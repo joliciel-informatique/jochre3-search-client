@@ -79,16 +79,18 @@ function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
 }
 </script>
 
-<template>
+<template class="container">
   Query: <input v-model="query" />
-  <button @click="search">Search</button>
+  <button @click="search" class="button is-primary">Search</button>
   <ul>
     <li v-for="result of results">
       {{ result.docRef }}
       <ul>
         <li v-for="(snippet, index) in result.snippets">
           <div v-html="snippet.text" class="rtl-align"></div>
-          <button @click="toggleImageSnippet(result.docRef, index, snippet)">Image</button>
+          <button @click="toggleImageSnippet(result.docRef, index, snippet)" class="button is-info">
+            Image
+          </button>
           <img :src="images.get(`${result.docRef}_${index}`)" title="Image" />
           <hr />
         </li>
@@ -112,7 +114,7 @@ body {
 
 body {
   background-color: #fff;
-  font-family: 'Times New Roman', Times, serif;
+  /*font-family: 'Times New Roman', Times, serif;*/
 }
 
 h1 {
@@ -142,6 +144,7 @@ a:hover {
 }
 
 .rtl-align {
+  font-family: 'Times New Roman', Times, serif;
   text-align: right;
   direction: rtl;
 }
