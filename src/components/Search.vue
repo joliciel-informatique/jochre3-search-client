@@ -1,8 +1,27 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, inject } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
 
-const query = ref('velt')
+const router = useRouter()
+const route = useRoute()
+
+const API_URL = inject('apiUrl')
+
+onMounted(() => {
+  getUrlQueryParams()
+})
+
+const query = ref<string>('velt')
+
+const getUrlQueryParams = async () => {
+  //router is async so we wait for it to be ready
+  await router.isReady()
+  //once its ready we can access the query params
+  console.log(route.query)
+  query.value = route.query['query']
+  search(false)
+}
 
 const results = ref<SearchResult[]>([])
 
@@ -22,9 +41,9 @@ interface SearchResponse {
   results: SearchResult[]
 }
 
-function search() {
+function search(updateHistory: boolean = true) {
   axios
-    .get<SearchResponse>('http://localhost:4242/search', {
+    .get<SearchResponse>(`${API_URL}/search`, {
       params: {
         query: query.value,
         first: '0',
@@ -38,7 +57,13 @@ function search() {
           'Bearer {"username": "Test", "email": "test@example.com", "roles": ["index"]}'
       }
     })
-    .then((response) => (results.value = response.data.results))
+    .then((response) => {
+      if (updateHistory) {
+        history.pushState({}, '', route.path + '?query=' + encodeURIComponent(query.value))
+      }
+      results.value = response.data.results
+      images.value = new Map()
+    })
 }
 
 const images = ref<Map<string, string>>(new Map())
@@ -59,7 +84,7 @@ function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
     )
 
     axios
-      .get('http://localhost:4242/image-snippet', {
+      .get(`${API_URL}/image-snippet`, {
         params: params,
         headers: {
           accept: 'image/png',
@@ -79,27 +104,39 @@ function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
 }
 </script>
 
-<template class="container">
-  Query: <input v-model="query" />
-  <button @click="search" class="button is-primary">Search</button>
-  <ul>
-    <li v-for="result of results">
-      {{ result.docRef }}
-      <ul>
-        <li v-for="(snippet, index) in result.snippets">
-          <div v-html="snippet.text" class="rtl-align"></div>
-          <button @click="toggleImageSnippet(result.docRef, index, snippet)" class="button is-info">
-            Image
-          </button>
-          <img :src="images.get(`${result.docRef}_${index}`)" title="Image" />
-          <hr />
-        </li>
-      </ul>
-    </li>
-  </ul>
+<template>
+  <div class="container is-max-desktop">
+    Query: <input v-model="query" />
+    <button @click="search" class="button is-primary">Search</button>
+    <ul>
+      <li v-for="result of results">
+        {{ result.docRef }}
+        <ul>
+          <li v-for="(snippet, index) in result.snippets">
+            <div v-html="snippet.text" class="rtl-align"></div>
+            <button
+              @click="toggleImageSnippet(result.docRef, index, snippet)"
+              class="button is-info"
+            >
+              Image
+            </button>
+            <img :src="images.get(`${result.docRef}_${index}`)" title="Image" />
+            <hr />
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
 </template>
 
-<style>
+<style lang="scss">
+@use 'bulma/sass/utilities/mixins';
+
+@include mixins.touch {
+  // Styles applied
+  // below $desktop
+}
+
 * {
   font-family: inherit;
   text-align: inherit;

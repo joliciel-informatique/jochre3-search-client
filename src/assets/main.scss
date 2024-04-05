@@ -1,4 +1,10 @@
 // Customizations Here (Optional)
+@use 'bulma/sass/utilities/mixins';
+
+@include mixins.touch {
+  // Styles applied
+  // below $desktop
+}
 
 // Bulma Import
 @import 'bulma/css/bulma.css';
