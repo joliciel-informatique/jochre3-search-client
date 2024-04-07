@@ -4,6 +4,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import { createI18n } from 'vue-i18n'
+import KeyCloakService from './security/KeycloakService'
 
 const messages = {
   en: {
@@ -26,6 +27,7 @@ const i18n = createI18n({
 })
 
 const app = createApp(App)
+const renderApp = () => app
 
 app.use(router)
 app.use(i18n)
@@ -37,4 +39,6 @@ fetch(import.meta.env.BASE_URL + 'config.json')
       app.provide(key, config[key])
     }
     app.mount('#app')
+
+    KeyCloakService.CallLogin(renderApp)
   })

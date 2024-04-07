@@ -2,6 +2,7 @@
 import { ref, onMounted, inject } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
+import { store } from '../store.js'
 
 const router = useRouter()
 const route = useRoute()
@@ -19,7 +20,7 @@ const getUrlQueryParams = async () => {
   await router.isReady()
   //once its ready we can access the query params
   console.log(route.query)
-  query.value = route.query['query']
+  query.value = route.query['query'] as string
   search(false)
 }
 
@@ -53,8 +54,7 @@ function search(updateHistory: boolean = true) {
       },
       headers: {
         accept: 'application/json',
-        Authorization:
-          'Bearer {"username": "Test", "email": "test@example.com", "roles": ["index"]}'
+        Authorization: `Bearer ${store.keycloakToken}`
       }
     })
     .then((response) => {
@@ -88,8 +88,7 @@ function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
         params: params,
         headers: {
           accept: 'image/png',
-          Authorization:
-            'Bearer {"username": "Test", "email": "test@example.com", "roles": ["index"]}'
+          Authorization: `Bearer ${store.keycloakToken}`
         },
         responseType: 'arraybuffer'
       })
@@ -113,7 +112,7 @@ function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
         {{ result.docRef }}
         <ul>
           <li v-for="(snippet, index) in result.snippets">
-            <div v-html="snippet.text" class="rtl-align"></div>
+            <div v-html="snippet.text" class="rtl-align yiddish"></div>
             <button
               @click="toggleImageSnippet(result.docRef, index, snippet)"
               class="button is-info"
@@ -158,6 +157,15 @@ h1 {
   font-size: 24px;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&display=swap');
+
+.yiddish {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
 .title {
   font-size: 24px;
   vertical-align: top;
@@ -181,7 +189,6 @@ a:hover {
 }
 
 .rtl-align {
-  font-family: 'Times New Roman', Times, serif;
   text-align: right;
   direction: rtl;
 }
