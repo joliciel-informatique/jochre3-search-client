@@ -16,8 +16,8 @@ function hidePreferences() {
 </script>
 
 <template>
-  <main>
-    <button @click="showPreferences" class="button is-light">Preferences</button>
+  <main class="container is-max-desktop" :class="{ 'rtl-align': $i18n.locale === 'yi' }">
+    <button @click="showPreferences" class="button is-small">Preferences</button>
     <PreferencesModal
       :visible="preferencesVisible"
       @on-close-modal="hidePreferences"
