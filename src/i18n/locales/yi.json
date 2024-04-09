@@ -12,7 +12,10 @@
     "alternate-author": "מחבר אין טראַנסקריפציע:",
     "publisher": "פֿאַרלאַג:",
     "publication-year": "יאָר:",
-    "document-reference": "אידענטיפֿיציר נומער:"
+    "document-reference": "אידענטיפֿיציר נומער:",
+    "result-count": "רעזולטאַטן געפֿונען אין {0} ביכער.",
+    "result-range": "רעזולטאַטן {0} ביז {1}:",
+    "reset": "אױסמעקן"
   },
   "preferences": {
     "title": "דעם באַניצערס פּרעפֿערענצן",
@@ -27,5 +30,14 @@
     "next": "ווײַטער",
     "previous": "פֿריער",
     "last": "סוף"
+  },
+  "header": {
+    "title": "<span class=\"title has-text-white\">Yiddish Book Center's Full-Text Search</span><br><span class=\"beta-flyout\">Currently in beta</span><br>גײט צו <a href=\"http://www.yiddishbookcenter.org\" target=\"_blank\">yiddishbookcenter.org</a>",
+    "logout": "אַרױסלאָגירן"
+  },
+  "footer": {
+    "powered-by": "געבױט אױפֿן יסוד פֿון",
+    "credits": "טעקסטן סקאַנירט דורכן <a href=\"http://www.yiddishbookcenter.org\">ייִדישן ביכער־צענטער</a><br><br>אָפּטישע אותיות־דערקענונג און אינדעקסירונג פֿון <a href=\"https://gitlab.com/assafurieli\" target=\"blank\">אסף אוריאלי</a>, זשאָליסיעל אינפֿאָרמאַטיק<br><br>לעקסיקאָן פֿון יצחק ניבאָרסקי און דער <a href=\"https://www.yiddishweb.com/\" target=\"blank\">פּאַריזער ייִדיש־צענטער</a>",
+    "privacy": "Made possible by the generous support of The David and Barbara B. Hirschhorn Foundation, Inc.<br><br>פּאָליטיק פֿון דאַטנשיץ"
   }
 }

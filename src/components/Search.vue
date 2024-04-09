@@ -4,6 +4,7 @@ import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import Footer from '@/components/Footer.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -46,6 +47,11 @@ const lastPage = computed(() => {
   )
   return last
 })
+const firstResult = computed(() => (page.value - 1) * preferences.resultsPerPage + 1)
+const lastResult = computed(() => {
+  const last = page.value * preferences.resultsPerPage + 1
+  return totalCount.value < last ? totalCount.value : last
+})
 
 interface Snippet {
   text: String
@@ -75,38 +81,51 @@ interface SearchResponse {
   totalCount: number
 }
 
+function updateUrl() {
+  const url =
+    route.path +
+    '?query=' +
+    encodeURIComponent(query.value) +
+    '&strict=' +
+    encodeURIComponent(strict.value) +
+    '&page=' +
+    page.value
+  history.pushState({}, '', url)
+}
+
 function search(updateHistory: boolean) {
-  axios
-    .get<SearchResponse>(`${API_URL}/search`, {
-      params: {
-        query: query.value,
-        strict: strict.value,
-        first: (page.value - 1) * preferences.resultsPerPage,
-        max: page.value * preferences.resultsPerPage,
-        'max-snippets': preferences.snippetsPerResult,
-        'row-padding': 2
-      },
-      headers: {
-        accept: 'application/json',
-        Authorization: `Bearer ${keycloak?.token}`
-      }
-    })
-    .then((response) => {
-      if (updateHistory) {
-        const url =
-          route.path +
-          '?query=' +
-          encodeURIComponent(query.value) +
-          '&strict=' +
-          encodeURIComponent(strict.value) +
-          '&page=' +
-          page.value
-        history.pushState({}, '', url)
-      }
-      searchResults.value = response.data.results
-      totalCount.value = response.data.totalCount
-      images.value = new Map()
-    })
+  if (query.value.length > 0) {
+    axios
+      .get<SearchResponse>(`${API_URL}/search`, {
+        params: {
+          query: query.value,
+          strict: strict.value,
+          first: (page.value - 1) * preferences.resultsPerPage,
+          max: page.value * preferences.resultsPerPage,
+          'max-snippets': preferences.snippetsPerResult,
+          'row-padding': 2
+        },
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${keycloak?.token}`
+        }
+      })
+      .then((response) => {
+        if (updateHistory) {
+          updateUrl()
+        }
+        searchResults.value = response.data.results
+        totalCount.value = response.data.totalCount
+        images.value = new Map()
+      })
+  } else {
+    if (updateHistory) {
+      updateUrl()
+    }
+    searchResults.value = []
+    totalCount.value = 0
+    images.value = new Map()
+  }
 }
 
 const images = ref<Map<string, string>>(new Map())
@@ -149,53 +168,74 @@ function gotoPage(newPage: number) {
   page.value = newPage
   search(true)
 }
+
+function resetResults() {
+  query.value = ''
+  page.value = 1
+  search(true)
+}
 </script>
 
 <template>
   <div>
-    <div class="field has-addons">
-      <div class="control">
-        <input
-          v-model="query"
-          class="input is-normal"
-          type="text"
-          :placeholder="$t('search.query')"
-          @keyup.enter="search(true)"
-        />
-      </div>
-      <div class="control">
-        <button @click="search(true)" class="button is-normal">
-          <span class="icon is-small">
-            <svg
-              class="svg-inline--fa fa-search fa-w-16"
-              aria-hidden="true"
-              focusable="false"
-              data-prefix="fa"
-              data-icon="search"
-              role="img"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 512 512"
-              data-fa-i2svg=""
-            >
-              <path
-                fill="currentColor"
-                d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"
-              ></path>
-            </svg>
-          </span>
-        </button>
-      </div>
-      <div class="control pr-2 pl-2">
-        <label class="checkbox">
-          <input type="checkbox" v-model="strict" @change="search(true)" />
-          {{ $t('search.strict') }}
-        </label>
+    <div class="block has-text-white custom-background has-text-weight-semibold m-0 p-0">
+      <div class="field has-addons p-3">
+        <div class="control">
+          <input
+            v-model="query"
+            class="input is-normal"
+            type="text"
+            :placeholder="$t('search.query')"
+            @keyup.enter="search(true)"
+          />
+        </div>
+        <div class="control">
+          <button @click="search(true)" class="button is-normal">
+            <span class="icon is-small">
+              <svg
+                class="svg-inline--fa fa-search fa-w-16"
+                aria-hidden="true"
+                focusable="false"
+                data-prefix="fa"
+                data-icon="search"
+                role="img"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+                data-fa-i2svg=""
+              >
+                <path
+                  fill="currentColor"
+                  d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"
+                ></path>
+              </svg>
+            </span>
+          </button>
+        </div>
+        <div class="control pr-2 pl-2">
+          <label class="checkbox">
+            <input type="checkbox" v-model="strict" @change="search(true)" />
+            {{ $t('search.strict') }}
+          </label>
+        </div>
       </div>
     </div>
     <div v-if="searchResults.length > 0">
+      <nav class="navbar" role="navigation">
+        <div class="navbar-start">
+          <strong
+            >{{ $t('results.result-count', [totalCount]) }}
+            {{ $t('results.result-range', [firstResult, lastResult]) }}</strong
+          >
+        </div>
+        <div class="navbar-end p-1">
+          <button @click="resetResults" class="button is-small">
+            {{ $t('results.reset') }}
+          </button>
+        </div>
+      </nav>
       <ul>
         <li v-for="result of searchResults">
-          <h1>{{ result.metadata.title ?? result.docRef }}</h1>
+          <h1 class="title">{{ result.metadata.title ?? result.docRef }}</h1>
           <div v-if="typeof result.metadata.titleEnglish !== undefined">
             <strong>{{ $t('results.alternate-title') }}</strong> {{ result.metadata.titleEnglish }}
           </div>
@@ -246,7 +286,11 @@ function gotoPage(newPage: number) {
                 </span>
                 <span>{{ $t('results.show-image-snippet') }}</span>
               </button>
-              <img :src="images.get(`${result.docRef}_${index}`)" title="Image" />
+              <img
+                v-if="images.has(`${result.docRef}_${index}`)"
+                :src="images.get(`${result.docRef}_${index}`)"
+                title="Image"
+              />
               <hr />
             </li>
           </ul>
@@ -304,5 +348,10 @@ function gotoPage(newPage: number) {
         </ul>
       </nav>
     </div>
+    <Footer />
   </div>
 </template>
+
+<style lang="scss" scoped>
+@import '@/assets/main.scss';
+</style>

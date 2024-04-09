@@ -1,5 +1,22 @@
-// Customizations Here (Optional)
 @use 'bulma/sass/utilities/mixins';
+
+// Customizations Here (Optional)
+@import 'bulma/sass/utilities/initial-variables';
+@import 'bulma/sass/utilities/functions';
+
+$grey: #757575;
+$grey-invert: findColorInvert($grey);
+
+@import 'bulma/sass/utilities/derived-variables';
+$addColors: (
+  'grey': (
+    $grey,
+    $grey-invert
+  )
+);
+$colors: map-merge($colors, $addColors);
+
+@import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&display=swap');
 
 @include mixins.touch {
   // Styles applied
@@ -8,3 +25,15 @@
 
 // Bulma Import
 @import 'bulma/css/bulma.css';
+
+.custom-background {
+  background-color: $grey;
+}
+
+.beta-flyout {
+  float: right;
+  bottom: -1rem;
+  right: 0;
+  font-size: 1rem;
+  color: #eeb211;
+}

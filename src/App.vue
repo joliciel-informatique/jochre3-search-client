@@ -8,12 +8,7 @@ import HomeView from './views/HomeView.vue'
 </template>
 
 <style lang="scss">
-@use 'bulma/sass/utilities/mixins';
-
-@include mixins.touch {
-  // Styles applied
-  // below $desktop
-}
+@import '@/assets/main.scss';
 
 * {
   font-family: inherit;
@@ -35,8 +30,6 @@ body {
 h1 {
   font-size: 24px;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&display=swap');
 
 .yiddish {
   font-family: 'Frank Ruhl Libre', serif;

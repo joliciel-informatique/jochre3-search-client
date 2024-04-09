@@ -12,7 +12,10 @@
     "alternate-author": "Alternate author:",
     "publisher": "Publisher:",
     "publication-year": "Date:",
-    "document-reference": "Reference number:"
+    "document-reference": "Reference number:",
+    "result-count": "Results found in {0} books.",
+    "result-range": "Results {0} to {1}:",
+    "reset": "Clear results"
   },
   "preferences": {
     "title": "Update preferences",
@@ -27,5 +30,14 @@
     "next": "next page",
     "previous": "previous page",
     "last": "last page"
+  },
+  "header": {
+    "title": "<span class=\"title has-text-white\">Yiddish Book Center's Full-Text Search</span><br><span class=\"beta-flyout\">Currently in beta</span>",
+    "logout": "Logout"
+  },
+  "footer": {
+    "powered-by": "Powered by",
+    "credits": "Texts scanned by the <a href=\"http://www.yiddishbookcenter.org\">Yiddish Book Center</a><br><br>Texts OCR'd and indexed by <a href=\"https://gitlab.com/assafurieli\" target=\"blank\">Assaf Urieli</a>, Joliciel Informatique<br><br>Lexicon by Yitskhok Niborski and the <a href=\"https://www.yiddishweb.com/\" target=\"blank\">Maison de la Culture Yiddish</a>",
+    "privacy": "Made possible by the generous support of The David and Barbara B. Hirschhorn Foundation, Inc.<br><br>Privacy Policy"
   }
 }
