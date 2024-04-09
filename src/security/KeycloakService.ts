@@ -1,5 +1,5 @@
 import Keycloak from 'keycloak-js'
-import { store } from '../store.js'
+import { useLoginStore } from '@/stores/LoginStore'
 
 const keycloak = new Keycloak()
 
@@ -12,12 +12,14 @@ interface CallbackOneParam<T1 = void, T2 = void> {
  * @param onAuthenticatedCallback
  */
 const Login = (onAuthenticatedCallback: CallbackOneParam) => {
+  const loginStore = useLoginStore()
+
   keycloak
     .init({ onLoad: 'login-required' })
     .then(function (authenticated) {
       authenticated ? onAuthenticatedCallback() : alert('non authenticated')
-      store.keycloakToken = keycloak.token as string
-      store.keycloakRefreshToken = keycloak.refreshToken as string
+      loginStore.keycloakToken = keycloak.token as string
+      loginStore.keycloakRefreshToken = keycloak.refreshToken as string
     })
     .catch((e) => {
       console.dir(e)
@@ -29,8 +31,8 @@ const Login = (onAuthenticatedCallback: CallbackOneParam) => {
       .updateToken(70)
       .then((refreshed) => {
         if (refreshed) {
-          store.keycloakToken = keycloak.token as string
-          store.keycloakRefreshToken = keycloak.refreshToken as string
+          loginStore.keycloakToken = keycloak.token as string
+          loginStore.keycloakRefreshToken = keycloak.refreshToken as string
           console.info('Token refreshed' + refreshed)
         } else {
           console.warn(`Token not refreshed`)
@@ -40,6 +42,10 @@ const Login = (onAuthenticatedCallback: CallbackOneParam) => {
         console.error('Failed to refresh token')
       })
   }, 3000)
+}
+
+function logout() {
+  keycloak.logout()
 }
 
 const KeyCloakService = {

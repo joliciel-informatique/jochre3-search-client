@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted, inject } from 'vue'
 import axios from 'axios'
-import { store } from '../store.js'
+import { useKeycloakStore } from '@/stores/KeycloakStore'
 import VueI18n from 'vue-i18n'
 
 defineProps(['visible'])
 const emit = defineEmits(['onCloseModal'])
+const keycloak = useKeycloakStore().keycloak
 
 const API_URL = inject('apiUrl')
 
@@ -20,7 +21,7 @@ function onSubmit(vi18n: VueI18n.VueI18n) {
       {
         headers: {
           accept: 'application/json',
-          Authorization: `Bearer ${store.keycloakToken}`
+          Authorization: `Bearer ${keycloak?.token}`
         }
       }
     )
@@ -48,7 +49,7 @@ function onFocus() {
     .get<UserPreferences>(`${API_URL}/preferences/user`, {
       headers: {
         accept: 'application/json',
-        Authorization: `Bearer ${store.keycloakToken}`
+        Authorization: `Bearer ${keycloak?.token}`
       }
     })
     .then((response) => {

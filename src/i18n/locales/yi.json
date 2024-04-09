@@ -1,0 +1,17 @@
+{
+  "search": {
+    "query": "שרײַבט אַרײַן אַ זוכוואָרט",
+    "search": "זוכן",
+    "strict": "שטרענג"
+  },
+  "results": {
+    "show-image-snippet": "ווײַזן דעם פֿראַגמענט פֿון זײַטל",
+    "alternate-title": "טיטל אין טראַנסקריפציע:",
+    "volume": "באַנד:",
+    "author": "מחבר:",
+    "alternate-author": "מחבר אין טראַנסקריפציע:",
+    "publisher": "פֿאַרלאַג:",
+    "publication-year": "יאָר:",
+    "document-reference": "אידענטיפֿיציר נומער:"
+  }
+}

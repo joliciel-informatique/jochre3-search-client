@@ -1,0 +1,17 @@
+{
+  "search": {
+    "query": "Please enter a search term",
+    "search": "Search",
+    "strict": "Strict"
+  },
+  "results": {
+    "show-image-snippet": "View page snippet",
+    "alternate-title": "Alternate title:",
+    "volume": "Volume:",
+    "author": "Author:",
+    "alternate-author": "Alternate author:",
+    "publisher": "Publisher:",
+    "publication-year": "Date:",
+    "document-reference": "Reference number:"
+  }
+}

@@ -3,20 +3,19 @@ import './assets/main.scss'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import { createPinia, type Pinia } from 'pinia'
 import { createI18n } from 'vue-i18n'
-import KeyCloakService from './security/KeycloakService'
+import Keycloak, { type KeycloakConfig, type KeycloakInitOptions } from 'keycloak-js'
+import { useKeycloakStore } from '@/stores/KeycloakStore'
+
+import en from './i18n/locales/en.json'
+import yi from './i18n/locales/yi.json'
+import keycloakParams from './security/keycloak.json'
+import config from './config/config.json'
 
 const messages = {
-  en: {
-    message: {
-      hello: 'hello world'
-    }
-  },
-  yi: {
-    message: {
-      hello: 'שלום־עליכם װעלט'
-    }
-  }
+  en: en,
+  yi: yi
 }
 
 const i18n = createI18n({
@@ -26,19 +25,55 @@ const i18n = createI18n({
   messages
 })
 
+const pinia: Pinia = createPinia()
+
 const app = createApp(App)
 const renderApp = () => app
 
 app.use(router)
 app.use(i18n)
+app.use(pinia)
 
-fetch(import.meta.env.BASE_URL + 'config.json')
-  .then((response) => response.json())
-  .then((config) => {
-    for (const key in config) {
-      app.provide(key, config[key])
+app.provide('apiUrl', config.apiUrl)
+
+const keycloakConfig: KeycloakConfig = {
+  url: keycloakParams['auth-server-url'],
+  realm: keycloakParams.realm,
+  clientId: keycloakParams.resource
+}
+
+const keycloak = new Keycloak(keycloakConfig)
+const keycloakStore = useKeycloakStore()
+keycloakStore.keycloak = keycloak
+
+const initOptions: KeycloakInitOptions = {
+  onLoad: 'login-required'
+}
+
+keycloak
+  .init(initOptions)
+  .then((auth) => {
+    if (!auth) {
+      console.warn('Authentication failed')
+    } else {
+      console.log('Authenticated')
+      app.mount('#app')
     }
-    app.mount('#app')
 
-    KeyCloakService.CallLogin(renderApp)
+    //Token Refresh
+    setInterval(() => {
+      keycloak
+        .updateToken(70)
+        .then((refreshed) => {
+          if (refreshed) {
+            console.log('Token refreshed')
+          } else {
+            console.warn('Token not refreshed')
+          }
+        })
+        .catch(() => {
+          console.error('Failed to refresh token')
+        })
+    }, 6000)
   })
+  .catch(() => console.error('Authentication failed'))
