@@ -316,7 +316,7 @@ function resetResults() {
           </ul>
         </li>
       </ul>
-      <nav class="pagination" role="navigation" aria-label="pagination">
+      <nav class="pagination p-1" role="navigation" aria-label="pagination">
         <button @click="gotoPage(page - 1)" :disabled="page <= 1" class="pagination-previous">
           {{ $t('pagination.previous') }}
         </button>

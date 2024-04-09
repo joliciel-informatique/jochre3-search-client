@@ -44,7 +44,7 @@ function onCancel() {
 </script>
 
 <template>
-  <div class="modal" tabindex="100" :class="{ 'is-active': visible }" @focus="onFocus">
+  <div class="modal" tabindex="100" :class="{ 'is-active': visible }">
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">

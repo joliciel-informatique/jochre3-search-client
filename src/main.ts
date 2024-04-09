@@ -21,19 +21,11 @@ const messages = {
   yi: yi
 }
 
-const i18n = createI18n({
-  legacy: false,
-  locale: 'yi',
-  fallbackLocale: 'en',
-  messages
-})
-
 const pinia: Pinia = createPinia()
 
 const app = createApp(App)
 
 app.use(router)
-app.use(i18n)
 app.use(pinia)
 
 app.provide('apiUrl', config.apiUrl)
@@ -89,10 +81,24 @@ keycloak
           if (snippetsPerResult) {
             preferencesStore.snippetsPerResult = snippetsPerResult
           }
+          const i18n = createI18n({
+            legacy: false,
+            locale: preferencesStore.language,
+            fallbackLocale: 'en',
+            messages
+          })
+          app.use(i18n)
           app.mount('#app')
         })
         .catch((reason: AxiosError) => {
           if (reason.response!.status === 404) {
+            const i18n = createI18n({
+              legacy: false,
+              locale: preferencesStore.language,
+              fallbackLocale: 'en',
+              messages
+            })
+            app.use(i18n)
             app.mount('#app')
           } else {
             // Don't mount the app
