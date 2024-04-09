@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import Search from '../components/Search.vue'
+import Header from '../components/Header.vue'
 </script>
 
 <template>
-  <main>
-    <h1>Search page</h1>
+  <main
+    class="container"
+    :class="{ 'rtl-align': $i18n.locale === 'yi', yiddish: $i18n.locale === 'yi' }"
+  >
+    <Header />
     <Search />
   </main>
 </template>
