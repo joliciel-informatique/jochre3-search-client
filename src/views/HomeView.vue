@@ -5,7 +5,7 @@ import Header from '../components/Header.vue'
 
 <template>
   <main
-    class="container is-max-desktop"
+    class="container"
     :class="{ 'rtl-align': $i18n.locale === 'yi', yiddish: $i18n.locale === 'yi' }"
   >
     <Header />

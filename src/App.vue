@@ -38,6 +38,13 @@ h1 {
   font-style: normal;
 }
 
+.english {
+  font-family: serif;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
+}
+
 .title {
   font-size: 24px;
   vertical-align: top;

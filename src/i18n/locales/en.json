@@ -32,12 +32,12 @@
     "last": "last page"
   },
   "header": {
-    "title": "<span class=\"title has-text-white\">Yiddish Book Center's Full-Text Search</span><br><span class=\"beta-flyout\">Currently in beta</span>",
+    "title": "<span class=\"title has-text-white\">Yiddish Book Center's Full-Text Search</span><br><span class=\"beta-flyout\">Currently in beta</span><br>Go to <a href=\"http://www.yiddishbookcenter.org\" target=\"_blank\">yiddishbookcenter.org</a>",
     "logout": "Logout"
   },
   "footer": {
     "powered-by": "Powered by",
-    "credits": "Texts scanned by the <a href=\"http://www.yiddishbookcenter.org\">Yiddish Book Center</a><br><br>Texts OCR'd and indexed by <a href=\"https://gitlab.com/assafurieli\" target=\"blank\">Assaf Urieli</a>, Joliciel Informatique<br><br>Lexicon by Yitskhok Niborski and the <a href=\"https://www.yiddishweb.com/\" target=\"blank\">Maison de la Culture Yiddish</a>",
+    "credits": "Texts scanned by the <a href=\"http://www.yiddishbookcenter.org\" target=\"_blank\">Yiddish Book Center</a><br><br>Texts OCR'd and indexed by <a href=\"https://gitlab.com/assafurieli\" target=\"_blank\">Assaf Urieli</a>, Joliciel Informatique<br><br>Lexicon by Yitskhok Niborski and the <a href=\"https://www.yiddishweb.com/\" target=\"_blank\">Maison de la Culture Yiddish</a>",
     "privacy": "Made possible by the generous support of The David and Barbara B. Hirschhorn Foundation, Inc.<br><br>Privacy Policy"
   }
 }
