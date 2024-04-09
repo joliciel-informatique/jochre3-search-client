@@ -5,8 +5,11 @@ import App from './App.vue'
 import router from './router'
 import { createPinia, type Pinia } from 'pinia'
 import { createI18n } from 'vue-i18n'
+import axios from 'axios'
+import { AxiosError } from 'axios'
 import Keycloak, { type KeycloakConfig, type KeycloakInitOptions } from 'keycloak-js'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 import en from './i18n/locales/en.json'
 import yi from './i18n/locales/yi.json'
@@ -28,7 +31,6 @@ const i18n = createI18n({
 const pinia: Pinia = createPinia()
 
 const app = createApp(App)
-const renderApp = () => app
 
 app.use(router)
 app.use(i18n)
@@ -46,6 +48,8 @@ const keycloak = new Keycloak(keycloakConfig)
 const keycloakStore = useKeycloakStore()
 keycloakStore.keycloak = keycloak
 
+const preferencesStore = usePreferencesStore()
+
 const initOptions: KeycloakInitOptions = {
   onLoad: 'login-required'
 }
@@ -57,7 +61,44 @@ keycloak
       console.warn('Authentication failed')
     } else {
       console.log('Authenticated')
-      app.mount('#app')
+
+      // After login, load the user preferences from the database
+      interface UserPreferences {
+        language: string
+        resultsPerPage: number
+        snippetsPerResult: number
+      }
+
+      axios
+        .get<UserPreferences>(`${config.apiUrl}/preferences/user`, {
+          headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${keycloak?.token}`
+          }
+        })
+        .then((response) => {
+          const language = response.data.language
+          if (language) {
+            preferencesStore.language = language
+          }
+          const resultsPerPage = response.data.resultsPerPage
+          if (resultsPerPage) {
+            preferencesStore.resultsPerPage = resultsPerPage
+          }
+          const snippetsPerResult = response.data.snippetsPerResult
+          if (snippetsPerResult) {
+            preferencesStore.snippetsPerResult = snippetsPerResult
+          }
+          app.mount('#app')
+        })
+        .catch((reason: AxiosError) => {
+          if (reason.response!.status === 404) {
+            app.mount('#app')
+          } else {
+            // Don't mount the app
+          }
+          console.error(reason.message)
+        })
     }
 
     //Token Refresh

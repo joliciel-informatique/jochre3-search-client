@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted, inject } from 'vue'
+import { computed, ref, onMounted, inject } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const router = useRouter()
 const route = useRoute()
 const keycloak = useKeycloakStore().keycloak
-
+const preferences = usePreferencesStore()
 const API_URL = inject('apiUrl')
 
 onMounted(() => {
@@ -16,19 +17,35 @@ onMounted(() => {
 
 const query = ref<string>('')
 const strict = ref(false)
+const page = ref<number>(1)
 
 const getUrlQueryParams = async () => {
   //router is async so we wait for it to be ready
   await router.isReady()
   //once its ready we can access the query params
   console.log(route.query)
-  query.value = route.query['query'] as string
-  strict.value = route.query['strict'] === 'true'
+  if (route.query['query']) {
+    query.value = route.query['query'] as string
+  }
+  if (route.query['strict']) {
+    strict.value = route.query['strict'] === 'true'
+  }
+  if (route.query['page']) {
+    page.value = Number(route.query['page'])
+  }
+
   search(false)
 }
 
 const searchResults = ref<SearchResult[]>([])
 const totalCount = ref<number>(0)
+const lastPage = computed(() => {
+  const last = Math.floor((totalCount.value - 1) / preferences.resultsPerPage) + 1
+  console.log(
+    `totalCount: ${totalCount.value}, results per page: ${preferences.resultsPerPage}. Current: ${page.value}. Last: ${last}`
+  )
+  return last
+})
 
 interface Snippet {
   text: String
@@ -64,10 +81,10 @@ function search(updateHistory: boolean) {
       params: {
         query: query.value,
         strict: strict.value,
-        first: '0',
-        max: '10',
-        'max-snippets': '20',
-        'row-padding': '2'
+        first: (page.value - 1) * preferences.resultsPerPage,
+        max: page.value * preferences.resultsPerPage,
+        'max-snippets': preferences.snippetsPerResult,
+        'row-padding': 2
       },
       headers: {
         accept: 'application/json',
@@ -81,7 +98,9 @@ function search(updateHistory: boolean) {
           '?query=' +
           encodeURIComponent(query.value) +
           '&strict=' +
-          encodeURIComponent(strict.value)
+          encodeURIComponent(strict.value) +
+          '&page=' +
+          page.value
         history.pushState({}, '', url)
       }
       searchResults.value = response.data.results
@@ -124,6 +143,11 @@ function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
         }
       })
   }
+}
+
+function gotoPage(newPage: number) {
+  page.value = newPage
+  search(true)
 }
 </script>
 
@@ -168,7 +192,7 @@ function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
         </label>
       </div>
     </div>
-    <div>
+    <div v-if="searchResults.length > 0">
       <ul>
         <li v-for="result of searchResults">
           <h1>{{ result.metadata.title ?? result.docRef }}</h1>
@@ -228,6 +252,57 @@ function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
           </ul>
         </li>
       </ul>
+      <nav class="pagination" role="navigation" aria-label="pagination">
+        <button @click="gotoPage(page - 1)" :disabled="page <= 1" class="pagination-previous">
+          {{ $t('pagination.previous') }}
+        </button>
+        <button @click="gotoPage(page + 1)" :disabled="page >= lastPage" class="pagination-next">
+          {{ $t('pagination.next') }}
+        </button>
+        <ul class="pagination-list">
+          <li v-if="page - 1 > 1">
+            <a @click="gotoPage(1)" class="pagination-link" aria-label="Goto page 1">1</a>
+          </li>
+          <li v-if="page - 1 > 1">
+            <span class="pagination-ellipsis">&hellip;</span>
+          </li>
+          <li v-if="page > 1">
+            <a
+              @click="gotoPage(page - 1)"
+              class="pagination-link"
+              :aria-label="`Goto page ${page - 1}`"
+              >{{ page - 1 }}</a
+            >
+          </li>
+          <li>
+            <a
+              class="pagination-link is-current"
+              :aria-label="`Page ${page}`"
+              aria-current="page"
+              >{{ page }}</a
+            >
+          </li>
+          <li v-if="page < lastPage">
+            <a
+              @click="gotoPage(page + 1)"
+              class="pagination-link"
+              :aria-label="`Goto page ${page + 1}`"
+              >{{ page + 1 }}</a
+            >
+          </li>
+          <li v-if="page + 1 < lastPage">
+            <span class="pagination-ellipsis">&hellip;</span>
+          </li>
+          <li v-if="page + 1 < lastPage">
+            <a
+              @click="gotoPage(lastPage)"
+              class="pagination-link"
+              :aria-label="`Goto page ${lastPage}`"
+              >{{ lastPage }}</a
+            >
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
 </template>

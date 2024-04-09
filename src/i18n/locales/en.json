@@ -16,8 +16,16 @@
   },
   "preferences": {
     "title": "Update preferences",
-    "language": "Interface language"
+    "language": "Interface language",
+    "results-per-page": "Results per page",
+    "snippets-per-result": "Snippets per book"
   },
   "cancel": "Cancel",
-  "save": "Save changes"
+  "save": "Save changes",
+  "pagination": {
+    "first": "first page",
+    "next": "next page",
+    "previous": "previous page",
+    "last": "last page"
+  }
 }
