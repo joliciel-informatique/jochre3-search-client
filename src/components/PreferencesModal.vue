@@ -63,16 +63,16 @@ function onFocus() {
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">User preferences</p>
+        <p class="modal-card-title">{{ $t('preferences.title') }}</p>
         <button class="delete" aria-label="close"></button>
       </header>
       <section class="modal-card-body">
         <div class="field">
-          <label class="label">Language</label>
+          <label class="label">{{ $t('preferences.language') }}</label>
           <div class="control">
             <div class="select">
               <select v-model="language">
-                <option value="yi">Yiddish</option>
+                <option value="yi">ייִדיש</option>
                 <option value="en">English</option>
               </select>
             </div>
@@ -81,8 +81,12 @@ function onFocus() {
       </section>
       <footer class="modal-card-foot">
         <div class="buttons">
-          <button class="button is-link" @click="onSubmit($i18n as VueI18n.VueI18n)">Submit</button>
-          <button class="button is-link is-light" @click="onCancel">Cancel</button>
+          <button class="button is-link" @click="onSubmit($i18n as VueI18n.VueI18n)">
+            {{ $t('save') }}
+          </button>
+          <button class="button is-link is-light" @click="onCancel">
+            {{ $t('cancel') }}
+          </button>
         </div>
       </footer>
     </div>

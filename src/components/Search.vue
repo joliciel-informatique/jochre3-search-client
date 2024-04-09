@@ -182,7 +182,8 @@ function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
             <strong>{{ $t('results.author') }}</strong> {{ result.metadata.author }}
           </div>
           <div v-if="typeof result.metadata.authorEnglish !== undefined">
-            <strong>{{ $t('results.alternate-author') }}</strong> {{ result.metadata.author }}
+            <strong>{{ $t('results.alternate-author') }}</strong>
+            {{ result.metadata.authorEnglish }}
           </div>
           <div v-if="typeof result.metadata.publisher !== undefined">
             <strong>{{ $t('results.publisher') }}</strong> {{ result.metadata.publisher }}

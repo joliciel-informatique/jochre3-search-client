@@ -13,5 +13,11 @@
     "publisher": "Publisher:",
     "publication-year": "Date:",
     "document-reference": "Reference number:"
-  }
+  },
+  "preferences": {
+    "title": "Update preferences",
+    "language": "Interface language"
+  },
+  "cancel": "Cancel",
+  "save": "Save changes"
 }
