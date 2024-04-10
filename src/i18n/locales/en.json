@@ -2,7 +2,15 @@
   "search": {
     "query": "Please enter a search term",
     "search": "Search",
-    "strict": "Strict"
+    "strict": "Strict",
+    "advanced": "Advanced search",
+    "field-instructions": "These fields accept Roman or Yiddish characters.",
+    "author": "Author:",
+    "title": "Title:",
+    "date-from": "Publication year from:",
+    "date-to": "to:",
+    "document-reference": "Reference number:",
+    "sort-by": "Sort by:"
   },
   "results": {
     "show-image-snippet": "View page snippet",

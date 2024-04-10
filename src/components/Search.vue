@@ -19,23 +19,15 @@ const query = ref<string>('')
 const strict = ref(false)
 const page = ref<number>(1)
 
-const getUrlQueryParams = async () => {
-  //router is async so we wait for it to be ready
-  await router.isReady()
-  //once its ready we can access the query params
-  console.log(route.query)
-  if (route.query['query']) {
-    query.value = route.query['query'] as string
-  }
-  if (route.query['strict']) {
-    strict.value = route.query['strict'] === 'true'
-  }
-  if (route.query['page']) {
-    page.value = Number(route.query['page'])
-  }
+const authorText = ref<string>('')
+const authorDropdownItems = ref<string[]>([])
+const authors = ref<string[]>([])
+const authorInclude = ref('true')
 
-  search(false)
-}
+const title = ref<string>('')
+const fromYear = ref<number>()
+const toYear = ref<number>()
+const docRefs = ref<string>('')
 
 const searchResults = ref<SearchResult[]>([])
 const totalCount = ref<number>(0)
@@ -53,6 +45,59 @@ const lastResult = computed(() => {
 })
 
 const hasSearch = ref<boolean>(false)
+const showAdvanced = ref<boolean>(false)
+
+const images = ref<Map<string, string>>(new Map())
+
+const getUrlQueryParams = async () => {
+  //router is async so we wait for it to be ready
+  await router.isReady()
+  //once its ready we can access the query params
+  console.log(route.query)
+  if (route.query['query']) {
+    query.value = (route.query['query'] as string).trim()
+  }
+  if (route.query['strict']) {
+    strict.value = route.query['strict'] === 'true'
+  }
+  if (route.query['page']) {
+    page.value = Number(route.query['page'])
+  }
+  if (route.query['authorInclude']) {
+    authorInclude.value = (route.query['authorInclude'] as string).trim()
+  }
+  if (route.query['authors']) {
+    if (Array.isArray(route.query['authors'])) {
+      authors.value = route.query['authors'] as string[]
+    } else {
+      authors.value = [route.query['authors'] as string]
+    }
+  }
+  if (route.query['title']) {
+    title.value = (route.query['title'] as string).trim()
+  }
+  if (route.query['from-year']) {
+    fromYear.value = Number((route.query['from-year'] as string).trim())
+  }
+  if (route.query['to-year']) {
+    toYear.value = Number((route.query['to-year'] as string).trim())
+  }
+  if (route.query['doc-refs']) {
+    docRefs.value = (route.query['doc-refs'] as string).trim()
+  }
+
+  if (
+    authors.value.length > 0 ||
+    title.value.length > 0 ||
+    (fromYear.value != null && fromYear.value > 0) ||
+    (toYear.value != null && toYear.value > 0) ||
+    docRefs.value.length > 0
+  ) {
+    showAdvanced.value = true
+  }
+
+  search(false)
+}
 
 interface Snippet {
   text: String
@@ -83,29 +128,60 @@ interface SearchResponse {
 }
 
 function updateUrl() {
-  const url =
-    route.path +
-    '?query=' +
-    encodeURIComponent(query.value) +
-    '&strict=' +
-    encodeURIComponent(strict.value) +
-    '&page=' +
-    page.value
+  const params = new URLSearchParams()
+  params.append('query', query.value.trim())
+  params.append('strict', strict.value.toString())
+  params.append('authorInclude', authorInclude.value)
+  for (const author of authors.value) {
+    params.append('authors', author)
+  }
+  params.append('title', title.value.trim())
+  params.append('page', page.value.toString())
+  if (fromYear.value != null) {
+    params.append('from-year', fromYear.value?.toString())
+  }
+  if (toYear.value != null) {
+    params.append('to-year', toYear.value?.toString())
+  }
+  params.append('doc-refs', docRefs.value.trim())
+  const url = route.path + '?' + params.toString()
+
   history.pushState({}, '', url)
 }
 
 function search(updateHistory: boolean) {
   if (query.value.length > 0) {
+    const params = new URLSearchParams()
+    params.append('query', query.value)
+    params.append('strict', strict.value.toString())
+    params.append('author-include', authorInclude.value)
+    for (const author of authors.value) {
+      params.append('authors', author)
+    }
+    if (title.value.trim().length > 0) {
+      params.append('title', title.value.trim())
+    }
+    if (fromYear.value != null) {
+      console.log(`Adding from-year ${fromYear.value}`)
+      params.append('from-year', fromYear.value.toString())
+    }
+    if (toYear.value != null) {
+      console.log(`Adding to-year ${toYear.value}`)
+      params.append('to-year', toYear.value.toString())
+    }
+    const docRefArray = docRefs.value.split(/\W+/)
+    for (const docRef of docRefArray) {
+      if (docRef.length > 0) {
+        params.append('doc-refs', docRef)
+      }
+    }
+    params.append('first', ((page.value - 1) * preferences.resultsPerPage).toString())
+    params.append('max', (page.value * preferences.resultsPerPage).toString())
+    params.append('max-snippets', preferences.snippetsPerResult.toString())
+    params.append('row-padding', '2')
     axios
       .get<SearchResponse>(`${API_URL}/search`, {
-        params: {
-          query: query.value,
-          strict: strict.value,
-          first: (page.value - 1) * preferences.resultsPerPage,
-          max: page.value * preferences.resultsPerPage,
-          'max-snippets': preferences.snippetsPerResult,
-          'row-padding': 2
-        },
+        params: params,
         headers: {
           accept: 'application/json',
           Authorization: `Bearer ${keycloak?.token}`
@@ -130,8 +206,6 @@ function search(updateHistory: boolean) {
     images.value = new Map()
   }
 }
-
-const images = ref<Map<string, string>>(new Map())
 
 function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
   const imageKey = `${docRef}_${index}`
@@ -177,17 +251,60 @@ function resetResults() {
   page.value = 1
   search(true)
 }
+
+interface AggregationBin {
+  label: string
+  count: number
+}
+
+interface AggregationBins {
+  bins: AggregationBin[]
+}
+
+function findAuthors() {
+  if (authorText.value.length > 0) {
+    axios
+      .get<AggregationBins>(`${API_URL}/authors`, {
+        params: {
+          prefix: authorText.value,
+          maxBins: 10
+        },
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${keycloak?.token}`
+        }
+      })
+      .then((response) => {
+        authorDropdownItems.value = response.data.bins.map((b) => b.label)
+      })
+  } else {
+    authorDropdownItems.value = []
+  }
+}
+
+function addAuthor(author: string) {
+  authors.value.push(author)
+  authorText.value = ''
+  authorDropdownItems.value = []
+}
+
+function removeAuthor(author: string) {
+  const index = authors.value.indexOf(author, 0)
+  if (index > -1) {
+    authors.value.splice(index, 1)
+  }
+}
 </script>
 
 <template>
   <div>
     <div class="block has-text-white custom-background has-text-weight-semibold m-0 p-0">
       <div class="container is-max-desktop">
-        <div class="field has-addons p-3">
+        <div class="field has-addons pb-0 mb-0">
           <div class="control">
             <input
               v-model="query"
-              class="input is-normal"
+              class="input is-normal keyboardInput"
               type="text"
               :placeholder="$t('search.query')"
               @keyup.enter="search(true)"
@@ -221,6 +338,98 @@ function resetResults() {
               {{ $t('search.strict') }}
             </label>
           </div>
+        </div>
+        <div class="pt-0 mt-0">
+          <button @click="showAdvanced = !showAdvanced" class="button is-text has-text-white">
+            <span>{{ $t('search.advanced') }}</span>
+            <span class="icon is-small">
+              <svg
+                class="svg-inline--fa fa-plus fa-w-14 mx-2"
+                aria-hidden="true"
+                focusable="false"
+                data-prefix="fas"
+                data-icon="plus"
+                role="img"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+                data-fa-i2svg=""
+              >
+                <path
+                  fill="currentColor"
+                  d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+                ></path>
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div v-if="showAdvanced" class="block custom-background-light m-0 p-0">
+      <div class="container is-max-desktop">
+        <p>{{ $t('search.field-instructions') }}</p>
+        <div class="field has-addons">
+          <label class="label">{{ $t('search.author') }}</label>
+          <div class="dropdown is-active is-right">
+            <div class="dropdown-trigger">
+              <input class="input" type="text" v-model="authorText" @keyup="findAuthors" />
+            </div>
+            <div
+              class="dropdown-menu"
+              id="dropdown-menu"
+              role="menu"
+              v-if="authorDropdownItems.length > 0"
+            >
+              <div class="dropdown-content">
+                <a
+                  v-for="author of authorDropdownItems"
+                  class="dropdown-item"
+                  @click="addAuthor(author)"
+                  >{{ author }}</a
+                >
+              </div>
+            </div>
+          </div>
+          <div class="control">
+            <label class="radio">
+              <input type="radio" name="authorInclude" value="true" v-model="authorInclude" />
+              ✓
+            </label>
+            <label class="radio">
+              <input type="radio" name="authorInclude" value="false" v-model="authorInclude" />
+              ✗
+            </label>
+          </div>
+          <button v-for="author of authors" class="tag mr-1 ml-1" @click="removeAuthor(author)">
+            {{ author }} ×
+          </button>
+        </div>
+        <div class="field has-addons">
+          <label class="label">{{ $t('search.title') }}</label>
+          <input id="title" class="input" type="text" v-model="title" @keyup.enter="search(true)" />
+        </div>
+        <div class="field has-addons">
+          <label class="label">{{ $t('search.date-from') }}</label>
+          <input
+            class="input"
+            type="number"
+            v-model="fromYear"
+            min="1700"
+            max="2000"
+            @keyup.enter="search(true)"
+          />
+          <label class="label">{{ $t('search.date-to') }}</label>
+          <input
+            class="input"
+            type="number"
+            v-model="toYear"
+            min="1700"
+            max="2000"
+            @keyup.enter="search(true)"
+          />
+        </div>
+        <div class="field has-addons">
+          <label class="label">{{ $t('search.document-reference') }}</label>
+          <input class="input" type="text" v-model="docRefs" @keyup.enter="search(true)" />
         </div>
       </div>
     </div>
@@ -385,9 +594,4 @@ function resetResults() {
 
 <style lang="scss" scoped>
 @import '@/assets/main.scss';
-
-.current-page-color {
-  background-color: #eeb211;
-  border-color: #eeb211;
-}
 </style>
