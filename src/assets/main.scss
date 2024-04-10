@@ -1,20 +1,12 @@
-@use 'bulma/sass/utilities/mixins';
-
-// Customizations Here (Optional)
-@import 'bulma/sass/utilities/initial-variables';
-@import 'bulma/sass/utilities/functions';
-
 $grey: #757575;
-$grey-invert: findColorInvert($grey);
 
-@import 'bulma/sass/utilities/derived-variables';
-$addColors: (
-  'grey': (
-    $grey,
-    $grey-invert
-  )
+@use 'bulma/sass' with (
+  $pagination-current-color: black,
+  $pagination-current-background-color: #eeb211,
+  $pagination-current-border-color: #eeb211
 );
-$colors: map-merge($colors, $addColors);
+
+@use 'bulma/sass/utilities/mixins';
 
 @import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&display=swap');
 
@@ -24,7 +16,6 @@ $colors: map-merge($colors, $addColors);
 }
 
 // Bulma Import
-@import 'bulma/css/bulma.css';
 
 .custom-background {
   background-color: $grey;

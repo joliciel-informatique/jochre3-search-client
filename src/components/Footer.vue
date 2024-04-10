@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer has-text-white custom-background has-text-weight-semibold">
+  <footer class="footer has-text-white custom-background has-text-weight-semibold mt-auto">
     <div class="columns">
       <div class="column">
         {{ $t('footer.powered-by') }}

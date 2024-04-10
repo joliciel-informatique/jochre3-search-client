@@ -85,7 +85,10 @@ a:hover {
 }
 
 .highlight {
-  font-weight: bold;
+  background-color: #ffff80;
+  box-shadow: 0 1px 3px 4px rgba(0, 0, 0, 0.3);
+  font-weight: normal;
+  outline: 4px #ffff80 solid;
 }
 
 .checkboxes label {

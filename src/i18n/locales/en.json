@@ -15,7 +15,8 @@
     "document-reference": "Reference number:",
     "result-count": "Results found in {0} books.",
     "result-range": "Results {0} to {1}:",
-    "reset": "Clear results"
+    "reset": "Clear results",
+    "none": "No search results"
   },
   "preferences": {
     "title": "Update preferences",
