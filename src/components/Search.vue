@@ -4,6 +4,18 @@ import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import {
+  // import icons here
+  faMagnifyingGlass,
+  faFileImage,
+  faSquarePlus
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faMagnifyingGlass)
+library.add(faFileImage)
+library.add(faSquarePlus)
 
 const router = useRouter()
 const route = useRoute()
@@ -13,7 +25,43 @@ const API_URL = inject('apiUrl')
 
 onMounted(() => {
   getUrlQueryParams()
+
+  const stylesheet = document.createElement('link')
+  stylesheet.type = 'text/css'
+  stylesheet.rel = 'stylesheet'
+  document.head.appendChild(stylesheet)
+
+  stylesheet.href = '/css/keyboard.css'
+
+  const plugin = document.createElement('script')
+  plugin.type = 'module'
+
+  document.head.appendChild(plugin)
+
+  plugin.src = '/js/keyboard.js'
+  plugin.async = true
+
+  getIndexSize()
 })
+
+function getIndexSize() {
+  interface SizeResponse {
+    size: number
+  }
+
+  axios
+    .get<SizeResponse>(`${API_URL}/size`, {
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${keycloak?.token}`
+      }
+    })
+    .then((response) => {
+      indexSize.value = response.data.size
+    })
+}
+
+const indexSize = ref<number>(0)
 
 const query = ref<string>('')
 const strict = ref(false)
@@ -249,6 +297,12 @@ function gotoPage(newPage: number) {
 function resetResults() {
   query.value = ''
   page.value = 1
+  title.value = ''
+  fromYear.value = undefined
+  toYear.value = undefined
+  docRefs.value = ''
+  authors.value = []
+  strict.value = false
   search(true)
 }
 
@@ -301,77 +355,51 @@ function removeAuthor(author: string) {
     <div class="block has-text-white custom-background has-text-weight-semibold m-0 p-0">
       <div class="container is-max-desktop">
         <div class="field has-addons pb-0 mb-0">
-          <div class="control">
-            <input
-              v-model="query"
-              class="input is-normal keyboardInput"
-              type="text"
-              :placeholder="$t('search.query')"
-              @keyup.enter="search(true)"
-            />
-          </div>
-          <div class="control">
-            <button @click="search(true)" class="button is-normal">
-              <span class="icon is-small">
-                <svg
-                  class="svg-inline--fa fa-search fa-w-16"
-                  aria-hidden="true"
-                  focusable="false"
-                  data-prefix="fa"
-                  data-icon="search"
-                  role="img"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 512 512"
-                  data-fa-i2svg=""
-                >
-                  <path
-                    fill="currentColor"
-                    d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"
-                  ></path>
-                </svg>
-              </span>
-            </button>
-          </div>
-          <div class="control pr-2 pl-2">
-            <label class="checkbox">
-              <input type="checkbox" v-model="strict" @change="search(true)" />
-              {{ $t('search.strict') }}
-            </label>
-          </div>
+          <input
+            id="query"
+            v-model="query"
+            class="input is-normal keyboardInput"
+            type="text"
+            lang="yi"
+            :placeholder="$t('search.query')"
+            @keyup.enter="search(true)"
+          />
+          <button @click="search(true)" class="button is-normal" v-if="true">
+            <span class="icon is-small">
+              <font-awesome-icon icon="magnifying-glass" />
+            </span>
+          </button>
+        </div>
+        <div class="control pr-2 pl-2">
+          <label class="checkbox">
+            <input type="checkbox" v-model="strict" @change="search(true)" />
+            {{ $t('search.strict') }}
+          </label>
         </div>
         <div class="pt-0 mt-0">
           <button @click="showAdvanced = !showAdvanced" class="button is-text has-text-white">
             <span>{{ $t('search.advanced') }}</span>
             <span class="icon is-small">
-              <svg
-                class="svg-inline--fa fa-plus fa-w-14 mx-2"
-                aria-hidden="true"
-                focusable="false"
-                data-prefix="fas"
-                data-icon="plus"
-                role="img"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"
-                data-fa-i2svg=""
-              >
-                <path
-                  fill="currentColor"
-                  d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
-                ></path>
-              </svg>
+              <font-awesome-icon icon="square-plus" />
             </span>
           </button>
         </div>
       </div>
     </div>
-    <div v-if="showAdvanced" class="block custom-background-light m-0 p-0">
+    <div v-show="showAdvanced" class="block custom-background-light m-0 p-0">
       <div class="container is-max-desktop">
         <p>{{ $t('search.field-instructions') }}</p>
         <div class="field has-addons">
           <label class="label">{{ $t('search.author') }}</label>
           <div class="dropdown is-active is-right">
             <div class="dropdown-trigger">
-              <input class="input" type="text" v-model="authorText" @keyup="findAuthors" />
+              <input
+                id="findAuthors"
+                class="input"
+                type="text"
+                v-model="authorText"
+                @keyup="findAuthors"
+              />
             </div>
             <div
               class="dropdown-menu"
@@ -405,11 +433,19 @@ function removeAuthor(author: string) {
         </div>
         <div class="field has-addons">
           <label class="label">{{ $t('search.title') }}</label>
-          <input id="title" class="input" type="text" v-model="title" @keyup.enter="search(true)" />
+          <input
+            id="title"
+            class="input keyboardInput"
+            type="text"
+            lang="yi"
+            v-model="title"
+            @keyup.enter="search(true)"
+          />
         </div>
         <div class="field has-addons">
           <label class="label">{{ $t('search.date-from') }}</label>
           <input
+            id="fromYear"
             class="input"
             type="number"
             v-model="fromYear"
@@ -419,6 +455,7 @@ function removeAuthor(author: string) {
           />
           <label class="label">{{ $t('search.date-to') }}</label>
           <input
+            id="toYear"
             class="input"
             type="number"
             v-model="toYear"
@@ -431,6 +468,13 @@ function removeAuthor(author: string) {
           <label class="label">{{ $t('search.document-reference') }}</label>
           <input class="input" type="text" v-model="docRefs" @keyup.enter="search(true)" />
         </div>
+        <div class="field has-text-centered p-2">
+          <button class="button is-light" @click="resetResults">{{ $t('search.reset') }}</button
+          >&nbsp;
+          <button class="button is-inverted" @click="search(true)">
+            {{ $t('search.search') }}
+          </button>
+        </div>
       </div>
     </div>
     <div class="container is-max-desktop hero is-full-height">
@@ -438,10 +482,10 @@ function removeAuthor(author: string) {
         v-if="!hasSearch && searchResults.length == 0"
         :class="{ 'ltr-align': $i18n.locale === 'yi', english: $i18n.locale === 'yi' }"
       >
-        With Yiddish Book Center's Full-Text search, you can search the complete contents of nearly
-        11,000 Yiddish books in our digital library. This application (powered by the Jochre engine)
-        uses machine learning to correct the OCR and improve character recognition over time.
-        <br /><br />
+        With Yiddish Book Center's Full-Text search, you can search the complete contents of
+        {{ indexSize }} Yiddish books in our digital library. This application (powered by the
+        Jochre engine) uses machine learning to correct the OCR and improve character recognition
+        over time. <br /><br />
         This site is currently in beta. Please send feedback and error reports to
         <a href="mailto:ocr@yiddishbookcenter.org">ocr@yiddishbookcenter.org</a>. <br /><br />
         For help with this site, please see the Jochre
@@ -464,7 +508,7 @@ function removeAuthor(author: string) {
             >
           </div>
           <div class="navbar-end p-1">
-            <button @click="resetResults" class="button is-small is-black">
+            <button @click="resetResults" class="button is-small is-light">
               {{ $t('results.reset') }}
             </button>
           </div>
@@ -501,30 +545,22 @@ function removeAuthor(author: string) {
             <ul>
               <li v-for="(snippet, index) in result.snippets">
                 <div v-html="snippet.text" class="rtl-align yiddish pr-2 pl-2"></div>
-                <button
-                  @click="toggleImageSnippet(result.docRef, index, snippet)"
-                  class="button is-text"
-                >
-                  <span class="icon is-small">
-                    <svg
-                      class="svg-inline--fa fa-file-image fa-w-12 mx-1"
-                      aria-hidden="true"
-                      focusable="false"
-                      data-prefix="fas"
-                      data-icon="file-image"
-                      role="img"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 384 512"
-                      data-fa-i2svg=""
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M384 121.941V128H256V0h6.059a24 24 0 0 1 16.97 7.029l97.941 97.941a24.002 24.002 0 0 1 7.03 16.971zM248 160c-13.2 0-24-10.8-24-24V0H24C10.745 0 0 10.745 0 24v464c0 13.255 10.745 24 24 24h336c13.255 0 24-10.745 24-24V160H248zm-135.455 16c26.51 0 48 21.49 48 48s-21.49 48-48 48-48-21.49-48-48 21.491-48 48-48zm208 240h-256l.485-48.485L104.545 328c4.686-4.686 11.799-4.201 16.485.485L160.545 368 264.06 264.485c4.686-4.686 12.284-4.686 16.971 0L320.545 304v112z"
-                      ></path>
-                    </svg>
-                  </span>
-                  <span>{{ $t('results.show-image-snippet') }}</span>
-                </button>
+                <div class="container">
+                  <button
+                    class="button is-small is-text pl-0 m-1"
+                    @click="toggleImageSnippet(result.docRef, index, snippet)"
+                  >
+                    <span class="icon">
+                      <font-awesome-icon icon="file-image" size="xs" />
+                    </span>
+                  </button>
+                  <button
+                    @click="toggleImageSnippet(result.docRef, index, snippet)"
+                    class="button is-text p-0 m-1"
+                  >
+                    <span>{{ $t('results.show-image-snippet') }}</span>
+                  </button>
+                </div>
                 <br />
                 <img
                   v-if="images.has(`${result.docRef}_${index}`)"

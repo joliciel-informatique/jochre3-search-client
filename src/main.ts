@@ -91,7 +91,7 @@ keycloak
           app.mount('#app')
         })
         .catch((reason: AxiosError) => {
-          if (reason.response!.status === 404) {
+          if (reason.response?.status === 404) {
             const i18n = createI18n({
               legacy: false,
               locale: preferencesStore.language,
