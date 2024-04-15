@@ -46,9 +46,12 @@ $grey: #757575;
 }
 
 /* Required for sticky footer */
-html,
-body {
+html {
   height: 100%;
+  overflow: auto;
+}
+body {
+  height: auto;
 }
 
 body {

@@ -92,6 +92,7 @@ keycloak
         })
         .catch((reason: AxiosError) => {
           if (reason.response?.status === 404) {
+            console.log('No preferences for user')
             const i18n = createI18n({
               legacy: false,
               locale: preferencesStore.language,

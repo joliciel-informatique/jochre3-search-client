@@ -9,13 +9,17 @@ import {
   // import icons here
   faMagnifyingGlass,
   faFileImage,
-  faSquarePlus
+  faSquarePlus,
+  faBookOpen,
+  faFileLines
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(faMagnifyingGlass)
 library.add(faFileImage)
 library.add(faSquarePlus)
+library.add(faBookOpen)
+library.add(faFileLines)
 
 const router = useRouter()
 const route = useRoute()
@@ -149,6 +153,7 @@ const getUrlQueryParams = async () => {
 
 interface Snippet {
   text: String
+  page: number
   start: number
   end: number
   highlights: number[][]
@@ -547,7 +552,7 @@ function removeAuthor(author: string) {
                 <div v-html="snippet.text" class="rtl-align yiddish pr-2 pl-2"></div>
                 <div class="container">
                   <button
-                    class="button is-small is-text pl-0 m-1"
+                    class="button is-small is-text p-1 m-1"
                     @click="toggleImageSnippet(result.docRef, index, snippet)"
                   >
                     <span class="icon">
@@ -560,6 +565,36 @@ function removeAuthor(author: string) {
                   >
                     <span>{{ $t('results.show-image-snippet') }}</span>
                   </button>
+                  <button
+                    class="button is-small is-text p-1 m-1"
+                    @click="router.push(`/text/${result.docRef}/page/${snippet.page}`)"
+                  >
+                    <span class="icon">
+                      <font-awesome-icon icon="file-lines" size="xs" />
+                    </span>
+                  </button>
+                  <button
+                    @click="router.push(`/text/${result.docRef}/page/${snippet.page}`)"
+                    class="button is-text p-0 m-1"
+                  >
+                    <span>{{ $t('results.show-text') }}</span>
+                  </button>
+                  <a
+                    class="button is-small is-text p-1 m-1"
+                    :href="`https://archive.org/details/${result.docRef}/page/n${snippet.page}/mode/1up`"
+                    target="_blank"
+                  >
+                    <span class="icon">
+                      <font-awesome-icon icon="book-open" size="xs" />
+                    </span>
+                  </a>
+                  <a
+                    :href="`https://archive.org/details/${result.docRef}/page/n${snippet.page}/mode/1up`"
+                    target="_blank"
+                    class="button is-text p-0 m-1"
+                  >
+                    <span>{{ $t('results.show-original-page', [snippet.page]) }}</span>
+                  </a>
                 </div>
                 <br />
                 <img
