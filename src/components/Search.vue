@@ -80,6 +80,7 @@ const title = ref<string>('')
 const fromYear = ref<number>()
 const toYear = ref<number>()
 const docRefs = ref<string>('')
+const sortBy = ref<string>('Score')
 
 const searchResults = ref<SearchResult[]>([])
 const totalCount = ref<number>(0)
@@ -137,13 +138,17 @@ const getUrlQueryParams = async () => {
   if (route.query['doc-refs']) {
     docRefs.value = (route.query['doc-refs'] as string).trim()
   }
+  if (route.query['sort']) {
+    sortBy.value = (route.query['sort'] as string).trim()
+  }
 
   if (
     authors.value.length > 0 ||
     title.value.length > 0 ||
     (fromYear.value != null && fromYear.value > 0) ||
     (toYear.value != null && toYear.value > 0) ||
-    docRefs.value.length > 0
+    docRefs.value.length > 0 ||
+    sortBy.value.length > 0
   ) {
     showAdvanced.value = true
   }
@@ -197,6 +202,7 @@ function updateUrl() {
     params.append('to-year', toYear.value?.toString())
   }
   params.append('doc-refs', docRefs.value.trim())
+  params.append('sort', sortBy.value.trim())
   const url = route.path + '?' + params.toString()
 
   history.pushState({}, '', url)
@@ -230,6 +236,7 @@ function search(updateHistory: boolean) {
     }
     params.append('first', ((page.value - 1) * preferences.resultsPerPage).toString())
     params.append('max', (page.value * preferences.resultsPerPage).toString())
+    params.append('sort', sortBy.value.trim())
     params.append('max-snippets', preferences.snippetsPerResult.toString())
     params.append('row-padding', '2')
     axios
@@ -472,6 +479,16 @@ function removeAuthor(author: string) {
         <div class="field has-addons">
           <label class="label">{{ $t('search.document-reference') }}</label>
           <input class="input" type="text" v-model="docRefs" @keyup.enter="search(true)" />
+        </div>
+        <div class="field has-addons">
+          <label class="label">{{ $t('search.sort-by') }}</label>
+          <div class="select">
+            <select v-model="sortBy">
+              <option value="Score">{{ $t('search.sort.score') }}</option>
+              <option value="DateAscending">{{ $t('search.sort.date-ascending') }}</option>
+              <option value="DateDescending">{{ $t('search.sort.date-descending') }}</option>
+            </select>
+          </div>
         </div>
         <div class="field has-text-centered p-2">
           <button class="button is-light" @click="resetResults">{{ $t('search.reset') }}</button
