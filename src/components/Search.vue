@@ -14,6 +14,7 @@ import {
   faFileLines
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import FixWordModal from '../components/FixWordModal.vue'
 
 library.add(faMagnifyingGlass)
 library.add(faFileImage)
@@ -360,9 +361,63 @@ function removeAuthor(author: string) {
     authors.value.splice(index, 1)
   }
 }
+
+const fixWordModalVisible = ref<boolean>(false)
+const fixWordOffset = ref<number>()
+const fixWordDocRef = ref<string>()
+function showFixWordModal() {
+  fixWordModalVisible.value = true
+  console.log(`fixWordVisible: ${fixWordModalVisible.value}`)
+}
+
+function hideFixWordModal() {
+  fixWordModalVisible.value = false
+  console.log(`fixWordVisible: ${fixWordModalVisible.value}`)
+}
+
+function correctWord(docRef: string) {
+  var sel = window.getSelection()
+
+  if (sel && sel.anchorNode) {
+    const range = sel.getRangeAt(0)
+    console.log(
+      `range startOffset: ${range.startOffset}, endOffset ${range.endOffset}, startContainer ${range.startContainer.nodeName}, endContainer ${range.endContainer.nodeName}, commonAncestorContainer ${range.commonAncestorContainer.nodeName}`
+    )
+    console.log(`sel.anchorNode: ${sel.anchorNode.nodeName}, sel.anchorOffset: ${sel.anchorOffset}`)
+
+    // Get the parent span
+    let parentElement = sel.anchorNode
+    while (parentElement.nodeType != Node.ELEMENT_NODE) {
+      parentElement = parentElement.parentNode as ParentNode
+    }
+
+    let parentSpan = parentElement as HTMLElement
+    while (parentSpan.tagName != 'SPAN') {
+      parentSpan = parentSpan.parentElement as HTMLElement
+    }
+
+    const localOffset = sel.anchorOffset
+    const globalOffsetStr = parentSpan.getAttribute('offset') ?? '0'
+    const globalOffset = parseInt(globalOffsetStr)
+    const wordOffset = globalOffset + localOffset
+    console.log(
+      `localOffset: ${localOffset}, globalOffset: ${globalOffset}, wordOffset: ${wordOffset}`
+    )
+
+    fixWordDocRef.value = docRef
+    fixWordOffset.value = wordOffset
+    showFixWordModal()
+  }
+}
 </script>
 
 <template>
+  <FixWordModal
+    :visible="fixWordModalVisible"
+    :doc-ref="fixWordDocRef"
+    :word-offset="fixWordOffset"
+    @on-close-modal="hideFixWordModal"
+  ></FixWordModal>
   <div>
     <div class="block has-text-white custom-background has-text-weight-semibold m-0 p-0">
       <div class="container is-max-desktop">
@@ -566,7 +621,11 @@ function removeAuthor(author: string) {
             </div>
             <ul>
               <li v-for="(snippet, index) in result.snippets">
-                <div v-html="snippet.text" class="rtl-align yiddish pr-2 pl-2"></div>
+                <div
+                  v-html="snippet.text"
+                  class="rtl-align yiddish pr-2 pl-2"
+                  @dblclick="correctWord(result.docRef)"
+                ></div>
                 <div class="container">
                   <button
                     class="button is-small is-text p-1 m-1"

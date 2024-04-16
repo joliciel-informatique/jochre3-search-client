@@ -41,6 +41,11 @@
     "results-per-page": "Results per page",
     "snippets-per-result": "Snippets per book"
   },
+  "fix-word": {
+    "title": "Fix a word",
+    "instructions": "Please enter the word exactly as it appears above, including niqqud, apostrophes, quotes, dashes, and other punctuation. If the word is badly segmented (i.e. if only part of the word appears), do not correct it.",
+    "word": "Word:"
+  },
   "cancel": "Cancel",
   "save": "Save changes",
   "pagination": {

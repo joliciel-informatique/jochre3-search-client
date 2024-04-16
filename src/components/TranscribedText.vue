@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, onBeforeUpdate, inject, watch } from 'vue'
-import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router'
-import axios from 'axios'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
-import { usePreferencesStore } from '@/stores/PreferencesStore'
+import axios from 'axios'
+import { inject, onMounted, ref } from 'vue'
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 
-const router = useRouter()
 const route = useRoute()
 const keycloak = useKeycloakStore().keycloak
-const preferences = usePreferencesStore()
 const API_URL = inject('apiUrl')
 
 const docText = ref<string>('')

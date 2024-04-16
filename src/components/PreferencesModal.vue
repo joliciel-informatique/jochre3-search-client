@@ -49,7 +49,7 @@ function onCancel() {
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">{{ $t('preferences.title') }}</p>
-        <button class="delete" aria-label="close"></button>
+        <button class="delete" aria-label="close" @click="onCancel"></button>
       </header>
       <section class="modal-card-body">
         <div class="field">
