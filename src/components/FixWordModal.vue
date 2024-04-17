@@ -72,6 +72,27 @@ function loadWordImage(docRef: string, wordOffset: number) {
 
 function onSubmit() {
   console.log('onSubmit')
+  axios
+    .post(
+      `${API_URL}/suggest-word`,
+      {
+        docRef: props.docRef,
+        offset: props.wordOffset,
+        suggestion: word.value
+      },
+      {
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${keycloak?.token}`
+        }
+      }
+    )
+    .then((response) => {
+      console.log('Word suggestion made')
+    })
+    .catch((error) => {
+      console.error(error)
+    })
   emit('onCloseModal')
 }
 

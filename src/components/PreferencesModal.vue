@@ -34,6 +34,9 @@ function onSubmit(vi18n: VueI18n.VueI18n) {
       console.log('Saved preferences')
       vi18n.locale = preferences.language
     })
+    .catch((error) => {
+      console.error(error)
+    })
   emit('onCloseModal')
 }
 

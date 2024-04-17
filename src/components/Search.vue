@@ -257,6 +257,9 @@ function search(updateHistory: boolean) {
         totalCount.value = response.data.totalCount
         images.value = new Map()
       })
+      .catch((error) => {
+        console.error(error)
+      })
   } else {
     if (updateHistory) {
       updateUrl()
@@ -298,6 +301,9 @@ function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
           const imgData = 'data:' + response.headers['content-type'] + ';base64,' + b64
           images.value.set(imageKey, imgData)
         }
+      })
+      .catch((error) => {
+        console.error(error)
       })
   }
 }
