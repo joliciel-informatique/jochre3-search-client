@@ -33,7 +33,7 @@ function logout() {
   <div class="block has-text-white custom-background has-text-weight-semibold m-0 p-0">
     <div class="grid">
       <div class="cell p-2">
-        <img style="width: 100px; border: none" src="/images/ocr-logo.jpg" />
+        <img style="width: 100px; border: none" :src="$t('header.logo')" />
       </div>
       <div class="cell is-col-span-2 p-2">
         <div v-html="$t('header.title')"></div>

@@ -12,7 +12,10 @@
         </a>
       </div>
       <div class="column" v-html="$t('footer.credits')"></div>
-      <div class="column" v-html="$t('footer.privacy')"></div>
+      <div class="column">
+        <div v-html="$t('footer.credits-column-2')"></div>
+        <div v-html="$t('footer.privacy')"></div>
+      </div>
     </div>
   </footer>
 </template>

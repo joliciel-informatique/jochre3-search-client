@@ -14,12 +14,14 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 import en from './i18n/locales/en.json'
 import yi from './i18n/locales/yi.json'
 import keycloakParams from './security/keycloak.json'
-import config from './config/config.json'
+import { mergeDeep } from './assets/deepMerge'
 
 const messages = {
   en: en,
   yi: yi
 }
+
+const customizedMessages = {}
 
 const pinia: Pinia = createPinia()
 
@@ -28,11 +30,17 @@ const app = createApp(App)
 app.use(router)
 app.use(pinia)
 
-app.provide('apiUrl', config.apiUrl)
+const apiUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : 'http://localhost:4242'
+
+app.provide('apiUrl', apiUrl)
 
 const keycloakConfig: KeycloakConfig = {
-  url: keycloakParams['auth-server-url'],
-  realm: keycloakParams.realm,
+  url: import.meta.env.VITE_KEYCLOAK_URL
+    ? import.meta.env.VITE_KEYCLOAK_URL
+    : keycloakParams['auth-server-url'],
+  realm: import.meta.env.VITE_KEYCLOAK_REALM
+    ? import.meta.env.VITE_KEYCLOAK_REALM
+    : keycloakParams.realm,
   clientId: keycloakParams.resource
 }
 
@@ -61,12 +69,18 @@ keycloak
         snippetsPerResult: number
       }
 
-      axios
-        .get<UserPreferences>(`${config.apiUrl}/preferences/user`, {
-          headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${keycloak?.token}`
-          }
+      fetch(import.meta.env.BASE_URL + 'conf/config.json')
+        .then((response) => response.json())
+        .then((config) => {
+          mergeDeep(customizedMessages, messages, config)
+        })
+        .then(() => {
+          return axios.get<UserPreferences>(`${apiUrl}/preferences/user`, {
+            headers: {
+              accept: 'application/json',
+              Authorization: `Bearer ${keycloak?.token}`
+            }
+          })
         })
         .then((response) => {
           const language = response.data.language
@@ -85,7 +99,7 @@ keycloak
             legacy: false,
             locale: preferencesStore.language,
             fallbackLocale: 'en',
-            messages
+            messages: customizedMessages
           })
           app.use(i18n)
           app.mount('#app')

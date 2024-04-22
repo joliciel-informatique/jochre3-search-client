@@ -1,6 +1,8 @@
 {
   "Jochre": "Jochre",
   "search": {
+    "about": "Full-text search engine.",
+    "index-size": "Index size: {0} books.",
     "query": "Please enter a search term",
     "search": "Search",
     "strict": "Strict",
@@ -55,12 +57,17 @@
     "last": "last page"
   },
   "header": {
-    "title": "<span class=\"title has-text-white\">Yiddish Book Center's Full-Text Search</span><br><span class=\"beta-flyout\">Currently in beta</span><br>Go to <a href=\"http://www.yiddishbookcenter.org\" target=\"_blank\">yiddishbookcenter.org</a>",
+    "logo": "/images/jochreLogo.png",
+    "title": "",
     "logout": "Logout"
   },
   "footer": {
     "powered-by": "Powered by",
-    "credits": "Texts scanned by the <a href=\"http://www.yiddishbookcenter.org\" target=\"_blank\">Yiddish Book Center</a><br><br>Texts OCR'd and indexed by <a href=\"https://gitlab.com/assafurieli\" target=\"_blank\">Assaf Urieli</a>, Joliciel Informatique<br><br>Lexicon by Yitskhok Niborski and the <a href=\"https://www.yiddishweb.com/\" target=\"_blank\">Maison de la Culture Yiddish</a>",
-    "privacy": "Made possible by the generous support of The David and Barbara B. Hirschhorn Foundation, Inc.<br><br>Privacy Policy"
+    "credits": "",
+    "credits-column-2": "",
+    "privacy": "<a href=\"privacy.html\">Privacy Policy</a>"
+  },
+  "privacy": {
+    "policy": "Privacy Policy"
   }
 }

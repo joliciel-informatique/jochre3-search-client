@@ -37,3 +37,29 @@ npm run build
 ```sh
 npm run lint
 ```
+
+### To build the docker file
+
+```
+docker build -t registry.gitlab.com/jochre/jochre3-search-client:[YOUR-TAG] .
+```
+
+### To run the docker image
+
+```
+docker-compose -f docker-compose/docker-compose.yml up -d
+```
+
+To take it down again:
+
+```
+docker-compose -f docker-compose/docker-compose.yml down
+```
+
+### Customizing
+
+You can customize the search engine by creating the following files in the public folder:
+
+- conf/config.json - this file must override keys in i18n/locales/en.json. See conf/config-sample.json for an example.
+  - In particular, you can add a logo to images, and change "en.header.logo" to point at your new logo.
+- privacy.html - you can use privacy-sample.html as an example.

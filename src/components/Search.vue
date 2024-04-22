@@ -322,6 +322,7 @@ function resetResults() {
   docRefs.value = ''
   authors.value = []
   strict.value = false
+  showAdvanced.value = false
   search(true)
 }
 
@@ -561,23 +562,9 @@ function correctWord(docRef: string) {
       </div>
     </div>
     <div class="container is-max-desktop hero is-full-height">
-      <div
-        v-if="!hasSearch && searchResults.length == 0"
-        :class="{ 'ltr-align': $i18n.locale === 'yi', english: $i18n.locale === 'yi' }"
-      >
-        With Yiddish Book Center's Full-Text search, you can search the complete contents of
-        {{ indexSize }} Yiddish books in our digital library. This application (powered by the
-        Jochre engine) uses machine learning to correct the OCR and improve character recognition
-        over time. <br /><br />
-        This site is currently in beta. Please send feedback and error reports to
-        <a href="mailto:ocr@yiddishbookcenter.org">ocr@yiddishbookcenter.org</a>. <br /><br />
-        For help with this site, please see the Jochre
-        <a href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help" target="_blank"
-          >user's guide</a
-        >. Comments, questions, and other feedback may be submitted on our
-        <a href="https://www.yiddishbookcenter.org/full-text-search" target="_blank"
-          >website here</a
-        >
+      <div v-if="!hasSearch && searchResults.length == 0">
+        <div v-html="$t('search.about')"></div>
+        <div>{{ $t('search.index-size', [indexSize]) }}</div>
       </div>
       <div v-if="hasSearch && searchResults.length == 0">
         <strong>{{ $t('results.none') }}</strong>

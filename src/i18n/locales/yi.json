@@ -1,6 +1,8 @@
 {
   "Jochre": "יאָוקער",
   "search": {
+    "about": "זוך־מאַשין פֿונעם טעקסט־אינהאַלט פֿון די ביכער אין אונדזער דיגיטאַלישער ביבליאָטעק.",
+    "index-size": "גרײס פֿון זוכצעטל: {0} ביכער.",
     "query": "שרײַבט אַרײַן אַ זוכוואָרט",
     "search": "זוכן",
     "strict": "שטרענג",
@@ -55,12 +57,13 @@
     "last": "סוף"
   },
   "header": {
-    "title": "<span class=\"title has-text-white\">Yiddish Book Center's Full-Text Search</span><br><span class=\"beta-flyout\">Currently in beta</span><br>גײט צו <a href=\"http://www.yiddishbookcenter.org\" target=\"_blank\">yiddishbookcenter.org</a>",
+    "title": "",
     "logout": "אַרױסלאָגירן"
   },
   "footer": {
     "powered-by": "געבױט אױפֿן יסוד פֿון",
-    "credits": "טעקסטן סקאַנירט דורכן <a href=\"http://www.yiddishbookcenter.org\">ייִדישן ביכער־צענטער</a><br><br>אָפּטישע אותיות־דערקענונג און אינדעקסירונג פֿון <a href=\"https://gitlab.com/assafurieli\" target=\"blank\">אסף אוריאלי</a>, זשאָליסיעל אינפֿאָרמאַטיק<br><br>לעקסיקאָן פֿון יצחק ניבאָרסקי און דער <a href=\"https://www.yiddishweb.com/\" target=\"blank\">פּאַריזער ייִדיש־צענטער</a>",
-    "privacy": "Made possible by the generous support of The David and Barbara B. Hirschhorn Foundation, Inc.<br><br>פּאָליטיק פֿון דאַטנשיץ"
+    "credits": "",
+    "credits-column-2": "",
+    "privacy": "<a href=\"privacy.html\">פּאָליטיק פֿון דאַטנשיץ</a>"
   }
 }

@@ -29,5 +29,6 @@ coverage
 
 *.tsbuildinfo
 
-/public/config.json
-/public/keycloak.json
+/public/conf/config.json
+/public/privacy.html
+/public/yiddishbookcenter-ocr.jpg
