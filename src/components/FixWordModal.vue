@@ -113,11 +113,10 @@ function onCancel() {
       <section class="modal-card-body">
         <img :src="wordImage" />
         <div>{{ $t('fix-word.instructions') }}</div>
-        <div class="field">
-          <label class="label">{{ $t('fix-word.word') }}</label>
-          <div class="control">
-            <input class="input keyboardInput" type="text" lang="yi" v-model="word" />
-          </div>
+        <div class="field has-addons">
+          <label class="label">{{ $t('fix-word.word') }}</label
+          >&nbsp;
+          <input class="input keyboardInput" type="text" lang="yi" v-model="word" />
         </div>
       </section>
       <footer class="modal-card-foot">

@@ -11,16 +11,19 @@ import {
   faFileImage,
   faSquarePlus,
   faBookOpen,
-  faFileLines
+  faFileLines,
+  faPenToSquare
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import FixWordModal from '../components/FixWordModal.vue'
+import FixMetadataModal from '../components/FixMetadataModal.vue'
 
 library.add(faMagnifyingGlass)
 library.add(faFileImage)
 library.add(faSquarePlus)
 library.add(faBookOpen)
 library.add(faFileLines)
+library.add(faPenToSquare)
 
 const router = useRouter()
 const route = useRoute()
@@ -143,16 +146,13 @@ const getUrlQueryParams = async () => {
     sortBy.value = (route.query['sort'] as string).trim()
   }
 
-  if (
+  showAdvanced.value =
     authors.value.length > 0 ||
     title.value.length > 0 ||
     (fromYear.value != null && fromYear.value > 0) ||
     (toYear.value != null && toYear.value > 0) ||
     docRefs.value.length > 0 ||
-    sortBy.value.length > 0
-  ) {
-    showAdvanced.value = true
-  }
+    (sortBy.value.length > 0 && sortBy.value != 'Score')
 
   search(false)
 }
@@ -416,6 +416,29 @@ function correctWord(docRef: string) {
     showFixWordModal()
   }
 }
+
+const fixMetadataModalVisible = ref<boolean>(false)
+const fixMetadataDocRef = ref<string>()
+const fixMetadataField = ref<string>()
+const fixMetadataCurrentValue = ref<string>()
+
+function showFixMetadataModal() {
+  fixMetadataModalVisible.value = true
+  console.log(`fixMetadataModalVisible: ${fixMetadataModalVisible.value}`)
+}
+
+function hideFixMetadataModal() {
+  fixMetadataModalVisible.value = false
+  console.log(`fixMetadataModalVisible: ${fixMetadataModalVisible.value}`)
+}
+
+function fixMetadata(docRef: string, field: string, currentValue: string | undefined) {
+  console.log(`Correct metadata, doc ${docRef}, field ${field}, currentValue ${currentValue}`)
+  fixMetadataDocRef.value = docRef
+  fixMetadataField.value = field
+  fixMetadataCurrentValue.value = currentValue ?? ''
+  showFixMetadataModal()
+}
 </script>
 
 <template>
@@ -425,6 +448,13 @@ function correctWord(docRef: string) {
     :word-offset="fixWordOffset"
     @on-close-modal="hideFixWordModal"
   ></FixWordModal>
+  <FixMetadataModal
+    :visible="fixMetadataModalVisible"
+    :doc-ref="fixMetadataDocRef"
+    :field="fixMetadataField"
+    :current-value="fixMetadataCurrentValue"
+    @on-close-modal="hideFixMetadataModal"
+  ></FixMetadataModal>
   <div>
     <div class="block has-text-white custom-background has-text-weight-semibold m-0 p-0">
       <div class="container is-max-desktop">
@@ -472,7 +502,7 @@ function correctWord(docRef: string) {
                 class="input"
                 type="text"
                 v-model="authorText"
-                @keyup="findAuthors"
+                @input="findAuthors"
               />
             </div>
             <div
@@ -585,29 +615,90 @@ function correctWord(docRef: string) {
         </nav>
         <ul>
           <li v-for="result of searchResults">
-            <h1 class="title">{{ result.metadata.title ?? result.docRef }}</h1>
-            <div
-              v-if="result.metadata.titleEnglish != null && result.metadata.titleEnglish.length > 0"
-            >
+            <h1 class="title">
+              {{ result.metadata.title ?? result.docRef }}
+              <button
+                @click="fixMetadata(result.docRef, 'Title', result.metadata.title)"
+                class="button is-small is-white"
+              >
+                <span class="icon is-small fa-2xs">
+                  <font-awesome-icon icon="pen-to-square" />
+                </span>
+              </button>
+            </h1>
+            <div>
               <strong>{{ $t('results.alternate-title') }}</strong>
               {{ result.metadata.titleEnglish }}
+              <button
+                @click="fixMetadata(result.docRef, 'TitleEnglish', result.metadata.titleEnglish)"
+                class="button is-small is-white"
+              >
+                <span class="icon is-small fa-2xs">
+                  <font-awesome-icon icon="pen-to-square" />
+                </span>
+              </button>
             </div>
-            <div v-if="result.metadata.volume != null && result.metadata.volume.length > 0">
-              <strong>{{ $t('results.volume') }}</strong> {{ result.metadata.volume }}
+            <div>
+              <strong>{{ $t('results.volume') }}</strong>
+              {{ result.metadata.volume }}
+              <button
+                @click="fixMetadata(result.docRef, 'Volume', result.metadata.volume)"
+                class="button is-small is-white"
+              >
+                <span class="icon is-small fa-2xs">
+                  <font-awesome-icon icon="pen-to-square" />
+                </span>
+              </button>
             </div>
-            <div v-if="result.metadata.author != null && result.metadata.author.length > 0">
-              <strong>{{ $t('results.author') }}</strong> {{ result.metadata.author }}
+            <div>
+              <strong>{{ $t('results.author') }}</strong>
+              {{ result.metadata.author }}
+              <button
+                @click="fixMetadata(result.docRef, 'Author', result.metadata.author)"
+                class="button is-small is-white"
+              >
+                <span class="icon is-small fa-2xs">
+                  <font-awesome-icon icon="pen-to-square" />
+                </span>
+              </button>
             </div>
-            <div v-if="result.metadata.authorEnglish != null">
+            <div>
               <strong>{{ $t('results.alternate-author') }}</strong>
               {{ result.metadata.authorEnglish }}
+              <button
+                @click="fixMetadata(result.docRef, 'AuthorEnglish', result.metadata.authorEnglish)"
+                class="button is-small is-white"
+              >
+                <span class="icon is-small fa-2xs">
+                  <font-awesome-icon icon="pen-to-square" />
+                </span>
+              </button>
             </div>
             <div v-if="result.metadata.publisher != null">
-              <strong>{{ $t('results.publisher') }}</strong> {{ result.metadata.publisher }}
+              <strong>{{ $t('results.publisher') }}</strong>
+              {{ result.metadata.publisher }}
+              <button
+                @click="fixMetadata(result.docRef, 'Publisher', result.metadata.publisher)"
+                class="button is-small is-white"
+              >
+                <span class="icon is-small fa-2xs">
+                  <font-awesome-icon icon="pen-to-square" />
+                </span>
+              </button>
             </div>
-            <div v-if="result.metadata.publicationYear != null">
+            <div>
               <strong>{{ $t('results.publication-year') }}</strong>
               {{ result.metadata.publicationYear }}
+              <button
+                @click="
+                  fixMetadata(result.docRef, 'PublicationYear', result.metadata.publicationYear)
+                "
+                class="button is-small is-white"
+              >
+                <span class="icon is-small fa-2xs">
+                  <font-awesome-icon icon="pen-to-square" />
+                </span>
+              </button>
             </div>
             <div>
               <strong>{{ $t('results.document-reference') }}</strong> {{ result.docRef }}
