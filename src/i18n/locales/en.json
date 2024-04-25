@@ -48,6 +48,23 @@
     "instructions": "Please enter the word exactly as it appears above, including niqqud, apostrophes, quotes, dashes, and other punctuation. If the word is badly segmented (i.e. if only part of the word appears), do not correct it.",
     "word": "Word:"
   },
+  "fix-metadata": {
+    "title": "Correct document meta data",
+    "instructions": "Correct the meta data.",
+    "field": "Field:",
+    "current-value": "Current value:",
+    "new-value": "New value:",
+    "or-merge-with": "or Merge with:",
+    "field-type": {
+      "Title": "Title",
+      "TitleEnglish": "Alternate title",
+      "Volume": "Volume",
+      "Author": "Author",
+      "AuthorEnglish": "Alternate author",
+      "Publisher": "Publisher",
+      "PublicationYear": "Date"
+    }
+  },
   "cancel": "Cancel",
   "save": "Save changes",
   "pagination": {

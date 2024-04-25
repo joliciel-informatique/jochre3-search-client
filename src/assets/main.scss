@@ -234,3 +234,17 @@ html[lang='en-us'] #updatePreferences {
 .dropdown-menu {
   z-index: 802;
 }
+
+/*
+  Fix for drop-down getting hidden by modal-card-foot
+  From https://stackoverflow.com/a/75182245/1417558
+*/
+.modal.has-overflow {
+  position: fixed !important;
+  overflow: auto !important;
+}
+.modal .modal-content,
+.modal .modal-card,
+.modal .modal-card-body {
+  overflow: visible !important;
+}
