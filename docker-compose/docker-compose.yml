@@ -1,11 +1,16 @@
 version: '3.7'
 
 services:
-  vue-app:
-    image: jochre3-search-client:0.0.1
+  jochre3-search-client:
+    container_name: jochre3-search-client
+    image: registry.gitlab.com/jochre/jochre3-search-client:0.0.1
     restart: always
     ports:
       - '5173:8080'
+    volumes:
+      - ./frontend-config.json:/app/dist/conf/config.json
+      - ./yiddishbookcenter-ocr.jpg:/app/dist/images/yiddishbookcenter-ocr.jpg
+      - ./privacy.html:/app/dist/privacy.html
     networks:
       - vue-network
 networks:

@@ -63,3 +63,5 @@ You can customize the search engine by creating the following files in the publi
 - conf/config.json - this file must override keys in i18n/locales/en.json. See conf/config-sample.json for an example.
   - In particular, you can add a logo to images, and change "en.header.logo" to point at your new logo.
 - privacy.html - you can use privacy-sample.html as an example.
+
+An example of customization can be found in the docker-compose folder.

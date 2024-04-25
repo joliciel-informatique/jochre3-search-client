@@ -69,7 +69,7 @@ keycloak
         snippetsPerResult: number
       }
 
-      fetch(import.meta.env.BASE_URL + 'conf/config.json')
+      fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
         .then((response) => response.json())
         .then((config) => {
           mergeDeep(customizedMessages, messages, config)
