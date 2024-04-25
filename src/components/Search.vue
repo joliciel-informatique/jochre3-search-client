@@ -210,7 +210,17 @@ function updateUrl() {
 }
 
 function search(updateHistory: boolean) {
-  if (query.value.length > 0) {
+  hasSearch.value =
+    query.value.length > 0 ||
+    authors.value.length > 0 ||
+    title.value.length > 0 ||
+    (fromYear.value != null && fromYear.value > 0) ||
+    (toYear.value != null && toYear.value > 0) ||
+    docRefs.value.length > 0
+
+  console.log(`Has search? ${hasSearch.value}`)
+
+  if (hasSearch.value) {
     const params = new URLSearchParams()
     params.append('query', query.value)
     params.append('strict', strict.value.toString())
@@ -264,7 +274,6 @@ function search(updateHistory: boolean) {
     if (updateHistory) {
       updateUrl()
     }
-    hasSearch.value = false
     searchResults.value = []
     totalCount.value = 0
     images.value = new Map()
