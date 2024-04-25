@@ -1,4 +1,9 @@
 {
+  "api-url": "http://localhost:4242",
+  "keycloak": {
+    "url": "http://localhost:8080/",
+    "realm": "jochre-test"
+  },
   "en": {
     "search": {
       "about": "With Yiddish Book Center's Full-Text search, you can search the complete contents of Yiddish books in our digital library. This application (powered by the Jochre engine) uses machine learning to correct the OCR and improve character recognition over time. <br><br>This site is currently in beta. Please send feedback and error reports to <a href=\"mailto:ocr{'@'}yiddishbookcenter.org\">ocr{'@'}yiddishbookcenter.org</a>. <br><br>For help with this site, please see the Jochre <a href=\"https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help\" target=\"_blank\">user's guide</a>. Comments, questions, and other feedback may be submitted on our <a href=\"https://www.yiddishbookcenter.org/full-text-search\" target=\"_blank\">website here</a><br><br>"

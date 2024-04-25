@@ -30,112 +30,111 @@ const app = createApp(App)
 app.use(router)
 app.use(pinia)
 
-const apiUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : 'http://localhost:4242'
+console.log('Starting up')
 
-app.provide('apiUrl', apiUrl)
+fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
+  .then((response) => response.json())
+  .then((config) => {
+    mergeDeep(customizedMessages, messages, config)
 
-const keycloakConfig: KeycloakConfig = {
-  url: import.meta.env.VITE_KEYCLOAK_URL
-    ? import.meta.env.VITE_KEYCLOAK_URL
-    : keycloakParams['auth-server-url'],
-  realm: import.meta.env.VITE_KEYCLOAK_REALM
-    ? import.meta.env.VITE_KEYCLOAK_REALM
-    : keycloakParams.realm,
-  clientId: keycloakParams.resource
-}
+    console.log('found config')
+    const apiUrl = config['api-url'] ?? 'http://localhost:4242'
 
-const keycloak = new Keycloak(keycloakConfig)
-const keycloakStore = useKeycloakStore()
-keycloakStore.keycloak = keycloak
+    app.provide('apiUrl', apiUrl)
 
-const preferencesStore = usePreferencesStore()
-
-const initOptions: KeycloakInitOptions = {
-  onLoad: 'login-required'
-}
-
-keycloak
-  .init(initOptions)
-  .then((auth) => {
-    if (!auth) {
-      console.warn('Authentication failed')
-    } else {
-      console.log('Authenticated')
-
-      // After login, load the user preferences from the database
-      interface UserPreferences {
-        language: string
-        resultsPerPage: number
-        snippetsPerResult: number
-      }
-
-      fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
-        .then((response) => response.json())
-        .then((config) => {
-          mergeDeep(customizedMessages, messages, config)
-        })
-        .then(() => {
-          return axios.get<UserPreferences>(`${apiUrl}/preferences/user`, {
-            headers: {
-              accept: 'application/json',
-              Authorization: `Bearer ${keycloak?.token}`
-            }
-          })
-        })
-        .then((response) => {
-          const language = response.data.language
-          if (language) {
-            preferencesStore.language = language
-          }
-          const resultsPerPage = response.data.resultsPerPage
-          if (resultsPerPage) {
-            preferencesStore.resultsPerPage = resultsPerPage
-          }
-          const snippetsPerResult = response.data.snippetsPerResult
-          if (snippetsPerResult) {
-            preferencesStore.snippetsPerResult = snippetsPerResult
-          }
-          const i18n = createI18n({
-            legacy: false,
-            locale: preferencesStore.language,
-            fallbackLocale: 'en',
-            messages: customizedMessages
-          })
-          app.use(i18n)
-          app.mount('#app')
-        })
-        .catch((reason: AxiosError) => {
-          if (reason.response?.status === 404) {
-            console.log('No preferences for user')
-            const i18n = createI18n({
-              legacy: false,
-              locale: preferencesStore.language,
-              fallbackLocale: 'en',
-              messages
-            })
-            app.use(i18n)
-            app.mount('#app')
-          } else {
-            // Don't mount the app
-          }
-          console.error(reason.message)
-        })
+    const keycloakConfig: KeycloakConfig = {
+      url: config.keycloak?.url ?? keycloakParams['auth-server-url'],
+      realm: config.keycloak?.realm ?? keycloakParams.realm,
+      clientId: keycloakParams.resource
     }
 
-    //Token Refresh
-    setInterval(() => {
-      keycloak
-        .updateToken(70)
-        .then((refreshed) => {
-          if (refreshed) {
-            console.log('Token refreshed')
-          } else {
-            console.warn('Token not refreshed')
+    const keycloak = new Keycloak(keycloakConfig)
+    const keycloakStore = useKeycloakStore()
+    keycloakStore.keycloak = keycloak
+
+    const preferencesStore = usePreferencesStore()
+
+    const initOptions: KeycloakInitOptions = {
+      onLoad: 'login-required'
+    }
+
+    keycloak
+      .init(initOptions)
+      .then((auth) => {
+        if (!auth) {
+          console.warn('Authentication failed')
+        } else {
+          console.log('Authenticated')
+
+          // After login, load the user preferences from the database
+          interface UserPreferences {
+            language: string
+            resultsPerPage: number
+            snippetsPerResult: number
           }
-        })
-        .catch(() => {
-          console.error('Failed to refresh token')
-        })
-    }, 6000)
+
+          axios
+            .get<UserPreferences>(`${apiUrl}/preferences/user`, {
+              headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${keycloak?.token}`
+              }
+            })
+            .then((response) => {
+              const language = response.data.language
+              if (language) {
+                preferencesStore.language = language
+              }
+              const resultsPerPage = response.data.resultsPerPage
+              if (resultsPerPage) {
+                preferencesStore.resultsPerPage = resultsPerPage
+              }
+              const snippetsPerResult = response.data.snippetsPerResult
+              if (snippetsPerResult) {
+                preferencesStore.snippetsPerResult = snippetsPerResult
+              }
+              const i18n = createI18n({
+                legacy: false,
+                locale: preferencesStore.language,
+                fallbackLocale: 'en',
+                messages: customizedMessages
+              })
+              app.use(i18n)
+              app.mount('#app')
+            })
+            .catch((reason: AxiosError) => {
+              if (reason.response?.status === 404) {
+                console.log('No preferences for user')
+                const i18n = createI18n({
+                  legacy: false,
+                  locale: preferencesStore.language,
+                  fallbackLocale: 'en',
+                  messages
+                })
+                app.use(i18n)
+                app.mount('#app')
+              } else {
+                // Don't mount the app
+              }
+              console.error(reason.message)
+            })
+        }
+
+        //Token Refresh
+        setInterval(() => {
+          keycloak
+            .updateToken(70)
+            .then((refreshed) => {
+              if (refreshed) {
+                console.log('Token refreshed')
+              } else {
+                console.warn('Token not refreshed')
+              }
+            })
+            .catch(() => {
+              console.error('Failed to refresh token')
+            })
+        }, 6000)
+      })
+      .catch(() => console.error('Authentication failed'))
   })
-  .catch(() => console.error('Authentication failed'))
