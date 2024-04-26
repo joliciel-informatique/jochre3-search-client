@@ -636,8 +636,11 @@ function fixMetadata(docRef: string, field: string, currentValue: string | undef
               </button>
             </h1>
             <div>
-              <strong>{{ $t('results.alternate-title') }}</strong>
-              {{ result.metadata.titleEnglish }}
+              <strong>{{ $t('results.alternate-title') }}</strong
+              >&nbsp;
+              <span :class="{ ltr: $i18n.locale === 'yi', english: $i18n.locale === 'yi' }">
+                {{ result.metadata.titleEnglish }}
+              </span>
               <button
                 @click="fixMetadata(result.docRef, 'TitleEnglish', result.metadata.titleEnglish)"
                 class="button is-small is-white"
@@ -648,7 +651,8 @@ function fixMetadata(docRef: string, field: string, currentValue: string | undef
               </button>
             </div>
             <div>
-              <strong>{{ $t('results.volume') }}</strong>
+              <strong>{{ $t('results.volume') }}</strong
+              >&nbsp;
               {{ result.metadata.volume }}
               <button
                 @click="fixMetadata(result.docRef, 'Volume', result.metadata.volume)"
@@ -660,7 +664,8 @@ function fixMetadata(docRef: string, field: string, currentValue: string | undef
               </button>
             </div>
             <div>
-              <strong>{{ $t('results.author') }}</strong>
+              <strong>{{ $t('results.author') }}</strong
+              >&nbsp;
               {{ result.metadata.author }}
               <button
                 @click="fixMetadata(result.docRef, 'Author', result.metadata.author)"
@@ -672,8 +677,11 @@ function fixMetadata(docRef: string, field: string, currentValue: string | undef
               </button>
             </div>
             <div>
-              <strong>{{ $t('results.alternate-author') }}</strong>
-              {{ result.metadata.authorEnglish }}
+              <strong>{{ $t('results.alternate-author') }}</strong
+              >&nbsp;
+              <span :class="{ ltr: $i18n.locale === 'yi', english: $i18n.locale === 'yi' }">{{
+                result.metadata.authorEnglish
+              }}</span>
               <button
                 @click="fixMetadata(result.docRef, 'AuthorEnglish', result.metadata.authorEnglish)"
                 class="button is-small is-white"
@@ -684,7 +692,8 @@ function fixMetadata(docRef: string, field: string, currentValue: string | undef
               </button>
             </div>
             <div v-if="result.metadata.publisher != null">
-              <strong>{{ $t('results.publisher') }}</strong>
+              <strong>{{ $t('results.publisher') }}</strong
+              >&nbsp;
               {{ result.metadata.publisher }}
               <button
                 @click="fixMetadata(result.docRef, 'Publisher', result.metadata.publisher)"
@@ -696,7 +705,8 @@ function fixMetadata(docRef: string, field: string, currentValue: string | undef
               </button>
             </div>
             <div>
-              <strong>{{ $t('results.publication-year') }}</strong>
+              <strong>{{ $t('results.publication-year') }}</strong
+              >&nbsp;
               {{ result.metadata.publicationYear }}
               <button
                 @click="
@@ -710,7 +720,8 @@ function fixMetadata(docRef: string, field: string, currentValue: string | undef
               </button>
             </div>
             <div>
-              <strong>{{ $t('results.document-reference') }}</strong> {{ result.docRef }}
+              <strong>{{ $t('results.document-reference') }}</strong
+              >&nbsp;{{ result.docRef }}
             </div>
             <ul>
               <li v-for="(snippet, index) in result.snippets">

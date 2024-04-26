@@ -3,8 +3,8 @@ version: '3.7'
 services:
   jochre3-search-client:
     container_name: jochre3-search-client
-    image: registry.gitlab.com/jochre/jochre3-search-client:0.0.1
-    restart: always
+    image: registry.gitlab.com/jochre/jochre3-search-client:0.0.1-SNAPSHOT
+    restart: on-failure
     ports:
       - '5173:8080'
     volumes:
