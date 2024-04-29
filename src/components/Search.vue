@@ -97,7 +97,7 @@ const lastPage = computed(() => {
 })
 const firstResult = computed(() => (page.value - 1) * preferences.resultsPerPage + 1)
 const lastResult = computed(() => {
-  const last = page.value * preferences.resultsPerPage + 1
+  const last = page.value * preferences.resultsPerPage
   return totalCount.value < last ? totalCount.value : last
 })
 
@@ -246,7 +246,7 @@ function search(updateHistory: boolean) {
       }
     }
     params.append('first', ((page.value - 1) * preferences.resultsPerPage).toString())
-    params.append('max', (page.value * preferences.resultsPerPage).toString())
+    params.append('max', preferences.resultsPerPage.toString())
     params.append('sort', sortBy.value.trim())
     params.append('max-snippets', preferences.snippetsPerResult.toString())
     params.append('row-padding', '2')
