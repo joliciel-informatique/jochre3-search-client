@@ -209,6 +209,13 @@ function updateUrl() {
   history.pushState({}, '', url)
 }
 
+function runNewSearch() {
+  page.value = 1
+  errorNotificationVisible.value = false
+
+  search(true)
+}
+
 function search(updateHistory: boolean) {
   hasSearch.value =
     query.value.length > 0 ||
@@ -218,6 +225,9 @@ function search(updateHistory: boolean) {
     (toYear.value != null && toYear.value > 0) ||
     docRefs.value.length > 0
 
+  console.log(
+    `Search parameters. query: ${query.value}. strict: ${strict.value}. authors: ${authors.value}. title: ${title.value}. fromyear: ${fromYear.value}. toYear: ${toYear.value}. docREfs: ${docRefs.value}`
+  )
   console.log(`Has search? ${hasSearch.value}`)
 
   if (hasSearch.value) {
@@ -231,11 +241,11 @@ function search(updateHistory: boolean) {
     if (title.value.trim().length > 0) {
       params.append('title', title.value.trim())
     }
-    if (fromYear.value != null) {
+    if (fromYear.value != null && fromYear.value > 0) {
       console.log(`Adding from-year ${fromYear.value}`)
       params.append('from-year', fromYear.value.toString())
     }
-    if (toYear.value != null) {
+    if (toYear.value != null && toYear.value > 0) {
       console.log(`Adding to-year ${toYear.value}`)
       params.append('to-year', toYear.value.toString())
     }
@@ -269,6 +279,7 @@ function search(updateHistory: boolean) {
       })
       .catch((error) => {
         console.error(error)
+        errorNotificationVisible.value = true
       })
   } else {
     if (updateHistory) {
@@ -332,6 +343,7 @@ function resetResults() {
   authors.value = []
   strict.value = false
   showAdvanced.value = false
+  errorNotificationVisible.value = false
   search(true)
 }
 
@@ -448,6 +460,13 @@ function fixMetadata(docRef: string, field: string, currentValue: string | undef
   fixMetadataCurrentValue.value = currentValue ?? ''
   showFixMetadataModal()
 }
+
+const errorNotificationVisible = ref<boolean>(false)
+
+function hideErrorNotification() {
+  errorNotificationVisible.value = false
+  console.log(`errorNotificationVisible: ${errorNotificationVisible.value}`)
+}
 </script>
 
 <template>
@@ -464,6 +483,10 @@ function fixMetadata(docRef: string, field: string, currentValue: string | undef
     :current-value="fixMetadataCurrentValue"
     @on-close-modal="hideFixMetadataModal"
   ></FixMetadataModal>
+  <div class="notification is-danger" v-if="errorNotificationVisible">
+    <button class="delete" @click="hideErrorNotification"></button>
+    {{ $t('error') }}
+  </div>
   <div>
     <div class="block has-text-white custom-background has-text-weight-semibold m-0 p-0">
       <div class="container is-max-desktop">
@@ -475,9 +498,9 @@ function fixMetadata(docRef: string, field: string, currentValue: string | undef
             type="text"
             lang="yi"
             :placeholder="$t('search.query')"
-            @keyup.enter="search(true)"
+            @keyup.enter="runNewSearch()"
           />
-          <button @click="search(true)" class="button is-normal" v-if="true">
+          <button @click="runNewSearch()" class="button is-normal" v-if="true">
             <span class="icon is-small">
               <font-awesome-icon icon="magnifying-glass" />
             </span>
@@ -485,7 +508,7 @@ function fixMetadata(docRef: string, field: string, currentValue: string | undef
         </div>
         <div class="control pr-2 pl-2">
           <label class="checkbox">
-            <input type="checkbox" v-model="strict" @change="search(true)" />
+            <input type="checkbox" v-model="strict" @change="runNewSearch()" />
             {{ $t('search.strict') }}
           </label>
         </div>
@@ -552,7 +575,7 @@ function fixMetadata(docRef: string, field: string, currentValue: string | undef
             type="text"
             lang="yi"
             v-model="title"
-            @keyup.enter="search(true)"
+            @keyup.enter="runNewSearch()"
           />
         </div>
         <div class="field has-addons">

@@ -6,15 +6,8 @@ $grey: #757575;
   $pagination-current-border-color: #eeb211
 );
 
-@use 'bulma/sass/utilities/mixins';
-
 @import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=David+Libre:wght@400;500;700&display=swap');
-
-@include mixins.touch {
-  // Styles applied
-  // below $desktop
-}
 
 // Bulma Import
 
@@ -124,41 +117,8 @@ a:hover {
   outline: 4px #ffff80 solid;
 }
 
-.checkboxes label {
-  display: block;
-  float: left;
-  padding-right: 10px;
-  white-space: nowrap;
-}
-
-.checkboxes input {
-  vertical-align: middle;
-}
-
-.checkboxes label span {
-  vertical-align: middle;
-}
-
-.editImage {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-}
-
 .link-white a {
   color: #fff;
-}
-
-.preferences__img {
-  width: 40px;
-  height: 40px;
-  margin: 0 10px 0 0;
-  border-radius: 40px;
-  overflow: hidden;
-}
-
-.rtl .preferences__img {
-  margin: 0 0 0 10px;
 }
 
 /* Bootstrap RTL fixes start */
@@ -202,15 +162,6 @@ a:hover {
 
 /* Bootstrap RTL fixes end */
 
-/* Hacks/fixes start */
-
-/* These settings currently don't work on pages which aren't the search page */
-html[lang='en-us'] #updatePreferences {
-  display: none !important;
-}
-
-/* Hacks/fixes end */
-
 /* Pager mobile start */
 
 @media screen and (max-width: 576px) {
@@ -247,4 +198,11 @@ html[lang='en-us'] #updatePreferences {
 .modal .modal-card,
 .modal .modal-card-body {
   overflow: visible !important;
+}
+
+.notification {
+  z-index: 801;
+  position: fixed;
+  bottom: 0;
+  right: 0;
 }
