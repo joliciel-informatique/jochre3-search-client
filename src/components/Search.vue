@@ -209,6 +209,8 @@ function updateUrl() {
   history.pushState({}, '', url)
 }
 
+const isBusy = ref<boolean>(false)
+
 function runNewSearch() {
   page.value = 1
   errorNotificationVisible.value = false
@@ -231,6 +233,7 @@ function search(updateHistory: boolean) {
   console.log(`Has search? ${hasSearch.value}`)
 
   if (hasSearch.value) {
+    isBusy.value = true
     const params = new URLSearchParams()
     params.append('query', query.value)
     params.append('strict', strict.value.toString())
@@ -273,6 +276,7 @@ function search(updateHistory: boolean) {
           updateUrl()
         }
         hasSearch.value = true
+        isBusy.value = false
         searchResults.value = response.data.results
         totalCount.value = response.data.totalCount
         images.value = new Map()
@@ -280,6 +284,7 @@ function search(updateHistory: boolean) {
       .catch((error) => {
         console.error(error)
         errorNotificationVisible.value = true
+        isBusy.value = false
       })
   } else {
     if (updateHistory) {
@@ -624,14 +629,17 @@ function hideErrorNotification() {
       </div>
     </div>
     <div class="container is-max-desktop hero is-full-height">
-      <div v-if="!hasSearch && searchResults.length == 0">
+      <div v-if="isBusy">
+        <img src="/images/loading.gif"></img>
+      </div>
+      <div v-if="!isBusy && !hasSearch && searchResults.length == 0">
         <div v-html="$t('search.about')"></div>
         <div>{{ $t('search.index-size', [indexSize]) }}</div>
       </div>
-      <div v-if="hasSearch && searchResults.length == 0">
+      <div v-if="!isBusy && hasSearch && searchResults.length == 0">
         <strong>{{ $t('results.none') }}</strong>
       </div>
-      <div v-if="searchResults.length > 0">
+      <div v-if="!isBusy && searchResults.length > 0">
         <nav class="navbar" role="navigation">
           <div class="navbar-start">
             <strong
