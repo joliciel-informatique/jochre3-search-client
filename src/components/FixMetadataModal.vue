@@ -19,6 +19,7 @@ const authorSelectionMethod = ref<string>('input')
 const applyEverywhere = computed(() => authorSelectionMethod.value != 'input')
 
 const showFindAuthorDropdown = ref<boolean>(false)
+const isLeftToRight = ref<boolean>(false)
 
 function resetForm() {
   authorToMerge.value = ''
@@ -45,6 +46,8 @@ watch(
   async (newVal, oldVal) => {
     resetForm()
     showFindAuthorDropdown.value = newVal == 'Author' || newVal == 'AuthorEnglish'
+    isLeftToRight.value =
+      newVal == 'AuthorEnglish' || newVal == 'TitleEnglish' || newVal == 'Publisher'
   }
 )
 
@@ -135,7 +138,13 @@ function addAuthor(author: string) {
         <div class="field has-addons">
           <label class="label">{{ $t('fix-metadata.current-value') }}</label
           >&nbsp;
-          {{ currentValue }}
+          <span
+            :class="{
+              ltr: isLeftToRight && $i18n.locale === 'yi',
+              english: isLeftToRight && $i18n.locale === 'yi'
+            }"
+            >{{ currentValue }}</span
+          >
         </div>
         <div class="field has-addons">
           <input
@@ -150,6 +159,10 @@ function addAuthor(author: string) {
           >&nbsp;
           <input
             class="input keyboardInput"
+            :class="{
+              'ltr-align': isLeftToRight && $i18n.locale === 'yi',
+              english: isLeftToRight && $i18n.locale === 'yi'
+            }"
             type="text"
             lang="yi"
             v-model="newValue"
