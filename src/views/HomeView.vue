@@ -6,7 +6,7 @@ import Footer from '../components/Footer.vue'
 
 <template>
   <main
-    class="container hero is-fullheight"
+    class="container hero is-fullheight is-fluid"
     :class="{ 'rtl-align': $i18n.locale === 'yi', yiddish: $i18n.locale === 'yi' }"
   >
     <Header />

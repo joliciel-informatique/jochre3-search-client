@@ -30,7 +30,9 @@ function logout() {
 </script>
 
 <template>
-  <div class="block has-text-white custom-background has-text-weight-semibold m-0 p-0">
+  <div
+    class="container is-fluid has-text-white custom-background has-text-weight-semibold m-0 p-0 header-footer-content"
+  >
     <div class="grid">
       <div class="cell p-2">
         <img style="width: 100px; border: none" :src="$t('header.logo')" />

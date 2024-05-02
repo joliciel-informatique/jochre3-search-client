@@ -347,6 +347,7 @@ function resetResults() {
   docRefs.value = ''
   authors.value = []
   strict.value = false
+  sortBy.value = 'Score'
   showAdvanced.value = false
   errorNotificationVisible.value = false
   search(true)
@@ -628,7 +629,7 @@ function hideErrorNotification() {
         </div>
       </div>
     </div>
-    <div class="container is-max-desktop hero is-full-height">
+    <div class="container is-max-desktop hero search-content">
       <div v-if="isBusy">
         <img src="/images/loading.gif"></img>
       </div>
