@@ -105,6 +105,9 @@ const hasSearch = ref<boolean>(false)
 const showAdvanced = ref<boolean>(false)
 
 const images = ref<Map<string, string>>(new Map())
+const imageBusy = ref<Set<string>>(new Set())
+
+const facets = ref<AggregationBin[]>([])
 
 const getUrlQueryParams = async () => {
   //router is async so we wait for it to be ready
@@ -173,6 +176,7 @@ interface Metadata {
   publicationYear: string
   publisher: string
   volume: string
+  url: string
 }
 
 interface SearchResult {
@@ -184,6 +188,15 @@ interface SearchResult {
 interface SearchResponse {
   results: SearchResult[]
   totalCount: number
+}
+
+interface AggregationBin {
+  label: string
+  count: number
+}
+
+interface AggregationBins {
+  bins: AggregationBin[]
 }
 
 function updateUrl() {
@@ -258,11 +271,19 @@ function search(updateHistory: boolean) {
         params.append('doc-refs', docRef)
       }
     }
+
+    const facetParams = new URLSearchParams({
+      ...Object.fromEntries(params)
+    })
+
     params.append('first', ((page.value - 1) * preferences.resultsPerPage).toString())
     params.append('max', preferences.resultsPerPage.toString())
     params.append('sort', sortBy.value.trim())
     params.append('max-snippets', preferences.snippetsPerResult.toString())
     params.append('row-padding', '2')
+
+    facets.value = []
+
     axios
       .get<SearchResponse>(`${API_URL}/search`, {
         params: params,
@@ -286,6 +307,26 @@ function search(updateHistory: boolean) {
         errorNotificationVisible.value = true
         isBusy.value = false
       })
+
+    if (authors.value.length != 1) {
+      facetParams.append('field', 'Author')
+      facetParams.append('maxBins', '10')
+
+      axios
+        .get<AggregationBins>(`${API_URL}/aggregate`, {
+          params: facetParams,
+          headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${keycloak?.token}`
+          }
+        })
+        .then((response) => {
+          facets.value = response.data.bins
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
   } else {
     if (updateHistory) {
       updateUrl()
@@ -296,6 +337,12 @@ function search(updateHistory: boolean) {
   }
 }
 
+function addAuthorToQuery(author: string) {
+  authors.value = [author]
+  authorInclude.value = 'true'
+  runNewSearch()
+}
+
 function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
   const imageKey = `${docRef}_${index}`
   if (images.value.has(imageKey)) {
@@ -303,6 +350,8 @@ function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
     images.value.delete(imageKey)
   } else {
     console.log(`Creating image ${imageKey}`)
+    imageBusy.value.add(imageKey)
+
     const params = new URLSearchParams()
     params.append('doc-ref', docRef)
     params.append('start-offset', `${snippet.start}`)
@@ -325,10 +374,12 @@ function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
           const b64 = btoa(String.fromCharCode(...new Uint8Array(response.data)))
           const imgData = 'data:' + response.headers['content-type'] + ';base64,' + b64
           images.value.set(imageKey, imgData)
+          imageBusy.value.delete(imageKey)
         }
       })
       .catch((error) => {
         console.error(error)
+        imageBusy.value.delete(imageKey)
       })
   }
 }
@@ -351,15 +402,6 @@ function resetResults() {
   showAdvanced.value = false
   errorNotificationVisible.value = false
   search(true)
-}
-
-interface AggregationBin {
-  label: string
-  count: number
-}
-
-interface AggregationBins {
-  bins: AggregationBin[]
 }
 
 function findAuthors() {
@@ -631,7 +673,7 @@ function hideErrorNotification() {
     </div>
     <div class="container is-max-desktop hero search-content">
       <div v-if="isBusy">
-        <img src="/images/loading.gif"></img>
+        <img src="/images/loading.gif" />
       </div>
       <div v-if="!isBusy && !hasSearch && searchResults.length == 0">
         <div v-html="$t('search.about')"></div>
@@ -654,10 +696,19 @@ function hideErrorNotification() {
             </button>
           </div>
         </nav>
+        <div v-if="facets.length > 0">
+          <span v-for="facet of facets">
+            <button @click="addAuthorToQuery(facet.label)" class="button is-small is-dark m-1">
+              {{ facet.label }}: {{ facet.count }}
+            </button>
+          </span>
+        </div>
         <ul>
           <li v-for="result of searchResults">
             <h1 class="title">
-              {{ result.metadata.title ?? result.docRef }}
+              <a :href="result.metadata.url" target="_blank">{{
+                result.metadata.title ?? result.docRef
+              }}</a>
               <button
                 @click="fixMetadata(result.docRef, 'Title', result.metadata.title)"
                 class="button is-small is-white"
@@ -809,6 +860,9 @@ function hideErrorNotification() {
                   </a>
                 </div>
                 <br />
+                <div v-if="imageBusy.has(`${result.docRef}_${index}`)">
+                  <img src="/images/loading.gif" />
+                </div>
                 <img
                   v-if="images.has(`${result.docRef}_${index}`)"
                   :src="images.get(`${result.docRef}_${index}`)"

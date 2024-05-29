@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, inject } from 'vue'
+import { inject } from 'vue'
 import axios from 'axios'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
@@ -30,7 +30,7 @@ function onSubmit(vi18n: VueI18n.VueI18n) {
         }
       }
     )
-    .then((response) => {
+    .then((_response) => {
       console.log('Saved preferences')
       vi18n.locale = preferences.language
     })

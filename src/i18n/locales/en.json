@@ -83,7 +83,7 @@
     "powered-by": "Powered by",
     "credits": "",
     "credits-column-2": "",
-    "privacy": "<a href=\"privacy.html\">Privacy Policy</a>"
+    "privacy": "<a href=\"privacy.html\" class=\"link-white\">Privacy Policy</a>"
   },
   "privacy": {
     "policy": "Privacy Policy"
