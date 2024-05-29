@@ -105,6 +105,7 @@ const hasSearch = ref<boolean>(false)
 const showAdvanced = ref<boolean>(false)
 
 const images = ref<Map<string, string>>(new Map())
+const imageBusy = ref<Set<string>>(new Set())
 
 const facets = ref<AggregationBin[]>([])
 
@@ -349,6 +350,8 @@ function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
     images.value.delete(imageKey)
   } else {
     console.log(`Creating image ${imageKey}`)
+    imageBusy.value.add(imageKey)
+
     const params = new URLSearchParams()
     params.append('doc-ref', docRef)
     params.append('start-offset', `${snippet.start}`)
@@ -371,10 +374,12 @@ function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
           const b64 = btoa(String.fromCharCode(...new Uint8Array(response.data)))
           const imgData = 'data:' + response.headers['content-type'] + ';base64,' + b64
           images.value.set(imageKey, imgData)
+          imageBusy.value.delete(imageKey)
         }
       })
       .catch((error) => {
         console.error(error)
+        imageBusy.value.delete(imageKey)
       })
   }
 }
@@ -857,6 +862,9 @@ function hideErrorNotification() {
                   </a>
                 </div>
                 <br />
+                <div v-if="imageBusy.has(`${result.docRef}_${index}`)">
+                  <img src="/images/loading.gif" />
+                </div>
                 <img
                   v-if="images.has(`${result.docRef}_${index}`)"
                   :src="images.get(`${result.docRef}_${index}`)"
