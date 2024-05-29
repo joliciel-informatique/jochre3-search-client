@@ -696,15 +696,13 @@ function hideErrorNotification() {
             </button>
           </div>
         </nav>
-        <nav class="navbar" role="navigation">
-          <div class="navbar-start">
-            <div class="navbar-item" v-for="facet of facets">
-              <button @click="addAuthorToQuery(facet.label)" class="button is-small is-dark">
-                {{ facet.label }}: {{ facet.count }}
-              </button>
-            </div>
-          </div>
-        </nav>
+        <div v-if="facets.length > 0">
+          <span v-for="facet of facets">
+            <button @click="addAuthorToQuery(facet.label)" class="button is-small is-dark m-1">
+              {{ facet.label }}: {{ facet.count }}
+            </button>
+          </span>
+        </div>
         <ul>
           <li v-for="result of searchResults">
             <h1 class="title">
