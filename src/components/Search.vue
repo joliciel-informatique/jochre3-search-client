@@ -106,6 +106,8 @@ const showAdvanced = ref<boolean>(false)
 
 const images = ref<Map<string, string>>(new Map())
 
+const facets = ref<AggregationBin[]>([])
+
 const getUrlQueryParams = async () => {
   //router is async so we wait for it to be ready
   await router.isReady()
@@ -187,6 +189,15 @@ interface SearchResponse {
   totalCount: number
 }
 
+interface AggregationBin {
+  label: string
+  count: number
+}
+
+interface AggregationBins {
+  bins: AggregationBin[]
+}
+
 function updateUrl() {
   const params = new URLSearchParams()
   params.append('query', query.value.trim())
@@ -259,11 +270,19 @@ function search(updateHistory: boolean) {
         params.append('doc-refs', docRef)
       }
     }
+
+    const facetParams = new URLSearchParams({
+      ...Object.fromEntries(params)
+    })
+
     params.append('first', ((page.value - 1) * preferences.resultsPerPage).toString())
     params.append('max', preferences.resultsPerPage.toString())
     params.append('sort', sortBy.value.trim())
     params.append('max-snippets', preferences.snippetsPerResult.toString())
     params.append('row-padding', '2')
+
+    facets.value = []
+
     axios
       .get<SearchResponse>(`${API_URL}/search`, {
         params: params,
@@ -287,6 +306,26 @@ function search(updateHistory: boolean) {
         errorNotificationVisible.value = true
         isBusy.value = false
       })
+
+    if (authors.value.length != 1) {
+      facetParams.append('field', 'Author')
+      facetParams.append('maxBins', '10')
+
+      axios
+        .get<AggregationBins>(`${API_URL}/aggregate`, {
+          params: facetParams,
+          headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${keycloak?.token}`
+          }
+        })
+        .then((response) => {
+          facets.value = response.data.bins
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
   } else {
     if (updateHistory) {
       updateUrl()
@@ -295,6 +334,12 @@ function search(updateHistory: boolean) {
     totalCount.value = 0
     images.value = new Map()
   }
+}
+
+function addAuthorToQuery(author: string) {
+  authors.value = [author]
+  authorInclude.value = 'true'
+  runNewSearch()
 }
 
 function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
@@ -352,15 +397,6 @@ function resetResults() {
   showAdvanced.value = false
   errorNotificationVisible.value = false
   search(true)
-}
-
-interface AggregationBin {
-  label: string
-  count: number
-}
-
-interface AggregationBins {
-  bins: AggregationBin[]
 }
 
 function findAuthors() {
@@ -653,6 +689,15 @@ function hideErrorNotification() {
             <button @click="resetResults" class="button is-small is-light">
               {{ $t('results.reset') }}
             </button>
+          </div>
+        </nav>
+        <nav class="navbar" role="navigation">
+          <div class="navbar-start">
+            <div class="navbar-item" v-for="facet of facets">
+              <button @click="addAuthorToQuery(facet.label)" class="button is-small is-dark">
+                {{ facet.label }}: {{ facet.count }}
+              </button>
+            </div>
           </div>
         </nav>
         <ul>
