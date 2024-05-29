@@ -173,6 +173,7 @@ interface Metadata {
   publicationYear: string
   publisher: string
   volume: string
+  url: string
 }
 
 interface SearchResult {
@@ -631,7 +632,7 @@ function hideErrorNotification() {
     </div>
     <div class="container is-max-desktop hero search-content">
       <div v-if="isBusy">
-        <img src="/images/loading.gif"></img>
+        <img src="/images/loading.gif" />
       </div>
       <div v-if="!isBusy && !hasSearch && searchResults.length == 0">
         <div v-html="$t('search.about')"></div>
@@ -657,7 +658,9 @@ function hideErrorNotification() {
         <ul>
           <li v-for="result of searchResults">
             <h1 class="title">
-              {{ result.metadata.title ?? result.docRef }}
+              <a :href="result.metadata.url" target="_blank">{{
+                result.metadata.title ?? result.docRef
+              }}</a>
               <button
                 @click="fixMetadata(result.docRef, 'Title', result.metadata.title)"
                 class="button is-small is-white"
