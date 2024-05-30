@@ -414,6 +414,7 @@ function resetResults() {
   showAdvanced.value = false
   errorNotificationVisible.value = false
   search(true)
+  getIndexSize()
 }
 
 function findAuthors() {
