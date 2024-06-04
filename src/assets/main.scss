@@ -163,6 +163,21 @@ a:hover {
   margin-right: 0.25rem;
 }
 
+.image-snippet {
+  width: 100%;
+}
+
+.snippet {
+  border-left: 3px #ccc solid;
+  padding: 0 0 0 10px;
+}
+
+.snippet.rtl {
+  border-left: 0;
+  border-right: 3px #ccc solid;
+  padding: 0 10px 0 0;
+}
+
 /* Bootstrap RTL fixes end */
 
 /* Pager mobile start */

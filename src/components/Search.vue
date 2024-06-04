@@ -724,7 +724,7 @@ function hideErrorNotification() {
       <div v-if="!isBusy && searchResults.length > 0">
         <ul>
           <li v-for="result of searchResults">
-            <h1 class="title">
+            <h1 class="title yiddish">
               <a :href="result.metadata.url" target="_blank">{{
                 result.metadata.title ?? result.docRef
               }}</a>
@@ -767,8 +767,7 @@ function hideErrorNotification() {
             </div>
             <div>
               <strong>{{ $t('results.author') }}</strong
-              >&nbsp;
-              {{ result.metadata.author }}
+              >&nbsp;<span class="yiddish">{{ result.metadata.author }}</span>
               <button
                 @click="fixMetadata(result.docRef, 'Author', result.metadata.author)"
                 class="button is-small is-white"
@@ -829,7 +828,7 @@ function hideErrorNotification() {
               <li v-for="(snippet, index) in result.snippets">
                 <div
                   v-html="snippet.text"
-                  class="rtl-align yiddish pr-2 pl-2"
+                  class="rtl-align snippet rtl yiddish pr-2 pl-2"
                   @dblclick="correctWord(result.docRef)"
                 ></div>
                 <div class="container">
@@ -883,6 +882,7 @@ function hideErrorNotification() {
                   <img src="/images/loading.gif" />
                 </div>
                 <img
+                  class="image-snippet"
                   v-if="images.has(`${result.docRef}_${index}`)"
                   :src="images.get(`${result.docRef}_${index}`)"
                   title="Image"
