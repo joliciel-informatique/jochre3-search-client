@@ -292,8 +292,7 @@ function search(updateHistory: boolean) {
       .get<SearchResponse>(`${API_URL}/search`, {
         params: params,
         headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${keycloak?.token}`
+          accept: 'application/json'
         }
       })
       .then((response) => {
@@ -320,8 +319,7 @@ function search(updateHistory: boolean) {
         .get<AggregationBins>(`${API_URL}/aggregate`, {
           params: facetParams,
           headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${keycloak?.token}`
+            accept: 'application/json'
           }
         })
         .then((response) => {
@@ -376,8 +374,7 @@ function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
       .get(`${API_URL}/image-snippet`, {
         params: params,
         headers: {
-          accept: 'image/png',
-          Authorization: `Bearer ${keycloak?.token}`
+          accept: 'image/png'
         },
         responseType: 'arraybuffer'
       })
@@ -426,8 +423,7 @@ function findAuthors() {
           maxBins: 10
         },
         headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${keycloak?.token}`
+          accept: 'application/json'
         }
       })
       .then((response) => {
@@ -721,7 +717,7 @@ function hideErrorNotification() {
           {{ $t('results.result-range', [firstResult, lastResult]) }}</strong
         >
       </div>
-      <div v-if="!isBusy && searchResults.length > 0">
+      <div class="column is-three-quarters" v-if="!isBusy && searchResults.length > 0">
         <ul>
           <li v-for="result of searchResults">
             <h1 class="title yiddish">
@@ -831,6 +827,9 @@ function hideErrorNotification() {
                   class="rtl-align snippet rtl yiddish pr-2 pl-2"
                   @dblclick="correctWord(result.docRef)"
                 ></div>
+                <div class="container is-italic has-text-weight-bold">
+                  {{ $t('results.word-fix-instructions') }}
+                </div>
                 <div class="container">
                   <button
                     class="button is-small is-text p-1 m-1"

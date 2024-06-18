@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import PreferencesSetup from '../components/PreferencesSetup.vue'
 import Search from '../components/Search.vue'
 import Header from '../components/Header.vue'
 import Footer from '../components/Footer.vue'
 </script>
 
 <template>
+  <PreferencesSetup />
   <main
     class="container hero is-fullheight is-fluid"
     :class="{ 'rtl-align': $i18n.locale === 'yi', yiddish: $i18n.locale === 'yi' }"

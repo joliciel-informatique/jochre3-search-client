@@ -6,6 +6,7 @@ import { inject, ref, watch } from 'vue'
 const props = defineProps(['visible', 'docRef', 'wordOffset'])
 const emit = defineEmits(['onCloseModal'])
 const keycloak = useKeycloakStore().keycloak
+const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
 
 const API_URL = inject('apiUrl')
 
@@ -111,6 +112,9 @@ function onCancel() {
         <button class="delete" aria-label="close" @click="onCancel"></button>
       </header>
       <section class="modal-card-body">
+        <div v-if="!authenticated" class="is-italic has-text-weight-bold has-text-danger">
+          {{ $t('fix-word.unauthenticated') }}
+        </div>
         <img :src="wordImage" />
         <div>{{ $t('fix-word.instructions') }}</div>
         <div class="field has-addons">
@@ -121,7 +125,7 @@ function onCancel() {
       </section>
       <footer class="modal-card-foot">
         <div class="buttons">
-          <button class="button is-link" @click="onSubmit">
+          <button class="button is-link" :disabled="!authenticated" @click="onSubmit">
             {{ $t('save') }}
           </button>
           <button class="button is-link is-light" @click="onCancel">

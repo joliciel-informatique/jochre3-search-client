@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { inject } from 'vue'
+import { inject, ref } from 'vue'
 import axios from 'axios'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import VueI18n from 'vue-i18n'
+import { useCookies } from 'vue3-cookies'
 
 defineProps(['visible'])
 const emit = defineEmits(['onCloseModal'])
 const keycloak = useKeycloakStore().keycloak
+const { cookies } = useCookies()
+
+const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
 
 const preferences = usePreferencesStore()
 
@@ -15,28 +19,34 @@ const API_URL = inject('apiUrl')
 
 function onSubmit(vi18n: VueI18n.VueI18n) {
   console.log('onSubmit')
-  axios
-    .post(
-      `${API_URL}/preferences/user`,
-      {
-        language: preferences.language,
-        resultsPerPage: preferences.resultsPerPage,
-        snippetsPerResult: preferences.snippetsPerResult
-      },
-      {
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${keycloak?.token}`
+  if (authenticated.value) {
+    axios
+      .post(
+        `${API_URL}/preferences/user`,
+        {
+          language: preferences.language,
+          resultsPerPage: preferences.resultsPerPage,
+          snippetsPerResult: preferences.snippetsPerResult
+        },
+        {
+          headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${keycloak?.token}`
+          }
         }
-      }
-    )
-    .then((_response) => {
-      console.log('Saved preferences')
-      vi18n.locale = preferences.language
-    })
-    .catch((error) => {
-      console.error(error)
-    })
+      )
+      .then((_response) => {
+        console.log('Saved preferences to database')
+        vi18n.locale = preferences.language
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  } else {
+    console.log('Saved preferences in cookie')
+    cookies.set('preferences', JSON.stringify(preferences))
+    vi18n.locale = preferences.language
+  }
   emit('onCloseModal')
 }
 
