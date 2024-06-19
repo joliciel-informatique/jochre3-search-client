@@ -4,13 +4,13 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import { createPinia, type Pinia } from 'pinia'
-import { I18nD, createI18n, type I18n } from 'vue-i18n'
+import { createI18n, type I18n } from 'vue-i18n'
 import axios from 'axios'
 import { AxiosError } from 'axios'
 import Keycloak, { type KeycloakConfig, type KeycloakInitOptions } from 'keycloak-js'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import { globalCookiesConfig, useCookies } from 'vue3-cookies'
+import { globalCookiesConfig } from 'vue3-cookies'
 
 import en from './i18n/locales/en.json'
 import yi from './i18n/locales/yi.json'
@@ -68,7 +68,7 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
           legacy: false,
           locale: preferencesStore.language,
           fallbackLocale: 'en',
-          messages
+          messages: customizedMessages
         })
         const i18nPromise = Promise.resolve(i18n)
         return i18nPromise
@@ -133,7 +133,7 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
                 legacy: false,
                 locale: preferencesStore.language,
                 fallbackLocale: 'en',
-                messages
+                messages: customizedMessages
               })
               return i18n
             } else {
