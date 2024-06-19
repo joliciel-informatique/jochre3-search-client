@@ -10,13 +10,19 @@ const { cookies } = useCookies()
 
 const preferences = usePreferencesStore()
 
+interface Preferences {
+  language: string
+  resultsPerPage: number
+  snippetsPerResult: number
+}
+
 onMounted(() => {
   const app = getCurrentInstance()
   const authenticated = keycloak?.authenticated ?? false
 
   console.log(`Authenticated? ${authenticated}`)
   if (!authenticated) {
-    const myPreferences = cookies.get('preferences')
+    const myPreferences = cookies.get('preferences') as unknown as Preferences
     if (myPreferences) {
       console.log(`Found preferences cookie: ${JSON.stringify(myPreferences)}`)
 
@@ -25,9 +31,10 @@ onMounted(() => {
       preferences.snippetsPerResult = myPreferences.snippetsPerResult
 
       const globalProperties = app?.appContext.config.globalProperties
-      const i18n: VueI18n.VueI18n = globalProperties?.$i18n
+      const i18n: VueI18n.VueI18n | undefined = globalProperties?.$i18n as VueI18n.VueI18n
       if (i18n) {
-        i18n.locale = preferences.language
+        const definedI18n = i18n as VueI18n.VueI18n
+        definedI18n.locale = preferences.language
       }
     } else {
       console.log('No preferences cookie')

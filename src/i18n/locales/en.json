@@ -51,7 +51,7 @@
     "unauthenticated": "In order to fix a word, please login first."
   },
   "fix-metadata": {
-    "title": "Correct document meta data",
+    "title": "Fix document meta data",
     "instructions": "Correct the meta data.",
     "field": "Field:",
     "current-value": "Current value:",

@@ -35,7 +35,7 @@ function onSubmit(vi18n: VueI18n.VueI18n) {
           }
         }
       )
-      .then((_response) => {
+      .then(() => {
         console.log('Saved preferences to database')
         vi18n.locale = preferences.language
       })
@@ -43,9 +43,13 @@ function onSubmit(vi18n: VueI18n.VueI18n) {
         console.error(error)
       })
   } else {
-    console.log('Saved preferences in cookie')
-    cookies.set('preferences', JSON.stringify(preferences))
+    console.log('Saving preferences in cookie')
+    cookies.set(
+      'preferences',
+      JSON.stringify(preferences, ['language', 'resultsPerPage', 'snippetsPerResult'])
+    )
     vi18n.locale = preferences.language
+    console.log('Saved preferences in cookie')
   }
   emit('onCloseModal')
 }

@@ -88,7 +88,7 @@ function onSubmit() {
         }
       }
     )
-    .then((response) => {
+    .then(() => {
       console.log('Word suggestion made')
     })
     .catch((error) => {

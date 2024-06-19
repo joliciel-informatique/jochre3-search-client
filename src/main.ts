@@ -139,7 +139,7 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
             } else {
               // Don't mount the app
               console.error(reason.message)
-              return undefined
+              throw reason
             }
           })
         return i18n
