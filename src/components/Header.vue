@@ -5,13 +5,19 @@ import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   // import icons here
-  faGear
+  faGear,
+  faRightToBracket,
+  faRightFromBracket
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(faGear)
+library.add(faRightToBracket)
+library.add(faRightFromBracket)
 
 const keycloak = useKeycloakStore().keycloak
+
+const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
 
 const preferencesVisible = ref<boolean>(false)
 function showPreferences() {
@@ -24,8 +30,12 @@ function hidePreferences() {
   console.log(`preferencesVisible: ${preferencesVisible.value}`)
 }
 
-function logout() {
-  keycloak?.logout()
+function loginOrLogout() {
+  if (authenticated.value) {
+    keycloak?.logout()
+  } else {
+    keycloak?.login()
+  }
 }
 </script>
 
@@ -42,13 +52,24 @@ function logout() {
       </div>
       <div class="cell p-2">
         <div class="container">
-          <button @click="showPreferences" class="button is-small">
+          <button
+            @click="showPreferences"
+            class="button is-small"
+            :title="$t('header.preferences')"
+          >
             <span class="icon is-small">
               <font-awesome-icon icon="gear" />
             </span></button
           >&nbsp;
-          <button @click="logout" class="button is-small">
-            {{ $t('header.logout') }}
+          <button
+            @click="loginOrLogout"
+            class="button is-small"
+            :title="authenticated ? $t('header.logout') : $t('header.login')"
+          >
+            <span class="icon is-small">
+              <font-awesome-icon icon="right-to-bracket" v-if="!authenticated" />
+              <font-awesome-icon icon="right-from-bracket" v-if="authenticated" />
+            </span>
           </button>
         </div>
         <PreferencesModal

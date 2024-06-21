@@ -35,7 +35,8 @@
     "reset": "Clear results",
     "none": "No search results",
     "show-original-page": "Go to book (page {0})",
-    "show-text": "View transcribed text"
+    "show-text": "View transcribed text",
+    "word-fix-instructions": "(Double-click on a word to make an OCR correction)"
   },
   "preferences": {
     "title": "Update preferences",
@@ -46,10 +47,11 @@
   "fix-word": {
     "title": "Fix a word",
     "instructions": "Please enter the word exactly as it appears above, including niqqud, apostrophes, quotes, dashes, and other punctuation. If the word is badly segmented (i.e. if only part of the word appears), do not correct it.",
-    "word": "Word:"
+    "word": "Word:",
+    "unauthenticated": "In order to fix a word, please login first."
   },
   "fix-metadata": {
-    "title": "Correct document meta data",
+    "title": "Fix document meta data",
     "instructions": "Correct the meta data.",
     "field": "Field:",
     "current-value": "Current value:",
@@ -63,7 +65,8 @@
       "AuthorEnglish": "Alternate author",
       "Publisher": "Publisher",
       "PublicationYear": "Date"
-    }
+    },
+    "unauthenticated": "In order to fix document meta data, please login first."
   },
   "cancel": "Cancel",
   "save": "Save changes",
@@ -78,6 +81,8 @@
   "header": {
     "logo": "/images/jochreLogo.png",
     "title": "",
+    "preferences": "Preferences",
+    "login": "Login",
     "logout": "Logout"
   },
   "footer": {
