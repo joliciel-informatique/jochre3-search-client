@@ -165,11 +165,12 @@ const getUrlQueryParams = async () => {
 }
 
 interface Snippet {
-  text: String
+  text: string
   page: number
   start: number
   end: number
   highlights: number[][]
+  deepLink: string
 }
 
 interface Metadata {
@@ -864,12 +865,13 @@ function hideErrorNotification() {
                     :href="`https://archive.org/details/${result.docRef}/page/n${snippet.page}/mode/1up`"
                     target="_blank"
                   >
-                    <span class="icon">
+                    <span class="icon" v-if="snippet.deepLink">
                       <font-awesome-icon icon="book-open" size="xs" />
                     </span>
                   </a>
                   <a
-                    :href="`https://archive.org/details/${result.docRef}/page/n${snippet.page}/mode/1up`"
+                    v-if="snippet.deepLink"
+                    :href="snippet.deepLink"
                     target="_blank"
                     class="button is-text p-0 m-1"
                   >
