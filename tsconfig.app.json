@@ -6,7 +6,7 @@
     "src/**/*.vue",
     "src/**/*.ts",
     "src/**/*.js",
-    "public/js/keyboard.js"
+    "src/assets/js/keyboard.js"
   ],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
