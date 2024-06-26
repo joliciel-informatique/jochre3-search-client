@@ -30,6 +30,7 @@ library.add(faPenToSquare)
 const router = useRouter()
 const route = useRoute()
 const keycloak = useKeycloakStore().keycloak
+const authenticated = keycloak?.authenticated ?? false
 const preferences = usePreferencesStore()
 const API_URL = inject('apiUrl')
 
@@ -289,11 +290,13 @@ function search(updateHistory: boolean) {
 
     facets.value = []
 
+    const searchUrl = authenticated ? 'search-with-auth' : 'search'
     axios
-      .get<SearchResponse>(`${API_URL}/search`, {
+      .get<SearchResponse>(`${API_URL}/${searchUrl}`, {
         params: params,
         headers: {
-          accept: 'application/json'
+          accept: 'application/json',
+          Authorization: `Bearer ${keycloak?.token ?? 'None'}`
         }
       })
       .then((response) => {
