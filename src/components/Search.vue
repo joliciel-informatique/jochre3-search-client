@@ -18,6 +18,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import FixWordModal from '../components/FixWordModal.vue'
 import FixMetadataModal from '../components/FixMetadataModal.vue'
+import PageNumbering from '@/_components/PageNumbering/PageNumbering.vue'
 
 library.add(faMagnifyingGlass)
 library.add(faFileImage)
@@ -205,10 +206,11 @@ interface AggregationBins {
 }
 
 function updateUrl() {
-  const params = new URLSearchParams()
-  params.append('query', query.value.trim())
-  params.append('strict', strict.value.toString())
-  params.append('authorInclude', authorInclude.value)
+  const params = new URLSearchParams({
+    'query' : query.value.trim(),
+    'strict' : strict.value.toString(),
+    'authorInclude' : authorInclude.value
+  })
   for (const author of authors.value) {
     params.append('authors', author)
   }
@@ -237,6 +239,7 @@ function runNewSearch() {
 }
 
 function search(updateHistory: boolean) {
+  console.log(page.value)
   hasSearch.value =
     query.value.length > 0 ||
     authors.value.length > 0 ||
@@ -298,6 +301,7 @@ function search(updateHistory: boolean) {
       })
       .then((response) => {
         if (updateHistory) {
+          console.log('update history', page.value)
           updateUrl()
         }
         hasSearch.value = true
@@ -519,6 +523,11 @@ function fixMetadata(docRef: string, field: string, currentValue: string | undef
   showFixMetadataModal()
 }
 
+const updatePage = (newPage : number) => {
+  page.value = newPage
+  search(true)
+}
+
 const errorNotificationVisible = ref<boolean>(false)
 
 function hideErrorNotification() {
@@ -546,6 +555,7 @@ function hideErrorNotification() {
     {{ $t('error') }}
   </div>
   <div>
+    <PageNumbering @update-page="updatePage" :page="page" :totalCount="totalCount"/>
     <div class="block has-text-white custom-background has-text-weight-semibold m-0 p-0">
       <div class="container is-max-desktop">
         <div class="field has-addons pb-0 mb-0">
@@ -893,57 +903,6 @@ function hideErrorNotification() {
             <hr />
           </li>
         </ul>
-        <nav class="pagination p-1" role="navigation" aria-label="pagination">
-          <button @click="gotoPage(page - 1)" :disabled="page <= 1" class="pagination-previous">
-            {{ $t('pagination.previous') }}
-          </button>
-          <button @click="gotoPage(page + 1)" :disabled="page >= lastPage" class="pagination-next">
-            {{ $t('pagination.next') }}
-          </button>
-          <ul class="pagination-list">
-            <li v-if="page - 1 > 1">
-              <a @click="gotoPage(1)" class="pagination-link" aria-label="Goto page 1">1</a>
-            </li>
-            <li v-if="page - 1 > 1">
-              <span class="pagination-ellipsis">&hellip;</span>
-            </li>
-            <li v-if="page > 1">
-              <a
-                @click="gotoPage(page - 1)"
-                class="pagination-link"
-                :aria-label="`Goto page ${page - 1}`"
-                >{{ page - 1 }}</a
-              >
-            </li>
-            <li>
-              <a
-                class="pagination-link is-current current-page-color"
-                :aria-label="`Page ${page}`"
-                aria-current="page"
-                >{{ page }}</a
-              >
-            </li>
-            <li v-if="page < lastPage">
-              <a
-                @click="gotoPage(page + 1)"
-                class="pagination-link"
-                :aria-label="`Goto page ${page + 1}`"
-                >{{ page + 1 }}</a
-              >
-            </li>
-            <li v-if="page + 1 < lastPage">
-              <span class="pagination-ellipsis">&hellip;</span>
-            </li>
-            <li v-if="page + 1 < lastPage">
-              <a
-                @click="gotoPage(lastPage)"
-                class="pagination-link"
-                :aria-label="`Goto page ${lastPage}`"
-                >{{ lastPage }}</a
-              >
-            </li>
-          </ul>
-        </nav>
       </div>
     </div>
   </div>
