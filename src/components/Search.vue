@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <script setup lang="ts">
 import { computed, ref, onMounted, inject } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
@@ -527,20 +528,9 @@ function hideErrorNotification() {
 }
 </script>
 
+=======
+>>>>>>> Stashed changes
 <template>
-  <FixWordModal
-    :visible="fixWordModalVisible"
-    :doc-ref="fixWordDocRef"
-    :word-offset="fixWordOffset"
-    @on-close-modal="hideFixWordModal"
-  ></FixWordModal>
-  <FixMetadataModal
-    :visible="fixMetadataModalVisible"
-    :doc-ref="fixMetadataDocRef"
-    :field="fixMetadataField"
-    :current-value="fixMetadataCurrentValue"
-    @on-close-modal="hideFixMetadataModal"
-  ></FixMetadataModal>
   <div class="notification is-danger" v-if="errorNotificationVisible">
     <button class="delete" @click="hideErrorNotification"></button>
     {{ $t('error') }}
@@ -686,10 +676,11 @@ function hideErrorNotification() {
       <div v-if="isBusy">
         <img src="/images/loading.gif" />
       </div>
-      <div v-if="!isBusy && !hasSearch && searchResults.length == 0">
+      <div v-if="!isBusy && !hasSearch && !searchResults">
         <div v-html="$t('search.about')"></div>
         <div>{{ $t('search.index-size', [indexSize]) }}</div>
       </div>
+<<<<<<< Updated upstream
       <div v-if="!isBusy && hasSearch">
         <div>
           <span class="is-pulled-right" v-if="searchResults.length == 0">
@@ -945,9 +936,356 @@ function hideErrorNotification() {
           </ul>
         </nav>
       </div>
+=======
+      <FacetDisplay 
+        v-model:isBusy="isBusy" 
+        v-model:hasSearch="hasSearch"
+        :searchResults="searchResults" 
+        :facets="facets"
+      />
+      <PageNumbering
+        v-model:page="page" 
+        v-model:totalCount="totalCount"
+      />
+      <DisplayResults 
+        v-model:isBusy="isBusy" 
+        v-model:hasSearch="hasSearch" 
+        :searchResults="searchResults"
+        v-model:totalCount="totalCount"
+        v-model:firstResult="firstResult"
+        v-model:lastResult="lastResult"
+      />
+      <PageNumbering
+        v-model:page="page" 
+        v-model:totalCount="totalCount"
+      />
+>>>>>>> Stashed changes
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { computed, ref, onMounted, inject } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import axios from 'axios'
+import { useKeycloakStore } from '@/stores/KeycloakStore'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+// Importing Interfaces
+import type { SearchResult, AggregationBin, AggregationBins } from '@/components/Support/InterfacesExternals.vue'
+
+// Importing sub-components
+import PageNumbering from '@/_components/PageNumbering/PageNumbering.vue'
+import FacetDisplay from '@/components/FacetDisplay.vue'
+import DisplayResults from '@/_components/Search/DisplayResults/DisplayResults.vue'
+
+import { fetchData } from '@/components/Support/FetchMethods.vue'
+
+// Configure icons
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import {
+  faMagnifyingGlass,
+  faFileImage,
+  faSquarePlus,
+  faSquareMinus,
+  faBookOpen,
+  faFileLines,
+  faPenToSquare
+} from '@fortawesome/free-solid-svg-icons'
+library.add(faMagnifyingGlass, faFileImage, faSquarePlus, faSquareMinus, faBookOpen, faFileLines, faPenToSquare)
+
+// Startup variables
+const router = useRouter()
+const route = useRoute()
+const keycloak = useKeycloakStore().keycloak
+const preferences = usePreferencesStore()
+const API_URL = inject('apiUrl')
+
+// References
+const indexSize = ref<number>(0)
+const errorNotificationVisible = ref<boolean>(false)
+
+// System
+const hasSearch = ref<boolean>(false)
+const showAdvanced = ref<boolean>(false)
+const isBusy = ref<boolean>(false)
+
+// Query
+const query = ref<string>('')
+const relatedWordForms = ref(true)
+const strict = computed(() => !relatedWordForms.value)
+const page = ref<number>(1)
+const authorText = ref<string>('')
+const authorDropdownItems = ref<string[]>([])
+const authors = ref<string[]>([])
+const authorInclude = ref('true')
+const title = ref<string>('')
+const fromYear = ref<number>()
+const toYear = ref<number>()
+const docRefs = ref<string>('')
+const sortBy = ref<string>('Score')
+
+// Search
+const searchResults = ref<SearchResult[]>([])
+const facets = ref<AggregationBin[]>([])
+
+// Metadata
+const totalCount = ref<number>(0)
+const firstResult = computed(() => (page.value - 1) * preferences.resultsPerPage + 1)
+const lastResult = computed(() => {
+  const last = page.value * preferences.resultsPerPage
+  return totalCount.value < last ? totalCount.value : last
+})
+
+// Globals
+let images = <Map<string, string>>inject('images')
+let imageBusy = <Set<string>>inject('imageBusy')
+
+onMounted(() => {
+  router.isReady().then(() => {
+    if (route.query['query']) query.value = (route.query['query'] as string).trim()
+    if (route.query['strict']) relatedWordForms.value = route.query['strict'] !== 'true'
+    if (route.query['page']) page.value = Number(route.query['page'])
+    if (route.query['authorInclude']) authorInclude.value = (route.query['authorInclude'] as string).trim()
+    if (route.query['title']) title.value = (route.query['title'] as string).trim()
+    if (route.query['from-year']) fromYear.value = Number((route.query['from-year'] as string).trim())
+    if (route.query['to-year']) toYear.value = Number((route.query['to-year'] as string).trim())
+    if (route.query['doc-refs']) docRefs.value = (route.query['doc-refs'] as string).trim()
+    if (route.query['sort']) sortBy.value = (route.query['sort'] as string).trim()
+    if (route.query['authors'] && (Array.isArray(route.query['authors']))) authors.value = route.query['authors'] as string[]
+    if (route.query['authors'] && (!Array.isArray(route.query['authors']))) authors.value = [route.query['authors'] as string]
+      
+    showAdvanced.value =
+      authors.value.length > 0 ||
+      title.value.length > 0 ||
+      (fromYear.value != null && fromYear.value > 0) ||
+      (toYear.value != null && toYear.value > 0) ||
+      docRefs.value.length > 0 ||
+      (sortBy.value.length > 0 && sortBy.value != 'Score')
+   
+    const stylesheet = document.createElement('link')
+    stylesheet.type = 'text/css'
+    stylesheet.rel = 'stylesheet'
+    document.head.appendChild(stylesheet)
+
+    stylesheet.href = '/css/keyboard.css'
+
+    const plugin = document.createElement('script')
+    plugin.type = 'module'
+
+    document.head.appendChild(plugin)
+
+    plugin.src = '/js/keyboard.js'
+    plugin.async = true
+
+    getIndexSize()
+    search(false)
+  })
+})
+
+// Configure EventBus
+const eventBus : any = inject('eventBus')
+
+// EventBus Listener Events
+eventBus.on('toggleImageSnippet', (values : Array<any>) => toggleImageSnippet(values))
+eventBus.on('resetResults', () => resetResults())
+eventBus.on('updatePage', (newPage : number) => {
+  page.value = newPage
+  search(true)
+})
+eventBus.on('addFacetToQuery', (facet : string) => {
+  authors.value = [facet]
+  authorInclude.value = 'true'
+  runNewSearch()
+})
+eventBus.on('error', (error : any) => {
+  console.error(error)
+})
+  
+const toggleImageSnippet = (values : Array<any>) => {
+  const [docRef, reference, snippetStart, snippetEnd, highlights] = values
+  if (images.has(reference)) {
+    console.log(`Deleting image ${reference}`)
+    images.delete(reference)
+  } else {
+    console.log(`Creating image ${reference}`)
+    imageBusy.add(reference)
+
+    console.log(imageBusy, highlights)
+
+    const params : URLSearchParams = new URLSearchParams({
+      'doc-ref' : docRef,
+      'start-offset' : `${snippetStart}`,
+      'end-offset' : `${snippetEnd}`
+    })
+    
+    highlights.forEach((highlight:Array<Number>) => {
+      console.log(highlight)
+      params.append('highlight', `[${highlight[0]},${highlight[1]}]`)
+    })
+
+    const options = {
+      method: "GET",
+      headers: {
+        Accept: "image/png",
+        Authorization: `Bearer ${keycloak?.token}`
+      },
+      responseType : 'arraybuffer'
+    }  
+
+    fetch(`${API_URL}/image-snippet?` + params, options)
+    .then(response => (response.status === 200) ? response.arrayBuffer()
+    .then(buffer => {
+      images.set(reference, `data:${response.headers.get('content-type')};base64,${btoa(String.fromCharCode(...new Uint8Array(buffer)))}`)
+      imageBusy.delete(reference)
+    }) : null)
+    .catch(error => {
+      console.error(error)
+      imageBusy.delete(reference)
+    })
+  }
+}
+
+const resetResults = () => {
+  query.value = ''
+  page.value = 1
+  title.value = ''
+  fromYear.value = undefined
+  toYear.value = undefined
+  docRefs.value = ''
+  authors.value = []
+  relatedWordForms.value = true
+  sortBy.value = 'Score'
+  showAdvanced.value = false
+  errorNotificationVisible.value = false
+  search(true)
+  getIndexSize()
+}
+
+const hideErrorNotification = () => {
+  errorNotificationVisible.value = false
+  console.log(`errorNotificationVisible: ${errorNotificationVisible.value}`)
+}
+
+const getIndexSize = () => {
+  fetchData('size', 'get', undefined, `Bearer ${keycloak?.token}`, 'json').then((response) => {
+    response.json().then(result => {
+      indexSize.value = result.size
+      isBusy.value = false
+    }) 
+  })
+}
+
+const updateUrl = () => {
+  const params = new URLSearchParams(defineSearchParams())
+  params.append('sort', sortBy.value.trim())
+  const url = route.path + '?' + params.toString()
+  history.pushState({}, '', url)
+}
+
+const runNewSearch = () => {
+  page.value = 1
+  errorNotificationVisible.value = false
+  search(true)
+}
+
+const defineSearchParams = () => {
+  const docRefArray = docRefs.value.split(/\W+/)
+  const searchParams = Object.assign({},
+      query.value !== null ? { 'query' : query.value.trim() } : null,
+      strict.value.toString() !== null ? { 'strict' : strict.value.toString() } : null,
+      authorInclude.value.length ? { 'author-include' : authorInclude.value } : null,
+      page.value > 0 ? { 'page' : page.value.toString() } : null,
+      title.value.trim().length > 0 ? { 'title' : title.value.trim() } : null,
+      (toYear.value != null && toYear.value > 0) ? { 'to-year' : toYear.value.toString() } : null,
+      (fromYear.value != null && fromYear.value > 0) ? { 'from-year' : fromYear.value.toString() } : null
+    )
+  for (const author of authors.value) searchParams.append('authors', author)
+  for (const docRef of docRefArray) (docRef.length > 0) ? searchParams.append('doc-refs', docRef) : null
+  return searchParams
+}
+
+const search = (updateHistory: boolean) => {
+  console.log('search')
+  hasSearch.value =
+    query.value.length > 0 ||
+    authors.value.length > 0 ||
+    title.value.length > 0 ||
+    (fromYear.value != null && fromYear.value > 0) ||
+    (toYear.value != null && toYear.value > 0) ||
+    docRefs.value.length > 0
+
+
+  if (hasSearch.value) {
+    isBusy.value = true
+    const params = new URLSearchParams(defineSearchParams())
+    const facetParams = new URLSearchParams({ ...Object.fromEntries(params) })
+
+    params.append('first', ((page.value - 1) * preferences.resultsPerPage).toString())
+    params.append('max', preferences.resultsPerPage.toString())
+    params.append('sort', sortBy.value.trim())
+    params.append('max-snippets', preferences.snippetsPerResult.toString())
+    params.append('row-padding', '2')
+
+    facets.value = []
+
+    fetchData('search', 'post', params).then(response => response.json().then(result => {
+      if (updateHistory) updateUrl()
+      hasSearch.value = true, isBusy.value = false, searchResults.value = result.results, totalCount.value = result.totalCount
+      images = new Map()
+    })).catch(error => {
+      console.error(error)
+      errorNotificationVisible.value = true, isBusy.value = false
+    })
+
+    if (authors.value.length != 1) {
+      facetParams.append('field', 'Author')
+      facetParams.append('maxBins', '10')
+      fetchData('aggregate', 'get', facetParams)
+      .then(response => response.json().then(result => facets.value = result.bins))
+      .catch(error => console.error(error))
+    }
+  } else {
+    if (updateHistory) updateUrl()
+    searchResults.value = [], totalCount.value = 0, images = new Map()
+  }
+}
+
+const findAuthors = () => {
+  if (authorText.value.length > 0) {
+    axios
+      .get<AggregationBins>(`${API_URL}/authors`, {
+        params: {
+          prefix: authorText.value,
+          maxBins: 10
+        },
+        headers: {
+          accept: 'application/json'
+        }
+      })
+      .then((response) => {
+        authorDropdownItems.value = response.data.bins.map((b) => b.label)
+      })
+  } else {
+    authorDropdownItems.value = []
+  }
+}
+
+const addAuthor = (author: string) => {
+  authors.value.push(author)
+  authorText.value = ''
+  authorDropdownItems.value = []
+}
+
+const removeAuthor = (author: string) => {
+  const index = authors.value.indexOf(author, 0)
+  if (index > -1) {
+    authors.value.splice(index, 1)
+  }
+}
+
+</script>
 
 <style lang="scss" scoped>
 @import '@/assets/main.scss';
