@@ -24,9 +24,11 @@
   "results": {
     "show-image-snippet": "View page snippet",
     "alternate-title": "Alternate title:",
+    "alternate-titleEnglish" : "Alternate title (English):",
     "volume": "Volume:",
     "author": "Author:",
     "alternate-author": "Alternate author:",
+    "alternate-authorEnglish": "Alternate author (English):",
     "publisher": "Publisher:",
     "publication-year": "Date:",
     "document-reference": "Reference number:",
