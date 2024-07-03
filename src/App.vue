@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 
 // Reload when back button pushed
 window.onpopstate = function () {

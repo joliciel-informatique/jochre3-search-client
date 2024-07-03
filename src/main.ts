@@ -76,14 +76,22 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
 
     const preferencesStore = usePreferencesStore()
 
+    const loginRequired: boolean = config['login-required'] ?? false
+    console.warn(`Login required: ${loginRequired}`)
+
     const initOptions: KeycloakInitOptions = {
       // onLoad: 'login-required' will force login. 'check-sso' will check login.
-      onLoad: 'check-sso'
+      onLoad: loginRequired ? 'login-required' : 'check-sso'
     }
 
     const myI18n: Promise<I18n<any>> = keycloak.init(initOptions).then((auth) => {
       if (!auth) {
         console.warn('Not authenticated')
+
+        if (loginRequired) {
+          console.error('Login required but not authenticated')
+          throw new Error('Login required but not authenticated')
+        }
 
         const i18n = createI18n({
           legacy: false,
