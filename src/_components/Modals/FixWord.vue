@@ -77,7 +77,7 @@ const loadWordImage = (docRef: string, wordOffset: number) => {
   fetchData('word-image', 'get', params, 'image/png', `Bearer ${keycloak?.token}`, 'arraybuffer')
   // fetch(`${API_URL}/word-image?` + params, options)
   .then(response => (response.status === 200) ? response.arrayBuffer()
-  .then(buffer => wordImage.value = `data:${response.headers.get('content-type')};base64,${btoa(String.fromCharCode(...new Uint8Array(buffer)))}`) : null)
+  .then(buffer => wordImage.value = `data:${response.headers.get('content-type')};base64,${btoa(Array.from(new Uint8Array(buffer)).map((b) => String.fromCharCode(b)).join(''))}`) : null)
 
   fetchData('word-text', 'get', params)
   // fetch(`${API_URL}/word-text?` + params)
