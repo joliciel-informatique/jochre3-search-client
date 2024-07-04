@@ -1,7 +1,49 @@
+<template>
+  <div class="modal" tabindex="100" :class="{ 'is-active': visible }">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">{{ $t('fix-word.title') }}</p>
+        <button class="delete" aria-label="close" @click="onCancel"></button>
+      </header>
+      
+      <section class="modal-card-body">
+        <div v-if="!authenticated" class="is-italic has-text-weight-bold has-text-danger">
+          {{ $t('fix-word.unauthenticated') }}
+        </div>
+        <img :src="wordImage" />
+        <div>{{ $t('fix-word.instructions') }}</div>
+        <div class="field has-addons">
+          <label class="label">{{ $t('fix-word.word') }}</label
+          >&nbsp;
+          <input class="input keyboardInput" type="text" lang="yi" v-model="word" />
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <div class="buttons">
+          <button class="button is-link" :disabled="!authenticated" @click="onSubmit">
+            {{ $t('save') }}
+          </button>
+          <button class="button is-link is-light" @click="onCancel">
+            {{ $t('cancel') }}
+          </button>
+        </div>
+      </footer>
+    </div>
+    <button class="modal-close is-large" aria-label="close" @click="onCancel"></button>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import axios from 'axios'
 import { inject, ref, watch } from 'vue'
+
+const eventBus : any = inject('eventBus')
+
+eventBus.on('fixWordModal', (value:string) => {   // *Listen* for event
+  console.log('myevent received!', `valude: ${value}`);
+});
 
 const props = defineProps(['visible', 'docRef', 'wordOffset'])
 const emit = defineEmits(['onCloseModal'])
@@ -102,38 +144,3 @@ function onCancel() {
   emit('onCloseModal')
 }
 </script>
-
-<template>
-  <div class="modal" tabindex="100" :class="{ 'is-active': visible }">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">{{ $t('fix-word.title') }}</p>
-        <button class="delete" aria-label="close" @click="onCancel"></button>
-      </header>
-      <section class="modal-card-body">
-        <div v-if="!authenticated" class="is-italic has-text-weight-bold has-text-danger">
-          {{ $t('fix-word.unauthenticated') }}
-        </div>
-        <img :src="wordImage" />
-        <div>{{ $t('fix-word.instructions') }}</div>
-        <div class="field has-addons">
-          <label class="label">{{ $t('fix-word.word') }}</label
-          >&nbsp;
-          <input class="input keyboardInput" type="text" lang="yi" v-model="word" />
-        </div>
-      </section>
-      <footer class="modal-card-foot">
-        <div class="buttons">
-          <button class="button is-link" :disabled="!authenticated" @click="onSubmit">
-            {{ $t('save') }}
-          </button>
-          <button class="button is-link is-light" @click="onCancel">
-            {{ $t('cancel') }}
-          </button>
-        </div>
-      </footer>
-    </div>
-    <button class="modal-close is-large" aria-label="close" @click="onCancel"></button>
-  </div>
-</template>

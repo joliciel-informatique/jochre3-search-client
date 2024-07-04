@@ -1,6 +1,7 @@
 import './assets/main.scss'
 
-import { createApp } from 'vue'
+import { createApp, ref } from 'vue'
+import mitt from 'mitt'
 import App from './App.vue'
 import router from './router'
 import { createPinia, type Pinia } from 'pinia'
@@ -17,6 +18,12 @@ import yi from './i18n/locales/yi.json'
 import keycloakParams from './security/keycloak.json'
 import { mergeDeep } from './assets/deepMerge'
 
+import SearchPage from './components/SearchPage.vue'
+import FixWordModal from './_components/Modals/FixWord.vue'
+import FixMetadataModal from './_components/Modals/FixMetadata.vue'
+import { fetchData, setURL } from './components/Support/FetchMethods.vue'
+import OCRInterfaces from './components/Support/InterfacesExternals.vue'
+
 const messages = {
   en: en,
   yi: yi
@@ -28,8 +35,16 @@ const pinia: Pinia = createPinia()
 
 const app = createApp(App)
 
+const eventBus = mitt()
+
 app.use(router)
 app.use(pinia)
+
+app
+  .component('OCRInterfaces', OCRInterfaces)
+  .component('SearchPage', SearchPage)
+  .component('FixWordModal', FixWordModal)
+  .component('FixMetadataModal', FixMetadataModal)
 
 console.log('Starting up')
 
@@ -41,7 +56,11 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
     console.log('found config')
     const apiUrl = config['api-url'] ?? 'http://localhost:4242'
 
+    setURL(apiUrl)
+
     app.provide('apiUrl', apiUrl)
+    app.provide('eventBus', eventBus)
+    app.provide('fetchData', fetchData)
 
     const keycloakConfig: KeycloakConfig = {
       url: config.keycloak?.url ?? keycloakParams['auth-server-url'],
