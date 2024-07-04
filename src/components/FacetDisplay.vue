@@ -1,12 +1,12 @@
 <template>
-  <div v-if="!isBusy && hasSearch">
+  <div>
     <div>
-      <span class="is-pulled-right" v-if="!searchResults">
-        <div class="navbar-item" v-if="!searchResults">
+      <span class="is-pulled-right" v-if="searchResults.length == 0">
+        <div class="navbar-item">
           <strong>{{ $t('results.none') }}</strong>
         </div>
       </span>
-      <span class="is-pulled-right" v-for="facet of facetsWithKey" :key="facet.key">
+      <span class="is-pulled-right" v-for="facet of facets" :key="facet">
         <SingleFacet :facet="facet" />
       </span>
       <span class="is-pulled-left">
@@ -21,19 +21,13 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineModel, inject } from 'vue';
-import { useRouter } from 'vue-router';
-import SingleFacet from '@/_components/Facets/SingleFacet.vue';
-import * as hash from 'object-hash';
+import { defineProps, inject } from 'vue'
+import { useRouter } from 'vue-router'
+import SingleFacet from '@/_components/Facets/SingleFacet.vue'
 
-const eventBus : any = inject('eventBus')
+const eventBus: any = inject('eventBus')
 
-const router = useRouter();
+const router = useRouter()
 
-const isBusy = defineModel('isBusy', { default : false, type : Boolean })
-const hasSearch = defineModel('hasSearch', { default : false, type : Boolean })
-
-const searchResults = defineModel('searchResults', { type : Array })
-const facets = defineModel('facets', { default : [['', 0]], type : Object })
-const facetsWithKey = facets.value.map((facet : Object) => ({ ...facet, key: hash.sha1(facet) }))
+defineProps(['searchResults', 'facets'])
 </script>

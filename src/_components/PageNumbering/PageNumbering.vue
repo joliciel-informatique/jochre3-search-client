@@ -1,5 +1,5 @@
 <template>
-  <nav class="pagination p-1" role="navigation" aria-label="pagination" v-if="totalCount > 0" >
+  <nav class="pagination p-1" role="navigation" aria-label="pagination" v-if="totalCount > 0">
     <button @click="gotoPage(page - 1)" :disabled="page < 1" class="pagination-previous">
       {{ $t('pagination.previous') }}
     </button>
@@ -53,14 +53,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineModel, inject } from 'vue'
+import { computed, defineProps, inject } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
-const eventBus : any = inject('eventBus')
+const eventBus: any = inject('eventBus')
 const gotoPage = (newPage: number) => eventBus.emit('updatePage', newPage)
 
 const preferences = usePreferencesStore()
-const page = defineModel('page', { type : Number, default : 0 })
-const totalCount = defineModel('totalCount', { type : Number, default : 0 })
-const lastPage = computed(() => Math.floor((totalCount.value - 1) / preferences.resultsPerPage) + 1)
+const props = defineProps(['page', 'totalCount'])
+
+const lastPage = computed(() => {
+  const totalCount: number = props.totalCount
+  const lastPage: number = Math.floor((totalCount - 1) / preferences.resultsPerPage) + 1
+  return lastPage
+})
 </script>

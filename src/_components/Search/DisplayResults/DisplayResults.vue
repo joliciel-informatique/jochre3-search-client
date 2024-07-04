@@ -1,11 +1,14 @@
 <template>
   <div>
-    <div v-if="!isBusy && hasSearch && searchResults.length > 0">
-        <strong>{{ $t('results.result-count', [totalCount]) }} {{ $t('results.result-range', [firstResult, lastResult]) }}</strong>
+    <div>
+      <strong
+        >{{ $t('results.result-count', [totalCount]) }}
+        {{ $t('results.result-range', [firstResult, lastResult]) }}</strong
+      >
     </div>
     <ul>
       <li v-for="(result, index) of searchResults" :key="index">
-        <SingleResult :singleResult="result" />
+        <SingleResult :result="result" :images="images" :imageBusy="imageBusy" />
       </li>
       <hr />
     </ul>
@@ -15,12 +18,7 @@
 <script setup lang="ts">
 import SingleResult from './SingleResult/SingleResult.vue'
 
-const isBusy = defineModel('isBusy', { default : false, type : Boolean })
-const hasSearch = defineModel('hasSearch', { default : false, type : Boolean })
-const searchResults = defineModel('searchResults', { type : [String, Object, Object]})
-const totalCount = defineModel('totalCount', { default : 0, type : Number })
-const firstResult = defineModel('firstResult', { default : 0, type : Number })
-const lastResult = defineModel('lastResult', { default : 0, type : Number })
+defineProps(['searchResults', 'totalCount', 'firstResult', 'lastResult', 'images', 'imageBusy'])
 </script>
 
 <style lang="scss" scoped>

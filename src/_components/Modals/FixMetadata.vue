@@ -1,5 +1,10 @@
 <template>
-  <div v-show="fixMetadataModalVisible" class="modal" tabindex="100" :class="{ 'is-active': fixMetadataModalVisible }">
+  <div
+    v-show="fixMetadataModalVisible"
+    class="modal"
+    tabindex="100"
+    :class="{ 'is-active': fixMetadataModalVisible }"
+  >
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
@@ -78,7 +83,12 @@
               v-if="authorDropdownItems.length > 0"
             >
               <div class="dropdown-content">
-                <a v-for="author of authorDropdownItems" :key="author" class="dropdown-item" @click="addAuthor(author)">
+                <a
+                  v-for="author of authorDropdownItems"
+                  :key="author"
+                  class="dropdown-item"
+                  @click="addAuthor(author)"
+                >
                   {{ author }}
                 </a>
               </div>
@@ -104,15 +114,14 @@
 </template>
 
 <script setup lang="ts">
-
 // Default value of modal visibility: set to false
 // const isVisible = false
 
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import axios from 'axios'
 import { computed, inject, ref } from 'vue'
-import type { AggregationBins } from '@/components/Support/InterfacesExternals.vue';
-import { fetchData } from '@/components/Support/FetchMethods.vue';
+import type { AggregationBins } from '@/components/Support/InterfacesExternals.vue'
+import { fetchData } from '@/components/Support/FetchMethods.vue'
 
 const fixMetadataModalVisible = ref<boolean>(false)
 const fixMetadataDocRef = ref<string>()
@@ -120,21 +129,20 @@ const fixMetadataField = ref<string>()
 const fixMetadataCurrentValue = ref<string>()
 
 // Setup EventBus
-const eventBus : any = inject('eventBus')
-eventBus.on('fixMetadata', (value : [string, string, string, boolean]) => {
-  [ fixMetadataDocRef.value, fixMetadataField.value, fixMetadataCurrentValue.value, fixMetadataModalVisible.value] = value
+const eventBus: any = inject('eventBus')
+eventBus.on('fixMetadata', (value: [string, string, string, boolean]) => {
+  ;[fixMetadataDocRef.value, fixMetadataField.value, fixMetadataCurrentValue.value] = value
   fixMetadataModalVisible.value = true
-  // loadWordImage(fixWordDocRef.value, Number(fixWordOffset.value))
+  console.log(`Received fixMetadata event: ${value}`)
 })
 
-
-    // metadata.title :field="Title"
-    // metadata.titleEnglish TitleEnglish
-    // metadata.volume Volume
-    // metadata.author Author
-    // metadata.authorEnglish AuthorEnglish
-    // metadata.publisher Publisher
-    // metadata.publicationYear PublicationYear
+// metadata.title :field="Title"
+// metadata.titleEnglish TitleEnglish
+// metadata.volume Volume
+// metadata.author Author
+// metadata.authorEnglish AuthorEnglish
+// metadata.publisher Publisher
+// metadata.publicationYear PublicationYear
 
 // const props = defineProps(['visible', 'docRef', 'field', 'currentValue'])
 // const emit = defineEmits(['onCloseModal'])
@@ -188,21 +196,29 @@ function resetForm() {
 
 const onSubmit = () => {
   console.log('onSubmit')
-  const body = JSON.stringify({ 
-    docRef : fixMetadataDocRef.value, 
-    field : fixMetadataField.value,
-    value : authorSelectionMethod.value == 'input' ? newValue.value : authorToMerge.value,
-    applyEverywhere : applyEverywhere.value
-  }) 
-    
-  fetchData('correct-metadata', 'post', new URLSearchParams(body), undefined, `Bearer ${keycloak?.token}`, )
-      .then(result => result.json().then(result => {
+  const body = JSON.stringify({
+    docRef: fixMetadataDocRef.value,
+    field: fixMetadataField.value,
+    value: authorSelectionMethod.value == 'input' ? newValue.value : authorToMerge.value,
+    applyEverywhere: applyEverywhere.value
+  })
+
+  fetchData(
+    'correct-metadata',
+    'post',
+    new URLSearchParams(body),
+    undefined,
+    `Bearer ${keycloak?.token}`
+  )
+    .then((result) =>
+      result.json().then((result) => {
         console.log(result)
         fixMetadataModalVisible.value = false
-      }))
-      .catch((error) => {
-        eventBus.emit('error', error)
       })
+    )
+    .catch((error) => {
+      eventBus.emit('error', error)
+    })
 }
 // function onSubmit() {
 //   console.log('onSubmit')
