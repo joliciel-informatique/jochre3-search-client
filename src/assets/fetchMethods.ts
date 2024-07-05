@@ -1,13 +1,11 @@
-<script lang="ts">
-import { inject } from 'vue'
-let API_URL = inject('apiUrl')
+let API_URL : string
 
 const setHeaders = (
   method?: string,
   accept?: string,
   authenticationToken?: string,
   responseType?: string
-) => {
+): Headers => {
   const headers = new Headers()
   headers.set('Method', method?.toUpperCase() ?? 'GET')
   headers.set('Accept', accept ?? 'application/json')
@@ -21,21 +19,20 @@ export const setURL = (url: string) => (API_URL = url)
 export const fetchData = async (
   url?: string,
   method?: string,
-  params?: URLSearchParams,
+  params?: URLSearchParams|Object,
   accept?: string,
   authenticationToken?: string,
   responseType?: string
-) => await fetch(makeRequest(url, params, method, accept, authenticationToken, responseType))
+): Promise<Response> => await fetch(makeRequest(url, params, method, accept, authenticationToken, responseType))
 
 const makeRequest = (
   url?: string,
-  params?: URLSearchParams,
+  params?: URLSearchParams|Object,
   method?: string,
   accept?: string,
   authenticationToken?: string,
   responseType?: string
-) =>
+): Request =>
   new Request(`${API_URL}/${url}` + (params ? '?' + params : ''), {
     headers: setHeaders(method, accept, authenticationToken, responseType)
   })
-</script>

@@ -1,5 +1,4 @@
-<script setup lang="ts">
-export interface Snippet {
+export default interface Snippet {
   text: string
   page: number
   start: number
@@ -9,7 +8,7 @@ export interface Snippet {
   key: string
 }
 
-export interface SizeResponse {
+export default interface SizeResponse {
   size: number
 }
 
@@ -19,7 +18,7 @@ export interface SearchResult {
   snippets: Snippet[]
 }
 
-export interface SearchResponse {
+export default interface SearchResponse {
   results: SearchResult[]
   totalCount: number
 }
@@ -29,17 +28,20 @@ export interface AggregationBin {
   count: number
 }
 
-export interface AggregationBins {
+export default interface AggregationBins {
   bins: AggregationBin[]
 }
 
-export interface WordText {
+export default interface WordText {
   text: string
 }
 
-// export interface EventBus {
-// <Emitter<Record<EventType, unknown>>
-// }
+export default interface UserPreferences {
+  language: string
+  resultsPerPage: number
+  snippetsPerResult: number
+}
+
 
 interface Metadata {
   title: string
@@ -51,4 +53,3 @@ interface Metadata {
   volume: string
   url: string
 }
-</script>

@@ -1,6 +1,6 @@
 import './assets/main.scss'
 
-import { createApp, ref } from 'vue'
+import { createApp } from 'vue'
 import mitt from 'mitt'
 import App from './App.vue'
 import router from './router'
@@ -13,6 +13,8 @@ import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { globalCookiesConfig } from 'vue3-cookies'
 
+import type UserPreferences from './assets/InterfacesExternals'
+
 import en from './i18n/locales/en.json'
 import yi from './i18n/locales/yi.json'
 import keycloakParams from './security/keycloak.json'
@@ -21,8 +23,7 @@ import { mergeDeep } from './assets/deepMerge'
 import SearchPage from './components/SearchPage.vue'
 import FixWordModal from './_components/Modals/FixWord.vue'
 import FixMetadataModal from './_components/Modals/FixMetadata.vue'
-import { fetchData, setURL } from './components/Support/FetchMethods.vue'
-import OCRInterfaces from './components/Support/InterfacesExternals.vue'
+import { fetchData, setURL } from './assets/fetchMethods'
 
 const messages = {
   en: en,
@@ -41,7 +42,6 @@ app.use(router)
 app.use(pinia)
 
 app
-  .component('OCRInterfaces', OCRInterfaces)
   .component('SearchPage', SearchPage)
   .component('FixWordModal', FixWordModal)
   .component('FixMetadataModal', FixMetadataModal)
@@ -119,12 +119,6 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
         }, 6000)
 
         // After login, load the user preferences from the database
-        interface UserPreferences {
-          language: string
-          resultsPerPage: number
-          snippetsPerResult: number
-        }
-
         const i18n = axios
           .get<UserPreferences>(`${apiUrl}/preferences/user`, {
             headers: {
