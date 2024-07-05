@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { defineProps, inject } from 'vue'
 import { useRouter } from 'vue-router'
-import SingleFacet from '@/_components/Facets/SingleFacet.vue'
+import SingleFacet from '@/_components/Facets/DisplayFacets/SingleFacet/SingleFacet.vue'
 
 const eventBus: any = inject('eventBus')
 
