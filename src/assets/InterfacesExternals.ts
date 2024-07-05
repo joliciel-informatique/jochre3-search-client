@@ -42,7 +42,6 @@ export default interface UserPreferences {
   snippetsPerResult: number
 }
 
-
 interface Metadata {
   title: string
   author: string
