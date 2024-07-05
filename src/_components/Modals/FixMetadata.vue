@@ -120,8 +120,8 @@
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import axios from 'axios'
 import { computed, inject, ref } from 'vue'
-import type { AggregationBins } from '@/components/Support/InterfacesExternals.vue'
-import { fetchData } from '@/components/Support/FetchMethods.vue'
+import type AggregationBins from '@/assets/InterfacesExternals'
+import { fetchData } from '@/assets/fetchMethods'
 
 const fixMetadataModalVisible = ref<boolean>(false)
 const fixMetadataDocRef = ref<string>()
