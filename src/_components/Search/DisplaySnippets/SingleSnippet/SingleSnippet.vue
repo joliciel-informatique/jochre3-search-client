@@ -45,43 +45,84 @@
     </a>
   </div>
   <br />
-  <div v-if="imageBusy.has(reference)">
+  <div v-if="imageBusy">
     <img src="/images/loading.gif" />
   </div>
-  <img
-    class="image-snippet"
-    v-if="images.has(reference)"
-    :src="images.get(reference)"
-    title="Image"
-  />
+  <img class="image-snippet" v-if="image" :src="image" title="Image" />
 </template>
 
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { inject } from 'vue'
+import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { useKeycloakStore } from '@/stores/KeycloakStore'
+import type { Snippet } from '@/components/Support/InterfacesExternals.vue'
 
-const props = defineProps(['snippet', 'docRef', 'index', 'url', 'images', 'imageBusy'])
+const props = defineProps(['snippet', 'docRef', 'index', 'url'])
 
-const reference = computed(() => {
-  return `${props.docRef}_${props.index}`
-})
+const keycloak = useKeycloakStore().keycloak
+const API_URL = inject('apiUrl')
 
 // Setup EventBus
 const eventBus: any = inject('eventBus')
 
 // Setup router
-import { useRouter } from 'vue-router'
-import { computed } from 'vue'
 const router = useRouter()
 
-const toggleImageSnippet = () =>
-  eventBus.emit('toggleImageSnippet', [
-    props.docRef,
-    reference.value,
-    props.snippet.start,
-    props.snippet.end,
-    props.snippet.highlights
-  ])
+// Local variables
+const imageBusy = ref<boolean>(false)
+const image = ref<string>()
+
+const toggleImageSnippet = () => {
+  const snippet: Snippet = props.snippet
+  const docRef: string = props.docRef
+  if (image.value) {
+    console.log(`Deleting image ${docRef} index ${props.index}`)
+    image.value = undefined
+  } else {
+    console.log(`Creating image ${docRef} index ${props.index}`)
+    imageBusy.value = true
+
+    const params: URLSearchParams = new URLSearchParams({
+      'doc-ref': docRef,
+      'start-offset': `${snippet.start}`,
+      'end-offset': `${snippet.end}`
+    })
+
+    snippet.highlights.forEach((highlight: Array<Number>) => {
+      console.log(highlight)
+      params.append('highlight', `[${highlight[0]},${highlight[1]}]`)
+    })
+
+    const options = {
+      method: 'GET',
+      headers: {
+        Accept: 'image/png',
+        Authorization: `Bearer ${keycloak?.token}`
+      },
+      responseType: 'arraybuffer'
+    }
+
+    fetch(`${API_URL}/image-snippet?` + params, options)
+      .then((response) =>
+        response.status === 200
+          ? response.arrayBuffer().then((buffer) => {
+              image.value = `data:${response.headers.get('content-type')};base64,${btoa(
+                Array.from(new Uint8Array(buffer))
+                  .map((b) => String.fromCharCode(b))
+                  .join('')
+              )}`
+              imageBusy.value = false
+            })
+          : null
+      )
+      .catch((error) => {
+        console.error(error)
+        imageBusy.value = false
+      })
+  }
+}
 
 const correctWord = (docRef: string) => {
   var sel = window.getSelection()
