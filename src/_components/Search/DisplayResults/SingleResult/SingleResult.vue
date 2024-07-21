@@ -42,15 +42,13 @@
       :snippets="result.snippets"
       :docRef="result.docRef"
       :url="result.metadata.url"
-      :images="images"
-      :imageBusy="imageBusy"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { inject, computed, defineProps } from 'vue'
+import { inject, defineProps } from 'vue'
 import SingleResultItem from './SingleResultItem.vue'
 import DisplaySnippets from '../../DisplaySnippets/DisplaySnippets.vue'
 
@@ -59,7 +57,7 @@ const eventBus: any = inject('eventBus')
 const fixMetadata = (docRef: string, field: string, value: string) =>
   eventBus.emit('fixMetadataModal', [docRef, field, value, true])
 
-defineProps(['result', 'images', 'imageBusy'])
+defineProps(['result'])
 </script>
 
 <style lang="scss" scoped>

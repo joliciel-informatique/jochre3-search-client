@@ -8,7 +8,7 @@
     </div>
     <ul>
       <li v-for="(result, index) of searchResults" :key="index">
-        <SingleResult :result="result" :images="images" :imageBusy="imageBusy" />
+        <SingleResult :result="result" />
       </li>
       <hr />
     </ul>
@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import SingleResult from './SingleResult/SingleResult.vue'
 
-defineProps(['searchResults', 'totalCount', 'firstResult', 'lastResult', 'images', 'imageBusy'])
+defineProps(['searchResults', 'totalCount', 'firstResult', 'lastResult'])
 </script>
 
 <style lang="scss" scoped>

@@ -65,6 +65,7 @@
                   v-for="author of authorDropdownItems"
                   class="dropdown-item"
                   @click="addAuthor(author)"
+                  :key="author"
                   >{{ author }}</a
                 >
               </div>
@@ -80,7 +81,12 @@
               ✗
             </label>
           </div>
-          <button v-for="author of authors" class="tag mr-1 ml-1" @click="removeAuthor(author)">
+          <button
+            v-for="author of authors"
+            class="tag mr-1 ml-1"
+            @click="removeAuthor(author)"
+            :key="author"
+          >
             {{ author }} ×
           </button>
         </div>
@@ -156,8 +162,6 @@
         :totalCount="totalCount"
         :firstResult="firstResult"
         :lastResult="lastResult"
-        :images="images"
-        :imageBusy="imageBusy"
       />
       <PageNumbering v-if="!isBusy && hasSearch" :page="page" :totalCount="totalCount" />
     </div>
@@ -250,10 +254,6 @@ const lastResult = computed(() => {
   return totalCount.value < last ? totalCount.value : last
 })
 
-// Snippet images
-const images = ref<Map<string, string>>(new Map())
-const imageBusy = ref<Set<string>>(new Set())
-
 onMounted(() => {
   router.isReady().then(() => {
     if (route.query['query']) query.value = (route.query['query'] as string).trim()
@@ -304,7 +304,6 @@ onMounted(() => {
 const eventBus: any = inject('eventBus')
 
 // EventBus Listener Events
-eventBus.on('toggleImageSnippet', (values: Array<any>) => toggleImageSnippet(values))
 eventBus.on('resetResults', () => resetResults())
 eventBus.on('updatePage', (newPage: number) => {
   page.value = newPage
@@ -318,54 +317,6 @@ eventBus.on('addFacetToQuery', (facet: string) => {
 eventBus.on('error', (error: any) => {
   console.error(error)
 })
-
-const toggleImageSnippet = (values: Array<any>) => {
-  const [docRef, reference, snippetStart, snippetEnd, highlights] = values
-  if (images.value.has(reference)) {
-    console.log(`Deleting image ${reference}`)
-    images.value.delete(reference)
-  } else {
-    console.log(`Creating image ${reference}`)
-    imageBusy.value.add(reference)
-
-    const params: URLSearchParams = new URLSearchParams({
-      'doc-ref': docRef,
-      'start-offset': `${snippetStart}`,
-      'end-offset': `${snippetEnd}`
-    })
-
-    highlights.forEach((highlight: Array<Number>) => {
-      console.log(highlight)
-      params.append('highlight', `[${highlight[0]},${highlight[1]}]`)
-    })
-
-    const options = {
-      method: 'GET',
-      headers: {
-        Accept: 'image/png',
-        Authorization: `Bearer ${keycloak?.token}`
-      },
-      responseType: 'arraybuffer'
-    }
-
-    fetch(`${API_URL}/image-snippet?` + params, options)
-      .then((response) =>
-        response.status === 200
-          ? response.arrayBuffer().then((buffer) => {
-              images.value.set(
-                reference,
-                `data:${response.headers.get('content-type')};base64,${btoa(String.fromCharCode(...new Uint8Array(buffer)))}`
-              )
-              imageBusy.value.delete(reference)
-            })
-          : null
-      )
-      .catch((error) => {
-        console.error(error)
-        imageBusy.value.delete(reference)
-      })
-  }
-}
 
 const resetResults = () => {
   query.value = ''
@@ -460,7 +411,6 @@ const search = (updateHistory: boolean) => {
             (isBusy.value = false),
             (searchResults.value = result.results),
             (totalCount.value = result.totalCount)
-          images.value = new Map()
         })
       )
       .catch((error) => {
@@ -477,7 +427,7 @@ const search = (updateHistory: boolean) => {
     }
   } else {
     if (updateHistory) updateUrl()
-    ;(searchResults.value = []), (totalCount.value = 0), (images.value = new Map())
+    ;(searchResults.value = []), (totalCount.value = 0)
   }
 }
 
