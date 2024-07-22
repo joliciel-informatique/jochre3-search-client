@@ -58,13 +58,13 @@
     "new-value": "New value:",
     "or-merge-with": "or Merge with:",
     "field-type": {
-      "Title": "Title",
-      "TitleEnglish": "Alternate title",
-      "Volume": "Volume",
-      "Author": "Author",
-      "AuthorEnglish": "Alternate author",
-      "Publisher": "Publisher",
-      "PublicationYear": "Date"
+      "title": "Title",
+      "titleEnglish": "Alternate title",
+      "volume": "Volume",
+      "author": "Author",
+      "authorEnglish": "Alternate author",
+      "publisher": "Publisher",
+      "publicationYear": "Date"
     },
     "unauthenticated": "In order to fix document meta data, please login first."
   },

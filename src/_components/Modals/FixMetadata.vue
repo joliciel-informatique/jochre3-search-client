@@ -114,9 +114,6 @@
 </template>
 
 <script setup lang="ts">
-// Default value of modal visibility: set to false
-// const isVisible = false
-
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import axios from 'axios'
 import { computed, inject, ref } from 'vue'
@@ -130,22 +127,18 @@ const fixMetadataCurrentValue = ref<string>()
 
 // Setup EventBus
 const eventBus: any = inject('eventBus')
-eventBus.on('fixMetadata', (value: [string, string, string, boolean]) => {
+eventBus.on('fixMetadata', (value: [string, string, string]) => {
   ;[fixMetadataDocRef.value, fixMetadataField.value, fixMetadataCurrentValue.value] = value
   fixMetadataModalVisible.value = true
+  if (fixMetadataField.value == 'author' || fixMetadataField.value == 'authorEnglish') {
+    showFindAuthorDropdown.value = true
+  } else {
+    showFindAuthorDropdown.value = false
+  }
+
   console.log(`Received fixMetadata event: ${value}`)
 })
 
-// metadata.title :field="Title"
-// metadata.titleEnglish TitleEnglish
-// metadata.volume Volume
-// metadata.author Author
-// metadata.authorEnglish AuthorEnglish
-// metadata.publisher Publisher
-// metadata.publicationYear PublicationYear
-
-// const props = defineProps(['visible', 'docRef', 'field', 'currentValue'])
-// const emit = defineEmits(['onCloseModal'])
 const keycloak = useKeycloakStore().keycloak
 
 const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
@@ -163,36 +156,6 @@ const applyEverywhere = computed(() => authorSelectionMethod.value != 'input')
 
 const showFindAuthorDropdown = ref<boolean>(false)
 const isLeftToRight = ref<boolean>(false)
-
-function resetForm() {
-  authorToMerge.value = ''
-  authorSelectionMethod.value = 'input'
-}
-
-// watch(
-//   () => props.docRef,
-//   async (newVal, oldVal) => {
-//     resetForm()
-//   }
-// )
-
-// watch(
-//   () => props.currentValue,
-//   async (newVal, oldVal) => {
-//     resetForm()
-//     newValue.value = newVal
-//   }
-// )
-
-// watch(
-//   () => props.field,
-//   async (newVal, oldVal) => {
-//     resetForm()
-//     showFindAuthorDropdown.value = newVal == 'Author' || newVal == 'AuthorEnglish'
-//     isLeftToRight.value =
-//       newVal == 'AuthorEnglish' || newVal == 'TitleEnglish' || newVal == 'Publisher'
-//   }
-// )
 
 const onSubmit = () => {
   console.log('onSubmit')
@@ -220,32 +183,6 @@ const onSubmit = () => {
       eventBus.emit('error', error)
     })
 }
-// function onSubmit() {
-//   console.log('onSubmit')
-//   axios
-//     .post(
-//       `${API_URL}/correct-metadata`,
-//       {
-//         docRef: props.docRef,
-//         field: props.field,
-//         value: authorSelectionMethod.value == 'input' ? newValue.value : authorToMerge.value,
-//         applyEverywhere: applyEverywhere.value
-//       },
-//       {
-//         headers: {
-//           accept: 'application/json',
-//           Authorization: `Bearer ${keycloak?.token}`
-//         }
-//       }
-//     )
-//     .then((response) => {
-//       console.log('Metadata correction made')
-//     })
-//     .catch((error) => {
-//       console.error(error)
-//     })
-//   emit('onCloseModal')
-// }
 
 const onCancel = () => {
   fixMetadataModalVisible.value = false
@@ -277,17 +214,4 @@ function addAuthor(author: string) {
   authorText.value = ''
   authorDropdownItems.value = []
 }
-
-function hideFixMetadataModal() {
-  fixMetadataModalVisible.value = false
-  console.log(`fixMetadataModalVisible: ${fixMetadataModalVisible.value}`)
-}
-
-// function fixMetadata(docRef: string, field: string, currentValue: string | undefined) {
-//   console.log(`Correct metadata, doc ${docRef}, field ${field}, currentValue ${currentValue}`)
-//   fixMetadataDocRef.value = docRef
-//   fixMetadataField.value = field
-//   fixMetadataCurrentValue.value = currentValue ?? ''
-//   showFixMetadataModal()
-// }
 </script>

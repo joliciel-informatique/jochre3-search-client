@@ -5,7 +5,7 @@
         result.metadata.title ?? result.docRef
       }}</a>
       <button
-        @click="fixMetadata(result.docRef, 'Title', result.metadata.title)"
+        @click="fixMetadata(result.docRef, 'title', result.metadata.title)"
         class="button is-small is-white"
       >
         <span class="icon is-small fa-2xs">
@@ -54,8 +54,10 @@ import DisplaySnippets from '../../DisplaySnippets/DisplaySnippets.vue'
 
 // Setup EventBus
 const eventBus: any = inject('eventBus')
-const fixMetadata = (docRef: string, field: string, value: string) =>
-  eventBus.emit('fixMetadataModal', [docRef, field, value, true])
+const fixMetadata = (docRef: string, field: string, value: string) => {
+  console.log(`fixMetadata(${docRef}, ${field}, ${value})`)
+  eventBus.emit('fixMetadata', [docRef, field, value])
+}
 
 defineProps(['result'])
 </script>

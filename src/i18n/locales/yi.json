@@ -58,13 +58,13 @@
     "new-value": "נײַער אינהאַלט:",
     "or-merge-with": "אָדער גיסט צונױף מיט:",
     "field-type": {
-      "Title": "טיטל",
-      "TitleEnglish": "טיטל אין טראַנסקריפציע",
-      "Volume": "באַנד",
-      "Author": "מחבר",
-      "AuthorEnglish": "מחבר אין טראַנסקירפּציע",
-      "Publisher": "פֿאַרלאַג",
-      "PublicationYear": "יאָר"
+      "title": "טיטל",
+      "titleEnglish": "טיטל אין טראַנסקריפציע",
+      "volume": "באַנד",
+      "author": "מחבר",
+      "authorEnglish": "מחבר אין טראַנסקירפּציע",
+      "publisher": "פֿאַרלאַג",
+      "publicationYear": "יאָר"
     },
     "unauthenticated": "בכֿדי צו אױסבעסערן אַן אַטריבוט, דאַרף מען ארײַנלאָגירן."
   },

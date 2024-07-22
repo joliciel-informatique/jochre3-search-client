@@ -34,6 +34,8 @@ const locale = i18n?.locale
 let ltr: string = locale === 'yi' ? 'ltr' : ''
 ltr = props.field === 'author' ? '' : ltr
 
-const fixMetadata = (docRef: string, field: string, value: string) =>
-  eventBus.emit('fixMetadata', docRef, field, value)
+const fixMetadata = (docRef: string, field: string, value: string) => {
+  console.log(`fixMetadata(${docRef}, ${field}, ${value})`)
+  eventBus.emit('fixMetadata', [docRef, field, value])
+}
 </script>
