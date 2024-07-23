@@ -1,4 +1,3 @@
-<script setup lang="ts">
 export interface Snippet {
   text: string
   page: number
@@ -37,10 +36,6 @@ export interface WordText {
   text: string
 }
 
-// export interface EventBus {
-// <Emitter<Record<EventType, unknown>>
-// }
-
 interface Metadata {
   title: string
   author: string
@@ -51,4 +46,3 @@ interface Metadata {
   volume: string
   url: string
 }
-</script>

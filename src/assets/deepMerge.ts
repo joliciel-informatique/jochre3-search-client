@@ -7,16 +7,14 @@
  * @param item
  * @returns {boolean}
  */
-export function isObject(item: any) {
-  return item && typeof item === 'object' && !Array.isArray(item)
-}
+export const isObject = (item: any): boolean => item && typeof item === 'object' && !Array.isArray(item)
 
 /**
  * Deep merge two objects.
  * @param target
  * @param ...sources
  */
-export function mergeDeep(target: any, ...sources: any) {
+export const mergeDeep = (target: any, ...sources: any): any => {
   if (!sources.length) return target
   const source = sources.shift()
 

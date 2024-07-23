@@ -52,19 +52,19 @@
   },
   "fix-metadata": {
     "title": "Fix document meta data",
-    "instructions": "Correct the meta data.",
+    "instructions": "Correction for field:",
     "field": "Field:",
     "current-value": "Current value:",
-    "new-value": "New value:",
-    "or-merge-with": "or Merge with:",
+    "new-value": "Value:",
+    "or-merge-with": "or merge with:",
     "field-type": {
-      "Title": "Title",
-      "TitleEnglish": "Alternate title",
-      "Volume": "Volume",
-      "Author": "Author",
-      "AuthorEnglish": "Alternate author",
-      "Publisher": "Publisher",
-      "PublicationYear": "Date"
+      "title": "Title",
+      "titleEnglish": "Alternate title",
+      "volume": "Volume",
+      "author": "Author",
+      "authorEnglish": "Alternate author",
+      "publisher": "Publisher",
+      "publicationYear": "Date"
     },
     "unauthenticated": "In order to fix document meta data, please login first."
   },
@@ -72,6 +72,7 @@
   "save": "Save changes",
   "error": "An error occurred.",
   "back": "Back",
+  "forward" : "Forward",
   "pagination": {
     "first": "first page",
     "next": "next page",

@@ -6,6 +6,9 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 import VueI18n from 'vue-i18n'
 import { useCookies } from 'vue3-cookies'
 
+import { fetchData } from '@/assets/fetchMethods'
+import { setErrorMessage } from '../ErrorNotification/ErrorNotification.vue'
+
 defineProps(['visible'])
 const emit = defineEmits(['onCloseModal'])
 const keycloak = useKeycloakStore().keycloak
@@ -20,28 +23,48 @@ const API_URL = inject('apiUrl')
 function onSubmit(vi18n: VueI18n.VueI18n) {
   console.log('onSubmit')
   if (authenticated.value) {
-    axios
-      .post(
-        `${API_URL}/preferences/user`,
-        {
-          language: preferences.language,
-          resultsPerPage: preferences.resultsPerPage,
-          snippetsPerResult: preferences.snippetsPerResult
-        },
-        {
-          headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${keycloak?.token}`
+    // const params = JSON.stringify({
+    //   language: preferences.language,
+    //   resultsPerPage: preferences.resultsPerPage,
+    //   snippetsPerResult: preferences.snippetsPerResult
+    // })
+
+    // fetchData('preferences/user', 'post', params)
+    // .then(() => {
+    //   // console.log('Saved preferences to database')
+    //   vi18n.locale = preferences.language
+    // })
+    // .catch((error) => setErrorMessage(new Error(`Failed to save user preferences: ${error.message}`)))
+    try {
+      axios
+        .post(
+          `${API_URL}/preferences/user`,
+          {
+            language: preferences.language,
+            resultsPerPage: preferences.resultsPerPage,
+            snippetsPerResult: preferences.snippetsPerResult
+          },
+          {
+            headers: {
+              accept: 'application/json',
+              Authorization: `Bearer ${keycloak?.token}`
+            }
           }
-        }
+        )
+        .then(() => {
+          console.log('Saved preferences to database')
+          vi18n.locale = preferences.language
+        })
+        .catch((error) => {
+          cookies.set(
+        'preferences',
+        JSON.stringify(preferences, ['language', 'resultsPerPage', 'snippetsPerResult'])
       )
-      .then(() => {
-        console.log('Saved preferences to database')
-        vi18n.locale = preferences.language
-      })
-      .catch((error) => {
-        console.error(error)
-      })
+          console.error(error)
+        })
+      } catch(error) {
+        console.log(error)
+      }
   } else {
     console.log('Saving preferences in cookie')
     cookies.set(
