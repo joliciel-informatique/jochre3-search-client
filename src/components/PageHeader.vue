@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import PreferencesModal from '../components/PreferencesModal.vue'
+import PreferencesModal from '@/_components/Modals/Preferences/PreferencesModal.vue'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {

@@ -55,8 +55,8 @@
     "instructions": "Correct the meta data.",
     "field": "Field:",
     "current-value": "Current value:",
-    "new-value": "New value:",
-    "or-merge-with": "or Merge with:",
+    "new-value": "Value:",
+    "or-merge-with": "or merge with:",
     "field-type": {
       "Title": "Title",
       "TitleEnglish": "Alternate title",
@@ -72,6 +72,7 @@
   "save": "Save changes",
   "error": "An error occurred.",
   "back": "Back",
+  "forward" : "Forward",
   "pagination": {
     "first": "first page",
     "next": "next page",

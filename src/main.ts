@@ -1,6 +1,6 @@
 import './assets/main.scss'
 
-import { createApp, ref } from 'vue'
+import { createApp } from 'vue'
 import mitt from 'mitt'
 import App from './App.vue'
 import router from './router'
@@ -18,11 +18,13 @@ import yi from './i18n/locales/yi.json'
 import keycloakParams from './security/keycloak.json'
 import { mergeDeep } from './assets/deepMerge'
 
-import SearchPage from './components/SearchPage.vue'
-import FixWordModal from './_components/Modals/FixWord.vue'
-import FixMetadataModal from './_components/Modals/FixMetadata.vue'
-import { fetchData, setURL } from './components/Support/FetchMethods.vue'
-import OCRInterfaces from './components/Support/InterfacesExternals.vue'
+import SearchPage from './components/SearchPage/SearchPage.vue'
+// import FixWordModal from './_components/Modals/FixWord/FixWord.vue'
+// import FixMetadataModal from './_components/Modals/FixMetaData/FixMetadata.vue'
+import { fetchData, setURL } from './assets/fetchMethods'
+import FixWord from './_components/Modals/FixWord/FixWord.vue'
+import FixMetadata from './_components/Modals/FixMetaData/FixMetadata.vue'
+// import OCRInterfaces from './assets/interfacesExternals'
 
 const messages = {
   en: en,
@@ -41,10 +43,10 @@ app.use(router)
 app.use(pinia)
 
 app
-  .component('OCRInterfaces', OCRInterfaces)
+  // .component('OCRInterfaces', OCRInterfaces)
   .component('SearchPage', SearchPage)
-  .component('FixWordModal', FixWordModal)
-  .component('FixMetadataModal', FixMetadataModal)
+  .component('FixWordModal', FixWord)
+  .component('FixMetadataModal', FixMetadata)
 
 console.log('Starting up')
 

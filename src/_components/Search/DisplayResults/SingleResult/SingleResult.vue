@@ -5,7 +5,7 @@
         result.metadata.title ?? result.docRef
       }}</a>
       <button
-        @click="fixMetadata(result.docRef, 'Title', result.metadata.title)"
+        @click="fixMetaData(result.docRef, 'Title', result.metadata.title)"
         class="button is-small is-white"
       >
         <span class="icon is-small fa-2xs">
@@ -18,7 +18,11 @@
       field="titleEnglish"
       :value="result.metadata.titleEnglish"
     />
-    <SingleResultItem :docRef="result.docRef" :field="'author'" :value="result.metadata.author" />
+    <SingleResultItem 
+      :docRef="result.docRef" 
+      field="author" 
+      :value="result.metadata.author"
+    />
     <SingleResultItem
       :docRef="result.docRef"
       field="authorEnglish"
@@ -42,24 +46,17 @@
       :snippets="result.snippets"
       :docRef="result.docRef"
       :url="result.metadata.url"
-      :images="images"
-      :imageBusy="imageBusy"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { inject, computed, defineProps } from 'vue'
-import SingleResultItem from './SingleResultItem.vue'
-import DisplaySnippets from '../../DisplaySnippets/DisplaySnippets.vue'
+import SingleResultItem from '@/_components/Search/DisplayResults/SingleResult/SingleResultItem.vue'
+import DisplaySnippets from '@/_components/Search/DisplaySnippets/DisplaySnippets.vue';
+import { fixMetaData } from '@/_components/Modals/FixMetaData/FixMetaData-methods';
 
-// Setup EventBus
-const eventBus: any = inject('eventBus')
-const fixMetadata = (docRef: string, field: string, value: string) =>
-  eventBus.emit('fixMetadataModal', [docRef, field, value, true])
-
-defineProps(['result', 'images', 'imageBusy'])
+defineProps(['result'])
 </script>
 
 <style lang="scss" scoped>

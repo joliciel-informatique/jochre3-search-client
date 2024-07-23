@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TranscribedText from '../components/TranscribedText.vue'
-import Header from '../components/Header.vue'
-import Footer from '../components/Footer.vue'
+import Header from '../components/PageHeader.vue'
+import Footer from '../components/PageFooter.vue'
 </script>
 
 <template>

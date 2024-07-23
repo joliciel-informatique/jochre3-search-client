@@ -1,13 +1,11 @@
 <template>
   <ul>
-    <li v-for="(snippet, index) in snippets" :key="snippet">
+    <li v-for="(snippet, index) in snippets" :key="sha1(snippet)">
       <SingleSnippet
         :snippet="snippet"
         :docRef="docRef"
         :index="index"
         :url="url"
-        :images="images"
-        :imageBusy="imageBusy"
       />
     </li>
   </ul>
@@ -15,8 +13,9 @@
 
 <script setup lang="ts">
 import SingleSnippet from './SingleSnippet/SingleSnippet.vue'
+import { sha1 } from 'object-hash';
 
-defineProps(['snippets', 'docRef', 'url', 'images', 'imageBusy'])
+defineProps(['snippets', 'docRef', 'url'])
 </script>
 
 <style lang="scss" scoped>
