@@ -15,10 +15,7 @@ Description: presents OCR record metadata
       <a :href="result.metadata?.url" target="_blank">{{
         result.metadata.title ?? result.docRef
       }}</a>
-      <button
-        @click="showFixMetaDataModal()"
-        class="button is-small is-white"
-      >
+      <button @click="showFixMetaDataModal()" class="button is-small is-white">
         <span class="icon is-small fa-2xs">
           <font-awesome-icon icon="pen-to-square" />
         </span>
@@ -29,11 +26,7 @@ Description: presents OCR record metadata
       field="titleEnglish"
       :value="result.metadata.titleEnglish"
     />
-    <SingleResultItem 
-      :docRef="result.docRef" 
-      field="author" 
-      :value="result.metadata.author"
-    />
+    <SingleResultItem :docRef="result.docRef" field="author" :value="result.metadata.author" />
     <SingleResultItem
       :docRef="result.docRef"
       field="authorEnglish"
@@ -58,9 +51,9 @@ Description: presents OCR record metadata
       :docRef="result.docRef"
       :url="result.metadata.url"
     />
-    <FixMetaData 
+    <FixMetaData
       :docRef="result.docRef"
-      field='title'
+      field="title"
       :oldValue="result.metadata.title"
       :visibility="FixMetaDataVisible"
     />
@@ -68,11 +61,11 @@ Description: presents OCR record metadata
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import SingleResultItem from '@/_components/Search/DisplayResults/SingleResult/SingleResultItem.vue'
-import DisplaySnippets from '@/_components/Search/DisplaySnippets/DisplaySnippets.vue';
-import FixMetaData from '@/_components/Modals/FixMetaData/FixMetaData.vue';
+import DisplaySnippets from '@/_components/Search/DisplaySnippets/DisplaySnippets.vue'
+import FixMetaData from '@/_components/Modals/FixMetaData/FixMetadata.vue'
 
 const FixMetaDataVisible = ref(false)
 
