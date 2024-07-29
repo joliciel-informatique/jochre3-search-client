@@ -65,7 +65,7 @@ import { ref } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import SingleResultItem from '@/_components/Search/DisplayResults/SingleResult/SingleResultItem.vue'
 import DisplaySnippets from '@/_components/Search/DisplaySnippets/DisplaySnippets.vue'
-import FixMetaData from '@/_components/Modals/FixMetaData/FixMetadata.vue'
+import FixMetaData from '@/_components/Modals/FixMetaData/FixMetaData.vue'
 
 const FixMetaDataVisible = ref(false)
 

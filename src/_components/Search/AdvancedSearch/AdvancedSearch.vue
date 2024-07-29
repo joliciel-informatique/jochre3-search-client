@@ -10,30 +10,30 @@ Methods: None
 Description: presents the advanced search toolbox
 -->
 <template>
-    <div class="pt-0 mt-0">
-        <a @click="togglePanel">
-            <span class="m-1">{{ $t('search.advanced') }}</span>
-            <span class="icon is-small m-1">
-              <font-awesome-icon v-if="!showAdvancedSearchPanel" icon="square-plus" />
-              <font-awesome-icon v-if="showAdvancedSearchPanel" icon="square-minus" />
-            </span>
-        </a>
-    </div>
-    <div v-if="showAdvancedSearchPanel" class="box m-1 p-3">
-      <div class="container is-max-desktop">
-        <p>{{ $t('search.field-instructions') }}</p>
-        <FindAuthors v-model:authorList="authorList"/>
-        <div class="grid has-addons">
+  <div class="pt-0 mt-0">
+    <a @click="togglePanel">
+      <span class="m-1">{{ $t('search.advanced') }}</span>
+      <span class="icon is-small m-1">
+        <font-awesome-icon v-if="!showAdvancedSearchPanel" icon="square-plus" />
+        <font-awesome-icon v-if="showAdvancedSearchPanel" icon="square-minus" />
+      </span>
+    </a>
+  </div>
+  <div v-if="showAdvancedSearchPanel" class="box m-1 p-3">
+    <div class="container is-max-desktop">
+      <p>{{ $t('search.field-instructions') }}</p>
+      <FindAuthors v-model:authorList="authorList" />
+      <div class="grid has-addons">
         <label class="label">{{ $t('search.title') }}</label>
-          <input
-            id="title"
-            class="input keyboardInput"
-            type="text"
-            lang="yi"
-            :placeholder="'Title'"
-            v-model="title"
-            @keyup.enter="emit('search')"
-          />
+        <input
+          id="title"
+          class="input keyboardInput"
+          type="text"
+          lang="yi"
+          :placeholder="'Title'"
+          v-model="title"
+          @keyup.enter="emit('search')"
+        />
       </div>
       <div class="field has-addons">
         <label class="label">{{ $t('search.date-from') }}</label>
@@ -72,23 +72,25 @@ Description: presents the advanced search toolbox
         </div>
       </div>
       <div class="field has-text-centered p-2">
-        <button class="button is-light" @click="emit('resetSearchResults')">{{ $t('search.reset') }}</button>
+        <button class="button is-light" @click="emit('resetSearchResults')">
+          {{ $t('search.reset') }}
+        </button>
         &nbsp;
         <button class="button is-inverted" @click="emit('search')">
-          {{ $t('search.search') }}
+          {{ $t('search.search-button') }}
         </button>
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import FindAuthors from '@/_components/FindAuthors/FindAuthors.vue';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import FindAuthors from '@/_components/FindAuthors/FindAuthors.vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const emit = defineEmits(['search', 'resetSearchResults'])
 
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
-const authorList = defineModel<Array<{ label : string, count : number}>>('authorList')
+const authorList = defineModel<Array<{ label: string; count: number }>>('authorList')
 const title = defineModel('title')
 const fromYear = defineModel('fromYear')
 const toYear = defineModel('toYear')
@@ -98,5 +100,4 @@ const sortBy = defineModel('sortBy')
 const togglePanel = () => {
   showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value
 }
-
 </script>

@@ -20,13 +20,10 @@ import keycloakParams from './security/keycloak.json'
 import { mergeDeep } from './assets/deepMerge'
 
 import SearchPage from './components/SearchPage/SearchPage.vue'
-// import FixWordModal from './_components/Modals/FixWord/FixWord.vue'
-// import FixMetadataModal from './_components/Modals/FixMetaData/FixMetadata.vue'
 import { fetchData, setURL } from './assets/fetchMethods'
 import FixWord from './_components/Modals/FixWord/FixWord.vue'
-import FixMetadata from './_components/Modals/FixMetaData/FixMetaData.vue'
+import FixMetaData from './_components/Modals/FixMetaData/FixMetaData.vue'
 import { setErrorMessage } from './_components/Modals/ErrorNotification/ErrorNotification.vue'
-// import OCRInterfaces from './assets/interfacesExternals'
 
 const messages = {
   en: en,
@@ -48,7 +45,7 @@ app
   // .component('OCRInterfaces', OCRInterfaces)
   .component('SearchPage', SearchPage)
   .component('FixWordModal', FixWord)
-  .component('FixMetadataModal', FixMetadata)
+  .component('FixMetaDataModal', FixMetaData)
 
 console.log('Starting up')
 
@@ -188,7 +185,7 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
             } else {
               const msg = new Error(`Failed to get user preferences: ${reason}`)
               setErrorMessage(msg)
-              
+
               // Don't mount the app
               // console.error(reason.message)
               // throw reason
@@ -200,7 +197,6 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
                 messages: customizedMessages
               })
               return i18n
-
             }
           })
         return i18n

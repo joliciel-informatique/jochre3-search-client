@@ -21,23 +21,18 @@ Description: display single metadata item
       </span>
     </button>
   </div>
-  <FixMetaData 
-    v-model:visibility="visible"
-    :docRef="docRef"
-    :field="field"
-    :oldValue="value"
-  />
+  <FixMetaData v-model:visibility="visible" :docRef="docRef" :field="field" :oldValue="value" />
 </template>
 
 <script setup lang="ts">
-import FixMetaData from '@/_components/Modals/FixMetaData/FixMetaData.vue';
+import FixMetaData from '@/_components/Modals/FixMetaData/FixMetaData.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { ltr } from '@/assets/appState';
-import { ref } from 'vue';
+import { ltr } from '@/assets/appState'
+import { ref } from 'vue'
 
 const visible = ref(false)
 
-const {field, value, docRef } = defineProps(['field', 'value', 'docRef'])
+const { field, value, docRef } = defineProps(['field', 'value', 'docRef'])
 
 let title: string = `results.${field}`
 title = field === 'titleEnglish' ? `results.alternate-title` : title

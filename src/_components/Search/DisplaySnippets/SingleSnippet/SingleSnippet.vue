@@ -46,7 +46,12 @@ Description: displays text snippets from the OCR text
         <font-awesome-icon icon="book-open" size="xs" />
       </span>
     </a>
-    <a class="button is-text p-0 m-1" v-if="snippet.deepLink" :href="snippet.deepLink" target="_blank">
+    <a
+      class="button is-text p-0 m-1"
+      v-if="snippet.deepLink"
+      :href="snippet.deepLink"
+      target="_blank"
+    >
       <span>{{ $t('results.show-original-page', [snippet.page]) }}</span>
     </a>
   </div>
@@ -55,11 +60,11 @@ Description: displays text snippets from the OCR text
     <img src="/images/loading.gif" />
   </div>
   <img class="image-snippet" v-if="image" :src="image" title="Image" />
-  <FixWord 
+  <FixWord
     v-model:wordOffset="wordOffset"
     v-model:word="word"
     v-model:wordImage="wordImage"
-    v-model:visibility="visibility"  
+    v-model:visibility="visibility"
     :docRef="docRef"
   />
 </template>
@@ -89,65 +94,74 @@ const visibility = ref(false)
 // import { wordOffset, word, wordImage, fixWordVisible} from '@/_components/Modals/FixWord/FixWord.vue';
 
 const getSelectedWord = (snippet: string) => {
-    const sel = window.getSelection()
-    if (sel && sel.anchorNode) {
+  const sel = window.getSelection()
+  if (sel && sel.anchorNode) {
+    // Get the parent span
+    let parentElement = sel.anchorNode
 
-        const div1 = document.createElement('div');
-        div1.innerHTML = snippet.trim();
-
-        // Get the parent span
-        let parentElement = sel.anchorNode
-
-        while (parentElement.nodeType != Node.ELEMENT_NODE) {
-          parentElement = parentElement.parentNode as ParentNode
-        }
-
-        let parentSpan = parentElement as HTMLElement
-        while (parentSpan.tagName != 'SPAN') {
-          parentSpan = parentSpan.parentElement as HTMLElement
-        }
-
-        if (parentSpan.tagName === 'SPAN') {
-
-          const offset = parentSpan.getAttribute('offset') ?? '0'
-
-          // docRef.value = ref
-          wordOffset.value = parseInt(offset)
-
-          // Pull the image from the database
-          const params : URLSearchParams = new URLSearchParams({ 'doc-ref' : docRef, 'word-offset' : wordOffset.value.toString() })
-
-          fetchData('word-image', 'get', params, 'image/png', 'arraybuffer')
-          .then(response => (response.status === 200) ? response.arrayBuffer()
-          .then(buffer => wordImage.value = `data:${response.headers.get('content-type')};base64,${btoa(Array.from(new Uint8Array(buffer)).map((buf) => String.fromCharCode(buf)).join(''))}` 
-          ) : null)
-
-          console.log(1)
-
-          // const img : { docRef : string, page : number, offset : number, image : string } | undefined = cachedImages.find(ref, page, wordOffset.value)
-          // if (img !== undefined) {
-
-            // Pull text from the DOM-cached snippet
-            // wordImage.value = img.image
-            
-          const selectedWord = div1.querySelector(`span[offset="${wordOffset.value}"]`)
-            
-          if (selectedWord !== null && selectedWord.textContent !== null) {
-            word.value = selectedWord.textContent
-          }
-
-        } else {
-
-            // Else set selected text
-            if (sel.anchorNode.textContent) {
-              word.value = sel.anchorNode.textContent.substring(sel.anchorOffset, sel.focusOffset).trim()
-              wordImage.value = ''
-            }
-
-        }
-        visibility.value = true // Open modal
-      }
+    while (parentElement.nodeType != Node.ELEMENT_NODE) {
+      parentElement = parentElement.parentNode as ParentNode
     }
+
+    let parentSpan = parentElement as HTMLElement
+    while (parentSpan.tagName != 'SPAN') {
+      parentSpan = parentSpan.parentElement as HTMLElement
+    }
+
+    if (parentSpan.tagName === 'SPAN') {
+      const localOffset = sel.anchorOffset
+      const globalOffsetStr = parentSpan.getAttribute('offset') ?? '0'
+      const globalOffset = parseInt(globalOffsetStr)
+      const offset = globalOffset + localOffset
+      console.log(
+        `localOffset: ${localOffset}, globalOffset: ${globalOffset}, wordOffset: ${offset}`
+      )
+
+      // docRef.value = ref
+      wordOffset.value = offset
+
+      // Pull the image from the database
+      const params: URLSearchParams = new URLSearchParams({
+        'doc-ref': docRef,
+        'word-offset': wordOffset.value.toString()
+      })
+
+      fetchData('word-image', 'get', params, 'image/png', 'arraybuffer').then((response) =>
+        response.status === 200
+          ? response.arrayBuffer().then(
+              (buffer) =>
+                (wordImage.value = `data:${response.headers.get('content-type')};base64,${btoa(
+                  Array.from(new Uint8Array(buffer))
+                    .map((buf) => String.fromCharCode(buf))
+                    .join('')
+                )}`)
+            )
+          : null
+      )
+
+      // const img : { docRef : string, page : number, offset : number, image : string } | undefined = cachedImages.find(ref, page, wordOffset.value)
+      // if (img !== undefined) {
+
+      // Pull text from the DOM-cached snippet
+      // wordImage.value = img.image
+
+      // We cannot get the word from the selection, because we need to ensure correspondence between image and word
+      // especially if the word is followed by punctuation (which is excluded from the selection on double-click)
+      // word.value =
+      //   sel.anchorNode.textContent?.substring(sel.anchorOffset, sel.focusOffset).trim() ?? ''
+
+      fetchData('word-text', 'get', params).then((response) => {
+        // console.log(response)
+        response.json().then((result) => {
+          word.value = result.text
+        })
+      })
+    } else {
+      throw new Error("Couldn't find span surrounding selection")
+    }
+    visibility.value = true // Open modal
+  }
+}
 
 const toggleImageSnippet = () => {
   if (image.value) {
@@ -166,11 +180,18 @@ const toggleImageSnippet = () => {
     })
 
     fetchData('image-snippet', 'get', params, 'image/png', 'arraybuffer')
-      .then((response) => response.status === 200 ? response.arrayBuffer()
-      .then((buffer) => {
-        image.value = `data:${response.headers.get('content-type')};base64,${btoa(String.fromCharCode(...new Uint8Array(buffer)))}`
-        imageBusy.value = false
-      }) : null)
+      .then((response) =>
+        response.status === 200
+          ? response.arrayBuffer().then((buffer) => {
+              image.value = `data:${response.headers.get('content-type')};base64,${btoa(
+                Array.from(new Uint8Array(buffer))
+                  .map((buf) => String.fromCharCode(buf))
+                  .join('')
+              )}`
+              imageBusy.value = false
+            })
+          : null
+      )
       .catch((error) => {
         console.error(error)
         imageBusy.value = false
