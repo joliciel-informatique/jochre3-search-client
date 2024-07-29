@@ -24,13 +24,13 @@ Description: presents the advanced search toolbox
       <p>{{ $t('search.field-instructions') }}</p>
       <FindAuthors v-model:authorList="authorList" />
       <div class="grid has-addons">
-        <label class="label">{{ $t('search.title') }}</label>
+        <label class="label">{{ $t('search.title') }}:</label>
         <input
           id="title"
           class="input keyboardInput"
           type="text"
           lang="yi"
-          :placeholder="'Title'"
+          :placeholder="$t('search.title')"
           v-model="title"
           @keyup.enter="emit('search')"
         />

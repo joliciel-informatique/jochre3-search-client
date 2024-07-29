@@ -150,7 +150,7 @@ const strict = computed(() => !relatedWordForms.value)
 const resetSearchResults = () => {
   query.value = ''
   page.value = 1
-  title.value = 'Enter a title'
+  title.value = ''
   fromYear.value = 0
   toYear.value = 0
   docRefs.value = ''
@@ -226,6 +226,7 @@ const search = (facet: string | undefined = undefined) => {
         isBusy.value = false
       })
   } else {
+    console.log('Clearing search results')
     searchResults.value = []
     totalHits.value = 0
   }
