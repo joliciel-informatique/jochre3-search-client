@@ -1,6 +1,7 @@
 import './assets/main.scss'
+import 'animate.css'
 
-import { createApp, ref } from 'vue'
+import { createApp } from 'vue'
 import mitt from 'mitt'
 import App from './App.vue'
 import router from './router'
@@ -18,11 +19,11 @@ import yi from './i18n/locales/yi.json'
 import keycloakParams from './security/keycloak.json'
 import { mergeDeep } from './assets/deepMerge'
 
-import SearchPage from './components/SearchPage.vue'
-import FixWordModal from './_components/Modals/FixWord.vue'
-import FixMetadataModal from './_components/Modals/FixMetadata.vue'
-import { fetchData, setURL } from './components/Support/FetchMethods.vue'
-import OCRInterfaces from './components/Support/InterfacesExternals.vue'
+import SearchPage from './components/SearchPage/SearchPage.vue'
+import { fetchData, setURL } from './assets/fetchMethods'
+import FixWord from './_components/Modals/FixWord/FixWord.vue'
+import FixMetaData from './_components/Modals/FixMetaData/FixMetaData.vue'
+import { setErrorMessage } from './_components/Modals/ErrorNotification/ErrorNotification.vue'
 
 const messages = {
   en: en,
@@ -41,10 +42,10 @@ app.use(router)
 app.use(pinia)
 
 app
-  .component('OCRInterfaces', OCRInterfaces)
+  // .component('OCRInterfaces', OCRInterfaces)
   .component('SearchPage', SearchPage)
-  .component('FixWordModal', FixWordModal)
-  .component('FixMetadataModal', FixMetadataModal)
+  .component('FixWordModal', FixWord)
+  .component('FixMetaDataModal', FixMetaData)
 
 console.log('Starting up')
 
@@ -125,6 +126,24 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
           snippetsPerResult: number
         }
 
+        // return fetchData('preferences/user', 'get')
+        // .then((response) => response.json()
+        // .then(({ data }) => {
+        //   preferencesStore.language = (data.language) ? data.language : null
+        //   preferencesStore.resultsPerPage = (data.resultsPerPage) ? data.resultsPerPage : null
+        //   preferencesStore.snippetsPerResult = (data.snippetsPerResult) ? data.snippetsPerResult : null
+        //   return createI18n({
+        //     legacy: false,
+        //     locale: preferencesStore.language,
+        //     fallbackLocale: 'en',
+        //     messages: customizedMessages
+        //   })
+        // }))
+        // .catch((error) => {
+        //   const msg = new Error(`Failed to get user preferences: ${error.message}`)
+        //   setErrorMessage(msg)
+        // })
+
         const i18n = axios
           .get<UserPreferences>(`${apiUrl}/preferences/user`, {
             headers: {
@@ -164,9 +183,20 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
               })
               return i18n
             } else {
+              const msg = new Error(`Failed to get user preferences: ${reason}`)
+              setErrorMessage(msg)
+
               // Don't mount the app
-              console.error(reason.message)
-              throw reason
+              // console.error(reason.message)
+              // throw reason
+
+              const i18n = createI18n({
+                legacy: false,
+                locale: 'en',
+                fallbackLocale: 'en',
+                messages: customizedMessages
+              })
+              return i18n
             }
           })
         return i18n

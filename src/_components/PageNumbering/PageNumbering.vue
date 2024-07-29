@@ -1,5 +1,16 @@
+<!-- PageNumbering
+Parent: SearchPage.vue
+Children: None
+Siblings: None
+
+Props: search, page, totalHits
+Variables: lastPage (computed), isBusy (boolean, imported), hasSearch (boolean, imported)
+Methods: gotoPage (local)
+
+Description: calculates and presents page numbers
+-->
 <template>
-  <nav class="pagination p-1" role="navigation" aria-label="pagination" v-if="totalCount > 0">
+  <nav class="pagination p-1" role="navigation" aria-label="pagination" v-if="totalHits > 0 && !isBusy && hasSearch">
     <button @click="gotoPage(page - 1)" :disabled="page < 1" class="pagination-previous">
       {{ $t('pagination.previous') }}
     </button>
@@ -37,7 +48,7 @@
           >{{ page + 1 }}</a
         >
       </li>
-      <li v-if="page + 1 < lastPage">
+      <li v-if="page + 1 < lastPage - 1">
         <span class="pagination-ellipsis">&hellip;</span>
       </li>
       <li v-if="page + 1 < lastPage">
@@ -53,18 +64,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, inject } from 'vue'
-import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { computed, type Ref } from 'vue'
+import { preferences } from '@/assets/fetchMethods';
+import { isBusy, hasSearch } from '@/assets/appState';
 
-const eventBus: any = inject('eventBus')
-const gotoPage = (newPage: number) => eventBus.emit('updatePage', newPage)
+// const { totalHits } = defineProps(['page', 'totalHits'])
+const emit = defineEmits(['search'])
 
-const preferences = usePreferencesStore()
-const props = defineProps(['page', 'totalCount'])
+const page: Ref = defineModel('page')
+const totalHits : Ref = defineModel('totalHits')
 
-const lastPage = computed(() => {
-  const totalCount: number = props.totalCount
-  const lastPage: number = Math.floor((totalCount - 1) / preferences.resultsPerPage) + 1
-  return lastPage
-})
+const gotoPage = (newPage: number) => { 
+  page.value = newPage
+  emit('search')
+}
+
+const lastPage = computed(() => Math.floor((totalHits.value - 1) / preferences.resultsPerPage) + 1)
 </script>

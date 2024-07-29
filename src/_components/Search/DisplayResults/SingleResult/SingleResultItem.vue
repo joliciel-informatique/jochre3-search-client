@@ -1,39 +1,41 @@
+<!-- SingleResultItem
+Parent: DisplayResults.vue
+Children: None
+Siblings: None
+
+Props: field, value, docRef
+Variables: title (string)
+Methods: fixMetaData (imported)
+
+Description: display single metadata item
+-->
 <template>
   <div>
     <strong>{{ $t(title) }}&nbsp;</strong>
-    <span :class="{ ltr }">
+    <span :class="field === 'author' ? '' : ltr">
       {{ value }}
     </span>
-    <button @click="fixMetadata(docRef, field, value)" class="button is-small is-white">
+    <button @click="visible = true" class="button is-small is-white">
       <span class="icon is-small fa-2xs">
         <font-awesome-icon icon="pen-to-square" />
       </span>
     </button>
   </div>
+  <FixMetaData v-model:visibility="visible" :docRef="docRef" :field="field" :oldValue="value" />
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, inject } from 'vue'
+import FixMetaData from '@/_components/Modals/FixMetaData/FixMetaData.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import VueI18n from 'vue-i18n'
+import { ltr } from '@/assets/appState'
+import { ref } from 'vue'
 
-const eventBus: any = inject('eventBus')
+const visible = ref(false)
 
-const props = defineProps(['field', 'value', 'docRef'])
+const { field, value, docRef } = defineProps(['field', 'value', 'docRef'])
 
-let title: string = `results.${props.field}`
-title = props.field === 'titleEnglish' ? `results.alternate-title` : title
-title = props.field === 'authorEnglish' ? `results.alternate-author` : title
-title = props.field === 'publicationYear' ? `results.publication-year` : title
-
-const app = getCurrentInstance()
-const globalProperties = app?.appContext.config.globalProperties
-const i18n: VueI18n.VueI18n | undefined = globalProperties?.$i18n as VueI18n.VueI18n
-const locale = i18n?.locale
-
-let ltr: string = locale === 'yi' ? 'ltr' : ''
-ltr = props.field === 'author' ? '' : ltr
-
-const fixMetadata = (docRef: string, field: string, value: string) =>
-  eventBus.emit('fixMetadata', docRef, field, value)
+let title: string = `results.${field}`
+title = field === 'titleEnglish' ? `results.alternate-title` : title
+title = field === 'authorEnglish' ? `results.alternate-author` : title
+title = field === 'publicationYear' ? `results.publication-year` : title
 </script>
