@@ -1,0 +1,232 @@
+@import url("https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=David+Libre:wght@400;500;700&display=swap");
+:root {
+  --bulma-primary-h: 92deg;
+  --bulma-primary-s: 42%;
+}
+
+.pagination {
+  --bulma-pagination-item-h: 292;
+  --bulma-pagination-item-s: 0%;
+  --bulma-pagination-item-background-l-delta: 1%;
+  --bulma-pagination-item-hover-background-l-delta: 0%;
+  --bulma-pagination-item-active-background-l-delta: 0%;
+  --bulma-pagination-item-border-width: 2px;
+  --bulma-pagination-item-color-l: 70%;
+  --bulma-pagination-item-outer-shadow-a: .15;
+  --bulma-pagination-current-color: #eeb211;
+  --bulma-pagination-current-background-color: #eeb211;
+  --bulma-pagination-current-border-color: #eeb211;
+  --bulma-pagination-ellipsis-color: #d2d2d2;
+  --bulma-pagination-selected-item-h: 46deg;
+  --bulma-pagination-selected-item-s: 90%;
+  --bulma-pagination-selected-item-l: 100%;
+  --bulma-pagination-selected-item-background-l: 48%;
+  --bulma-pagination-selected-item-border-l: 46%;
+  --bulma-pagination-selected-item-color-l: 100%;
+}
+
+.custom-background {
+  background-color: #303030;
+}
+
+.custom-background-light {
+  background-color: #edeee6;
+}
+
+.beta-flyout {
+  float: right;
+  bottom: -1rem;
+  right: 0;
+  font-size: 1rem;
+  color: #eeb211;
+}
+
+* {
+  font-family: inherit;
+  text-align: inherit;
+  direction: inherit;
+}
+
+/* Required for sticky footer */
+html {
+  height: 100%;
+  overflow: auto;
+}
+
+body {
+  height: auto;
+}
+
+body {
+  background-color: #fff;
+  /*font-family: 'Times New Roman', Times, serif;*/
+}
+
+h1 {
+  font-size: 24px;
+}
+
+.yiddish {
+  font-family: "Noto", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.english {
+  font-family: serif;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
+}
+
+.title {
+  font-size: 24px;
+  vertical-align: top;
+}
+
+a {
+  color: #000;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #eeb211;
+}
+
+.rtl-align {
+  text-align: right;
+  direction: rtl;
+}
+
+.ltr-align {
+  text-align: left;
+  direction: ltr;
+  unicode-bidi: bidi-override;
+}
+
+.ltr {
+  direction: ltr;
+  unicode-bidi: bidi-override;
+}
+
+.highlight {
+  padding: 0.1rem;
+  background-color: rgba(255, 255, 128, 0.5);
+  box-shadow: 0 1px 3px 4px rgba(255, 255, 128, 0.3);
+  font-weight: bold;
+  outline: 1px #e0e0e0 solid;
+}
+
+.link-white {
+  color: #fff;
+}
+
+/* Bootstrap RTL fixes start */
+.rtl .alert-dismissible .close {
+  left: 0;
+  right: auto;
+}
+
+.rtl .alert {
+  padding: 0.75rem 1.25rem;
+}
+
+.rtl .alert-dismissible {
+  padding-left: 4rem;
+}
+
+.rtl .modal-header .close {
+  margin: -1rem auto -1rem -1rem;
+}
+
+.rtl .form-check {
+  padding-left: 0;
+  padding-right: 1.25rem;
+}
+
+.rtl .form-check-input {
+  margin-left: 0.125rem;
+  margin-right: -1.25rem;
+}
+
+.rtl .modal-footer > :first-child {
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+
+.rtl .modal-footer > :last-child {
+  margin-left: 0;
+  margin-right: 0.25rem;
+}
+
+.image-snippet {
+  width: 100%;
+}
+
+.snippet {
+  border-left: 3px #ccc solid;
+  padding: 0 0 0 10px;
+}
+
+.snippet.rtl {
+  border-left: 0;
+  border-right: 3px #ccc solid;
+  padding: 0 10px 0 0;
+}
+
+/* Bootstrap RTL fixes end */
+/* Pager mobile start */
+@media screen and (max-width: 576px) {
+  .page-first,
+  .page-last,
+  .page-next,
+  .page-prev {
+    flex-basis: 25%;
+    margin-bottom: 0.5rem;
+    order: -1;
+  }
+  .page-item {
+    flex-grow: 1;
+    text-align: center;
+  }
+}
+/* Pager mobile end */
+.dropdown-menu {
+  z-index: 802;
+}
+
+/*
+  Fix for drop-down getting hidden by modal-card-foot
+  From https://stackoverflow.com/a/75182245/1417558
+*/
+.modal.has-overflow {
+  position: fixed !important;
+  overflow: auto !important;
+}
+
+.modal .modal-content,
+.modal .modal-card,
+.modal .modal-card-body {
+  overflow: visible !important;
+}
+
+.notification {
+  z-index: 801;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: all 3s;
+  opacity: 0;
+}
+
+.search-content {
+  flex: 1 1 auto;
+}
+
+.header-footer-content {
+  flex: 0 1 auto;
+}/*# sourceMappingURL=main.css.map */

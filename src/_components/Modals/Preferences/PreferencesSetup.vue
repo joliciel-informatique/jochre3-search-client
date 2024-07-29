@@ -43,4 +43,4 @@ onMounted(() => {
 })
 </script>
 
-<template><div v-if="false"></div></template>
+<template><div v-if="false" class="hero-body"></div></template>

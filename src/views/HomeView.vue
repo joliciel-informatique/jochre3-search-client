@@ -1,7 +1,7 @@
 <template>
   <PreferencesSetup />
   <main
-    class="container hero is-fullheight is-fluid"
+    class="hero is-fullheight is-widescreen"
     :class="{ 'rtl-align': $i18n.locale === 'yi', yiddish: $i18n.locale === 'yi' }"
   >
     <PageHeader />

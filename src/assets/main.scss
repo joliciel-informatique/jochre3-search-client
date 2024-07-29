@@ -1,18 +1,102 @@
-$darkgrey: #303030;
+$darkgrey: #757575;
+$lightgrey: #d2d2d2;
 $gold: #eeb211;
 $white: #ffffff;
 
+@use 'pagination';
 @use 'bulma/sass' with (
-  $pagination-current-color: black,
-  $pagination-current-background-color: $gold,
+  // Pagination
+  $pagination-margin: -0.25rem,
+  $pagination-item-border-style: solid,
+  $pagination-item-font-size: 1em,
+  $pagination-item-margin: 0.25em,
+  $pagination-item-padding-left: 0.5em,
+  $pagination-item-padding-right: 0.5em,
+  $pagination-nav-padding-left: 0.75em,
+  $pagination-nav-padding-right: 0.75em,
+  $pagination-disabled-color: var(--bulma-text-weak),
+  $pagination-disabled-background-color: var(--bulma-border),
+  $pagination-disabled-border-color: var(--bulma-border),
+  // $pagination-current-color: var(--bulma-link-invert),
+  $pagination-current-color: $gold,
   $pagination-current-border-color: $gold,
-  $button-focus-box-shadow-color: $gold,
-  $button-text-color: $gold,
-  $button-text-hover-background-color: $gold
+  $pagination-current-background-color: $gold,
+  $pagination-ellipsis-color: $darkgrey,
+  $pagination-shadow-inset: pink,
+  $grey-dark: $darkgrey
 );
+
+// @import "/node_modules/bulma-checkbox/bulma-checkbox.scss";
 
 @import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=David+Libre:wght@400;500;700&display=swap');
+
+// :root {
+//   --bulma-primary-h: 92deg;
+//   --bulma-primary-s: 42%;
+//   --bulma-link-h: 183deg;
+//   --bulma-link-s: 43%;
+//   --bulma-link-l: 36%;
+//   --bulma-info-h: 183deg;
+//   --bulma-info-s: 43%;
+//   --bulma-info-l: 36%;
+//   --bulma-success-h: 200deg;
+//   --bulma-success-s: 60%;
+//   --bulma-success-l: 63%;
+//   --bulma-scheme-h: 146;
+//   --bulma-scheme-s: 18%;
+//   --bulma-family-primary: Inter,SF Pro,Segoe UI,Roboto,Oxygen,Ubuntu,Helvetica Neue,Helvetica,Arial,Noto,sans-serif;
+//   --bulma-family-secondary: Inter,SF Pro,Segoe UI,Roboto,Oxygen,Ubuntu,Helvetica Neue,Helvetica,Arial,Noto,sans-serif;
+//   --bulma-block-spacing: 1.25rem;
+//   --bulma-radius: 0.35rem;
+// }
+
+// .modal {
+//   --bulma-modal-card-head-radius: 1rem;
+//   --bulma-modal-card-title-size: 2.5rem;
+//   --bulma-modal-card-foot-radius: 1rem;
+// }
+
+// .pagination {
+//   --bulma-pagination-item-h: 292;
+//   --bulma-pagination-item-s: 0%;
+//   --bulma-pagination-item-background-l-delta: 1%;
+//   --bulma-pagination-item-hover-background-l-delta: 0%;
+//   --bulma-pagination-item-active-background-l-delta: 0%;
+//   --bulma-pagination-item-border-width: 2px;
+//   --bulma-pagination-item-color-l: 70%;
+//   --bulma-pagination-item-outer-shadow-a: .15;
+//   --bulma-pagination-current-color: #eeb211;
+//   --bulma-pagination-current-background-color: #eeb211;
+//   --bulma-pagination-current-border-color: #eeb211;
+//   --bulma-pagination-ellipsis-color: #d2d2d2;
+//   --bulma-pagination-selected-item-h: 46deg;
+//   --bulma-pagination-selected-item-s: 90%;
+//   --bulma-pagination-selected-item-l: 100%;
+//   --bulma-pagination-selected-item-background-l: 48%;
+//   --bulma-pagination-selected-item-border-l: 46%;
+//   --bulma-pagination-selected-item-color-l: 100%;
+// }
+
+// .input {
+//   --bulma-input-h: 52;
+//   --bulma-input-s: 28%;
+//   --bulma-input-border-l: 30%;
+//   --bulma-input-border-l-delta: 60%;
+//   --bulma-input-hover-border-l-delta: 90%;
+//   --bulma-input-active-border-l-delta: 94%;
+//   --bulma-input-focus-h: 54deg;
+//   --bulma-input-focus-s: 0%;
+//   --bulma-input-focus-l: 100%;
+//   --bulma-input-focus-shadow-size: 0.1875em 0.1875em 0.1875em 0.1875em;
+//   --bulma-input-color-l: 0%;
+//   --bulma-input-background-l: 0%;
+//   --bulma-input-background-l-delta: 100%;
+// }
+
+
+
+
 
 // Bulma Import
 
@@ -24,10 +108,10 @@ $white: #ffffff;
   background-color: #edeee6;
 }
 
-.current-page-color {
-  background-color: #eeb211;
-  border-color: #eeb211;
-}
+// .current-page-color {
+  // background-color: #eeb211;
+  // border-color: #eeb211;
+// }
 
 .beta-flyout {
   float: right;
@@ -96,7 +180,7 @@ a {
 
 a:hover {
   text-decoration: none;
-  color: #eeb211;
+  // color: #eeb211;
 }
 
 .rtl-align {
