@@ -10,6 +10,7 @@ import {
   faMagnifyingGlass,
   faFileImage,
   faSquarePlus,
+  faSquareMinus,
   faBookOpen,
   faFileLines,
   faPenToSquare
@@ -21,6 +22,7 @@ import FixMetadataModal from '../components/FixMetadataModal.vue'
 library.add(faMagnifyingGlass)
 library.add(faFileImage)
 library.add(faSquarePlus)
+library.add(faSquareMinus)
 library.add(faBookOpen)
 library.add(faFileLines)
 library.add(faPenToSquare)
@@ -72,7 +74,9 @@ function getIndexSize() {
 const indexSize = ref<number>(0)
 
 const query = ref<string>('')
-const strict = ref(false)
+const relatedWordForms = ref(true)
+const strict = computed(() => !relatedWordForms.value)
+
 const page = ref<number>(1)
 
 const authorText = ref<string>('')
@@ -118,7 +122,7 @@ const getUrlQueryParams = async () => {
     query.value = (route.query['query'] as string).trim()
   }
   if (route.query['strict']) {
-    strict.value = route.query['strict'] === 'true'
+    relatedWordForms.value = route.query['strict'] !== 'true'
   }
   if (route.query['page']) {
     page.value = Number(route.query['page'])
@@ -161,11 +165,12 @@ const getUrlQueryParams = async () => {
 }
 
 interface Snippet {
-  text: String
+  text: string
   page: number
   start: number
   end: number
   highlights: number[][]
+  deepLink: string
 }
 
 interface Metadata {
@@ -288,8 +293,7 @@ function search(updateHistory: boolean) {
       .get<SearchResponse>(`${API_URL}/search`, {
         params: params,
         headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${keycloak?.token}`
+          accept: 'application/json'
         }
       })
       .then((response) => {
@@ -316,12 +320,19 @@ function search(updateHistory: boolean) {
         .get<AggregationBins>(`${API_URL}/aggregate`, {
           params: facetParams,
           headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${keycloak?.token}`
+            accept: 'application/json'
           }
         })
         .then((response) => {
           facets.value = response.data.bins
+
+          // For testing many facets:
+          // for (let i = 0; i < 10; i++) {
+          //   const bin = {} as AggregationBin
+          //   bin.count = 42
+          //   bin.label = 'כלב שבכלבים'
+          //   facets.value.push(bin)
+          // }
         })
         .catch((error) => {
           console.error(error)
@@ -364,8 +375,7 @@ function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
       .get(`${API_URL}/image-snippet`, {
         params: params,
         headers: {
-          accept: 'image/png',
-          Authorization: `Bearer ${keycloak?.token}`
+          accept: 'image/png'
         },
         responseType: 'arraybuffer'
       })
@@ -397,11 +407,12 @@ function resetResults() {
   toYear.value = undefined
   docRefs.value = ''
   authors.value = []
-  strict.value = false
+  relatedWordForms.value = true
   sortBy.value = 'Score'
   showAdvanced.value = false
   errorNotificationVisible.value = false
   search(true)
+  getIndexSize()
 }
 
 function findAuthors() {
@@ -413,8 +424,7 @@ function findAuthors() {
           maxBins: 10
         },
         headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${keycloak?.token}`
+          accept: 'application/json'
         }
       })
       .then((response) => {
@@ -556,17 +566,18 @@ function hideErrorNotification() {
         </div>
         <div class="control pr-2 pl-2">
           <label class="checkbox">
-            <input type="checkbox" v-model="strict" @change="runNewSearch()" />
-            {{ $t('search.strict') }}
+            <input type="checkbox" v-model="relatedWordForms" @change="runNewSearch()" />
+            {{ $t('search.related-word-forms') }}
           </label>
         </div>
         <div class="pt-0 mt-0">
-          <button @click="showAdvanced = !showAdvanced" class="button is-text has-text-white">
-            <span>{{ $t('search.advanced') }}</span>
-            <span class="icon is-small">
-              <font-awesome-icon icon="square-plus" />
+          <a @click="showAdvanced = !showAdvanced" class="link-white">
+            <span class="m-1">{{ $t('search.advanced') }}</span>
+            <span class="icon is-small m-1">
+              <font-awesome-icon v-if="!showAdvanced" icon="square-plus" />
+              <font-awesome-icon v-if="showAdvanced" icon="square-minus" />
             </span>
-          </button>
+          </a>
         </div>
       </div>
     </div>
@@ -679,33 +690,38 @@ function hideErrorNotification() {
         <div v-html="$t('search.about')"></div>
         <div>{{ $t('search.index-size', [indexSize]) }}</div>
       </div>
-      <div v-if="!isBusy && hasSearch && searchResults.length == 0">
-        <strong>{{ $t('results.none') }}</strong>
-      </div>
-      <div v-if="!isBusy && searchResults.length > 0">
-        <nav class="navbar" role="navigation">
-          <div class="navbar-start">
-            <strong
-              >{{ $t('results.result-count', [totalCount]) }}
-              {{ $t('results.result-range', [firstResult, lastResult]) }}</strong
-            >
-          </div>
-          <div class="navbar-end p-1">
-            <button @click="resetResults" class="button is-small is-light">
-              {{ $t('results.reset') }}
-            </button>
-          </div>
-        </nav>
-        <div v-if="facets.length > 0">
-          <span v-for="facet of facets">
+      <div v-if="!isBusy && hasSearch">
+        <div>
+          <span class="is-pulled-right" v-if="searchResults.length == 0">
+            <div class="navbar-item" v-if="searchResults.length == 0">
+              <strong>{{ $t('results.none') }}</strong>
+            </div>
+          </span>
+          <span class="is-pulled-right" v-for="facet of facets">
             <button @click="addAuthorToQuery(facet.label)" class="button is-small is-dark m-1">
               {{ facet.label }}: {{ facet.count }}
             </button>
           </span>
+          <span class="is-pulled-left">
+            <button @click="router.back()" class="button is-small is-light m-1">
+              {{ $t('back') }}
+            </button>
+            <button @click="resetResults" class="button is-small is-light m-1">
+              {{ $t('results.reset') }}
+            </button>
+          </span>
         </div>
+      </div>
+      <div v-if="!isBusy && hasSearch && searchResults.length > 0">
+        <strong
+          >{{ $t('results.result-count', [totalCount]) }}
+          {{ $t('results.result-range', [firstResult, lastResult]) }}</strong
+        >
+      </div>
+      <div class="column is-three-quarters" v-if="!isBusy && searchResults.length > 0">
         <ul>
           <li v-for="result of searchResults">
-            <h1 class="title">
+            <h1 class="title yiddish">
               <a :href="result.metadata.url" target="_blank">{{
                 result.metadata.title ?? result.docRef
               }}</a>
@@ -748,8 +764,7 @@ function hideErrorNotification() {
             </div>
             <div>
               <strong>{{ $t('results.author') }}</strong
-              >&nbsp;
-              {{ result.metadata.author }}
+              >&nbsp;<span class="yiddish">{{ result.metadata.author }}</span>
               <button
                 @click="fixMetadata(result.docRef, 'Author', result.metadata.author)"
                 class="button is-small is-white"
@@ -810,9 +825,12 @@ function hideErrorNotification() {
               <li v-for="(snippet, index) in result.snippets">
                 <div
                   v-html="snippet.text"
-                  class="rtl-align yiddish pr-2 pl-2"
+                  class="rtl-align snippet rtl yiddish pr-2 pl-2"
                   @dblclick="correctWord(result.docRef)"
                 ></div>
+                <div class="container is-italic has-text-weight-bold">
+                  {{ $t('results.word-fix-instructions') }}
+                </div>
                 <div class="container">
                   <button
                     class="button is-small is-text p-1 m-1"
@@ -847,12 +865,13 @@ function hideErrorNotification() {
                     :href="`https://archive.org/details/${result.docRef}/page/n${snippet.page}/mode/1up`"
                     target="_blank"
                   >
-                    <span class="icon">
+                    <span class="icon" v-if="snippet.deepLink">
                       <font-awesome-icon icon="book-open" size="xs" />
                     </span>
                   </a>
                   <a
-                    :href="`https://archive.org/details/${result.docRef}/page/n${snippet.page}/mode/1up`"
+                    v-if="snippet.deepLink"
+                    :href="snippet.deepLink"
                     target="_blank"
                     class="button is-text p-0 m-1"
                   >
@@ -864,6 +883,7 @@ function hideErrorNotification() {
                   <img src="/images/loading.gif" />
                 </div>
                 <img
+                  class="image-snippet"
                   v-if="images.has(`${result.docRef}_${index}`)"
                   :src="images.get(`${result.docRef}_${index}`)"
                   title="Image"

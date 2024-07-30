@@ -7,6 +7,8 @@ const props = defineProps(['visible', 'docRef', 'field', 'currentValue'])
 const emit = defineEmits(['onCloseModal'])
 const keycloak = useKeycloakStore().keycloak
 
+const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
+
 const API_URL = inject('apiUrl')
 
 const newValue = ref<string>()
@@ -129,6 +131,9 @@ function addAuthor(author: string) {
         <button class="delete" aria-label="close" @click="onCancel"></button>
       </header>
       <section class="modal-card-body">
+        <div v-if="!authenticated" class="is-italic has-text-weight-bold has-text-danger">
+          {{ $t('fix-metadata.unauthenticated') }}
+        </div>
         <div>{{ $t('fix-metadata.instructions') }}</div>
         <div class="field has-addons">
           <label class="label">{{ $t('fix-metadata.field') }}</label
@@ -212,7 +217,7 @@ function addAuthor(author: string) {
       </section>
       <footer class="modal-card-foot">
         <div class="buttons">
-          <button class="button is-link" @click="onSubmit">
+          <button class="button is-link" :disabled="!authenticated" @click="onSubmit">
             {{ $t('save') }}
           </button>
           <button class="button is-link is-light" @click="onCancel">
