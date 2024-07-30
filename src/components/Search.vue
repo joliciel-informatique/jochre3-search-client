@@ -30,6 +30,7 @@ library.add(faPenToSquare)
 const router = useRouter()
 const route = useRoute()
 const keycloak = useKeycloakStore().keycloak
+const authenticated = keycloak?.authenticated ?? false
 const preferences = usePreferencesStore()
 const API_URL = inject('apiUrl')
 
@@ -289,11 +290,13 @@ function search(updateHistory: boolean) {
 
     facets.value = []
 
+    const searchUrl = authenticated ? 'search-with-auth' : 'search'
     axios
-      .get<SearchResponse>(`${API_URL}/search`, {
+      .get<SearchResponse>(`${API_URL}/${searchUrl}`, {
         params: params,
         headers: {
-          accept: 'application/json'
+          accept: 'application/json',
+          Authorization: `Bearer ${keycloak?.token ?? 'None'}`
         }
       })
       .then((response) => {
@@ -381,7 +384,13 @@ function toggleImageSnippet(docRef: string, index: number, snippet: Snippet) {
       })
       .then((response) => {
         if (response.status == 200) {
-          const b64 = btoa(String.fromCharCode(...new Uint8Array(response.data)))
+          //const b64 = btoa(String.fromCharCode(...new Uint8Array(response.data)))
+          // Causes "RangeError: too many function arguments" in some cases, trying another method
+          const b64 = btoa(
+            Array.from(new Uint8Array(response.data))
+              .map((b) => String.fromCharCode(b))
+              .join('')
+          )
           const imgData = 'data:' + response.headers['content-type'] + ';base64,' + b64
           images.value.set(imageKey, imgData)
           imageBusy.value.delete(imageKey)
