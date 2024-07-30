@@ -20,7 +20,7 @@ import keycloakParams from './security/keycloak.json'
 import { mergeDeep } from './assets/deepMerge'
 
 import SearchPage from './components/SearchPage/SearchPage.vue'
-import { fetchData, setURL } from './assets/fetchMethods'
+import { fetchData, setURL, setToken } from './assets/fetchMethods'
 import FixWord from './_components/Modals/FixWord/FixWord.vue'
 import FixMetaData from './_components/Modals/FixMetaData/FixMetaData.vue'
 import { setErrorMessage } from './_components/Modals/ErrorNotification/ErrorNotification.vue'
@@ -110,6 +110,7 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
             .then((refreshed) => {
               if (refreshed) {
                 console.log('Token refreshed')
+                setToken(keycloak.token)
               } else {
                 console.warn('Token not refreshed')
               }
