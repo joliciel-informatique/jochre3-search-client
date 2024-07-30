@@ -19,7 +19,7 @@ Description: presents the advanced search toolbox
       </span>
     </a>
   </div>
-  <div v-if="showAdvancedSearchPanel" class="box m-1 p-3">
+  <div v-show="showAdvancedSearchPanel" class="box m-1 p-3">
     <div class="container is-max-desktop">
       <p>{{ $t('search.field-instructions') }}</p>
       <FindAuthors v-model:authorList="authorList" />
