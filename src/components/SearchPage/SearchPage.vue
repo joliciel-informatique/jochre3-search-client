@@ -1,6 +1,11 @@
 <template>
   <div>
-    <SearchBar v-model:query="query" @search="search" />
+    <SearchBar
+      @search="search"
+      @setShowAdvancedSearchPanel="setShowAdvancedSearchPanel"
+      v-model:query="query"
+      v-model:showAdvancedSearchPanel="showAdvancedSearchPanel"
+    />
     <AdvancedSearch
       @search="search"
       @resetSearchResults="resetSearchResults"
@@ -51,7 +56,6 @@ import { setErrorMessage } from '@/_components/Modals/ErrorNotification/ErrorNot
 // Configure icons
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
-  faMagnifyingGlass,
   faFileImage,
   faSquarePlus,
   faSquareMinus,
@@ -59,15 +63,7 @@ import {
   faFileLines,
   faPenToSquare
 } from '@fortawesome/free-solid-svg-icons'
-library.add(
-  faMagnifyingGlass,
-  faFileImage,
-  faSquarePlus,
-  faSquareMinus,
-  faBookOpen,
-  faFileLines,
-  faPenToSquare
-)
+library.add(faFileImage, faSquarePlus, faSquareMinus, faBookOpen, faFileLines, faPenToSquare)
 
 // Startup variables: may move to App.vue or HomeView.vue
 const router = useRouter()
@@ -161,6 +157,10 @@ const resetSearchResults = () => {
   search()
 }
 
+const setShowAdvancedSearchPanel = () => {
+  showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value
+}
+
 const search = (facet: string | undefined = undefined) => {
   if (facet) {
     authorInclude.value = true
@@ -232,7 +232,3 @@ const search = (facet: string | undefined = undefined) => {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-@import '@/assets/main.scss';
-</style>

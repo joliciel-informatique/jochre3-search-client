@@ -14,7 +14,7 @@ Description: presents the search bar
     <div class="container is-max-desktop">
       <div class="field has-addons pb-0 mb-0">
         <label for="query">{{ $t('search.search') }}</label>
-        <p class="control has-icons-right">
+        <p class="control has-icons-left">
           <input
             id="query"
             type="text"
@@ -26,25 +26,38 @@ Description: presents the search bar
               ({ target }: Event) => {
                 query = (target as HTMLInputElement).value
                 emit('search')
-              }"
+              }
+            "
+          />
+          <span class="icon is-small is-left is-clickable" :style="{ 'z-index': 'auto' }">
+            <font-awesome-icon
+              v-if="!showAdvancedSearchPanel"
+              @click="emit('setShowAdvancedSearchPanel')"
+              icon="magnifying-glass-plus"
             />
-            <span class="icon is-small is-left">
-              <font-awesome-icon icon="magnifying-glass" />
-            </span>
-          </div>
-          <div class="control column">
+            <font-awesome-icon
+              v-if="showAdvancedSearchPanel"
+              @click="emit('setShowAdvancedSearchPanel')"
+              icon="magnifying-glass-minus"
+            />
+          </span>
+        </p>
+        <div class="control column">
           <label class="checkbox is-large">
             <input type="checkbox" @change="emit('search')" />
             {{ $t('search.related-word-forms') }}
           </label>
         </div>
-
-        </div>
       </div>
     </div>
+  </div>
 </template>
 <script setup lang="ts">
+import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faMagnifyingGlassPlus, faMagnifyingGlassMinus } from '@fortawesome/free-solid-svg-icons'
+library.add(faMagnifyingGlassPlus, faMagnifyingGlassMinus)
 const query = defineModel('query')
-const emit = defineEmits(['search'])
+const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
+const emit = defineEmits(['search', 'setShowAdvancedSearchPanel'])
 </script>
