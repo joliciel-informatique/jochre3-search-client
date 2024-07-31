@@ -22,7 +22,11 @@ Description: presents the advanced search toolbox
   <div v-show="showAdvancedSearchPanel" class="box m-1 p-3">
     <div class="container is-max-desktop">
       <p>{{ $t('search.field-instructions') }}</p>
-      <FindAuthors v-model:authorList="authorList" />
+      <FindAuthors
+        v-model:authorList="authorList"
+        :label="$t('search.author')"
+        :multivalue="true"
+      />
       <div class="grid has-addons">
         <label class="label">{{ $t('search.title') }}:</label>
         <input
