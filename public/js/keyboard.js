@@ -10,8 +10,8 @@
  *
  * - https://github.com/GreyWyvern/virtual-keyboard/
  */
-var VKI_attach, VKI_close
-;(function () {
+export var VKI_attach, VKI_close, VKI_buildKeyboardInputs
+var setup = function () {
   let self = this
 
   let script = document.currentScript || document.querySelector('script[src*="keyboard.js"]')
@@ -24,7 +24,7 @@ var VKI_attach, VKI_close
   this.VKI_numberPadOn = false // Show number pad by default
   this.VKI_kts = this.VKI_kt = 'US International' // Default keyboard layout
   this.VKI_langAdapt = true // Use lang attribute of input to pre-select keyboard
-  this.VKI_size = 2 // Default keyboard size (1-5)
+  this.VKI_size = 1 // Default keyboard size (1-5)
   this.VKI_sizeAdj = true // Allow user to adjust keyboard size
   this.VKI_clearPasswords = false // Clear password fields on focus
   this.VKI_flashPassword = 1000 // Flash last character of password: 0 = disabled, > 0 = delay in ms
@@ -6863,7 +6863,8 @@ var VKI_attach, VKI_close
         },
         false
       )
-      elem.parentNode.insertBefore(keybut, elem.dir == 'rtl' ? elem : elem.nextSibling)
+      //elem.parentNode.insertBefore(keybut, elem.dir == 'rtl' ? elem : elem.nextSibling)
+      elem.parentNode.appendChild(keybut)
     } else {
       elem.addEventListener(
         'focus',
@@ -7007,7 +7008,7 @@ var VKI_attach, VKI_close
   }
 
   /* ***** Find tagged input & textarea elements ***************** */
-  function VKI_buildKeyboardInputs() {
+  VKI_buildKeyboardInputs = function () {
     let inputElems = [
       document.getElementsByTagName('input'),
       document.getElementsByTagName('textarea')
@@ -7174,7 +7175,7 @@ var VKI_attach, VKI_close
   kbSelect.appendChild(document.createTextNode(this.VKI_isIElt8 ? ' \u2193' : ' \u25be'))
   kbSelect.langCount = 0
   let ol = document.createElement('ol')
-  for (ktype in this.VKI_layout) {
+  for (var ktype in this.VKI_layout) {
     if (typeof this.VKI_layout[ktype] == 'object') {
       if (!this.VKI_layout[ktype].lang) this.VKI_layout[ktype].lang = []
       for (let x = 0; x < this.VKI_layout[ktype].lang.length; x++)
@@ -7205,7 +7206,7 @@ var VKI_attach, VKI_close
   kbSelect.appendChild(ol)
   if (kbSelect.langCount > 1) thth.appendChild(kbSelect)
   this.VKI_langCode.index = []
-  for (prop in this.VKI_langCode)
+  for (var prop in this.VKI_langCode)
     if (prop != 'index' && typeof this.VKI_langCode[prop] == 'string')
       this.VKI_langCode.index.push(prop)
   this.VKI_langCode.index.sort()
@@ -7803,6 +7804,7 @@ var VKI_attach, VKI_close
 
       if (this.VKI_isIE6) document.body.appendChild(this.VKI_iframe)
       document.body.appendChild(this.VKI_keyboard)
+
       this.VKI_keyboard.style.position = this.VKI_target.keyboardPosition
       if (this.VKI_isOpera) this.VKI_keyboard.reflow()
 
@@ -7920,6 +7922,7 @@ var VKI_attach, VKI_close
 
   function VKI_findPos(obj) {
     if (self.VKI_target.keyboardPosition != 'fixed') {
+      let curtop
       let curleft = (curtop = 0),
         scr = obj
       while ((scr = scr.parentNode) && scr != document.body) {
@@ -7974,4 +7977,10 @@ var VKI_attach, VKI_close
   // VKI_addListener(window, 'load', function() {
   //   setTimeout(VKI_buildKeyboardInputs, 5);
   // }, false);
-})()
+}
+
+var setupObj = {}
+setupObj.setup = setup
+setupObj.setup()
+
+VKI_buildKeyboardInputs()
