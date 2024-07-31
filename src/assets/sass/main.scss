@@ -1,9 +1,11 @@
-$darkgrey: #757575;
+// Basic color scheme
+
+$darkgrey-1: #303030;
+$darkgrey-2: #757575;
 $lightgrey: #d2d2d2;
 $gold: #eeb211;
 $white: #ffffff;
 
-@use 'pagination';
 @use 'bulma/sass' with (
   // Pagination
   $pagination-margin: -0.25rem,
@@ -21,12 +23,34 @@ $white: #ffffff;
   $pagination-current-color: $gold,
   $pagination-current-border-color: $gold,
   $pagination-current-background-color: $gold,
-  $pagination-ellipsis-color: $darkgrey,
-  $pagination-shadow-inset: pink,
-  $grey-dark: $darkgrey
+  $pagination-ellipsis-color: $darkgrey-2,
+  $pagination-shadow-inset: pink
 );
 
-// @import "/node_modules/bulma-checkbox/bulma-checkbox.scss";
+// Modal
+// $modal-z: var(--bulma-modal-z),
+// $modal-background-background-color: $darkgrey-1,
+// $modal-content-width: var(--bulma-modal-content-width),
+// $modal-content-margin-mobile: var(--bulma-modal-content-margin-mobile),
+// $modal-content-spacing-mobile: var(--bulma-modal-content-spacing-mobile),
+// $modal-content-spacing-tablet: var(--bulma-modal-content-spacing-tablet),
+// $modal-close-dimensions: var(--bulma-modal-close-dimensions),
+// $modal-close-right: var(--bulma-modal-close-right),
+// $modal-close-top: var(--bulma-modal-close-top),
+// $modal-card-spacing: var(--bulma-modal-card-spacing),
+// $modal-card-head-background-color: var(--bulma-modal-card-head-background-color),
+// $modal-card-head-padding: var(--bulma-modal-card-head-padding),
+// $modal-card-head-radius: var(--bulma-modal-card-head-radius),
+// $modal-card-title-color: var(--bulma-modal-card-title-color),
+// $modal-card-title-line-height: var(--bulma-modal-card-title-line-height),
+// $modal-card-title-size: var(--bulma-modal-card-title-size),
+// $modal-card-foot-background-color: var(--bulma-modal-card-foot-background-color),
+// $modal-card-foot-radius: var(--bulma-modal-card-foot-radius),
+// $modal-card-body-background-color: var(--bulma-modal-card-body-background-color),
+// $modal-card-body-padding: var(--bulma-modal-card-body-padding),
+// $modal-breakpoint: var(--bulma-)
+
+// @import '/node_modules/bulma-checkbox/bulma-checkbox.scss';
 
 @import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=David+Libre:wght@400;500;700&display=swap');
@@ -94,14 +118,10 @@ $white: #ffffff;
 //   --bulma-input-background-l-delta: 100%;
 // }
 
-
-
-
-
 // Bulma Import
 
 .custom-background {
-  background-color: $darkgrey;
+  background-color: $darkgrey-2;
 }
 
 .custom-background-light {
@@ -109,8 +129,8 @@ $white: #ffffff;
 }
 
 // .current-page-color {
-  // background-color: #eeb211;
-  // border-color: #eeb211;
+// background-color: #eeb211;
+// border-color: #eeb211;
 // }
 
 .beta-flyout {
