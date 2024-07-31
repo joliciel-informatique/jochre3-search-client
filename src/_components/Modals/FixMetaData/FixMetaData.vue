@@ -19,32 +19,34 @@
         <div v-if="!authenticated" class="is-italic has-text-weight-bold has-text-danger">
           {{ $t('fix-metadata.unauthenticated') }}
         </div>
+        <label class="label"
+          >{{ $t('fix-metadata.instructions') }} "{{
+            $t(`fix-metadata.field-type.${field}`)
+          }}"</label
+        >
         <div class="field has-addons">
-          <label class="label"
-            >{{ $t('fix-metadata.instructions') }} "{{
-              $t(`fix-metadata.field-type.${field}`)
-            }}"</label
-          >
-          <div>
-            <label class="label">{{ $t('fix-metadata.new-value') }}</label
-            >&nbsp;
+          <label class="label">{{ $t('fix-metadata.new-value') }}</label
+          >&nbsp;
 
-            <input
-              class="input keyboardInput"
-              :class="{
-                'ltr-align': isLeftToRight && $i18n.locale === 'yi',
-                english: isLeftToRight && $i18n.locale === 'yi'
-              }"
-              type="text"
-              lang="yi"
-              v-model="inputValue"
-              :disabled="authorList.value > 0"
-            />
-          </div>
-          <div class="field has-addons" v-if="showFindAuthorDropdown">
-            <label class="label">{{ $t('fix-metadata.or-merge-with') }}</label>
-            <FindAuthors v-model:authorList="authorList" v-model:exclude="inputValue" />
-          </div>
+          <input
+            class="input keyboardInput"
+            :class="{
+              'ltr-align': isLeftToRight && $i18n.locale === 'yi',
+              english: isLeftToRight && $i18n.locale === 'yi'
+            }"
+            type="text"
+            lang="yi"
+            v-model="inputValue"
+            :disabled="authorList.length > 0"
+          />
+        </div>
+        <div class="field has-addons" v-if="showFindAuthorDropdown">
+          <FindAuthors
+            v-model:authorList="authorList"
+            v-model:exclude="inputValue"
+            :label="$t('fix-metadata.or-merge-with')"
+            :multivalue="false"
+          />
         </div>
       </section>
       <footer class="modal-card-foot">
@@ -80,13 +82,12 @@ const authorList: Ref = ref<Array<{ label: string; count: number }>>([])
 const showFindAuthorDropdown = computed(() => field.includes('author'))
 
 const onSubmit = () => {
-  const newValue = showFindAuthorDropdown.value
-    ? authorList.value
-      ? authorList.value
+  const newValue =
+    showFindAuthorDropdown.value && authorList.value.length > 0
+      ? authorList.value[0].label
       : inputValue.value
-    : inputValue.value
 
-  const applyEverywhere = showFindAuthorDropdown.value ? (authorList.value ? true : false) : false
+  const applyEverywhere = showFindAuthorDropdown.value && authorList.value.length > 0 ? true : false
 
   console.log(`new value: ${newValue}, apply everywhere? ${applyEverywhere}`)
 
