@@ -11,7 +11,7 @@
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
-    "build-bulma": "sass --load-path=node_modules main.scss main.css",
+    "build-bulma": "sass --load-path=node_modules /assets/sass/main.scss /assets/css/main.css",
     "start": "npm run build-bulma -- --watch"
   },
   "dependencies": {
