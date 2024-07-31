@@ -27,23 +27,19 @@ Description: display results in SingleResult child component
 </template>
 
 <script setup lang="ts">
-  import { sha1 } from 'object-hash';
-  import { computed, type Ref } from 'vue';
-  import { preferences } from '@/assets/fetchMethods';
-  import { isBusy, hasSearch } from '@/assets/appState';
-  import SingleResult from './SingleResult/SingleResult.vue'
+import { sha1 } from 'object-hash'
+import { computed, type Ref } from 'vue'
+import { preferences } from '@/assets/fetchMethods'
+import { isBusy, hasSearch } from '@/assets/appState'
+import SingleResult from './SingleResult/SingleResult.vue'
 
-  const {searchResults } = defineProps(['searchResults'])
-  const page: Ref = defineModel('page')
-  const totalHits: Ref = defineModel('totalHits')
+const { searchResults } = defineProps(['searchResults'])
+const page: Ref = defineModel('page')
+const totalHits: Ref = defineModel('totalHits')
 
-  const firstResult = computed(() => (page.value - 1) * preferences.resultsPerPage + 1)
-  const lastResult = computed(() => {
-    const last = page.value * preferences.resultsPerPage
-    return totalHits.value < last ? totalHits.value : last
-  })
+const firstResult = computed(() => (page.value - 1) * preferences.resultsPerPage + 1)
+const lastResult = computed(() => {
+  const last = page.value * preferences.resultsPerPage
+  return totalHits.value < last ? totalHits.value : last
+})
 </script>
-
-<style lang="scss" scoped>
-@import '@/assets/main.scss';
-</style>
