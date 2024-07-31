@@ -188,7 +188,7 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
             } else {
               const msg = new Error(`Failed to get user preferences: ${reason}`)
               setErrorMessage(msg)
-              
+
               // Don't mount the app
               // console.error(reason.message)
               // throw reason
@@ -200,7 +200,6 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
                 messages: customizedMessages
               })
               return i18n
-
             }
           })
         return i18n

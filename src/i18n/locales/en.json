@@ -72,7 +72,7 @@
   "save": "Save changes",
   "error": "An error occurred.",
   "back": "Back",
-  "forward" : "Forward",
+  "forward": "Forward",
   "pagination": {
     "first": "first page",
     "next": "next page",

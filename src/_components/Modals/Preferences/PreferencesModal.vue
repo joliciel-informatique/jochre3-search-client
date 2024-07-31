@@ -69,7 +69,7 @@ const preferences = usePreferencesStore()
 const API_URL = inject('apiUrl')
 
 const onSubmit = (vi18n: VueI18n.VueI18n) => {
-    console.log('onSubmit')
+  console.log('onSubmit')
   if (authenticated.value) {
     // const params = JSON.stringify({
     //   language: preferences.language,
@@ -105,14 +105,14 @@ const onSubmit = (vi18n: VueI18n.VueI18n) => {
         })
         .catch((error) => {
           cookies.set(
-        'preferences',
-        JSON.stringify(preferences, ['language', 'resultsPerPage', 'snippetsPerResult'])
-      )
+            'preferences',
+            JSON.stringify(preferences, ['language', 'resultsPerPage', 'snippetsPerResult'])
+          )
           console.error(error)
         })
-      } catch(error) {
-        console.log(error)
-      }
+    } catch (error) {
+      console.log(error)
+    }
   } else {
     console.log('Saving preferences in cookie')
     cookies.set(
