@@ -1,8 +1,6 @@
-import './assets/main.scss'
-import 'animate.css'
+import './assets/sass/main.scss'
 
 import { createApp } from 'vue'
-import mitt from 'mitt'
 import App from './App.vue'
 import router from './router'
 import { createPinia, type Pinia } from 'pinia'
@@ -21,8 +19,6 @@ import { mergeDeep } from './assets/deepMerge'
 
 import SearchPage from './components/SearchPage/SearchPage.vue'
 import { fetchData, setURL, setToken } from './assets/fetchMethods'
-import FixWord from './_components/Modals/FixWord/FixWord.vue'
-import FixMetaData from './_components/Modals/FixMetaData/FixMetaData.vue'
 import { setErrorMessage } from './_components/Modals/ErrorNotification/ErrorNotification.vue'
 
 const messages = {
@@ -36,16 +32,10 @@ const pinia: Pinia = createPinia()
 
 const app = createApp(App)
 
-const eventBus = mitt()
-
 app.use(router)
 app.use(pinia)
 
-app
-  // .component('OCRInterfaces', OCRInterfaces)
-  .component('SearchPage', SearchPage)
-  .component('FixWordModal', FixWord)
-  .component('FixMetaDataModal', FixMetaData)
+app.component('SearchPage', SearchPage)
 
 console.log('Starting up')
 
@@ -60,7 +50,6 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
     setURL(apiUrl)
 
     app.provide('apiUrl', apiUrl)
-    app.provide('eventBus', eventBus)
     app.provide('fetchData', fetchData)
 
     const keycloakConfig: KeycloakConfig = {
