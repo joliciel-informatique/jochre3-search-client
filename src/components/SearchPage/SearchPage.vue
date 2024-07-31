@@ -21,13 +21,13 @@
         :searchResults="searchResults"
         :facets="facets"
       />
-      <PageNumbering v-model:page="page" v-model:totalHits="totalHits" />
+      <PageNumbering @search="search" v-model:page="page" v-model:totalHits="totalHits" />
       <DisplayResults
         :searchResults="searchResults"
         v-model:totalHits="totalHits"
         v-model:page="page"
       />
-      <PageNumbering v-model:page="page" v-model:totalHits="totalHits" />
+      <PageNumbering @search="search" v-model:page="page" v-model:totalHits="totalHits" />
     </div>
   </div>
 </template>
@@ -150,7 +150,7 @@ const strict = computed(() => !relatedWordForms.value)
 const resetSearchResults = () => {
   query.value = ''
   page.value = 1
-  title.value = 'Enter a title'
+  title.value = ''
   fromYear.value = 0
   toYear.value = 0
   docRefs.value = ''
@@ -226,6 +226,7 @@ const search = (facet: string | undefined = undefined) => {
         isBusy.value = false
       })
   } else {
+    console.log('Clearing search results')
     searchResults.value = []
     totalHits.value = 0
   }

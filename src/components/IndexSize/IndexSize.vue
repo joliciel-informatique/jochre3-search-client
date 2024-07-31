@@ -40,4 +40,19 @@ onMounted(() => {
       setErrorMessage(msg)
     })
 })
+onMounted(() => {
+  fetchData('size', 'get', undefined, 'json')
+    .then((response) => {
+      // console.log(response)
+      response.json().then((result) => {
+        indexSize.value = result.size
+        isBusy.value = false
+      })
+    })
+    .catch((error: any) => {
+      // console.log(error)
+      const msg = new Error(`Failed to retrieve index: ${error.message}`)
+      setErrorMessage(msg)
+    })
+})
 </script>
