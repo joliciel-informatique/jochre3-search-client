@@ -1,65 +1,3 @@
-<script setup lang="ts">
-import { inject, ref } from 'vue'
-import axios from 'axios'
-import { useKeycloakStore } from '@/stores/KeycloakStore'
-import { usePreferencesStore } from '@/stores/PreferencesStore'
-import VueI18n from 'vue-i18n'
-import { useCookies } from 'vue3-cookies'
-
-defineProps(['visible'])
-const emit = defineEmits(['onCloseModal'])
-const keycloak = useKeycloakStore().keycloak
-const { cookies } = useCookies()
-
-const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
-
-const preferences = usePreferencesStore()
-
-const API_URL = inject('apiUrl')
-
-function onSubmit(vi18n: VueI18n.VueI18n) {
-  console.log('onSubmit')
-  if (authenticated.value) {
-    axios
-      .post(
-        `${API_URL}/preferences/user`,
-        {
-          language: preferences.language,
-          resultsPerPage: preferences.resultsPerPage,
-          snippetsPerResult: preferences.snippetsPerResult
-        },
-        {
-          headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${keycloak?.token}`
-          }
-        }
-      )
-      .then(() => {
-        console.log('Saved preferences to database')
-        vi18n.locale = preferences.language
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  } else {
-    console.log('Saving preferences in cookie')
-    cookies.set(
-      'preferences',
-      JSON.stringify(preferences, ['language', 'resultsPerPage', 'snippetsPerResult'])
-    )
-    vi18n.locale = preferences.language
-    console.log('Saved preferences in cookie')
-  }
-  emit('onCloseModal')
-}
-
-function onCancel() {
-  console.log('onCancel')
-  emit('onCloseModal')
-}
-</script>
-
 <template>
   <div class="modal" tabindex="100" :class="{ 'is-active': visible }">
     <div class="modal-background"></div>
@@ -107,3 +45,65 @@ function onCancel() {
     <button class="modal-close is-large" aria-label="close" @click="onCancel"></button>
   </div>
 </template>
+
+<script setup lang="ts">
+import { inject, ref } from 'vue'
+import axios from 'axios'
+import { useKeycloakStore } from '@/stores/KeycloakStore'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+import VueI18n from 'vue-i18n'
+import { useCookies } from 'vue3-cookies'
+
+defineProps(['visible'])
+const emit = defineEmits(['onCloseModal'])
+const keycloak = useKeycloakStore().keycloak
+const { cookies } = useCookies()
+
+const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
+
+const preferences = usePreferencesStore()
+
+const API_URL = inject('apiUrl')
+
+const onSubmit = (vi18n: VueI18n.VueI18n) => {
+    console.log('onSubmit')
+  if (authenticated.value) {
+    axios
+      .post(
+        `${API_URL}/preferences/user`,
+        {
+          language: preferences.language,
+          resultsPerPage: preferences.resultsPerPage,
+          snippetsPerResult: preferences.snippetsPerResult
+        },
+        {
+          headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${keycloak?.token}`
+          }
+        }
+      )
+      .then(() => {
+        console.log('Saved preferences to database')
+        vi18n.locale = preferences.language
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  } else {
+    console.log('Saving preferences in cookie')
+    cookies.set(
+      'preferences',
+      JSON.stringify(preferences, ['language', 'resultsPerPage', 'snippetsPerResult'])
+    )
+    vi18n.locale = preferences.language
+    console.log('Saved preferences in cookie')
+  }
+  emit('onCloseModal')
+}
+
+const onCancel = () => {
+  console.log('onCancel')
+  emit('onCloseModal')
+}
+</script>
