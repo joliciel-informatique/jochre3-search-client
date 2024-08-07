@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container hery-body is-fluid has-text-white custom-background has-text-weight-semibold m-0 p-0 header-footer-content"
+    class="container hero-body is-fluid has-background-primary has-text-white has-text-weight-semibold m-0 p-0 header-footer-content"
   >
     <div class="grid">
       <div class="cell p-2">
