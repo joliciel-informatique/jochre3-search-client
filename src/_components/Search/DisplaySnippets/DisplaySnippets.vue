@@ -11,8 +11,8 @@ Description: controls text snippets from the OCR text
 -->
 <template>
   <ul>
-    <li v-for="snippet in snippets" :key="sha1(snippet)">
-      <SingleSnippet :snippet="snippet" :docRef="docRef" :url="url" />
+    <li v-for="(snippet, index) in snippets" :key="sha1(snippet)">
+      <SingleSnippet :index="index" :snippet="snippet" :docRef="docRef" :url="url" />
     </li>
   </ul>
 </template>
