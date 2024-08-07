@@ -28,7 +28,7 @@ var setup = function () {
   this.VKI_sizeAdj = true // Allow user to adjust keyboard size
   this.VKI_clearPasswords = false // Clear password fields on focus
   this.VKI_flashPassword = 1000 // Flash last character of password: 0 = disabled, > 0 = delay in ms
-  this.VKI_imageURI = 'keyboard.svg' // If empty string, use imageless mode
+  this.VKI_imageURI = '' // If empty string, use imageless mode
   this.VKI_clickless = 0 // 0 = disabled, > 0 = delay in ms
   this.VKI_activeTab = 0 // Tab moves to next: 1 = element, 2 = keyboard enabled element
   this.VKI_enterSubmit = true // Submit forms when Enter is pressed
@@ -6843,29 +6843,37 @@ var setup = function () {
    * Attach the keyboard to an element
    *
    */
-  VKI_attach = function (elem) {
+  VKI_attach = function (elem, btn = undefined) {
     if (elem.getAttribute('VKI_attached')) return false
-    if (self.VKI_imageURI) {
-      let keybut = document.createElement('img')
-      keybut.src = self.VKI_path + self.VKI_imageURI
-      keybut.alt = self.VKI_i18n['01']
-      keybut.classList.add('keyboardInputInitiator')
-      keybut.title = self.VKI_i18n['01']
-      keybut.elem = elem
-      keybut.addEventListener(
+    if (self.VKI_imageURI || btn !== undefined) {
+      let needsAdding = false
+      if (!btn) {
+        needsAdding = true
+        let btn = document.createElement('img')
+        btn.src = self.VKI_path + self.VKI_imageURI
+        btn.classList.add('keyboardInputInitiator')
+      }
+      // btn.alt = self.VKI_i18n['01']
+      // btn.title = self.VKI_i18n['01']
+      btn.elem = elem
+      btn.addEventListener(
         'click',
         function (e) {
           e = e || event
           if (e.stopPropagation) {
             e.stopPropagation()
           } else e.cancelBubble = true
+          console.log(this.elem)
           self.VKI_show(this.elem)
         },
         false
       )
       //elem.parentNode.insertBefore(keybut, elem.dir == 'rtl' ? elem : elem.nextSibling)
-      elem.parentNode.appendChild(keybut)
+      if (needsAdding) {
+        elem.parentNode.appendChild(btn)
+      }
     } else {
+      // Imageless mode, add two event listeners to the clicked element
       elem.addEventListener(
         'focus',
         function () {
@@ -7009,19 +7017,24 @@ var setup = function () {
 
   /* ***** Find tagged input & textarea elements ***************** */
   VKI_buildKeyboardInputs = function () {
-    let inputElems = [
-      document.getElementsByTagName('input'),
-      document.getElementsByTagName('textarea')
-    ]
-    for (let x = 0, elem; (elem = inputElems[x++]); )
-      for (let y = 0, ex; (ex = elem[y++]); )
-        if (
-          ex.nodeName == 'TEXTAREA' ||
-          ex.type == 'text' ||
-          ex.type == 'number' ||
-          ex.type == 'password'
-        )
-          if (ex.classList.contains('keyboardInput')) VKI_attach(ex)
+    let elems = document.querySelectorAll('input[vki-id][type="text"]')
+
+    for (const elem of elems) {
+      if (
+        elem.nodeName == 'TEXTAREA' ||
+        elem.type == 'text' ||
+        elem.type == 'number' ||
+        elem.type == 'password'
+      ) {
+        const id = elem.getAttribute('vki-id')
+        const btn = document.querySelectorAll(`.button[vki-id="${id}"]`)
+        if (btn.length > 0) {
+          VKI_attach(elem, btn[0])
+        } else {
+          VKI_attach(elem)
+        }
+      }
+    }
 
     VKI_addListener(
       document.documentElement,

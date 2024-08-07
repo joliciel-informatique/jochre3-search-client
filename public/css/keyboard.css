@@ -1,7 +1,7 @@
 #keyboardInputMaster {
   position: absolute;
   font:
-    normal 0.8rem Arial,
+    normal 0.8rem Times,
     sans-serif;
   border-top: 0.1em solid #eeeeee;
   border-right: 0.1em solid #888888;
@@ -33,7 +33,7 @@
   filter: alpha(opacity=100);
   background: transparent;
   font:
-    normal 0.8rem Arial,
+    normal 0.8rem Times,
     sans-serif;
   width: auto;
   height: auto;
