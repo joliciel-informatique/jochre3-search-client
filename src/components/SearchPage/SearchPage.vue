@@ -1,8 +1,10 @@
 <template>
-  <div>
+  <div class="stickySearchBarDocked has-background-primary p-1 pb-1">
     <SearchBar
       @search="search"
+      @resetSearchResults="resetSearchResults"
       @setShowAdvancedSearchPanel="setShowAdvancedSearchPanel"
+      v-model:isLoading="isLoading"
       v-model:query="query"
       v-model:showAdvancedSearchPanel="showAdvancedSearchPanel"
     />
@@ -134,6 +136,7 @@ const searchResults = ref<Array<SearchResult>>([])
 const facets = ref<Array<AggregationBin>>([])
 const query = ref('')
 const relatedWordForms = ref(false)
+const isLoading = ref(false)
 const page = ref(1)
 const totalHits = ref(0)
 const title = ref('')
@@ -162,6 +165,7 @@ const setShowAdvancedSearchPanel = () => {
 }
 
 const search = (facet: string | undefined = undefined) => {
+  isLoading.value = true
   if (facet) {
     authorInclude.value = true
     authorList.value.push({ label: facet, count: 0 })
@@ -175,8 +179,7 @@ const search = (facet: string | undefined = undefined) => {
     (toYear.value != null && toYear.value > 0) ||
     docRefs.value.length > 0
 
-  if (hasSearch) {
-    isBusy.value = true
+  if (hasSearch.value) {
     const params = new URLSearchParams(defineSearchParams())
     authorInclude.value = false
     if (authorList.value)
@@ -195,6 +198,13 @@ const search = (facet: string | undefined = undefined) => {
     facets.value = []
     const url = route.path + '?' + params.toString()
     history.pushState({}, '', url)
+
+    const q: HTMLElement | null = document.getElementById('query')
+    isLoading.value
+      ? q?.parentElement?.classList.add('is-loading')
+      : q?.parentElement?.classList.remove('is-loading')
+    isLoading.value ? q?.setAttribute('disabled', 'disabled') : q?.removeAttribute('disabled')
+    isBusy.value = true
     fetchData('search', 'get', params)
       .then((response) =>
         response.json().then(({ results, totalCount }) => {
@@ -215,6 +225,9 @@ const search = (facet: string | undefined = undefined) => {
                 response.json().then((result) => {
                   facets.value = result.bins
                   showAdvancedSearchPanel.value = false
+                  q?.parentElement?.classList.remove('is-loading')
+                  q?.removeAttribute('disabled')
+                  isLoading.value = false
                 })
               )
               .catch((error) => console.error(error))

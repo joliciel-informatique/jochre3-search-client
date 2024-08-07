@@ -10,17 +10,24 @@ Methods: None
 Description: presents the search bar
 -->
 <template>
-  <div class="block has-text-white custom-background has-text-weight-semibold m-0 p-0">
+  <div
+    id="searchBar"
+    class="block has-background-primary has-text-white has-text-weight-semibold p-0"
+  >
     <div class="container is-max-desktop">
-      <div class="field has-addons pb-0 mb-0">
-        <label for="query">{{ $t('search.search') }}</label>
-        <p class="control has-icons-left">
+      <div class="pb-0 mb-0 field has-addons">
+        <p class="control">
+          <a class="button is-static level-item">{{ $t('search.search') }}</a>
+        </p>
+        <p class="control container has-icons-left has-icons-right">
           <input
             id="query"
+            ref="queryBox"
             type="text"
-            class="input is-normal keyboardInput"
+            class="input is-normal is-rounded keyboardInput"
+            vki-id="1"
             lang="yi"
-            :placeholder="$t('search.query')"
+            v-model="query"
             @keyup.enter="emit('search')"
             @change="
               ({ target }: Event) => {
@@ -28,26 +35,42 @@ Description: presents the search bar
                 emit('search')
               }
             "
+            :placeholder="$t('search.query')"
           />
-          <span class="icon is-small is-left is-clickable" :style="{ 'z-index': 'auto' }">
+          <span
+            class="icon is-small is-left is-clickable"
+            @click="emit('setShowAdvancedSearchPanel')"
+          >
             <font-awesome-icon
-              v-if="!showAdvancedSearchPanel"
-              @click="emit('setShowAdvancedSearchPanel')"
-              icon="magnifying-glass-plus"
-            />
-            <font-awesome-icon
-              v-if="showAdvancedSearchPanel"
-              @click="emit('setShowAdvancedSearchPanel')"
-              icon="magnifying-glass-minus"
+              :icon="!showAdvancedSearchPanel ? 'magnifying-glass-plus' : 'magnifying-glass-minus'"
             />
           </span>
+          <span
+            class="icon is-small is-right is-clickable"
+            @click="emit('resetSearchResults')"
+            v-if="query?.length && !isLoading"
+          >
+            <font-awesome-icon icon="circle-xmark" />
+          </span>
         </p>
-        <div class="control column">
-          <label class="checkbox is-large">
-            <input type="checkbox" @change="emit('search')" />
-            {{ $t('search.related-word-forms') }}
-          </label>
-        </div>
+        <p class="control">
+          <button
+            class="button is-clickable is-medium is-info keyboardInputButton"
+            vki-id="1"
+            :alt="$t('search.keyboard')"
+            :title="$t('search.keyboard')"
+          >
+            <font-awesome-icon icon="keyboard" />
+          </button>
+        </p>
+        <p v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
+          <a class="button is-info is-clickable">
+            <label for="searchRelatedWordFormsCheckbox" class="mx-2 is-clickable">{{
+              $t('search.related-word-forms')
+            }}</label>
+            <input id="searchRelatedWordFormsCheckbox" type="checkbox" @change="emit('search')" />
+          </a>
+        </p>
       </div>
     </div>
   </div>
@@ -55,9 +78,15 @@ Description: presents the search bar
 <script setup lang="ts">
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faMagnifyingGlassPlus, faMagnifyingGlassMinus } from '@fortawesome/free-solid-svg-icons'
-library.add(faMagnifyingGlassPlus, faMagnifyingGlassMinus)
-const query = defineModel('query')
+import {
+  faMagnifyingGlassPlus,
+  faMagnifyingGlassMinus,
+  faKeyboard,
+  faXmarkCircle
+} from '@fortawesome/free-solid-svg-icons'
+library.add(faMagnifyingGlassPlus, faMagnifyingGlassMinus, faKeyboard, faXmarkCircle)
+const query = defineModel<string>('query')
+const isLoading = defineModel('isLoading')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
-const emit = defineEmits(['search', 'setShowAdvancedSearchPanel'])
+const emit = defineEmits(['search', 'resetSearchResults', 'setShowAdvancedSearchPanel'])
 </script>
