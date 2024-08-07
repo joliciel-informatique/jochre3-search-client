@@ -1,5 +1,5 @@
 <template>
-  <div id="searchInfo" class="search-info">
+  <div id="searchInfo" class="search-info" v-if="totalHits > 0">
     <div class="search-info-background">
       <strong>
         {{ $t('results.result-count', [totalHits]) }}
