@@ -33,9 +33,18 @@
         :searchResults="searchResults"
         v-model:totalHits="totalHits"
         v-model:page="page"
-      />
-      <PageNumbering @search="search" v-model:page="page" v-model:totalHits="totalHits" />
-    </div>
+      v-model:isLoading="isLoading"
+      :query="query"
+      :searchResults="searchResults"
+    />
+    <PageFooter
+      @search="search"
+      @resetSearchResults="resetSearchResults"
+      :query="query"
+      v-model:searchResults="searchResults"
+      v-model:page="page"
+      v-model:totalHits="totalHits"
+    />
   </div>
 </template>
 <script setup lang="ts">
