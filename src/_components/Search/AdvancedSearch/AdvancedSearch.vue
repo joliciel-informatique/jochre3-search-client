@@ -13,12 +13,8 @@ Description: the advanced search toolbox
 -->
 <template>
   <div ref="trapRef">
-    <transition name="fade">
-      <div
-        v-if="showAdvancedSearchPanel"
-        class="modal-background"
-        @click="showAdvancedSearchPanel = false"
-      ></div>
+    <transition name="slide">
+      <div v-if="showAdvancedSearchPanel" @click="showAdvancedSearchPanel = false"></div>
     </transition>
     <transition name="slide-fade">
       <div
@@ -27,66 +23,84 @@ Description: the advanced search toolbox
         @keydown.esc="showAdvancedSearchPanel = false"
       >
         <div class="container is-max-desktop">
-          <FindAuthors
-            v-model:authorList="authorList"
-            :label="$t('search.author')"
-            :multivalue="true"
-          />
-          <div class="grid has-addons">
-            <label class="label">{{ $t('search.title') }}:</label>
-            <input
-              id="title"
-              class="input keyboardInput"
-              type="text"
-              lang="yi"
-              :placeholder="$t('search.title')"
-              v-model="title"
-              @keyup.enter="emit('search')"
+          <span>
+            <FindAuthors
+              v-model:authorList="authorList"
+              :label="$t('search.author')"
+              :multivalue="true"
             />
-          </div>
-          <div class="field has-addons">
-            <label class="label">{{ $t('search.date-from') }}</label>
-            <input
-              id="fromYear"
-              class="input"
-              type="number"
-              placeholder="1700"
-              v-model="fromYear"
-              min="1700"
-              max="2000"
-            />
-            <label class="label">{{ $t('search.date-to') }}</label>
-            <input
-              id="toYear"
-              class="input"
-              type="number"
-              placeholder="2000"
-              v-model="toYear"
-              min="1700"
-              max="2000"
-            />
-          </div>
-          <div class="field has-addons">
-            <label class="label">{{ $t('search.document-reference') }}</label>
-            <input class="input" type="text" v-model="docRefs" />
-          </div>
-          <div class="field has-addons">
-            <label class="label">{{ $t('search.sort-by') }}</label>
-            <div class="select">
+          </span>
+          <span class="field has-addons has-addons-left is-horizontal">
+            <p class="control button is-static">{{ $t('search.title') }}</p>
+            <p class="control is-expanded">
+              <input
+                id="title"
+                class="input keyboardInput"
+                vki-id="2"
+                type="text"
+                lang="yi"
+                :placeholder="$t('search.title')"
+                v-model="title"
+                @keyup.enter="emit('search')"
+              />
+            </p>
+          </span>
+          <span class="field has-addons is-horizontal">
+            <p class="control button is-static">{{ $t('search.date-from') }}</p>
+            <p class="control">
+              <input
+                id="fromYear"
+                class="input"
+                type="number"
+                placeholder="1700"
+                v-model="fromYear"
+                min="1700"
+                max="2000"
+              />
+            </p>
+            <p class="field button has-addons is-static is-horizontal mx-2">
+              {{ $t('search.date-to') }}
+            </p>
+            <p class="control">
+              <input
+                id="toYear"
+                class="input control"
+                type="number"
+                placeholder="2000"
+                v-model="toYear"
+                min="1700"
+                max="2000"
+              />
+            </p>
+            <p class="control button is-static has-addons has-addons-right is-horizontal">
+              {{ $t('search.sort-by') }}
+            </p>
+            <p class="control select">
               <select v-model="sortBy">
                 <option value="Score">{{ $t('search.sort.score') }}</option>
                 <option value="DateAscending">{{ $t('search.sort.date-ascending') }}</option>
                 <option value="DateDescending">{{ $t('search.sort.date-descending') }}</option>
               </select>
-            </div>
-          </div>
-          <p>{{ $t('search.field-instructions') }}</p>
+            </p>
+          </span>
+          <span class="field has-addons has-addons-left is-horizontal">
+            <p class="control button is-static">
+              {{ $t('search.document-reference') }}
+            </p>
+            <input
+              class="input"
+              type="text"
+              v-model="docRefs"
+              :placeholder="$t('search.document-reference-placeholder')"
+            />
+          </span>
+          <p class="has-text-info">{{ $t('search.field-instructions') }}</p>
           <div class="field has-text-centered p-2">
             <button class="button is-light" @click="emit('resetSearchResults')">
               {{ $t('search.reset') }}
             </button>
             &nbsp;
-            <button class="button is-inverted" @click="emit('search')">
+            <button class="button is-info" @click="emit('search')">
               {{ $t('search.search-button') }}
             </button>
           </div>
@@ -135,13 +149,24 @@ const sortBy = defineModel('sortBy')
 
 .slide-fade-enter-from,
 .slide-fade-leave-to {
-  transform: translateY(2rem);
+  transform: translateY(-2rem);
   opacity: 0;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 1s ease-in-out;
+  /* top 1s ease-in-out; */
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateY(-2rem);
 }
 </style>
 
 <!-- Modal styles -->
-<style module>
+<!-- <style module>
 .overlay {
   background: rgba(0, 0, 0, 0.9);
   position: fixed;
@@ -198,4 +223,4 @@ const sortBy = defineModel('sortBy')
   justify-content: flex-end;
   gap: 1rem;
 }
-</style>
+</style> -->
