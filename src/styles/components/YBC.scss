@@ -1,0 +1,55 @@
+/** Default YBC JOCHRE CSS Configuration for https://ocr.yiddishbookcenter.org/ */
+@import url('https://fonts.googleapis.com/css?family=Noto Serif');
+
+/** Background colors */
+$primary-background: rgb(117, 117, 117);
+$secondary-background: rgb(48, 48, 48);
+$tertiary-background: rgb(210, 210, 210);
+
+/** Foreground colors */
+$primary-foreground: rgb(53, 129, 133);
+$foreground-2: rgb(180, 220, 222);
+$secondary-foreground: rgb(238, 178, 17);
+$highlight-color: rgb(255, 255, 128);
+$white: #ffffff;
+
+/** Overriding Bulma prime variables */
+$primary: $primary-background;
+$info: $primary-foreground;
+$link: $secondary-foreground;
+
+/** Fonts & text */
+$font-primary-family: 'Noto', serif;
+$font-primary-size: 1em;
+$font-secondary-size: 0.9em;
+$font-primary-weight: 200;
+$font-primary-line-height: 1;
+
+/** Footer navigation bar */
+$nav-margin-of-buttons: 0.25em;
+$nav-padding-of-buttons: 0.5em;
+$nav-padding-between-buttons: 0.75em;
+$nav-color-of-ellipsis: $white;
+$nav-size-of-font: $font-primary-size;
+$nav-border-around-buttons: none;
+$nav-color-of-background: $secondary-background;
+$nav-color-of-buttons: $secondary-background;
+$nav-color-of-disabled-buttons: $tertiary-background;
+$nav-color-of-disabled-background: $tertiary-background;
+$nav-color-of-disabled-border: $secondary-background;
+$nav-color-of-active-button-border: $secondary-foreground;
+$nav-color-of-active-button-background: $secondary-foreground;
+$nav-color-of-active-button: $secondary-foreground;
+
+/** ToolTip styling */
+$tt-min-width: 3em;
+$tt-max-width: 15em;
+$tt-content-overflow: visible;
+$tt-text-line-height: $font-primary-line-height;
+$tt-font: $font-primary-family;
+$tt-font-size: $font-secondary-size;
+$tt-font-weight: $font-primary-weight;
+$tt-color-of-font: $white;
+$tt-background-color: $secondary-background;
+$tt-padding: 0.5rem;
+$tt-radius: 0.3rem;
