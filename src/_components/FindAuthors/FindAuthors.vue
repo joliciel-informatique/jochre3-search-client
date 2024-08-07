@@ -15,9 +15,9 @@ Description: presents a 'search for authors' text box and retrieves authors ever
 -->
 <template>
   <div class="field has-addons" v-if="searchAuthors">
-    <label class="label">{{ label }}</label>
-    <div class="dropdown is-active is-right">
-      <div class="dropdown-trigger">
+    <p class="control button is-static">{{ label }}</p>
+    <div class="control dropdown is-active is-right">
+      <p class="dropdown-trigger">
         <input
           id="findAuthors"
           class="input"
@@ -26,7 +26,7 @@ Description: presents a 'search for authors' text box and retrieves authors ever
           @input="findAuthor"
           autocomplete="one-time-code"
         />
-      </div>
+      </p>
       <div
         class="dropdown-menu"
         id="dropdown-menu"
