@@ -28,9 +28,11 @@
         :searchResults="searchResults"
         :facets="facets"
       />
-      <PageNumbering @search="search" v-model:page="page" v-model:totalHits="totalHits" />
+  </div>
+  <div class="container is-max-desktop hero search-content">
+    <SearchInfo v-model:page="page" v-model:total-hits="totalHits" :searchResults="searchResults" />
+    <IndexSize :searchResults="searchResults" />
       <DisplayResults
-        :searchResults="searchResults"
         v-model:totalHits="totalHits"
         v-model:page="page"
       v-model:isLoading="isLoading"
@@ -62,6 +64,7 @@ import DisplayResults from '@/_components/Search/DisplayResults/DisplayResults.v
 import type { SearchResult, AggregationBin } from '@/assets/interfacesExternals'
 import { hasSearch, isBusy } from '@/assets/appState'
 import { setErrorMessage } from '@/_components/Modals/ErrorNotification/ErrorNotification.vue'
+import SearchInfo from '@/_components/Search/SearchInfo/SearchInfo.vue'
 
 // Configure icons
 import { library } from '@fortawesome/fontawesome-svg-core'
