@@ -19,9 +19,8 @@ import { mergeDeep } from './assets/deepMerge'
 import SearchPage from './components/SearchPage/SearchPage.vue'
 import { fetchData, setURL, setToken } from './assets/fetchMethods'
 import { setErrorMessage } from './_components/Modals/ErrorNotification/ErrorNotification.vue'
-// import VModal from './components/v-modal/v-modal.vue'
 
-import './styles/components/main.scss'
+import './styles/main.scss'
 
 const messages = {
   en: en,
@@ -35,7 +34,6 @@ const pinia: Pinia = createPinia()
 const app = createApp(App)
 
 directives(app)
-// app.component('v-modal', VModal)
 
 // Good place for authentication logic: see https://router.vuejs.org/guide/advanced/navigation-guards.html
 // router.beforeEach((to, from, next) => {
@@ -50,7 +48,7 @@ app.component('SearchPage', SearchPage)
 
 console.log('Starting up')
 
-fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
+fetch(import.meta.env.BASE_URL + `conf/config-frontend.json?date=${Date.now()}`)
   .then((response) => response.json())
   .then((config) => {
     mergeDeep(customizedMessages, messages, config)

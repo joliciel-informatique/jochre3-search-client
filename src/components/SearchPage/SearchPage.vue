@@ -1,82 +1,71 @@
 <template>
-  <div class="stickySearchBarDocked has-background-primary p-1 pb-1">
+  <div class="searchBar p-1">
     <SearchBar
-      @search="search"
+      @newSearch="newSearch"
       @resetSearchResults="resetSearchResults"
       @setShowAdvancedSearchPanel="setShowAdvancedSearchPanel"
-      v-model:isLoading="isLoading"
+      v-model:show-advanced-search-panel="showAdvancedSearchPanel"
       v-model:query="query"
-      v-model:showAdvancedSearchPanel="showAdvancedSearchPanel"
+      v-model:is-loading="isLoading"
     />
     <AdvancedSearch
-      @search="search"
+      @newSearch="newSearch"
       @resetSearchResults="resetSearchResults"
-      v-model:showAdvancedSearchPanel="showAdvancedSearchPanel"
-      v-model:authorList="authorList"
+      v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+      v-model:author-list="authorList"
       v-model:title="title"
-      v-model:toYear="toYear"
-      v-model:fromYear="fromYear"
-      v-model:docRefs="docRefs"
-      v-model:sortBy="sortBy"
+      v-model:to-year="toYear"
+      v-model:from-year="fromYear"
+      v-model:doc-refs="docRefs"
+      v-model:sort-by="sortBy"
     />
-    <div class="container is-max-desktop hero search-content">
-      <HistoryNavigator @resetSearchResults="resetSearchResults" />
-      <IndexSize :searchResults="searchResults" />
-      <DisplayFacets
-        @search="search"
-        @resetSearchResults="resetSearchResults"
-        :searchResults="searchResults"
-        :facets="facets"
-      />
-  </div>
-  <div class="container is-max-desktop hero search-content">
-    <SearchInfo v-model:page="page" v-model:total-hits="totalHits" :searchResults="searchResults" />
-    <IndexSize :searchResults="searchResults" />
-      <DisplayResults
-        v-model:totalHits="totalHits"
-        v-model:page="page"
-      v-model:isLoading="isLoading"
-      :query="query"
-      :searchResults="searchResults"
-    />
-    <PageFooter
-      @search="search"
+    <FacetBar
+      @newSearch="newSearch"
       @resetSearchResults="resetSearchResults"
-      :query="query"
-      v-model:searchResults="searchResults"
-      v-model:page="page"
-      v-model:totalHits="totalHits"
+      v-model:is-loading="isLoading"
+      v-model:facets="facets"
+    />
+  </div>
+  <div
+    class="container is-max-desktop is-flex-direction-column is-align-items-center has-text-centered p-5"
+  >
+    <IndexSize
+      v-model:search-results="searchResults"
+      v-model:query="query"
+      v-model:is-loading="isLoading"
+      v-model:has-search="hasSearch"
+      v-model:facets="facets"
+    />
+    <DisplayResults
+      v-model:is-loading="isLoading"
+      v-model:metadata-modal="metadataModal"
+      v-model:word-modal="wordModal"
+      v-model:query="query"
+      v-model:search-results="searchResults"
     />
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref, computed, defineExpose, type Ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchData, preferences } from '@/assets/fetchMethods'
 
-// Import sub-components
-import SearchBar from '@/_components/Search/SearchBar/SearchBar.vue'
-import AdvancedSearch from '@/_components/Search/AdvancedSearch/AdvancedSearch.vue'
-import IndexSize from '@/components/IndexSize/IndexSize.vue'
-import DisplayFacets from '@/_components/DisplayFacets/DisplayFacets.vue'
-import PageFooter from '@/components/PageFooter.vue'
-import DisplayResults from '@/_components/Search/DisplayResults/DisplayResults.vue'
-import type { SearchResult, AggregationBin } from '@/assets/interfacesExternals'
-import { hasSearch, isBusy } from '@/assets/appState'
-import { setErrorMessage } from '@/_components/Modals/ErrorNotification/ErrorNotification.vue'
-import SearchInfo from '@/_components/Search/SearchInfo/SearchInfo.vue'
+const query: Ref = defineModel('query')
+const searchResults: Ref = defineModel('searchResults')
+const totalHits: Ref = defineModel('totalHits')
+const page: Ref = defineModel('page')
+const metadataModal: Ref = defineModel('metadataModal')
+const wordModal: Ref = defineModel('wordModal')
 
-// Configure icons
-import { library } from '@fortawesome/fontawesome-svg-core'
-import {
-  faFileImage,
-  faSquarePlus,
-  faSquareMinus,
-  faBookOpen,
-  faFileLines,
-  faPenToSquare
-} from '@fortawesome/free-solid-svg-icons'
-library.add(faFileImage, faSquarePlus, faSquareMinus, faBookOpen, faFileLines, faPenToSquare)
+// Import sub-components
+import SearchBar from './SearchBar/SearchBar.vue'
+import AdvancedSearch from './SearchBar/AdvancedSearch/AdvancedSearch.vue'
+import IndexSize from './SearchResults/IndexSize/IndexSize.vue'
+import FacetBar from './SearchBar/FacetBar/FacetBar.vue'
+import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
+import type { SearchResult, AggregationBin } from '@/assets/interfacesExternals'
+import { hasSearch } from '@/assets/appState'
+import { setErrorMessage } from '@/_components/Modals/ErrorNotification/ErrorNotification.vue'
 
 // Startup variables: may move to App.vue or HomeView.vue
 const router = useRouter()
@@ -124,32 +113,55 @@ onMounted(() => {
     plugin.src = '/js/keyboard.js'
     plugin.async = true
 
-    search()
+    newSearch()
   })
 })
 
-const defineSearchParams = () =>
-  Object.assign(
+const newSearch = (facet: string | undefined = undefined) => {
+  console.log(facet)
+  search(facet).then((res) => {
+    console.log(6)
+    isLoading.value = res ? true : false
+    const searchBar = document.querySelector('.searchBar') as HTMLDivElement
+    if (searchBar !== null && searchResults.value.length) {
+      console.log(7)
+      window.onscroll = () => {
+        window.scrollY < searchBar.offsetTop
+          ? searchBar.classList.add('stickySearchBarDocked')
+          : searchBar.classList.remove('stickySearchBarUndocked')
+        const newSearchResults = document.querySelectorAll(
+          '.card.metadata'
+        ) as NodeListOf<HTMLDivElement>
+        newSearchResults.forEach((result) => (result.style.top = `${searchBar?.offsetHeight}px`))
+      }
+    } else {
+      console.log(8, searchResults.value.length)
+      return
+    }
+  })
+}
+
+const defineSearchParams = () => {
+  console.log(page.value)
+  return Object.assign(
     {},
-    query.value.length ? { query: query.value.trim() } : null,
+    query.value?.length ? { query: query.value.trim() } : null,
     strict.value.toString() !== null ? { strict: strict.value.toString() } : null,
     authorInclude.value ? { 'author-include': authorInclude.value } : null,
-    page.value > 0 ? { page: page.value.toString() } : null,
+    page.value ? (page.value > 0 ? { page: page.value?.toString() } : null) : null,
     title.value.trim().length > 0 ? { title: title.value.trim() } : null,
     toYear.value != null && toYear.value > 0 ? { 'to-year': toYear.value.toString() } : null,
     fromYear.value != null && fromYear.value > 0 ? { 'from-year': fromYear.value.toString() } : null
   )
+}
 
 const authorInclude = ref(false)
 const authors = ref<Array<string>>([])
 const authorList = ref<Array<{ label: string; count: number }>>([])
-const searchResults = ref<Array<SearchResult>>([])
 const facets = ref<Array<AggregationBin>>([])
-const query = ref('')
 const relatedWordForms = ref(false)
 const isLoading = ref(false)
-const page = ref(1)
-const totalHits = ref(0)
+
 const title = ref('')
 const fromYear = ref(0)
 const toYear = ref(0)
@@ -158,7 +170,13 @@ const sortBy = ref('Score')
 const strict = computed(() => !relatedWordForms.value)
 
 const resetSearchResults = () => {
+  console.log('reset')
   query.value = ''
+  isLoading.value = false
+  hasSearch.value = false
+  facets.value = []
+  searchResults.value = []
+
   page.value = 1
   title.value = ''
   fromYear.value = 0
@@ -168,14 +186,15 @@ const resetSearchResults = () => {
   sortBy.value = 'Score'
   authorList.value = []
   showAdvancedSearchPanel.value = false
-  search()
+
+  window.history.replaceState({}, document.title, '/')
 }
 
 const setShowAdvancedSearchPanel = () => {
   showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value
 }
 
-const search = (facet: string | undefined = undefined) => {
+const search = async (facet: string | undefined = undefined) => {
   isLoading.value = true
   if (facet) {
     authorInclude.value = true
@@ -183,76 +202,100 @@ const search = (facet: string | undefined = undefined) => {
   }
 
   hasSearch.value =
-    query.value.length > 0 ||
+    (query.value ? query.value.length > 0 : null) ||
     authorList.value.length > 0 ||
     title.value.length > 0 ||
     (fromYear.value != null && fromYear.value > 0) ||
     (toYear.value != null && toYear.value > 0) ||
     docRefs.value.length > 0
 
-  if (hasSearch.value) {
-    const params = new URLSearchParams(defineSearchParams())
-    authorInclude.value = false
-    if (authorList.value)
-      authorList.value.forEach((author) => params.append('authors', author.label))
-    if (docRefs.value)
-      docRefs.value.split(/\W+/).forEach((docRef) => params.append('doc-refs', docRef))
+  console.log(hasSearch.value)
 
-    const facetParams = new URLSearchParams({ ...Object.fromEntries(params) })
+  // if (hasSearch.value) {
+  console.log(1)
+  const params = new URLSearchParams(defineSearchParams())
+  authorInclude.value = false
+  if (authorList.value) authorList.value.forEach((author) => params.append('authors', author.label))
+  if (docRefs.value)
+    docRefs.value.split(/\W+/).forEach((docRef) => params.append('doc-refs', docRef))
 
-    params.append('first', ((page.value - 1) * preferences.resultsPerPage).toString())
-    params.append('max', preferences.resultsPerPage.toString())
-    params.append('sort', sortBy.value.trim())
-    params.append('max-snippets', preferences.snippetsPerResult.toString())
-    params.append('row-padding', '2')
+  const facetParams = new URLSearchParams({ ...Object.fromEntries(params) })
 
-    facets.value = []
-    const url = route.path + '?' + params.toString()
-    history.pushState({}, '', url)
+  params.append(
+    'first',
+    page.value ? ((page.value - 1) * preferences.resultsPerPage).toString() : '10'
+  )
+  params.append('max', preferences.resultsPerPage.toString())
+  params.append('sort', sortBy.value.trim())
+  params.append('max-snippets', preferences.snippetsPerResult.toString())
+  params.append('row-padding', '2')
 
-    const q: HTMLElement | null = document.getElementById('query')
-    isLoading.value
-      ? q?.parentElement?.classList.add('is-loading')
-      : q?.parentElement?.classList.remove('is-loading')
-    isLoading.value ? q?.setAttribute('disabled', 'disabled') : q?.removeAttribute('disabled')
-    isBusy.value = true
-    fetchData('search', 'get', params)
-      .then((response) =>
-        response.json().then(({ results, totalCount }) => {
-          authors.value = results
-            .map((result: SearchResult) =>
-              result.metadata.author !== '' ? result.metadata.author : ''
+  facets.value = []
+  const url = route.path + '?' + params.toString()
+  history.pushState({}, '', url)
+
+  const q: HTMLElement | null = document.getElementById('query')
+  isLoading.value
+    ? q?.parentElement?.classList.add('is-loading')
+    : q?.parentElement?.classList.remove('is-loading')
+  isLoading.value ? q?.setAttribute('disabled', 'disabled') : q?.removeAttribute('disabled')
+
+  return fetchData('search', 'get', params)
+    .then((response) =>
+      response.json().then(({ results, totalCount }) => {
+        authors.value = results
+          .map((result: SearchResult) =>
+            result.metadata.author !== '' ? result.metadata.author : ''
+          )
+          .filter((author: string) => author)
+        hasSearch.value = true
+        isLoading.value = false
+        searchResults.value = results
+        totalHits.value = totalCount
+        if (authors.value.length > 0) {
+          console.log(4)
+          facetParams.append('field', 'Author')
+          facetParams.append('maxBins', '10')
+          return fetchData('aggregate', 'get', facetParams)
+            .then((response) =>
+              response.json().then((result) => {
+                console.log(5)
+                facets.value = result.bins
+                showAdvancedSearchPanel.value = false
+                q?.parentElement?.classList.remove('is-loading')
+                q?.removeAttribute('disabled')
+                return false
+              })
             )
-            .filter((author: string) => author)
-          hasSearch.value = true
-          isBusy.value = false
-          searchResults.value = results
-          totalHits.value = totalCount
-          if (authors.value.length > 1) {
-            facetParams.append('field', 'Author')
-            facetParams.append('maxBins', '10')
-            fetchData('aggregate', 'get', facetParams)
-              .then((response) =>
-                response.json().then((result) => {
-                  facets.value = result.bins
-                  showAdvancedSearchPanel.value = false
-                  q?.parentElement?.classList.remove('is-loading')
-                  q?.removeAttribute('disabled')
-                  isLoading.value = false
-                })
-              )
-              .catch((error) => console.error(error))
-          }
-        })
-      )
-      .catch((error) => {
-        setErrorMessage(new Error(`Could not reach the search endpoint: ${error.message}`))
-        isBusy.value = false
+            .catch((error) => console.error(error))
+        } else {
+          facets.value = []
+          q?.parentElement?.classList.remove('is-loading')
+          q?.removeAttribute('disabled')
+          isLoading.value = false
+          return false
+        }
       })
-  } else {
-    console.log('Clearing search results')
-    searchResults.value = []
-    totalHits.value = 0
-  }
+    )
+    .catch((error) => {
+      setErrorMessage(new Error(`Could not reach the search endpoint: ${error.message}`))
+      isLoading.value = false
+      hasSearch.value = true
+      q?.parentElement?.classList.remove('is-loading')
+      q?.removeAttribute('disabled')
+      console.log(0)
+    })
+  // } else {
+  //   console.log(2)
+  //   console.log('Clearing search results')
+  //   searchResults.value = []
+  //   totalHits.value = 0
+  //   return false
+  // }
 }
+
+defineExpose({
+  newSearch,
+  resetSearchResults
+})
 </script>
