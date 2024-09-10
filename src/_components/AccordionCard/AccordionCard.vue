@@ -29,7 +29,7 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCircleChevronUp } from '@fortawesome/free-solid-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { onMounted, onUpdated } from 'vue'
+import { onMounted } from 'vue'
 library.add(faCircleChevronUp)
 
 const { id } = defineProps(['id'])
