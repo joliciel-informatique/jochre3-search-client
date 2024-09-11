@@ -50,11 +50,11 @@
         />
       </div>
     </template>
-    <template #footer>
+    <template #footer="modalBox">
       <button
         class="button is-link"
         :disabled="!authenticated || value === oldValue"
-        @click="onSubmit"
+        @click="save(modalBox.closeFunction)"
       >
         {{ $t('save') }}
       </button>
@@ -64,7 +64,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, type Ref } from 'vue'
-import { authenticated } from '@/assets/fetchMethods'
+import { authenticated, fetchData } from '@/assets/fetchMethods'
 import FindAuthors from '@/_components/FindAuthors/FindAuthors.vue'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -86,17 +86,24 @@ watch(metadataModal, (newVal) => {
   oldValue.value = metadataModal.value.value
 })
 
-const onSubmit = () => {
-  console.log('submit')
+// TODO: Is the url 'correct-metadata' correct?
+// Q: What does applyEverwhere do?
+const save = (closeFunc: Function) => {
+  const data = JSON.stringify({
+    docRef: metadataModal.value.docRef,
+    field: metadataModal.value.field,
+    value: metadataModal.value.value,
+    applyEverywhere: true
+  })
+  fetchData('correct-metadata', 'post', data, 'application/json')
+    .then((res) => {
+      if (res.status === 200) {
+        // Report success to user
+      } else {
+        // Report failure to user
+      }
+      closeFunc()
+    })
+    .catch(() => closeFunc())
 }
-
-// const close = () => {
-//   //   if (root.value !== null) {
-//   //     root.value.classList.remove('animate__fadeIn')
-//   //     root.value.classList.add('animate__fadeOut')
-//   //     setTimeout(() => (visibility.value = false), 500) // Returns control to main page
-//   //     inputValue.value = oldValue
-//   //     authorList.value = []
-//   //   }
-// }
 </script>
