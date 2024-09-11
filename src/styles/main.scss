@@ -251,17 +251,14 @@ $modal-background-background-color: $background-color-2;
 // Modal
 // $modal-z: var(--bulma-modal-z),
 // $modal-background-background-color: $background-color-1,
-// $modal-content-width: var(--bulma-modal-content-width),
 // $modal-content-margin-mobile: var(--bulma-modal-content-margin-mobile),
 // $modal-content-spacing-mobile: var(--bulma-modal-content-spacing-mobile),
 // $modal-content-spacing-tablet: var(--bulma-modal-content-spacing-tablet),
 // $modal-close-dimensions: var(--bulma-modal-close-dimensions),
 // $modal-close-right: var(--bulma-modal-close-right),
 // $modal-close-top: var(--bulma-modal-close-top),
-
 // $modal-breakpoint: var(--bulma-)
 // @import '../../../node_modules/bulma/sass';
-
 // :root {
 //   --bulma-primary-h: 92deg;
 //   --bulma-primary-s: 42%;
@@ -281,13 +278,11 @@ $modal-background-background-color: $background-color-2;
 //   --bulma-block-spacing: 1.25rem;
 // --bulma-radius: 0.35rem;
 // }
-
 // .modal {
 //   --bulma-modal-card-head-radius: 1rem;
 //   --bulma-modal-card-title-size: 2.5rem;
 //   --bulma-modal-card-foot-radius: 1rem;
 // }
-
 // .pagination {
 //   --bulma-pagination-item-h: 292;
 //   --bulma-pagination-item-s: 0%;
@@ -308,7 +303,6 @@ $modal-background-background-color: $background-color-2;
 //   --bulma-pagination-selected-item-border-l: 46%;
 //   --bulma-pagination-selected-item-color-l: 100%;
 // }
-
 // .input {
 // --bulma-input-h: 52;
 // --bulma-input-s: 28%;
@@ -325,9 +319,7 @@ $modal-background-background-color: $background-color-2;
 // --bulma-input-background-l-delta: 100%;
 // --bulma-input-radius: 0.35rem;
 // }
-
 // Bulma Import
-
 .custom-background-light {
   background-color: #edeee6;
 }
@@ -568,6 +560,10 @@ a:hover {
 // .modal .modal-card-body {
 //   overflow: visible !important;
 // }
+
+.modal-card {
+  width: 100%;
+}
 
 .notification {
   z-index: 41;

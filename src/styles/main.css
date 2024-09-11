@@ -23011,6 +23011,10 @@ a:hover {
   Fix for drop-down getting hidden by modal-card-foot
   From https://stackoverflow.com/a/75182245/1417558
 */
+.modal-card {
+  width: 100%;
+}
+
 .notification {
   z-index: 41;
   position: fixed;
