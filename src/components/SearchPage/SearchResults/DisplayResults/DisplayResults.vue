@@ -30,8 +30,9 @@ Description: display results in SingleResult child component
       <li v-for="(result, index) of searchResults" :key="sha1(result)">
         <div>
           <SingleResult
-            v-model:metadataModal="metadataModal"
-            v-model:wordModal="wordModal"
+            v-model:image-modal="imageModal"
+            v-model:word-modal="wordModal"
+            v-model:metadata-modal="metadataModal"
             :result="result"
           />
         </div>
@@ -55,6 +56,7 @@ import { type Ref } from 'vue'
 library.add(faBan)
 
 const isLoading = defineModel('isLoading')
+const imageModal = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const metadataModal = defineModel('metadataModal')
 const query: Ref = defineModel('query')
