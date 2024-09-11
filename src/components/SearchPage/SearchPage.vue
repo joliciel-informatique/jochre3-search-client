@@ -50,7 +50,7 @@ import { onMounted, ref, computed, defineExpose, type Ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchData, preferences } from '@/assets/fetchMethods'
 
-const query: Ref = defineModel('query')
+const query = ref('')
 const searchResults: Ref = defineModel('searchResults')
 const totalHits: Ref = defineModel('totalHits')
 const page: Ref = defineModel('page')
@@ -87,8 +87,10 @@ onMounted(() => {
     if (route.query['to-year']) toYear.value = Number((route.query['to-year'] as string).trim())
     if (route.query['doc-refs']) docRefs.value = (route.query['doc-refs'] as string).trim()
     if (route.query['sort']) sortBy.value = (route.query['sort'] as string).trim()
-    // if (route.query['authors'] && Array.isArray(route.query['authors']))
-    //   authors.value = route.query['authors'] as string[]
+    if (route.query['authors'] && Array.isArray(route.query['authors']))
+      authors.value = route.query['authors'] as string[]
+
+    // console.log(route.query)
     // if (route.query['authors'] && !Array.isArray(route.query['authors']))
     //   authors.value = [route.query['authors'] as string]
 
