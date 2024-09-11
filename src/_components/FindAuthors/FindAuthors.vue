@@ -93,9 +93,9 @@ const addAuthor = (author: { label: string; count: number }) => {
   authorDropdownItems.value = []
 }
 
-const delAuthor = (value: string) => {
+const delAuthor = (value: { label: string }) => {
   authorList.value = authorList.value.filter(
-    (author: { label: string; count: number }) => author.label !== value
+    (author: { label: string; count: number }) => author.label !== value.label
   )
 }
 
