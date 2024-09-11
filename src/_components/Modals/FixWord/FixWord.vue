@@ -17,8 +17,12 @@
         <input class="input keyboardInput" type="text" lang="yi" v-model="wordModal.word" />
       </div>
     </template>
-    <template #footer>
-      <button class="button is-link" :disabled="!authenticated" @click="onSubmit">
+    <template #footer="modalBox">
+      <button
+        class="button is-link"
+        :disabled="!authenticated"
+        @click="save(modalBox.closeFunction)"
+      >
         {{ $t('save') }}
       </button>
     </template>
@@ -57,31 +61,21 @@ onBeforeUpdate(async () => {
   wordLoading.value = false
 })
 
-// open: true,
-//         docRef: docRef,
-//         globalOffset: globalOffset,
-//         selection: selection
-//         word: tags[globalOffset].substring(sel.baseOffset, sel.extentOffset)
-
-// const root: Ref<HTMLElement | null> = ref(null)
-
-const onSubmit = () => {
-  // Image and text should match
+const save = (closeFunc: Function) => {
   const data = JSON.stringify({
     docRef: wordModal.value.docRef,
     offset: +wordModal.value.globalOffset,
     suggestion: wordModal.value.word
   })
   fetchData('suggest-word', 'post', data, 'application/json')
-    .then(() => close())
-    .catch(() => close())
+    .then((res) => {
+      if (res.status === 200) {
+        // Report success to user
+      } else {
+        // Report failure to user
+      }
+      closeFunc()
+    })
+    .catch(() => closeFunc())
 }
-
-// const close = () => {
-//   if (root.value !== null) {
-//     root.value.classList.remove('animate__fadeIn')
-//     root.value.classList.add('animate__fadeOut')
-//     setTimeout(() => (visibility.value = false), 500) // Returns control to main page
-//   }
-// }
 </script>

@@ -1,79 +1,3 @@
-<!-- <script setup lang="ts">
-import { ref, type Ref, computed } from 'vue'
-import { authenticated, fetchData } from '@/assets/fetchMethods'
-import FindAuthors from '@/_components/FindAuthors/FindAuthors.vue'
-
-const modal = ref()
-
-defineProps(['docRef', 'field', 'value'])
-
-const show = ref(false)
-// <span :docRef="docRef" :field="field" :value="value"><slot /></span>
-// const { docRef, field, value } = props
-
-// const root: Ref<HTMLElement | null> = ref(null)
-// const inputValue: Ref<string> = ref(oldValue)
-// const isLeftToRight = ref(false)
-
-// // const visibility: Ref = defineModel<boolean>('visibility')
-// const authorList: Ref = ref<Array<{ label: string; count: number }>>([])
-
-// const showFindAuthorDropdown = computed(() => field.includes('author'))
-
-// const onSubmit = () => {
-//   const newValue =
-//     showFindAuthorDropdown.value && authorList.value.length > 0
-//       ? authorList.value[0].label
-//       : inputValue.value
-
-//   const applyEverywhere = showFindAuthorDropdown.value && authorList.value.length > 0 ? true : false
-
-//   console.log(`new value: ${newValue}, apply everywhere? ${applyEverywhere}`)
-
-//   const fieldName = field.charAt(0).toUpperCase() + field.slice(1)
-
-//   const body = JSON.stringify({
-//     docRef: docRef,
-//     field: fieldName,
-//     value: newValue,
-//     applyEverywhere: applyEverywhere
-//   })
-//   fetchData('correct-metadata', 'post', body)
-//     .then((result) => result.json().then(() => close()))
-//     .catch((error) => console.error(error))
-// }
-
-// const close = () => {
-//   if (root.value !== null) {
-//     root.value.classList.remove('animate__fadeIn')
-//     root.value.classList.add('animate__fadeOut')
-//     setTimeout(() => (visibility.value = false), 500) // Returns control to main page
-//     inputValue.value = oldValue
-//     authorList.value = []
-//   }
-// }
-</script> -->
-<!-- <template>
-  <div v-if="open" class="modal-mask">
-    <div class="modal-card modal-wrapper">
-      <div class="modal-container" ref="target">
-        <div class="modal-header">
-          <slot name="header"> default header </slot>
-        </div>
-        <div class="modal-body">
-          <slot name="body"> default content </slot>
-        </div>
-        <div class="modal-footer">
-          <slot name="footer">
-            <div>
-              <button @click.stop="emit('modal-close')">Submit</button>
-            </div>
-          </slot>
-        </div>
-      </div>
-    </div>
-  </div>
-</template> -->
 <template>
   <Transition name="fade">
     <div class="modal fade" :class="active" v-if="visible">
@@ -88,7 +12,7 @@ const show = ref(false)
         </section>
         <footer class="modal-card-foot">
           <div class="buttons">
-            <slot name="footer"></slot>
+            <slot name="footer" :closeFunction="close"></slot>
             <button class="button is-link is-light" @click="close">
               {{ $t('cancel') }}
             </button>
@@ -100,11 +24,9 @@ const show = ref(false)
 </template>
 <script setup lang="ts">
 import { ref, watch, type Ref } from 'vue'
-import { authenticated } from '@/assets/fetchMethods'
 const active = ref('')
-
-const data: Ref = defineModel('data')
 const visible = ref(false)
+const data: Ref = defineModel('data')
 
 watch(data, (newv: { open: string }) => {
   visible.value = newv.open ? true : false
@@ -112,37 +34,9 @@ watch(data, (newv: { open: string }) => {
 })
 
 const close = () => {
-  data.value.open = false
   visible.value = false
   active.value = ''
 }
-
-const submitHandler = () => {
-  //here you do whatever
-}
-
-const emit = defineEmits(['modal-close'])
-
-const target = ref(null)
-const onSubmit = () => {
-  //   const newValue =
-  //     showFindAuthorDropdown.value && authorList.value.length > 0
-  //       ? authorList.value[0].label
-  //       : inputValue.value
-  //   const applyEverywhere = showFindAuthorDropdown.value && authorList.value.length > 0 ? true : false
-  //   console.log(`new value: ${newValue}, apply everywhere? ${applyEverywhere}`)
-  //   const fieldName = field.charAt(0).toUpperCase() + field.slice(1)
-  const body = JSON.stringify({
-    docRef: data.value.docRef,
-    field: data.value.field,
-    value: data.value.value
-    // applyEverywhere: applyEverywhere
-  })
-  //   fetchData('correct-metadata', 'post', body)
-  //     .then((result) => result.json().then(() => close()))
-  //     .catch((error) => console.error(error))
-}
-// onClickOutside(target, () => emit('modal-close'))
 </script>
 <style scoped>
 /* .modal-mask {
