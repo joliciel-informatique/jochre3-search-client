@@ -7843,7 +7843,7 @@ button.dropdown-item.is-selected {
 
 .modal {
   --bulma-modal-z: 40;
-  --bulma-modal-background-background-color: rgb(48, 48, 48);
+  --bulma-modal-background-background-color: rgba(48, 48, 48, 0.5);
   --bulma-modal-content-width: 40rem;
   --bulma-modal-content-margin-mobile: 1.25rem;
   --bulma-modal-content-spacing-mobile: 10rem;
