@@ -50,7 +50,7 @@ import { onMounted, ref, computed, defineExpose, type Ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchData, preferences } from '@/assets/fetchMethods'
 
-const query: Ref = defineModel('query')
+const query = ref('')
 const searchResults: Ref = defineModel('searchResults')
 const totalHits: Ref = defineModel('totalHits')
 const page: Ref = defineModel('page')
@@ -89,8 +89,6 @@ onMounted(() => {
     if (route.query['sort']) sortBy.value = (route.query['sort'] as string).trim()
     if (route.query['authors'] && Array.isArray(route.query['authors']))
       authors.value = route.query['authors'] as string[]
-    // if (route.query['authors'] && !Array.isArray(route.query['authors']))
-    // authors.value = [route.query['authors'] as string]
 
     showAdvancedSearchPanel.value =
       authors.value.length > 0 ||
@@ -145,7 +143,6 @@ const defineSearchParams = () => {
     query.value?.length ? { query: query.value.trim() } : null,
     strict.value.toString() !== null ? { strict: strict.value.toString() } : null,
     authorInclude.value ? { 'author-include': authorInclude.value } : null,
-    // facets.value ? { authors: facets.value.map((facet) => facet.label) } : null,
     page.value ? (page.value > 0 ? { page: page.value?.toString() } : null) : null,
     title.value.trim().length > 0 ? { title: title.value.trim() } : null,
     toYear.value != null && toYear.value > 0 ? { 'to-year': toYear.value.toString() } : null,
@@ -229,7 +226,6 @@ const search = async (facet: string | undefined = undefined) => {
     facets.value.forEach((facet) => (facet.active ? params.append('authors', facet.label) : null))
   if (docRefs.value)
     docRefs.value.split(/\W+/).forEach((docRef) => params.append('doc-refs', docRef))
-
   params.append(
     'first',
     page.value ? ((page.value - 1) * preferences.resultsPerPage).toString() : '10'
@@ -239,7 +235,6 @@ const search = async (facet: string | undefined = undefined) => {
   params.append('max-snippets', preferences.snippetsPerResult.toString())
   params.append('row-padding', '2')
 
-  // facets.value = []
   const url = route.path + '?' + params.toString()
   history.pushState({}, '', url)
 
@@ -288,7 +283,6 @@ const search = async (facet: string | undefined = undefined) => {
             )
             .catch((error) => console.error(error))
         } else {
-          // facets.value = []
           q?.parentElement?.classList.remove('is-loading')
           q?.removeAttribute('disabled')
           isLoading.value = false

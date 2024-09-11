@@ -7,7 +7,6 @@
     <HeaderPage />
     <SearchPage
       ref="searchPageRef"
-      v-model:query="query"
       v-model:search-results="searchResults"
       v-model:total-hits="totalHits"
       v-model:page="page"
@@ -17,7 +16,6 @@
     <!-- <ErrorNotification :error-modal /> -->
   </main>
   <FooterPage
-    v-model:query="query"
     v-model:total-hits="totalHits"
     v-model:page="page"
     @newSearch="newSearch"
@@ -43,7 +41,6 @@ import { hasSearch } from '@/assets/appState'
 // Props shared between SearchPage and FooterPage components
 const page = ref(1)
 const totalHits = ref(0)
-const query = ref('')
 const searchResults = ref<Array<SearchResult>>([])
 // const showFooterNavigation = ref(true)
 
