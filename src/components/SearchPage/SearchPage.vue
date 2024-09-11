@@ -87,10 +87,10 @@ onMounted(() => {
     if (route.query['to-year']) toYear.value = Number((route.query['to-year'] as string).trim())
     if (route.query['doc-refs']) docRefs.value = (route.query['doc-refs'] as string).trim()
     if (route.query['sort']) sortBy.value = (route.query['sort'] as string).trim()
-    // if (route.query['authors'] && Array.isArray(route.query['authors']))
-    //   authors.value = route.query['authors'] as string[]
+    if (route.query['authors'] && Array.isArray(route.query['authors']))
+      authors.value = route.query['authors'] as string[]
     // if (route.query['authors'] && !Array.isArray(route.query['authors']))
-    //   authors.value = [route.query['authors'] as string]
+    // authors.value = [route.query['authors'] as string]
 
     showAdvancedSearchPanel.value =
       authors.value.length > 0 ||
@@ -145,6 +145,7 @@ const defineSearchParams = () => {
     query.value?.length ? { query: query.value.trim() } : null,
     strict.value.toString() !== null ? { strict: strict.value.toString() } : null,
     authorInclude.value ? { 'author-include': authorInclude.value } : null,
+    // facets.value ? { authors: facets.value.map((facet) => facet.label) } : null,
     page.value ? (page.value > 0 ? { page: page.value?.toString() } : null) : null,
     title.value.trim().length > 0 ? { title: title.value.trim() } : null,
     toYear.value != null && toYear.value > 0 ? { 'to-year': toYear.value.toString() } : null,
@@ -155,7 +156,6 @@ const defineSearchParams = () => {
 const authorInclude = ref(false)
 const authors = ref<Array<string>>([])
 const authorList = ref<Array<{ label: string; count: number; active: boolean }>>([])
-const includedAuthors = ref<Array<{ label: string; count: number }>>([])
 const facets = ref<Array<AggregationBin>>([])
 const relatedWordForms = ref(false)
 const isLoading = ref(false)
@@ -203,19 +203,18 @@ const search = async (facet: string | undefined = undefined) => {
   // The user should be able to select multiple facets
   // The active boolean on each facet in facets.value could be used to indicate which should be included
   if (facet) {
-    authorList.value = facets.value.map((currentFacet) => {
+    facets.value = facets.value.map((currentFacet) => {
       if (currentFacet.label == facet) {
-        currentFacet.active = true
+        currentFacet.active = currentFacet.active ? false : true
       }
       return currentFacet
     })
-    console.log(authorList.value.length)
     authorInclude.value = authorList.value.length ? true : false
   }
 
   hasSearch.value =
     (query.value ? query.value.length > 0 : null) ||
-    authorList.value.length > 0 ||
+    facets.value.length > 0 ||
     title.value.length > 0 ||
     (fromYear.value != null && fromYear.value > 0) ||
     (toYear.value != null && toYear.value > 0) ||
@@ -223,12 +222,13 @@ const search = async (facet: string | undefined = undefined) => {
 
   // if (hasSearch.value) {
   const params = new URLSearchParams(defineSearchParams())
+  const facetParams = new URLSearchParams({ ...Object.fromEntries(params) })
+
   authorInclude.value = false
-  if (authorList.value) authorList.value.forEach((author) => params.append('authors', author.label))
+  if (facets.value)
+    facets.value.forEach((facet) => (facet.active ? params.append('authors', facet.label) : null))
   if (docRefs.value)
     docRefs.value.split(/\W+/).forEach((docRef) => params.append('doc-refs', docRef))
-
-  const facetParams = new URLSearchParams({ ...Object.fromEntries(params) })
 
   params.append(
     'first',
@@ -239,7 +239,7 @@ const search = async (facet: string | undefined = undefined) => {
   params.append('max-snippets', preferences.snippetsPerResult.toString())
   params.append('row-padding', '2')
 
-  facets.value = []
+  // facets.value = []
   const url = route.path + '?' + params.toString()
   history.pushState({}, '', url)
 
@@ -259,6 +259,7 @@ const search = async (facet: string | undefined = undefined) => {
           .filter((author: string) => author)
         hasSearch.value = true
         isLoading.value = false
+        console.log(results)
         searchResults.value = results
         totalHits.value = totalCount
         if (authors.value.length > 0) {
@@ -267,7 +268,18 @@ const search = async (facet: string | undefined = undefined) => {
           return fetchData('aggregate', 'get', facetParams)
             .then((response) =>
               response.json().then((result) => {
-                facets.value = result.bins
+                const activeFacets = facets.value
+                  .map((facet) => (facet.active ? facet.label : null))
+                  .filter((facet) => facet)
+
+                facets.value = result.bins.map((facet: { label: string; count: number }) =>
+                  activeFacets.includes(facet.label)
+                    ? { ...facet, active: true }
+                    : { ...facet, active: false }
+                )
+
+                console.log(result.bins)
+
                 showAdvancedSearchPanel.value = false
                 q?.parentElement?.classList.remove('is-loading')
                 q?.removeAttribute('disabled')
@@ -276,7 +288,7 @@ const search = async (facet: string | undefined = undefined) => {
             )
             .catch((error) => console.error(error))
         } else {
-          facets.value = []
+          // facets.value = []
           q?.parentElement?.classList.remove('is-loading')
           q?.removeAttribute('disabled')
           isLoading.value = false
