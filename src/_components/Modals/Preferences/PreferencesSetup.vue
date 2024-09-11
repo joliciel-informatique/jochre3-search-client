@@ -1,4 +1,4 @@
-<template><div v-if="false" class="hero-body"></div></template>
+<template><div v-if="false" class="hero-head"></div></template>
 <script setup lang="ts">
 import { getCurrentInstance, onMounted } from 'vue'
 import { useKeycloakStore } from '@/stores/KeycloakStore'

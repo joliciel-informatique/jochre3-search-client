@@ -1,116 +1,102 @@
 <template>
-  <div
-    ref="root"
-    v-show="visibility"
-    v-on:keydown.esc="close"
-    class="modal is-active animate__animated animate__faster"
-    tabindex="100"
-    :class="{
-      animate__fadeIn: visibility
-    }"
-  >
-    <div class="modal-background"></div>
-    <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">{{ $t('fix-metadata.title') }}</p>
-        <button class="delete" aria-label="close" @click="close"></button>
-      </header>
-      <section class="modal-card-body">
-        <div v-if="!authenticated" class="is-italic has-text-weight-bold has-text-danger">
-          {{ $t('fix-metadata.unauthenticated') }}
-        </div>
-        <label class="label"
-          >{{ $t('fix-metadata.instructions') }} "{{
-            $t(`fix-metadata.field-type.${field}`)
-          }}"</label
-        >
-        <div class="field has-addons">
-          <label class="label">{{ $t('fix-metadata.new-value') }}</label
-          >&nbsp;
-
+  <ModalBox v-model:data="metadataModal">
+    <template #header>
+      <p class="modal-card-title">
+        {{ $t('fix-metadata.title', [$t(`fix-metadata.field-type.${field}`)]) }}
+      </p>
+    </template>
+    <template #body>
+      <div v-if="!authenticated" class="is-italic has-text-weight-bold has-text-danger">
+        {{ $t('fix-metadata.unauthenticated') }}
+      </div>
+      <label class="label">{{ $t('fix-metadata.instructions') }}</label>
+      <div class="pb-0 mb-0 field has-addons">
+        <p class="control">
+          <a class="button is-static level-item">{{ $t(`fix-metadata.field-type.${field}`) }}</a>
+        </p>
+        <p class="control container">
           <input
-            class="input keyboardInput"
+            class="input is-normal is-rounded keyboardInput"
+            type="text"
+            :alt="$t('search.keyboard')"
+            :title="$t('search.keyboard')"
+            :vki-id="`${docRef}-${field}`"
             :class="{
               'ltr-align': isLeftToRight && $i18n.locale === 'yi',
               english: isLeftToRight && $i18n.locale === 'yi'
             }"
-            type="text"
-            lang="yi"
-            v-model="inputValue"
+            v-model="value"
             :disabled="authorList.length > 0"
+            lang="yi"
           />
-        </div>
-        <div class="field has-addons" v-if="showFindAuthorDropdown">
-          <FindAuthors
-            v-model:authorList="authorList"
-            v-model:exclude="inputValue"
-            :label="$t('fix-metadata.or-merge-with')"
-            :multivalue="false"
-          />
-        </div>
-      </section>
-      <footer class="modal-card-foot">
-        <div class="buttons">
-          <button class="button is-link" :disabled="!authenticated" @click="onSubmit">
-            {{ $t('save') }}
+        </p>
+        <p class="control">
+          <button
+            class="button is-clickable is-medium is-info keyboardInputButton"
+            :alt="$t('search.keyboard')"
+            :title="$t('search.keyboard')"
+            :vki-id="`${docRef}-${field}`"
+          >
+            <font-awesome-icon icon="keyboard" />
           </button>
-          <button class="button is-link is-light" @click="close">
-            {{ $t('cancel') }}
-          </button>
-        </div>
-      </footer>
-    </div>
-    <button class="modal-close is-large" aria-label="close" @click="close"></button>
-  </div>
+        </p>
+      </div>
+      <div class="field has-addons" v-if="showFindAuthorDropdown">
+        <FindAuthors
+          v-model:authorList="authorList"
+          v-model:exclude="value"
+          :label="$t('fix-metadata.or-merge-with')"
+          :multivalue="false"
+        />
+      </div>
+    </template>
+    <template #footer>
+      <button
+        class="button is-link"
+        :disabled="!authenticated || value === oldValue"
+        @click="onSubmit"
+      >
+        {{ $t('save') }}
+      </button>
+    </template>
+  </ModalBox>
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref, computed } from 'vue'
-import { authenticated, fetchData } from '@/assets/fetchMethods'
+import { ref, computed, watch, type Ref } from 'vue'
+import { authenticated } from '@/assets/fetchMethods'
 import FindAuthors from '@/_components/FindAuthors/FindAuthors.vue'
+import ModalBox from '@/_components/ModalBox/ModalBox.vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-const props = defineProps(['docRef', 'field', 'oldValue'])
-const { docRef, field, oldValue } = props
-
-const root: Ref<HTMLElement | null> = ref(null)
-const inputValue: Ref<string> = ref(oldValue)
+const showFindAuthorDropdown = computed(() => field.value.includes('author'))
+const metadataModal: Ref = defineModel('metadataModal')
 const isLeftToRight = ref(false)
-
-const visibility: Ref = defineModel<boolean>('visibility')
 const authorList: Ref = ref<Array<{ label: string; count: number }>>([])
 
-const showFindAuthorDropdown = computed(() => field.includes('author'))
+const oldValue = ref(metadataModal.value.value)
+const field = ref('')
+const value = ref('')
+const docRef = ref(metadataModal.value.docRef)
+// const vki_id = `${docRef}-${field}`
+
+watch(metadataModal, (newVal) => {
+  field.value = newVal.field
+  value.value = newVal.value
+  oldValue.value = metadataModal.value.value
+})
 
 const onSubmit = () => {
-  const newValue =
-    showFindAuthorDropdown.value && authorList.value.length > 0
-      ? authorList.value[0].label
-      : inputValue.value
-
-  const applyEverywhere = showFindAuthorDropdown.value && authorList.value.length > 0 ? true : false
-
-  console.log(`new value: ${newValue}, apply everywhere? ${applyEverywhere}`)
-
-  const fieldName = field.charAt(0).toUpperCase() + field.slice(1)
-
-  const body = JSON.stringify({
-    docRef: docRef,
-    field: fieldName,
-    value: newValue,
-    applyEverywhere: applyEverywhere
-  })
-  fetchData('correct-metadata', 'post', body)
-    .then((result) => result.json().then(() => close()))
-    .catch((error) => console.error(error))
+  console.log('submit')
 }
 
-const close = () => {
-  if (root.value !== null) {
-    root.value.classList.remove('animate__fadeIn')
-    root.value.classList.add('animate__fadeOut')
-    setTimeout(() => (visibility.value = false), 500) // Returns control to main page
-    inputValue.value = oldValue
-    authorList.value = []
-  }
-}
+// const close = () => {
+//   //   if (root.value !== null) {
+//   //     root.value.classList.remove('animate__fadeIn')
+//   //     root.value.classList.add('animate__fadeOut')
+//   //     setTimeout(() => (visibility.value = false), 500) // Returns control to main page
+//   //     inputValue.value = oldValue
+//   //     authorList.value = []
+//   //   }
+// }
 </script>

@@ -26,6 +26,7 @@ export interface SearchResponse {
 export interface AggregationBin {
   label: string
   count: number
+  active: boolean
 }
 
 export interface AggregationBins {

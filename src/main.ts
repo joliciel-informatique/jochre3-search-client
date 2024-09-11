@@ -1,8 +1,4 @@
-import './assets/main.scss'
-import 'animate.css'
-
 import { createApp } from 'vue'
-import mitt from 'mitt'
 import App from './App.vue'
 import router from './router'
 import { createPinia, type Pinia } from 'pinia'
@@ -13,6 +9,7 @@ import Keycloak, { type KeycloakConfig, type KeycloakInitOptions } from 'keycloa
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { globalCookiesConfig } from 'vue3-cookies'
+import directives from './directives/'
 
 import en from './i18n/locales/en.json'
 import yi from './i18n/locales/yi.json'
@@ -21,9 +18,9 @@ import { mergeDeep } from './assets/deepMerge'
 
 import SearchPage from './components/SearchPage/SearchPage.vue'
 import { fetchData, setURL, setToken } from './assets/fetchMethods'
-import FixWord from './_components/Modals/FixWord/FixWord.vue'
-import FixMetaData from './_components/Modals/FixMetaData/FixMetaData.vue'
 import { setErrorMessage } from './_components/Modals/ErrorNotification/ErrorNotification.vue'
+
+import './styles/main.scss'
 
 const messages = {
   en: en,
@@ -36,20 +33,22 @@ const pinia: Pinia = createPinia()
 
 const app = createApp(App)
 
-const eventBus = mitt()
+directives(app)
+
+// Good place for authentication logic: see https://router.vuejs.org/guide/advanced/navigation-guards.html
+// router.beforeEach((to, from, next) => {
+//   if (!authenticated) next('/login')
+//   else next()
+// })
 
 app.use(router)
 app.use(pinia)
 
-app
-  // .component('OCRInterfaces', OCRInterfaces)
-  .component('SearchPage', SearchPage)
-  .component('FixWordModal', FixWord)
-  .component('FixMetaDataModal', FixMetaData)
+app.component('SearchPage', SearchPage)
 
 console.log('Starting up')
 
-fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
+fetch(import.meta.env.BASE_URL + `conf/config-frontend.json?date=${Date.now()}`)
   .then((response) => response.json())
   .then((config) => {
     mergeDeep(customizedMessages, messages, config)
@@ -60,7 +59,6 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
     setURL(apiUrl)
 
     app.provide('apiUrl', apiUrl)
-    app.provide('eventBus', eventBus)
     app.provide('fetchData', fetchData)
 
     const keycloakConfig: KeycloakConfig = {
