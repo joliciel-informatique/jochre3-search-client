@@ -45,7 +45,7 @@ Description: the advanced search toolbox
                   lang="yi"
                   :placeholder="$t('search.title')"
                   v-model="title"
-                  @keyup.enter="emit('search')"
+                  @keyup.enter="emit('newSearch')"
                 />
               </p>
               <p class="control">
@@ -137,8 +137,7 @@ const docRefs = defineModel('docRefs')
 const sortBy = defineModel('sortBy')
 
 const beforeEnter = <Element,>(el: Element) => ((el as HTMLElement).style.height = '0')
-const enter = <Element,>(el: Element) =>
-  ((el as HTMLElement).style.height = `${(el as HTMLElement).scrollHeight}px`)
+const enter = <Element,>(el: Element) => ((el as HTMLElement).style.height = '100%')
 const beforeLeave = <Element,>(el: Element) =>
   ((el as HTMLElement).style.height = `${(el as HTMLElement).scrollHeight}px`)
 const leave = <Element,>(el: Element) => ((el as HTMLElement).style.height = '0')
