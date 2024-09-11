@@ -18,7 +18,7 @@ Description: display results in SingleResult child component
     <IndexSize v-else-if="!isLoading && !hasSearch" v-model:is-loading="isLoading" />
 
     <!-- No results for query -->
-    <h1 v-else-if="query.value && !searchResults.length">
+    <h1 v-else-if="query.length && !searchResults.length">
       <span class="no-results"> {{ $t('results.none') }}! </span>
       <div class="is-justify-content-center is-align-items-center no-results-image m-6">
         <FontAwesomeIcon class="fa-10x" icon="ban" />
