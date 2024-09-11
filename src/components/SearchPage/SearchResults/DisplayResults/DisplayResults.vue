@@ -14,9 +14,6 @@ Description: display results in SingleResult child component
     <!-- Loading -->
     <h1 v-if="isLoading">Loading</h1>
 
-    <!-- Show index size page upon no search params -->
-    <IndexSize v-else-if="!isLoading && !hasSearch" v-model:is-loading="isLoading" />
-
     <!-- No results for query -->
     <h1 v-else-if="query.value && !searchResults.length">
       <span class="no-results"> {{ $t('results.none') }}! </span>
@@ -26,7 +23,7 @@ Description: display results in SingleResult child component
     </h1>
 
     <!-- Display results -->
-    <ul v-else>
+    <ul v-else-if="searchResults.length">
       <li v-for="(result, index) of searchResults" :key="sha1(result)">
         <div>
           <SingleResult
@@ -38,6 +35,9 @@ Description: display results in SingleResult child component
         <hr v-if="index !== preferences.resultsPerPage - 1" />
       </li>
     </ul>
+
+    <!-- Show index size page upon no search params -->
+    <IndexSize v-else v-model:is-loading="isLoading" />
   </div>
 </template>
 
