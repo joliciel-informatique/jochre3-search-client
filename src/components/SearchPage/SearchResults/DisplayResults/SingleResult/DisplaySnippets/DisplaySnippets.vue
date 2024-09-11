@@ -13,7 +13,8 @@ Description: controls text snippets from the OCR text
   <ul>
     <li v-for="(snippet, index) in snippets" :key="sha1(snippet)">
       <SingleSnippet
-        v-model:wordModal="wordModal"
+        v-model:image-modal="imageModal"
+        v-model:word-modal="wordModal"
         :index="index"
         :snippet="snippet"
         :docRef="docRef"
@@ -25,14 +26,10 @@ Description: controls text snippets from the OCR text
 
 <script setup lang="ts">
 import SingleSnippet from './SingleSnippet/SingleSnippet.vue'
-
 import { sha1 } from 'object-hash'
-const wordModal = defineModel('wordModal')
 
-// const openWordModal = (docRef: string, offset: string, snippet: string) => {
-//   emit('openWordModal', { docRef: docRef, offset: offset, snippet: snippet })
-// }
-// const emit = defineEmits(['openWordModal'])
+const imageModal = defineModel('imageModal')
+const wordModal = defineModel('wordModal')
 
 defineProps(['snippets', 'docRef', 'url'])
 </script>

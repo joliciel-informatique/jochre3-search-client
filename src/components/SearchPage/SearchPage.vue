@@ -38,8 +38,9 @@
     /> -->
     <DisplayResults
       v-model:is-loading="isLoading"
-      v-model:metadata-modal="metadataModal"
+      v-model:image-modal="imageModal"
       v-model:word-modal="wordModal"
+      v-model:metadata-modal="metadataModal"
       v-model:query="query"
       v-model:search-results="searchResults"
     />
@@ -54,8 +55,9 @@ const query = ref('')
 const searchResults: Ref = defineModel('searchResults')
 const totalHits: Ref = defineModel('totalHits')
 const page: Ref = defineModel('page')
-const metadataModal: Ref = defineModel('metadataModal')
+const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
+const metadataModal: Ref = defineModel('metadataModal')
 
 // Import sub-components
 import SearchBar from './SearchBar/SearchBar.vue'

@@ -51,7 +51,7 @@ Description: displays text snippets from the OCR text
         <div
           class="column button is-flex is-align-items-center"
           :class="imageIsLoading ? 'is-loading' : ''"
-          @click="image ? null : toggleImageSnippet()"
+          @click="image ? openImageModal() : toggleImageSnippet()"
         >
           <div>
             <div v-if="!image" class="is-flex is-flex-direction-column is-align-items-center m-2">
@@ -91,9 +91,10 @@ import {
   faAngleDown
 } from '@fortawesome/free-solid-svg-icons'
 import { fetchData } from '@/assets/fetchMethods'
-import { ref } from 'vue'
+import { ref, type Ref } from 'vue'
 library.add(faFileImage, faBookOpen, faFileLines, faAngleDown)
 
+const imageModal: Ref = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const image = ref('')
 const imageIsLoading = ref(false)
@@ -168,6 +169,14 @@ const toggleImageSnippet = () => {
     })
 }
 
+const openImageModal = () => {
+  imageModal.value = {
+    open: true,
+    title: `Page ${snippet.page} for ${docRef}`,
+    data: image.value ? image.value : null
+  }
+}
+
 const openDeepLink = (url: string) => {
   window.open(url, '_blank')
 }
@@ -176,9 +185,4 @@ const { index, snippet, docRef } = defineProps(['index', 'snippet', 'docRef'])
 
 // Setup router
 const router = useRouter()
-
-// <div v-if="imageBusy">
-//         <img src="/images/loading.gif" />
-//       </div>
-//       <img class="image-snippet" v-if="image" :src="image" title="Image" />
 </script>

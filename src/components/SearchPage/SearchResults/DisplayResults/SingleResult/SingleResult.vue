@@ -42,7 +42,7 @@ Description: presents OCR record metadata
           </div>
           <div v-for="field in fields" :key="sha1(field)">
             <SingleResultItem
-              v-model:metadataModal="metadataModal"
+              v-model:metadata-modal="metadataModal"
               :doc-ref="result.docRef"
               :field="field"
               :value="result.metadata[field]"
@@ -75,7 +75,8 @@ Description: presents OCR record metadata
   </div>
   <div>
     <DisplaySnippets
-      v-model:wordModal="wordModal"
+      v-model:image-modal="imageModal"
+      v-model:word-modal="wordModal"
       :snippets="result.snippets"
       :docRef="result.docRef"
       :url="result.metadata.url"
@@ -103,29 +104,11 @@ const fields = ['titleEnglish', 'author', 'authorEnglish', 'publicationYear', 'p
 const { result } = defineProps(['result'])
 const showing = ref(true)
 
-const metadataModal = defineModel('metadataModal')
+const imageModal = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
-
-// const openWordModal = (docRef: string, offset: string, snippet: string) => {
-//   emit('openWordModal', { docRef: docRef, offset: offset, snippet: snippet })
-// }
+const metadataModal = defineModel('metadataModal')
 
 const emit = defineEmits(['openMetadataModal', 'openWordModal'])
-
-// const FixMetaDataVisible = ref(false)
-
-// const router = useRouter()
-
-// const toggleImageSnippet = () => {}
-
-// const currentSnippet = ref<Snippet>()
-
-// onMounted(() => {
-//   switchToPage(result.docRef, 0, result.snippets[0])
-// })
-// const showFixMetaDataModal = () => {
-//   FixMetaDataVisible.value = true
-// }
 
 /** Autohide card upon scrolling */
 const autoHide = () => {

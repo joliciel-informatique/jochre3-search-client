@@ -10,8 +10,9 @@
       v-model:search-results="searchResults"
       v-model:total-hits="totalHits"
       v-model:page="page"
-      v-model:wordModal="wordModal"
-      v-model:metadataModal="metadataModal"
+      v-model:image-modal="imageModal"
+      v-model:word-modal="wordModal"
+      v-model:metadata-modal="metadataModal"
     />
     <!-- <ErrorNotification :error-modal /> -->
   </main>
@@ -22,8 +23,9 @@
     @resetSearchResults="resetSearchResults"
     :search-results="searchResults"
   />
-  <FixWord v-model:wordModal="wordModal" />
-  <FixMetaData v-model:metadataModal="metadataModal" />
+  <LargeImage v-model:image-modal="imageModal" />
+  <FixWord v-model:word-modal="wordModal" />
+  <FixMetaData v-model:metadata-modal="metadataModal" />
 </template>
 
 <script setup lang="ts">
@@ -34,17 +36,17 @@ import FooterPage from '@/components/FooterPage/FooterPage.vue'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import PreferencesSetup from '@/_components/Modals/Preferences/PreferencesSetup.vue'
 import ErrorNotification from '@/_components/Modals/ErrorNotification/ErrorNotification.vue'
+import LargeImage from '@/_components/Modals/LargeImage/LargeImage.vue'
 import FixMetaData from '@/_components/Modals/FixMetaData/FixMetaData.vue'
 import FixWord from '@/_components/Modals/FixWord/FixWord.vue'
-import { hasSearch } from '@/assets/appState'
 
 // Props shared between SearchPage and FooterPage components
 const page = ref(1)
 const totalHits = ref(0)
 const searchResults = ref<Array<SearchResult>>([])
-// const showFooterNavigation = ref(true)
 
 // Props for modal boxes
+const imageModal = ref({})
 const metadataModal = ref({})
 const wordModal = ref({})
 const searchPageRef = ref<InstanceType<typeof SearchPage>>()
