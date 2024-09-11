@@ -14,7 +14,7 @@
       <div class="field has-addons">
         <label class="label">{{ $t('fix-word.word') }}</label>
         &nbsp;
-        <input class="input keyboardInput" type="text" lang="yi" v-model="wordModal.word" />
+        <input class="input keyboardInput" type="text" lang="yi" v-model="wordText" />
       </div>
     </template>
     <template #footer="modalBox">
@@ -37,9 +37,9 @@ import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 const wordImage = ref('')
 const wordLoading = ref(false)
 const wordModal: Ref = defineModel('wordModal')
+const wordText = ref('')
 
 onBeforeUpdate(async () => {
-  wordLoading.value = true
   const params: URLSearchParams = new URLSearchParams({
     'doc-ref': wordModal.value.docRef,
     'word-offset': (
@@ -47,6 +47,12 @@ onBeforeUpdate(async () => {
     ).toString()
   })
 
+  loadWordImage(params)
+  loadWordText(params)
+})
+
+const loadWordImage = async (params: URLSearchParams) => {
+  wordLoading.value = true
   const response = await fetchData('word-image', 'get', params, 'image/png', 'arraybuffer')
   response.status === 200
     ? response.arrayBuffer().then(
@@ -59,13 +65,23 @@ onBeforeUpdate(async () => {
       )
     : null
   wordLoading.value = false
-})
+}
+
+const loadWordText = async (params: URLSearchParams) => {
+  const textResponse = await fetchData('word-text', 'get', params, 'application/json')
+
+  textResponse.status === 200
+    ? textResponse.json().then((result) => {
+        wordText.value = result.text
+      })
+    : null
+}
 
 const save = (closeFunc: Function) => {
   const data = JSON.stringify({
     docRef: wordModal.value.docRef,
     offset: +wordModal.value.globalOffset,
-    suggestion: wordModal.value.word
+    suggestion: wordText.value
   })
   fetchData('suggest-word', 'post', data, 'application/json')
     .then((res) => {

@@ -102,6 +102,14 @@ const imageIsLoading = ref(false)
 const openWordModal = () => {
   const selection: Selection | null = window.getSelection()
   if (selection && selection.anchorNode) {
+    const range = selection.getRangeAt(0)
+    console.log(
+      `range startOffset: ${range.startOffset}, endOffset ${range.endOffset}, startContainer ${range.startContainer.nodeName}, endContainer ${range.endContainer.nodeName}, commonAncestorContainer ${range.commonAncestorContainer.nodeName}`
+    )
+    console.log(
+      `sel.anchorNode: ${selection.anchorNode.nodeName}, sel.anchorOffset: ${selection.anchorOffset}`
+    )
+
     let parentElement = selection.anchorNode
 
     while (parentElement.nodeType != Node.ELEMENT_NODE) {
@@ -114,24 +122,20 @@ const openWordModal = () => {
     }
 
     if (parentSpan.tagName === 'SPAN') {
+      // Important: we cannot get the word text from the span text,
+      // because there is no way for the frontend to know
+      // whether the word image displayed will correspond to the selection result of the double-click or not.
+      // In fact, in the case of punctuation touching the selection, it definitely will not.
+      // This is why we simply pass the offset, and let the modal
+      // take care of both retrieving the image and the corresponding text.
       const globalOffsetStr = parentSpan.getAttribute('offset') ?? '0'
       const globalOffset = parseInt(globalOffsetStr)
-      let parsed = new DOMParser().parseFromString(snippet.text, 'text/html')
-      const tags = Object.fromEntries(
-        Array.from(parsed.body.getElementsByTagName('span')).map((tag) => [
-          tag.getAttribute('offset'),
-          tag.innerText
-        ])
-      )
-
-      const word = tags[globalOffset].substring(selection.baseOffset - 1)
 
       wordModal.value = {
         open: true,
         docRef: docRef,
         selection: selection,
-        globalOffset: globalOffset,
-        word: `\u202B${word.split(' ').filter((d: string) => d)[0]}`
+        globalOffset: globalOffset
       }
     }
   }
