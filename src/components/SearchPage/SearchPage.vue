@@ -29,13 +29,13 @@
   <div
     class="container is-max-desktop is-flex-direction-column is-align-items-center has-text-centered p-5"
   >
-    <IndexSize
+    <!-- <IndexSize
       v-model:search-results="searchResults"
       v-model:query="query"
       v-model:is-loading="isLoading"
       v-model:has-search="hasSearch"
       v-model:facets="facets"
-    />
+    /> -->
     <DisplayResults
       v-model:is-loading="isLoading"
       v-model:metadata-modal="metadataModal"
@@ -60,12 +60,14 @@ const wordModal: Ref = defineModel('wordModal')
 // Import sub-components
 import SearchBar from './SearchBar/SearchBar.vue'
 import AdvancedSearch from './SearchBar/AdvancedSearch/AdvancedSearch.vue'
-import IndexSize from './SearchResults/IndexSize/IndexSize.vue'
 import FacetBar from './SearchBar/FacetBar/FacetBar.vue'
 import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
 import type { SearchResult, AggregationBin } from '@/assets/interfacesExternals'
 import { hasSearch } from '@/assets/appState'
 import { setErrorMessage } from '@/_components/Modals/ErrorNotification/ErrorNotification.vue'
+
+// import { useStateStore } from '@/stores/StateStore'
+// import { storeToRefs } from 'pinia'
 
 // Startup variables: may move to App.vue or HomeView.vue
 const router = useRouter()
@@ -118,13 +120,10 @@ onMounted(() => {
 })
 
 const newSearch = (facet: string | undefined = undefined) => {
-  console.log(facet)
   search(facet).then((res) => {
-    console.log(6)
     isLoading.value = res ? true : false
     const searchBar = document.querySelector('.searchBar') as HTMLDivElement
     if (searchBar !== null && searchResults.value.length) {
-      console.log(7)
       window.onscroll = () => {
         window.scrollY < searchBar.offsetTop
           ? searchBar.classList.add('stickySearchBarDocked')
@@ -134,15 +133,13 @@ const newSearch = (facet: string | undefined = undefined) => {
         ) as NodeListOf<HTMLDivElement>
         newSearchResults.forEach((result) => (result.style.top = `${searchBar?.offsetHeight}px`))
       }
-    } else {
-      console.log(8, searchResults.value.length)
-      return
+      // } else {
+      // return
     }
   })
 }
 
 const defineSearchParams = () => {
-  console.log(page.value)
   return Object.assign(
     {},
     query.value?.length ? { query: query.value.trim() } : null,
@@ -157,10 +154,15 @@ const defineSearchParams = () => {
 
 const authorInclude = ref(false)
 const authors = ref<Array<string>>([])
-const authorList = ref<Array<{ label: string; count: number }>>([])
+const authorList = ref<Array<{ label: string; count: number; active: boolean }>>([])
+const includedAuthors = ref<Array<{ label: string; count: number }>>([])
 const facets = ref<Array<AggregationBin>>([])
 const relatedWordForms = ref(false)
 const isLoading = ref(false)
+
+// const stateStore = useStateStore()
+// const { isLoading } = storeToRefs(stateStore)
+// const { notLoading, loading } = stateStore
 
 const title = ref('')
 const fromYear = ref(0)
@@ -170,12 +172,12 @@ const sortBy = ref('Score')
 const strict = computed(() => !relatedWordForms.value)
 
 const resetSearchResults = () => {
-  console.log('reset')
   query.value = ''
   isLoading.value = false
   hasSearch.value = false
   facets.value = []
   searchResults.value = []
+  totalHits.value = 0
 
   page.value = 1
   title.value = ''
@@ -196,9 +198,19 @@ const setShowAdvancedSearchPanel = () => {
 
 const search = async (facet: string | undefined = undefined) => {
   isLoading.value = true
+
+  // TODO: Known bug; currently only one facet is included when clicked
+  // The user should be able to select multiple facets
+  // The active boolean on each facet in facets.value could be used to indicate which should be included
   if (facet) {
-    authorInclude.value = true
-    authorList.value.push({ label: facet, count: 0 })
+    authorList.value = facets.value.map((currentFacet) => {
+      if (currentFacet.label == facet) {
+        currentFacet.active = true
+      }
+      return currentFacet
+    })
+    console.log(authorList.value.length)
+    authorInclude.value = authorList.value.length ? true : false
   }
 
   hasSearch.value =
@@ -209,10 +221,7 @@ const search = async (facet: string | undefined = undefined) => {
     (toYear.value != null && toYear.value > 0) ||
     docRefs.value.length > 0
 
-  console.log(hasSearch.value)
-
   // if (hasSearch.value) {
-  console.log(1)
   const params = new URLSearchParams(defineSearchParams())
   authorInclude.value = false
   if (authorList.value) authorList.value.forEach((author) => params.append('authors', author.label))
@@ -253,13 +262,11 @@ const search = async (facet: string | undefined = undefined) => {
         searchResults.value = results
         totalHits.value = totalCount
         if (authors.value.length > 0) {
-          console.log(4)
           facetParams.append('field', 'Author')
           facetParams.append('maxBins', '10')
           return fetchData('aggregate', 'get', facetParams)
             .then((response) =>
               response.json().then((result) => {
-                console.log(5)
                 facets.value = result.bins
                 showAdvancedSearchPanel.value = false
                 q?.parentElement?.classList.remove('is-loading')
@@ -283,7 +290,6 @@ const search = async (facet: string | undefined = undefined) => {
       hasSearch.value = true
       q?.parentElement?.classList.remove('is-loading')
       q?.removeAttribute('disabled')
-      console.log(0)
     })
   // } else {
   //   console.log(2)

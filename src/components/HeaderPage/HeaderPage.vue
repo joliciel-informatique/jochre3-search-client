@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container hero-body is-fluid has-background-primary has-text-white has-text-weight-semibold m-0 p-0 header-footer-content"
+    class="container hero-body is-fluid has-background-primary has-text-white m-0 p-0 header-footer-content"
   >
     <div class="grid">
       <div class="cell p-2">
@@ -9,13 +9,13 @@
         </div>
       </div>
       <div class="cell is-col-span-2 p-2">
+        {{ headerInfo($tm('header')) }}
         <div class="title has-text-white py-4">{{ $t('header.title') }}</div>
         <div class="beta-flyout">{{ $t('header.beta') }}</div>
-        <div class="link">
-          {{ $t('header.link.text') }}
-          <a class="link-white" href="{{ $t('header.link.url') }}" target="_blank">{{
-            $t('header.link.url-text')
-          }}</a>
+        <div class="link" v-for="link in headerLinks" :key="link">
+          <a class="link-subtle" :href="link.link" :target="link.target">
+            {{ link.title }}
+          </a>
         </div>
       </div>
       <div class="cell p-2">
@@ -62,6 +62,18 @@ library.add(faGear, faRightToBracket, faRightFromBracket)
 const keycloak = useKeycloakStore().keycloak
 const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
 const preferencesVisible = ref<boolean>(false)
+const headerLinks = ref()
+
+const headerInfo = (info: {}) => {
+  const infoObj = JSON.parse(JSON.stringify(info)) // Proxy to normal JSON object
+  const headerText = infoObj.header
+  if ('text' in headerText) {
+    const links = headerText.text.match(/{\d}/)
+    const strippedLinks = links.map((link: string) => link.replace('}', '').replace('{', ''))
+    const linked = strippedLinks.map((link: string) => headerText[link])
+    headerLinks.value = linked
+  }
+}
 
 const showPreferences = () => {
   preferencesVisible.value = true

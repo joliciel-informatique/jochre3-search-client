@@ -267,17 +267,14 @@ according to style policies.
 .search-info {
   position: sticky;
   z-index: 7;
-  padding: 10px;
   top: 0;
-  height: 50px;
-  bottom: 20px;
   align-content: center;
 }
 
 .search-info-background {
   position: relative;
   display: block;
-  padding: 10px 0px 10px 0px;
+  padding: 5px 0px 5px 0px;
   text-align: center;
   overflow: visible;
 }
@@ -22911,8 +22908,8 @@ a:hover {
   color: rgb(238, 178, 17);
 }
 
-.link-white {
-  color: #fff;
+.link-subtle {
+  color: rgb(180, 220, 222);
 }
 
 /* Bootstrap RTL fixes start */

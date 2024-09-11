@@ -1,11 +1,14 @@
 <template>
   <div id="searchInfo" class="search-info" v-if="totalHits > 0">
     <hr />
-    <div class="search-info-background">
+    <div class="search-info-background is-flex is-align-items-center">
       <div class="search-info-text">
         {{ $t('results.result-count', [totalHits]) }}
         ({{ $t('results.result-range', [firstResult, lastResult]) }})
       </div>
+      <span class="icon is-medium is-clickable footer-icon">
+        <font-awesome-icon icon="circle-chevron-down" size="lg" />
+      </span>
 
       <!-- <div class="px-2"></div> -->
     </div>
@@ -15,6 +18,10 @@
 import { preferences } from '@/assets/fetchMethods'
 // import { type SearchResult } from '@/assets/interfacesExternals'
 import { computed, onUpdated, ref, type Ref } from 'vue'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faCircleChevronDown } from '@fortawesome/free-solid-svg-icons'
+library.add(faCircleChevronDown)
 
 const page: Ref = defineModel('page')
 const totalHits: Ref = defineModel('totalHits')

@@ -19,6 +19,7 @@ Description: presents the facet bar
       <FilterTag
         :label="facet.label"
         :count="facet.count"
+        :active="facet.active"
         :showCount="true"
         @func="emit('newSearch', facet.label)"
       />

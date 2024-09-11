@@ -23,22 +23,15 @@ Description: displays text snippets from the OCR text
     <header class="card-header snippet">
       <p class="card-header-title has-text-info">Page {{ snippet.page }}</p>
       <!-- Open page in book -->
+
       <button
         class="card-header-icon is-large has-text-info p-1 m-1"
-        v-if="snippet.deepLink"
         v-tooltip:bottom="$t('results.show-original-page', [snippet.page])"
+        v-if="snippet.deepLink"
+        @click="openDeepLink(snippet.deepLink)"
       >
         <span class="icon">
           <font-awesome-icon icon="book-open" size="lg" />
-        </span>
-      </button>
-      <!-- Show snippet image -->
-      <button
-        v-tooltip:bottom="$t('results.show-image-snippet')"
-        class="card-header-icon is-large has-text-info p-1 m-1"
-      >
-        <span class="icon">
-          <font-awesome-icon icon="file-image" size="lg" />
         </span>
       </button>
 
@@ -54,11 +47,35 @@ Description: displays text snippets from the OCR text
       </button>
     </header>
     <div class="card-content" :data-index="index" :data-docref="docRef" :data-page="snippet.page">
-      <div
-        class="rtl-align snippet has-text-weight-medium rtl yiddish pr-2 pl-2"
-        v-html="snippet.text"
-        @dblclick="openWordModal"
-      ></div>
+      <div class="columns">
+        <div
+          class="column button is-flex is-align-items-center"
+          :class="imageIsLoading ? 'is-loading' : ''"
+          @click="image ? null : toggleImageSnippet()"
+        >
+          <div>
+            <div v-if="!image" class="is-flex is-flex-direction-column is-align-items-center m-2">
+              <div class="p-3" :hidden="imageIsLoading">
+                <button class="is-large is-flex is-align-items-center">
+                  <span class="icon" :hidden="imageIsLoading">
+                    <font-awesome-icon icon="file-image" size="2xl" />
+                  </span>
+                </button>
+              </div>
+              <span :hidden="imageIsLoading">{{ $t('results.show-image-snippet') }}</span>
+            </div>
+            <!-- Show snippet image -->
+            <div v-else>
+              <img class="image-snippet" :src="image" title="Image" />
+            </div>
+          </div>
+        </div>
+        <div
+          class="column rtl-align snippet has-text-weight-medium rtl yiddish pr-2 pl-2"
+          v-html="snippet.text"
+          @dblclick="openWordModal"
+        ></div>
+      </div>
     </div>
   </div>
 </template>
@@ -73,9 +90,13 @@ import {
   faFileLines,
   faAngleDown
 } from '@fortawesome/free-solid-svg-icons'
+import { fetchData } from '@/assets/fetchMethods'
+import { ref } from 'vue'
 library.add(faFileImage, faBookOpen, faFileLines, faAngleDown)
 
 const wordModal = defineModel('wordModal')
+const image = ref('')
+const imageIsLoading = ref(false)
 
 const openWordModal = () => {
   const selection: Selection | null = window.getSelection()
@@ -115,11 +136,46 @@ const openWordModal = () => {
   }
 }
 
-const { index, snippet, docRef, url } = defineProps(['index', 'snippet', 'docRef', 'url'])
+const toggleImageSnippet = () => {
+  imageIsLoading.value = true
+
+  const params: URLSearchParams = new URLSearchParams({
+    'doc-ref': docRef,
+    'start-offset': `${snippet.start}`,
+    'end-offset': `${snippet.end}`
+  })
+
+  snippet.highlights.forEach((highlight: Array<Number>) => {
+    params.append('highlight', `[${highlight[0]},${highlight[1]}]`)
+  })
+
+  fetchData('image-snippet', 'get', params, 'image/png', 'arraybuffer')
+    .then((response) =>
+      response.status === 200
+        ? response.arrayBuffer().then((buffer) => {
+            image.value = `data:${response.headers.get('content-type')};base64,${btoa(
+              Array.from(new Uint8Array(buffer))
+                .map((buf) => String.fromCharCode(buf))
+                .join('')
+            )}`
+            imageIsLoading.value = false
+          })
+        : null
+    )
+    .catch((error) => {
+      console.error(error)
+      imageIsLoading.value = false
+    })
+}
+
+const openDeepLink = (url: string) => {
+  window.open(url, '_blank')
+}
+
+const { index, snippet, docRef } = defineProps(['index', 'snippet', 'docRef'])
 
 // Setup router
 const router = useRouter()
-// @click="toggleImageSnippet()"
 
 // <div v-if="imageBusy">
 //         <img src="/images/loading.gif" />

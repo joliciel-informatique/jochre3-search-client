@@ -111,10 +111,10 @@ $footer-bottom: 0;
 .search-info {
   position: sticky;
   z-index: 7;
-  padding: 10px;
+  // padding: 10px;
   top: 0;
-  height: 50px;
-  bottom: 20px;
+  // height: 50px;
+  // bottom: 20px;
   // width: 100vw;
   // background-color: $background-color-4;
   align-content: center;
@@ -125,7 +125,7 @@ $footer-bottom: 0;
   // left: -10%;
   // width: 120%;
   display: block;
-  padding: 10px 0px 10px 0px;
+  padding: 5px 0px 5px 0px;
   // height: 70px;
   text-align: center;
   overflow: visible;
@@ -435,8 +435,8 @@ a:hover {
   color: $foreground-color-3;
 }
 
-.link-white {
-  color: #fff;
+.link-subtle {
+  color: $foreground-color-2;
 }
 
 /* Bootstrap RTL fixes start */

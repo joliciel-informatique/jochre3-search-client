@@ -78,6 +78,8 @@ Description: calculates and presents page numbers
       >
         {{ $t('pagination.next') }}
       </button>
+      <button @click="toTop" class="pagination-previous is-small m-1">To top</button>
+      <button @click="toBottom" class="pagination-previous is-small m-1">To bottom</button>
     </div>
     <div v-tooltip:left="$t('results.result-current-tooltip')" class="navigation-current">
       {{ $t('results.result-current-book', [onScreenBook, lastResult]) }},
@@ -109,6 +111,20 @@ const onScreenBook = ref((page.value - 1) * preferences.resultsPerPage + 1)
 const onScreenSnippet = ref(1)
 const onScreenTotalSnippets = ref(1)
 
+const toTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
+
+const toBottom = () => {
+  window.scrollTo({
+    top: document.body.scrollHeight,
+    behavior: 'smooth'
+  })
+}
+
 const lastResult = computed(() => {
   const last = page.value * preferences.resultsPerPage
   return totalHits.value < last ? totalHits.value : last
@@ -139,8 +155,7 @@ const check = () => {
   window.addEventListener('scroll', check)
 }
 
-onMounted(() => window.addEventListener('scroll', check))
-
 // Keep tabs on what book/snippet is being viewed
+onMounted(() => window.addEventListener('scroll', check))
 onUpdated(() => window.addEventListener('scroll', check))
 </script>

@@ -14,8 +14,11 @@ Description: display results in SingleResult child component
     <!-- Loading -->
     <h1 v-if="isLoading">Loading</h1>
 
+    <!-- Show index size page upon no search params -->
+    <IndexSize v-else-if="!isLoading && !hasSearch" v-model:is-loading="isLoading" />
+
     <!-- No results for query -->
-    <h1 v-else-if="(query.value && !searchResults.length) || (hasSearch && !searchResults.length)">
+    <h1 v-else-if="query.value && !searchResults.length">
       <span class="no-results"> {{ $t('results.none') }}! </span>
       <div class="is-justify-content-center is-align-items-center no-results-image m-6">
         <FontAwesomeIcon class="fa-10x" icon="ban" />
@@ -43,35 +46,17 @@ import { sha1 } from 'object-hash'
 import { preferences } from '@/assets/fetchMethods'
 import { hasSearch } from '@/assets/appState'
 import SingleResult from './SingleResult/SingleResult.vue'
+import IndexSize from './IndexSize/IndexSize.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { watch, type Ref } from 'vue'
+import { type Ref } from 'vue'
 library.add(faBan)
 
-// const { query, searchResults } = defineProps(['query', 'searchResults'])
 const isLoading = defineModel('isLoading')
 const wordModal = defineModel('wordModal')
 const metadataModal = defineModel('metadataModal')
 const query: Ref = defineModel('query')
 const searchResults: Ref = defineModel('searchResults')
-
-watch(searchResults, (newVal) => {
-  console.log(newVal)
-})
-
-watch(query, (newVal) => {
-  console.log(newVal)
-})
-
-watch(isLoading, (newVal) => {
-  console.log(newVal)
-})
-
-watch(hasSearch, (newVal) => {
-  console.log(newVal)
-})
-
-console.log(searchResults.value, query.value, isLoading.value, hasSearch.value)
 </script>

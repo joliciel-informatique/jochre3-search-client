@@ -12,7 +12,7 @@ Methods: None
 Description: the advanced search toolbox
 -->
 <template>
-  <div class="advancedSearch">
+  <div class="advancedSearch is-flex is-justify-content-center">
     <Transition
       name="advancedSearch"
       @before-enter="beforeEnter"

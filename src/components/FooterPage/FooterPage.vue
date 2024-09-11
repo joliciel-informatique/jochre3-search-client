@@ -1,7 +1,7 @@
 <template>
-  <footer class="footer has-text-white has-text-weight-semibold mt-auto header-footer-content">
+  <footer class="footer has-text-white mt-auto header-footer-content">
     <Transition name="slide-up" mode="out-in">
-      <div v-if="showing">
+      <div v-if="showFooterNavigation">
         <FooterNavigation
           @newSearch="emit('newSearch')"
           @resetSearchResults="emit('resetSearchResults')"
@@ -9,20 +9,22 @@
           v-model:page="page"
         />
       </div>
-      <div v-else-if="!showing">
+      <div v-else-if="!totalHits">
         <FooterDefault />
       </div>
     </Transition>
   </footer>
 </template>
 <script setup lang="ts">
-import { onMounted, onUpdated, watch } from 'vue'
+import { onMounted } from 'vue'
 import FooterDefault from './FooterDefault/FooterDefault.vue'
 import FooterNavigation from './FooterNavigation/FooterNavigation.vue'
+import { hasSearch } from '@/assets/appState'
 
 const totalHits = defineModel('totalHits')
 const page = defineModel('page')
-const showing = defineModel('showing')
+const showFooterNavigation = defineModel('showing')
+console.log(hasSearch.value, showFooterNavigation.value, totalHits.value)
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 
 /** Autohide footerbar upon scrolling */
@@ -32,7 +34,7 @@ const bottomVisible = () =>
 
 const autoHide = () => {
   console.log(bottomVisible())
-  showing.value = !bottomVisible() ? true : false
+  showFooterNavigation.value = !bottomVisible() ? true : false
 }
 
 onMounted(() => {
