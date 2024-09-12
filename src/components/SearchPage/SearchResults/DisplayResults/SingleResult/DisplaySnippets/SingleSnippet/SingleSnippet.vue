@@ -22,8 +22,8 @@ Description: displays text snippets from the OCR text
     </div> -->
     <header class="card-header snippet">
       <p class="card-header-title has-text-info">Page {{ snippet.page }}</p>
-      <!-- Open page in book -->
 
+      <!-- Open page in book -->
       <button
         class="card-header-icon is-large has-text-info p-1 m-1"
         v-tooltip:bottom="$t('results.show-original-page', [snippet.page])"
@@ -64,6 +64,7 @@ Description: displays text snippets from the OCR text
               </div>
               <span :hidden="imageIsLoading">{{ $t('results.show-image-snippet') }}</span>
             </div>
+
             <!-- Show snippet image -->
             <div v-else>
               <img class="image-snippet" :src="image" title="Image" />
@@ -94,6 +95,8 @@ import { fetchData } from '@/assets/fetchMethods'
 import { ref, type Ref } from 'vue'
 library.add(faFileImage, faBookOpen, faFileLines, faAngleDown)
 
+const { index, snippet, docRef } = defineProps(['index', 'snippet', 'docRef'])
+const router = useRouter()
 const imageModal: Ref = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const image = ref('')
@@ -113,31 +116,22 @@ const openWordModal = () => {
       parentSpan = parentSpan.parentElement as HTMLElement
     }
 
+    // IMPORTANT: text in span element may not match image; retrieve both separately from server based on selection globalOffset
     if (parentSpan.tagName === 'SPAN') {
       const globalOffsetStr = parentSpan.getAttribute('offset') ?? '0'
       const globalOffset = parseInt(globalOffsetStr)
-      let parsed = new DOMParser().parseFromString(snippet.text, 'text/html')
-      const tags = Object.fromEntries(
-        Array.from(parsed.body.getElementsByTagName('span')).map((tag) => [
-          tag.getAttribute('offset'),
-          tag.innerText
-        ])
-      )
-
-      const word = tags[globalOffset].substring(selection.baseOffset - 1)
 
       wordModal.value = {
         open: true,
         docRef: docRef,
         selection: selection,
-        globalOffset: globalOffset,
-        word: `\u202B${word.split(' ').filter((d: string) => d)[0]}`
+        globalOffset: globalOffset
       }
     }
   }
 }
 
-const toggleImageSnippet = () => {
+const toggleImageSnippet = async () => {
   imageIsLoading.value = true
 
   const params: URLSearchParams = new URLSearchParams({
@@ -150,23 +144,20 @@ const toggleImageSnippet = () => {
     params.append('highlight', `[${highlight[0]},${highlight[1]}]`)
   })
 
-  fetchData('image-snippet', 'get', params, 'image/png', 'arraybuffer')
-    .then((response) =>
-      response.status === 200
-        ? response.arrayBuffer().then((buffer) => {
-            image.value = `data:${response.headers.get('content-type')};base64,${btoa(
-              Array.from(new Uint8Array(buffer))
-                .map((buf) => String.fromCharCode(buf))
-                .join('')
-            )}`
-            imageIsLoading.value = false
-          })
-        : null
+  const response = await fetchData('image-snippet', 'get', params, 'image/png', 'arraybuffer')
+  if (response.status !== 200) {
+    // TODO: report failure to user
+  } else {
+    image.value = await response.arrayBuffer().then(
+      (buffer) =>
+        `data:${response.headers.get('content-type')};base64,${btoa(
+          Array.from(new Uint8Array(buffer))
+            .map((buf) => String.fromCharCode(buf))
+            .join('')
+        )}`
     )
-    .catch((error) => {
-      console.error(error)
-      imageIsLoading.value = false
-    })
+  }
+  imageIsLoading.value = false
 }
 
 const openImageModal = () => {
@@ -180,9 +171,4 @@ const openImageModal = () => {
 const openDeepLink = (url: string) => {
   window.open(url, '_blank')
 }
-
-const { index, snippet, docRef } = defineProps(['index', 'snippet', 'docRef'])
-
-// Setup router
-const router = useRouter()
 </script>
