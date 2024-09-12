@@ -11,6 +11,7 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { globalCookiesConfig } from 'vue3-cookies'
 import directives from './directives/'
 import Vue3TouchEvents, { type Vue3TouchEventsOptions } from 'vue3-touch-events'
+import cookieConsentConfig from './assets/cookieConsentConfig'
 
 import en from './i18n/locales/en.json'
 import yi from './i18n/locales/yi.json'
@@ -22,6 +23,7 @@ import { fetchData, setURL, setToken } from './assets/fetchMethods'
 import { setErrorMessage } from './_components/Modals/ErrorNotification/ErrorNotification.vue'
 
 import './styles/main.scss'
+import cookieConsent from './plugins/CookieConsentVue'
 
 const messages = {
   en: en,
@@ -45,6 +47,7 @@ directives(app)
 app.use(router)
 app.use(pinia)
 app.use<Vue3TouchEventsOptions>(Vue3TouchEvents, {})
+app.use(cookieConsent, cookieConsentConfig)
 
 app.component('SearchPage', SearchPage)
 
