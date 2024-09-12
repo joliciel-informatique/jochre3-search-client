@@ -10,6 +10,7 @@ import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { globalCookiesConfig } from 'vue3-cookies'
 import directives from './directives/'
+import Vue3TouchEvents, { type Vue3TouchEventsOptions } from 'vue3-touch-events'
 
 import en from './i18n/locales/en.json'
 import yi from './i18n/locales/yi.json'
@@ -43,6 +44,7 @@ directives(app)
 
 app.use(router)
 app.use(pinia)
+app.use<Vue3TouchEventsOptions>(Vue3TouchEvents, {})
 
 app.component('SearchPage', SearchPage)
 

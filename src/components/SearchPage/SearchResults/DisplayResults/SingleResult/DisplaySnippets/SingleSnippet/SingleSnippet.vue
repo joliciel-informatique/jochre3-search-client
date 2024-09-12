@@ -75,6 +75,7 @@ Description: displays text snippets from the OCR text
           class="column rtl-align snippet has-text-weight-medium rtl yiddish pr-2 pl-2"
           v-html="snippet.text"
           @dblclick="openWordModal"
+          v-touch:longtap="openWordModal"
         ></div>
       </div>
     </div>
