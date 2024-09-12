@@ -93,7 +93,7 @@ const save = (closeFunc: Function) => {
     docRef: metadataModal.value.docRef,
     field: metadataModal.value.field,
     value: metadataModal.value.value,
-    applyEverywhere: true
+    applyEverywhere: false
   })
   fetchData('correct-metadata', 'post', data, 'application/json')
     .then((res) => {
