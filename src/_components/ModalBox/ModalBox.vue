@@ -1,6 +1,6 @@
 <template>
   <Transition name="fade">
-    <div class="modal fade" :class="active" v-if="visible">
+    <div class="modal fade" :class="active" v-show="visible">
       <div class="modal-background" @click="close"></div>
       <div class="modal-content">
         <header class="modal-card-head">

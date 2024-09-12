@@ -22,7 +22,7 @@ Description: the advanced search toolbox
     >
       <div
         class="body modal-card m-3 p-3"
-        v-if="showAdvancedSearchPanel"
+        v-show="showAdvancedSearchPanel"
         @keydown.esc="showAdvancedSearchPanel = false"
       >
         <div class="body-inner container is-max-desktop">
@@ -31,6 +31,7 @@ Description: the advanced search toolbox
               v-model:authorList="authorList"
               :label="$t('search.author')"
               :multivalue="true"
+              unique-id="advanced-search-find-authors"
             />
           </span>
           <span class="columns is-vcentered mt-1 p-1">
