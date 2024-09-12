@@ -2,7 +2,7 @@
   "login-required": true,
   "api-url": "https://jochre-search-api.joli-ciel.com",
   "keycloak": {
-    "url": "https://dev-login.joli-ciel.com/auth/",
+    "url": "https://dev-login.joli-ciel.com/",
     "realm": "jochre"
   },
   "en": {
