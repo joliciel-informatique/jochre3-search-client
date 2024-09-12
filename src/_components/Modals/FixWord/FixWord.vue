@@ -4,17 +4,18 @@
       <p class="modal-card-title">{{ $t('fix-word.title') }}</p>
     </template>
     <template #body>
-      <div v-if="!authenticated" class="is-italic has-text-weight-bold has-text-danger">
-        {{ $t('fix-word.unauthenticated') }}
-      </div>
-      <div v-if="wordImage !== ''">
-        <img :src="wordImage" />
-      </div>
-      <div>{{ $t('fix-word.instructions') }}</div>
-      <div class="field has-addons">
-        <label class="label">{{ $t('fix-word.word') }}</label>
-        &nbsp;
-        <input class="input keyboardInput" type="text" lang="yi" v-model="wordSuggestion" />
+      <div class="is-flex is-flex-direction-column">
+        <div v-if="!authenticated" class="is-italic has-text-weight-bold has-text-danger p-2">
+          {{ $t('fix-word.unauthenticated') }}
+        </div>
+        <div class="p-2 has-text-centered" v-if="wordImage !== ''">
+          <img :src="wordImage" />
+        </div>
+        <div class="p-2 field has-addons">
+          <input class="input keyboardInput" type="text" lang="yi" v-model="wordSuggestion" />
+        </div>
+        <div class="p-2 has-text-info">{{ $t('fix-word.instructions') }}</div>
+        <div class="p-2 has-text-warning">{{ $t('fix-word.warning') }}</div>
       </div>
     </template>
     <template #footer="modalBox">

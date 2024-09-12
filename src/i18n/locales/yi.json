@@ -59,8 +59,8 @@
   },
   "fix-word": {
     "title": "פֿאַרבעסערט אַ וואָרט",
-    "instructions": "אױב אַ װאָרט איז שלעכט סעגמענטירט (ד“ה אױב נאָר אַ טײל פֿונעם װאָרט באַװײַזט זיך אױבן), טאָר מען עס נישט אױסבעסערן.",
-    "word": "װאָרט:",
+    "instructions": "YI__Please copy the above exactly below, including punctuation (niqqud, apostrophes, quotes, dashes etc.).",
+    "warning": "YI__Do not correct unclear text (e.g. text that is broken, partially visible and so on).",
     "unauthenticated": "בכֿדי אױסצובעסערן אַ װאָרט, דאַרף מען ארײַנלאָגירן."
   },
   "fix-metadata": {
