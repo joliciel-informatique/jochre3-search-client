@@ -14,7 +14,7 @@
       <div class="field has-addons">
         <label class="label">{{ $t('fix-word.word') }}</label>
         &nbsp;
-        <input class="input keyboardInput" type="text" lang="yi" v-model="wordText" />
+        <input class="input keyboardInput" type="text" lang="yi" v-model="wordSuggestion" />
       </div>
     </template>
     <template #footer="modalBox">
@@ -37,7 +37,7 @@ import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 const wordImage = ref('')
 const wordLoading = ref(false)
 const wordModal: Ref = defineModel('wordModal')
-const wordText = ref('')
+const wordSuggestion = ref('')
 
 onBeforeUpdate(async () => {
   const params: URLSearchParams = new URLSearchParams({
@@ -47,48 +47,51 @@ onBeforeUpdate(async () => {
     ).toString()
   })
 
+  wordLoading.value = true
   loadWordImage(params)
   loadWordText(params)
+  wordLoading.value = false
 })
 
 const loadWordImage = async (params: URLSearchParams) => {
-  wordLoading.value = true
   const response = await fetchData('word-image', 'get', params, 'image/png', 'arraybuffer')
-  response.status === 200
-    ? response.arrayBuffer().then(
-        (buffer) =>
-          (wordImage.value = `data:${response.headers.get('content-type')};base64,${btoa(
-            Array.from(new Uint8Array(buffer))
-              .map((buf) => String.fromCharCode(buf))
-              .join('')
-          )}`)
-      )
-    : null
-  wordLoading.value = false
+  if (response.status !== 200) {
+    // TODO: report failure to user
+    return null
+  } else {
+    wordImage.value = await response.arrayBuffer().then(
+      (buffer) =>
+        `data:${response.headers.get('content-type')};base64,${btoa(
+          Array.from(new Uint8Array(buffer))
+            .map((buf) => String.fromCharCode(buf))
+            .join('')
+        )}`
+    )
+  }
 }
 
 const loadWordText = async (params: URLSearchParams) => {
-  const textResponse = await fetchData('word-text', 'get', params, 'application/json')
-
-  textResponse.status === 200
-    ? textResponse.json().then((result) => {
-        wordText.value = result.text
-      })
-    : null
+  const response = await fetchData('word-text', 'get', params, 'application/json')
+  if (response.status !== 200) {
+    // TODO: report failure to user
+    return null
+  } else {
+    wordSuggestion.value = await response.json().then((result) => result.text)
+  }
 }
 
 const save = (closeFunc: Function) => {
   const data = JSON.stringify({
     docRef: wordModal.value.docRef,
     offset: +wordModal.value.globalOffset,
-    suggestion: wordText.value
+    suggestion: wordSuggestion.value
   })
   fetchData('suggest-word', 'post', data, 'application/json')
     .then((res) => {
       if (res.status === 200) {
-        // Report success to user
+        // TODO: report success to user
       } else {
-        // Report failure to user
+        // TODO: report failure to user
       }
       closeFunc()
     })
