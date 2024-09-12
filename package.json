@@ -32,7 +32,8 @@
     "vue": "^3.4.21",
     "vue-i18n": "^9.11.0",
     "vue-router": "^4.3.0",
-    "vue3-cookies": "^1.0.6"
+    "vue3-cookies": "^1.0.6",
+    "vue3-touch-events": "^4.2.0"
   },
   "devDependencies": {
     "@creativebulma/bulma-tooltip": "^1.2.0",
