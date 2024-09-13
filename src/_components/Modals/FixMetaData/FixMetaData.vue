@@ -63,7 +63,7 @@
           <FindAuthors
             v-model:author-list="authorList"
             v-model:exclude="metadataModal.value"
-            :multi-value="true"
+            :multi-value="false"
           />
         </div>
       </div>
@@ -92,24 +92,6 @@ const metadataModal: Ref = defineModel('metadataModal')
 const isLeftToRight = ref(false)
 const authorList: Ref = ref<Array<{ label: string; count: number }>>([])
 
-// const oldValue = ref(metadataModal.value.value)
-// const field = ref('')
-// const value = ref('')
-// const docRef = ref(metadataModal.value.docRef)
-// const vki_id = `${docRef}-${field}`
-
-// watch(metadataModal, (newVal) => {
-//   field.value = newVal.field
-//   // value.value = newVal.value
-//   // oldValue.value = metadataModal.value.value
-// })
-
-// watch(authorList, (newVal, oldVal) => {
-//   console.log(newVal, oldVal)
-// })
-
-// TODO: Is the url 'correct-metadata' correct?
-// Q: What does applyEverwhere do?
 const save = (closeFunc: Function) => {
   const data = JSON.stringify({
     docRef: metadataModal.value.docRef,

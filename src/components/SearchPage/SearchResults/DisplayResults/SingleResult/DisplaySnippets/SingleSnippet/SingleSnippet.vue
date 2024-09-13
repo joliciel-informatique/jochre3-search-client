@@ -62,7 +62,7 @@ Description: displays text snippets from the OCR text
                   </span>
                 </button>
               </div>
-              <span :hidden="imageIsLoading">{{ $t('results.show-image-snippet') }}</span>
+              <span :hidden="imageIsLoading">{{ $t('results.click-image-snippet') }}</span>
             </div>
 
             <!-- Show snippet image -->
