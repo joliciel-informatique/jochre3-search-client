@@ -6,20 +6,20 @@
     "query": "שרײַבט אַרײַן אַ זוכוואָרט",
     "search": "זוכן",
     "search-button": "זוכן",
-    "excludeAuthors": "YI__Checking this box will exclude selected authors from the query",
-    "related-word-forms": "זוכן פֿאַרבונדענע װערטער־פֿאָרמעס",
+    "excludeAuthors": "שטעלט אַ פֿײגעלע אױסצושליסן די אױסגעקליבענע מחברים פֿונעם דורכזוך",
+    "related-word-forms": "שטרענג",
+    "related-word-forms-tooltip": "שטעלט אַ פֿײגעלע אײסצושליסן פֿאַרבונדענע װערטער־פֿאָרמעס, למשל „שרײבן“, „שרײבט“, „געשריבן“",
     "what-are-facets": "YI__Select a facet to filter/narrow your search results",
-    "related-word-forms-tooltip": "YI__Checking this box will exclude related word forms (of the same stem/lemma) in search results (e.g. 'eat, 'eaten', 'ate')",
-    "keyboard": "YI__Open Yiddish on-screen keyboard",
+    "keyboard": "עפֿנט די ייִדישע קלאַװיאַטור",
     "advanced": "אַװאַנסירטער נאָכזוך",
     "field-instructions": "*די בלאַנקען נעמען אָן לאַטײנישע אָדער ייִדישע אותיות.",
     "author": "מחבר:",
-    "authorPlaceholder": "YI__Type author name (case-sensitive)",
+    "authorPlaceholder": "שרײַבט ארײַן דעם נאָמן פֿונעם מחבר",
     "title": "טיטל",
     "date-from": "אױסגאַבע פֿון יאָר:",
     "date-to": "ביז יאָר:",
     "document-reference": "אידענטיפֿיציר נומער:",
-    "document-reference-placeholder": "YI__Add document reference numbers separated by a comma",
+    "document-reference-placeholder": "שטרײַבט ארײַן אידענטיפֿיציר נומערס צעטײלט מיט קאָמעס",
     "sort-by": "סאָרטירן לױטן:",
     "reset": "אױסמעקן",
     "sort": {
@@ -40,7 +40,7 @@
     "document-reference": "אידענטיפֿיציר נומער: {0}",
     "result-count": "רעזולטאַטן געפֿונען אין {0} ביכער",
     "result-range": "(רעזולטאַטן {0} ביז {1})",
-    "result-current-tooltip": "YI__You are currently viewing this book and snippet",
+    "result-current-tooltip": "איצט קוקט איר אָן אָט דאָס בוך און פֿראַגמענט",
     "result-current-book": "{0}/{1}",
     "result-current-snippet": "{0}/{1}",
     "reset": "אױסמעקן",
@@ -50,10 +50,9 @@
     "word-fix-instructions": "(טוט אַ טאָפּלקװעטש אױף אַ װאָרט כּדי אױסצובעסערן דעם OCR אַנאַליז)"
   },
   "navigation": {
-    "back-tooltip": "YI__This button takes you back in your search history",
-    "forward-tooltip": "YI__This button takes you forward in your search history",
-    "clear-tooltip": "YI__This button will clear your search history",
-    "jump-to": "YI__Jump to"
+    "back-tooltip": "דאָס קנעפּל שיקט איר צוריק אין אײַער זוך־געשיכטע",
+    "forward-tooltip": "דאָס קנעפּל שיקט איר פֿאָראױס אין אײַער זוך־געשיכטע",
+    "clear-tooltip": "דאָס קנעפּל מעקט אָפּ אײַער זוך־געשיכטע"
   },
   "preferences": {
     "title": "דעם באַניצערס פּרעפֿערענצן",
@@ -63,18 +62,13 @@
   },
   "fix-word": {
     "title": "פֿאַרבעסערט אַ וואָרט",
-    "instructions": "YI__Please copy the above exactly below, including punctuation (niqqud, apostrophes, quotes, dashes etc.).",
-    "warning": "YI__Do not correct unclear text (e.g. text that is broken, partially visible and so on).",
+    "instructions": "שרײַבט איבער דאָס אױבנדיקע בילד אינעם אונטנדיקן בלאַנק פּונקט װי עס זעט אױס, מיט פּונקטואַציע, ניקוד, אאַז“װ",
+    "warning": "פֿאַרבעסערט ניט אַ װאָרט װאָס איז נאָר טײלװײַז זעיִק אונטן",
     "unauthenticated": "בכֿדי אױסצובעסערן אַ װאָרט, דאַרף מען ארײַנלאָגירן."
   },
   "fix-metadata": {
-    "title": "YI__Update metadata for \"{0}\"",
-    "instructions": {
-      "normal": "YI__Please suggest your correction below.",
-      "authorsNote": "YI__NOTE",
-      "authors": "YI__This individual may already be in our database under a different name.",
-      "authorsInstruction": "YI__You may submit alternative spellings for the same individual below."
-    },
+    "title": "פֿאַרבעסערט אַן אַטריבוט פֿאַר \"{0}\"",
+    "instructions": "שרײַבט ארײַן אײַער פֿירלײג אונטן.",
     "field": "אַטריבוט:",
     "current-value": "איצטיקער אינהאַלט:",
     "new-value": "נײַער אינהאַלט:",

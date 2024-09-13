@@ -1,3 +1,23 @@
+<template>
+  <main
+    :class="{
+      container: true,
+      hero: true,
+      'is-fullheight': true,
+      'rtl-align': !preferences.isLeftToRight,
+      yiddish: !preferences.isLeftToRight
+    }"
+  >
+    <!-- <Header />
+    <div :class="{ 'ltr-align': $i18n.locale === 'yi', english: $i18n.locale === 'yi' }">
+      <p v-if="responseCode == 200">Metadata correction {{ route.params.id }} undone.</p>
+      <p v-if="responseCode != 200">An error occurred.</p>
+      <p v-if="responseCode == 404">Metadata correction {{ route.params.id }} not found.</p>
+    </div>
+    <FooterDefault /> -->
+  </main>
+</template>
+
 <script setup lang="ts">
 import Header from '@/components/HeaderPage/HeaderPage.vue'
 
@@ -5,6 +25,9 @@ import { useKeycloakStore } from '@/stores/KeycloakStore'
 import axios from 'axios'
 import { inject, onMounted, ref } from 'vue'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const preferences = usePreferencesStore()
 
 const route = useRoute()
 const keycloak = useKeycloakStore().keycloak
@@ -48,18 +71,3 @@ async function undoCorrection(metadataCorrectionId: number): Promise<void> {
     })
 }
 </script>
-
-<template>
-  <main
-    class="container hero is-fullheight"
-    :class="{ 'rtl-align': $i18n.locale === 'yi', yiddish: $i18n.locale === 'yi' }"
-  >
-    <!-- <Header />
-    <div :class="{ 'ltr-align': $i18n.locale === 'yi', english: $i18n.locale === 'yi' }">
-      <p v-if="responseCode == 200">Metadata correction {{ route.params.id }} undone.</p>
-      <p v-if="responseCode != 200">An error occurred.</p>
-      <p v-if="responseCode == 404">Metadata correction {{ route.params.id }} not found.</p>
-    </div>
-    <FooterDefault /> -->
-  </main>
-</template>

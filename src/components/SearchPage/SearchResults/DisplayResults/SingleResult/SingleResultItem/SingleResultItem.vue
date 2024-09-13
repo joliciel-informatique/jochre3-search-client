@@ -11,7 +11,7 @@ Description: display single metadata item
 -->
 <template>
   <div class="has-text-left columns">
-    <span class="is-size-6 column is-one-quarter" :class="field === 'author' ? '' : ltr">
+    <span class="is-size-6 column is-one-quarter" :class="field === 'author' && preferences.needsLeftToRight ? 'ltr' : ''">
       <strong>{{ $t(title) }}</strong
       >:
     </span>
@@ -26,7 +26,9 @@ Description: display single metadata item
 
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { ltr } from '@/assets/appState'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const preferences = usePreferencesStore()
 
 const { field, value, docRef } = defineProps(['field', 'value', 'docRef'])
 
