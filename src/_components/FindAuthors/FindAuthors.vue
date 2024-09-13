@@ -14,58 +14,72 @@ NOTE:
 Description: presents a 'search for authors' text box and retrieves authors every key press.
 -->
 <template>
-  <div class="columns" v-show="searchAuthors">
-    <p class="column is-flex is-vcentered is-3">{{ $t('search.author') }}</p>
-    <span class="column field has-addons has-addons-left is-horizontal">
-      <div class="control dropdown is-active is-expanded">
-        <p class="control dropdown-trigger is-expanded">
-          <input
-            id="findAuthors"
-            class="input keyboardInput"
-            type="text"
-            :disabled="disabled"
-            :vki-id="uniqueId"
-            v-model="authorText"
-            @input="findAuthor"
-            autocomplete="one-time-code"
-            :placeholder="$t('search.authorPlaceholder')"
-          />
-        </p>
-        <div
-          class="dropdown-menu"
-          id="dropdown-menu"
-          role="menu"
-          v-if="authorDropdownItems.length > 0"
-        >
-          <div class="dropdown-content">
-            <a
-              v-for="author of authorDropdownItems"
-              :key="sha1(author)"
-              class="dropdown-item"
-              @click="addAuthor(author)"
-            >
-              {{ author.label }}
-            </a>
-          </div>
-        </div>
-        <p class="control">
-          <button
-            class="button is-clickable is-medium is-info keyboardInputButton"
-            :vki-id="uniqueId"
-            :alt="$t('search.keyboard')"
-            :title="$t('search.keyboard')"
+    <div class="columns" v-show="searchAuthors">
+      <p class="column is-flex is-vcentered is-3">{{ $t('search.author') }}</p>
+      <span class="column field has-addons has-addons-left is-horizontal">
+        <div class="control dropdown is-active is-expanded">
+          <p
+            class="control dropdown-trigger is-expanded"
+            :class="excludeCheckbox ? 'has-icons-left' : ''"
           >
-            <font-awesome-icon icon="keyboard" />
-          </button>
-        </p>
-      </div>
-    </span>
-  </div>
-  <div class="column flex is-flex is-flex-direction-row is-flex-wrap-wrap" v-if="authorList.length">
-    <div v-for="author of authorList" :key="sha1(author)">
-      <FilterTag :label="author.label" :count="author.count" :showCount="false" @func="delAuthor" />
+            <input
+              id="findAuthors"
+              class="input keyboardInput"
+              type="text"
+              :disabled="disabled"
+              :vki-id="uniqueId"
+              v-model="authorText"
+              @input="findAuthor"
+              autocomplete="one-time-code"
+              :placeholder="$t('search.authorPlaceholder')"
+            />
+            <p v-if="excludeCheckbox" class="control icon is-small is-left" v-tooltip:bottom.tooltip="$t('search.excludeAuthors')">
+              <input type="checkbox" :disabled="disabled" class="is-clickable" @click="excludeAuthors"/>
+            </p>
+          </p>
+          <div
+            class="dropdown-menu"
+            id="dropdown-menu"
+            role="menu"
+            v-if="authorDropdownItems.length > 0"
+          >
+            <div class="dropdown-content">
+              <a
+                v-for="author of authorDropdownItems"
+                :key="sha1(author)"
+                class="dropdown-item"
+                @click="addAuthor(author)"
+              >
+                {{ author.label }}
+              </a>
+            </div>
+          </div>
+          <p class="control">
+            <button
+              class="button is-clickable is-medium is-info keyboardInputButton"
+              :vki-id="uniqueId"
+              :alt="$t('search.keyboard')"
+              :title="$t('search.keyboard')"
+            >
+              <font-awesome-icon icon="keyboard" />
+            </button>
+          </p>
+        </div>
+      </span>
     </div>
-  </div>
+    <div
+    v-if="authorList.length"  
+    class="column flex is-flex is-flex-direction-row is-flex-wrap-wrap"
+    >
+      <div v-for="author of authorList" :key="sha1(author)">
+        <FilterTag
+          :label="author.label"
+          :count="author.count"
+          :showCount="false"
+          @func="delAuthor"
+        />
+      </div>
+    </div>
 </template>
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
@@ -74,11 +88,16 @@ import { fetchData } from '@/assets/fetchMethods'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import FilterTag from '@/_components/FilterTag/FilterTag.vue'
 
-const { multivalue, uniqueId } = defineProps(['multivalue', 'uniqueId'])
+const { multivalue, uniqueId, excludeCheckbox } = defineProps([
+  'multivalue',
+  'uniqueId',
+  'excludeCheckbox'
+])
 
 const disabled: Ref = defineModel('disabled')
 
 const exclude = defineModel('exclude', { default: '' })
+const excludeFromSearch = defineModel('excludeFromSearch')
 const authorList: Ref = defineModel('authorList')
 
 const authorDropdownItems = ref<Array<{ label: string; count: number }>>([])
@@ -100,6 +119,8 @@ const delAuthor = (value: { label: string }) => {
   )
 }
 
+const excludeAuthors = () => (excludeFromSearch.value = !excludeFromSearch.value)
+
 const findAuthor = () => {
   if (authorText.value.length > 0) {
     const params: URLSearchParams = new URLSearchParams({
@@ -110,7 +131,9 @@ const findAuthor = () => {
       response.json().then((result) => {
         authorDropdownItems.value = result.bins.filter(
           (author: { label: string; count: number }) =>
-            !authorList.value.map((author) => author.label).includes(author.label)
+            !authorList.value
+              .map((author: { label: string }) => author.label)
+              .includes(author.label)
         )
         // console.log(exclude.value)
         if (exclude.value) {

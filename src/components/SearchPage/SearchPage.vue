@@ -19,6 +19,7 @@
       v-model:doc-refs="docRefs"
       v-model:sort-by="sortBy"
       v-model:facets="facets"
+      v-model:exclude-from-search="excludeFromSearch"
     />
     <FacetBar
       @newSearch="newSearch"
@@ -60,14 +61,9 @@ const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
 
-// Import sub-components
-import SearchBar from './SearchBar/SearchBar.vue'
-import AdvancedSearch from './SearchBar/AdvancedSearch/AdvancedSearch.vue'
-import FacetBar from './SearchBar/FacetBar/FacetBar.vue'
-import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
-import type { SearchResult, AggregationBin } from '@/assets/interfacesExternals'
-import { hasSearch } from '@/assets/appState'
-import { setErrorMessage } from '@/_components/Modals/ErrorNotification/ErrorNotification.vue'
+const authorInclude = ref(false)
+const excludeFromSearch = ref(false)
+const authorList = ref<Array<{ label: string; count: number; active: boolean }>>([])
 
 // import { useStateStore } from '@/stores/StateStore'
 // import { storeToRefs } from 'pinia'
@@ -79,7 +75,7 @@ const route = useRoute()
 const showAdvancedSearchPanel = ref(false)
 const facets = ref<Array<AggregationBin>>([])
 // Hack: clear the authorList in case facets are selected
-// TODO: rethink structure of facets vs. authorList?
+// TODO: rethink structure of facets vs. authorList
 watch(facets, () => {
   const activeFacets = facets.value.filter((facet) => (facet.active ? true : null)).length
   if (activeFacets) {
@@ -92,7 +88,8 @@ onMounted(() => {
     if (route.query['query']) query.value = (route.query['query'] as string).trim()
     if (route.query['strict']) relatedWordForms.value = route.query['strict'] !== 'true'
     if (route.query['page']) page.value = Number(route.query['page'])
-    if (route.query['authorInclude']) authorInclude.value = true
+    if (route.query['authorInclude'])
+      authorInclude.value = route.query['authorInclude'] as unknown as boolean
     if (route.query['title']) title.value = (route.query['title'] as string).trim()
     if (route.query['from-year'])
       fromYear.value = Number((route.query['from-year'] as string).trim())
@@ -154,7 +151,8 @@ const defineSearchParams = () => {
     {},
     query.value?.length ? { query: query.value.trim() } : null,
     strict.value.toString() !== null ? { strict: strict.value.toString() } : null,
-    authorInclude.value ? { 'author-include': authorInclude.value } : null,
+    authors.value.length ? { 'author-include': authorInclude.value } : null,
+    // authorInclude.value ? { 'author-include': authorInclude.value } : null,
     page.value ? (page.value > 0 ? { page: page.value?.toString() } : null) : null,
     title.value.trim().length > 0 ? { title: title.value.trim() } : null,
     toYear.value != null && toYear.value > 0 ? { 'to-year': toYear.value.toString() } : null,
@@ -205,6 +203,11 @@ const setShowAdvancedSearchPanel = () => {
   showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value
 }
 
+watch(excludeFromSearch, () => {
+  console.log(excludeFromSearch.value)
+  authorInclude.value = !excludeFromSearch.value
+})
+
 const search = async (facet: string | undefined = undefined) => {
   isLoading.value = true
 
@@ -218,7 +221,7 @@ const search = async (facet: string | undefined = undefined) => {
       }
       return currentFacet
     })
-    authorInclude.value = authorList.value.length ? true : false
+    authorInclude.value = facets.value.length ? true : false
   }
 
   hasSearch.value =
@@ -238,6 +241,11 @@ const search = async (facet: string | undefined = undefined) => {
     facets.value.forEach((facet) => (facet.active ? params.append('authors', facet.label) : null))
   if (docRefs.value)
     docRefs.value.split(/\W+/).forEach((docRef) => params.append('doc-refs', docRef))
+
+  if (authorList.value) {
+    authorList.value.forEach((author) => params.append('authors', author.label))
+  }
+
   params.append(
     'first',
     page.value ? ((page.value - 1) * preferences.resultsPerPage).toString() : '10'

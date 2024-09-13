@@ -30,8 +30,10 @@ Description: the advanced search toolbox
             <FindAuthors
               v-model:authorList="authorList"
               v-model:disabled="disabled"
+              v-model:exclude-from-search="excludeFromSearch"
               :label="$t('search.author')"
               :multivalue="true"
+              :excludeCheckbox="true"
               unique-id="advanced-search-find-authors"
             />
           </span>
@@ -139,6 +141,7 @@ const toYear = defineModel('toYear')
 const docRefs = defineModel('docRefs')
 const sortBy = defineModel('sortBy')
 const facets: Ref = defineModel('facets')
+const excludeFromSearch = defineModel('excludeFromSearch')
 const disabled = computed(
   () => facets.value.filter((facet: { active: string }) => (facet.active ? facet : null)).length
 )
