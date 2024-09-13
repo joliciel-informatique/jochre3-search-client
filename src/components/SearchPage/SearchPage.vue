@@ -48,7 +48,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, computed, defineExpose, type Ref } from 'vue'
+import { onMounted, ref, computed, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchData, preferences } from '@/assets/fetchMethods'
 
@@ -77,6 +77,7 @@ const router = useRouter()
 const route = useRoute()
 
 const showAdvancedSearchPanel = ref(false)
+const facets = ref<Array<AggregationBin>>([])
 // Hack: clear the authorList in case facets are selected
 // TODO: rethink structure of facets vs. authorList?
 watch(facets, () => {
@@ -164,7 +165,7 @@ const defineSearchParams = () => {
 const authorInclude = ref(false)
 const authors = ref<Array<string>>([])
 const authorList = ref<Array<{ label: string; count: number; active: boolean }>>([])
-const facets = ref<Array<AggregationBin>>([])
+
 const relatedWordForms = ref(false)
 const isLoading = ref(false)
 
