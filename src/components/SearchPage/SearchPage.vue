@@ -31,13 +31,6 @@
   <div
     class="container is-max-desktop is-flex-direction-column is-align-items-center has-text-centered p-5"
   >
-    <!-- <IndexSize
-      v-model:search-results="searchResults"
-      v-model:query="query"
-      v-model:is-loading="isLoading"
-      v-model:has-search="hasSearch"
-      v-model:facets="facets"
-    /> -->
     <DisplayResults
       v-model:is-loading="isLoading"
       v-model:image-modal="imageModal"
@@ -53,6 +46,18 @@ import { onMounted, ref, computed, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchData, preferences } from '@/assets/fetchMethods'
 
+// Import Child components
+import SearchBar from './SearchBar/SearchBar.vue'
+import AdvancedSearch from './SearchBar/AdvancedSearch/AdvancedSearch.vue'
+import FacetBar from './SearchBar/FacetBar/FacetBar.vue'
+import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
+
+// Import interfaces
+import type { SearchResult, AggregationBin } from '@/assets/interfacesExternals'
+
+import { hasSearch } from '@/assets/appState'
+// import { setErrorMessage } from '@/_components/Modals/ErrorNotification/ErrorNotification.vue'
+
 const query = ref('')
 const searchResults: Ref = defineModel('searchResults')
 const totalHits: Ref = defineModel('totalHits')
@@ -63,7 +68,22 @@ const metadataModal: Ref = defineModel('metadataModal')
 
 const authorInclude = ref(false)
 const excludeFromSearch = ref(false)
+const authors = ref<Array<string>>([])
 const authorList = ref<Array<{ label: string; count: number; active: boolean }>>([])
+
+const relatedWordForms = ref(false)
+const isLoading = ref(false)
+
+// const stateStore = useStateStore()
+// const { isLoading } = storeToRefs(stateStore)
+// const { notLoading, loading } = stateStore
+
+const title = ref('')
+const fromYear = ref(0)
+const toYear = ref(0)
+const docRefs = ref('')
+const sortBy = ref('Score')
+const strict = computed(() => !relatedWordForms.value)
 
 // import { useStateStore } from '@/stores/StateStore'
 // import { storeToRefs } from 'pinia'
@@ -160,24 +180,6 @@ const defineSearchParams = () => {
   )
 }
 
-const authorInclude = ref(false)
-const authors = ref<Array<string>>([])
-const authorList = ref<Array<{ label: string; count: number; active: boolean }>>([])
-
-const relatedWordForms = ref(false)
-const isLoading = ref(false)
-
-// const stateStore = useStateStore()
-// const { isLoading } = storeToRefs(stateStore)
-// const { notLoading, loading } = stateStore
-
-const title = ref('')
-const fromYear = ref(0)
-const toYear = ref(0)
-const docRefs = ref('')
-const sortBy = ref('Score')
-const strict = computed(() => !relatedWordForms.value)
-
 const resetSearchResults = () => {
   query.value = ''
   isLoading.value = false
@@ -236,7 +238,7 @@ const search = async (facet: string | undefined = undefined) => {
   const params = new URLSearchParams(defineSearchParams())
   const facetParams = new URLSearchParams({ ...Object.fromEntries(params) })
 
-  authorInclude.value = false
+  // authorInclude.value = true
   if (facets.value)
     facets.value.forEach((facet) => (facet.active ? params.append('authors', facet.label) : null))
   if (docRefs.value)
@@ -274,7 +276,6 @@ const search = async (facet: string | undefined = undefined) => {
           .filter((author: string) => author)
         hasSearch.value = true
         isLoading.value = false
-        console.log(results)
         searchResults.value = results
         totalHits.value = totalCount
         if (authors.value.length > 0) {
@@ -293,8 +294,6 @@ const search = async (facet: string | undefined = undefined) => {
                     : { ...facet, active: false }
                 )
 
-                console.log(result.bins)
-
                 showAdvancedSearchPanel.value = false
                 q?.parentElement?.classList.remove('is-loading')
                 q?.removeAttribute('disabled')
@@ -311,7 +310,7 @@ const search = async (facet: string | undefined = undefined) => {
       })
     )
     .catch((error) => {
-      setErrorMessage(new Error(`Could not reach the search endpoint: ${error.message}`))
+      // Pass error to ErrorNotification dialog _component through HomeView
       isLoading.value = false
       hasSearch.value = true
       q?.parentElement?.classList.remove('is-loading')

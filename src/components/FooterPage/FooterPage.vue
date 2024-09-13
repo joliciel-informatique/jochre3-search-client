@@ -19,12 +19,10 @@
 import { onMounted } from 'vue'
 import FooterDefault from './FooterDefault/FooterDefault.vue'
 import FooterNavigation from './FooterNavigation/FooterNavigation.vue'
-import { hasSearch } from '@/assets/appState'
 
 const totalHits = defineModel('totalHits')
 const page = defineModel('page')
 const showFooterNavigation = defineModel('showing')
-console.log(hasSearch.value, showFooterNavigation.value, totalHits.value)
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 
 /** Autohide footerbar upon scrolling */
@@ -32,12 +30,7 @@ const bottomVisible = () =>
   document.documentElement.clientHeight + window.scrollY >=
   (document.documentElement.scrollHeight || document.documentElement.clientHeight)
 
-const autoHide = () => {
-  console.log(bottomVisible())
-  showFooterNavigation.value = !bottomVisible() ? true : false
-}
+const autoHide = () => (showFooterNavigation.value = !bottomVisible() ? true : false)
 
-onMounted(() => {
-  window.addEventListener('scroll', autoHide)
-})
+onMounted(() => window.addEventListener('scroll', autoHide))
 </script>
