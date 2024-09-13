@@ -61,7 +61,12 @@ Description: presents a 'search for authors' text box and retrieves authors ever
   </div>
   <div class="column flex is-flex is-flex-direction-row is-flex-wrap-wrap" v-if="authorList.length">
     <div v-for="author of authorList" :key="sha1(author)">
-      <FilterTag :label="author.label" :count="author.count" :showCount="false" @func="delAuthor" />
+      <FilterTag
+        :label="author.label"
+        :count="author.count"
+        :show-count="false"
+        @func="delAuthor"
+      />
     </div>
   </div>
 </template>
@@ -72,7 +77,7 @@ import { fetchData } from '@/assets/fetchMethods'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import FilterTag from '@/_components/FilterTag/FilterTag.vue'
 
-const { multivalue } = defineProps(['multivalue'])
+const { multiValue } = defineProps(['multiValue'])
 
 const exclude = defineModel('exclude', { default: '' })
 const authorList = defineModel<Array<{ label: string; count: number }>>('authorList', {
@@ -84,7 +89,7 @@ const authorText = ref<string>('')
 const searchAuthors = ref<boolean>(true)
 
 const addAuthor = (author: { label: string; count: number }) => {
-  if (!multivalue) {
+  if (!multiValue) {
     authorList.value.length = 0
   }
   authorList.value.push(author)
