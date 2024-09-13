@@ -41,12 +41,13 @@
           </button>
         </p>
       </div>
-      <div class="field has-addons" v-if="showFindAuthorDropdown">
+      <div class="field has-addons" v-show="showFindAuthorDropdown">
         <FindAuthors
           v-model:authorList="authorList"
           v-model:exclude="value"
           :label="$t('fix-metadata.or-merge-with')"
           :multivalue="false"
+          unique-id="fix-metadata-find-authors"
         />
       </div>
     </template>

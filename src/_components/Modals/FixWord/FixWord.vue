@@ -12,7 +12,27 @@
           <img :src="wordImage" />
         </div>
         <div class="p-2 field has-addons">
-          <input class="input keyboardInput" type="text" lang="yi" v-model="wordSuggestion" />
+          <span class="column field has-addons has-addons-left is-horizontal">
+            <p class="control is-expanded">
+              <input
+                class="input keyboardInput"
+                type="text"
+                lang="yi"
+                v-model="wordSuggestion"
+                vki-id="fixWord"
+              />
+            </p>
+            <p class="control">
+              <button
+                class="button is-clickable is-medium is-info keyboardInputButton"
+                vki-id="fixWord"
+                :alt="$t('search.keyboard')"
+                :title="$t('search.keyboard')"
+              >
+                <font-awesome-icon icon="keyboard" />
+              </button>
+            </p>
+          </span>
         </div>
         <div class="p-2 has-text-info">{{ $t('fix-word.instructions') }}</div>
         <div class="p-2 has-text-warning">{{ $t('fix-word.warning') }}</div>
@@ -33,6 +53,7 @@
 <script setup lang="ts">
 import { onBeforeUpdate, ref, type Ref } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 
 const wordImage = ref('')
