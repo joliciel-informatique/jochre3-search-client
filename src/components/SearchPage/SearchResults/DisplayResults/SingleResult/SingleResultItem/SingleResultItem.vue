@@ -10,12 +10,15 @@ Methods: fixMetaData (imported)
 Description: display single metadata item
 -->
 <template>
-  <div class="has-text-left">
-    <span class="is-size-6" :class="field === 'author' ? '' : ltr">
+  <div class="has-text-left columns">
+    <span class="is-size-6 column is-one-quarter" :class="field === 'author' ? '' : ltr">
       <strong>{{ $t(title) }}</strong
       >:
+    </span>
+    <span class="column">
       {{ value }}
     </span>
+
     <button @click="openMetadataModal" class="button is-small is-white is-pulled-right">
       <span class="icon is-small fa-2xs">
         <font-awesome-icon icon="pen-to-square" />
