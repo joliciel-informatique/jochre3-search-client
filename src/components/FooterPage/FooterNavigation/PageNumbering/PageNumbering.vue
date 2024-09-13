@@ -19,16 +19,14 @@ Description: calculates and presents page numbers
     <div>
       <ul class="pagination-list">
         <li v-if="page - 1 > 1">
-          <a @click="goToPage(1)" class="pagination-link is-small m-1" aria-label="Goto page 1"
-            >1</a
-          >
+          <a @click="page = 1" class="pagination-link is-small m-1" aria-label="Goto page 1">1</a>
         </li>
         <li v-if="page - 1 > 2">
           <span class="pagination-ellipsis">&hellip;</span>
         </li>
         <li v-if="page > 1">
           <a
-            @click="goToPage(page - 1)"
+            @click="page--"
             class="pagination-link is-small m-1"
             :aria-label="`Goto page ${page - 1}`"
             >{{ page - 1 }}</a
@@ -44,7 +42,7 @@ Description: calculates and presents page numbers
         </li>
         <li v-if="page < lastPage">
           <a
-            @click="goToPage(page + 1)"
+            @click="page++"
             class="pagination-link is-small m-1"
             :aria-label="`Goto page ${page + 1}`"
             >{{ page + 1 }}</a
@@ -55,7 +53,7 @@ Description: calculates and presents page numbers
         </li>
         <li v-if="page + 1 < lastPage">
           <a
-            @click="goToPage(lastPage)"
+            @click="page = lastPage"
             class="pagination-link is-small m-1"
             :aria-label="`Goto page ${lastPage}`"
             >{{ lastPage }}</a
@@ -64,18 +62,10 @@ Description: calculates and presents page numbers
       </ul>
     </div>
     <div>
-      <button
-        @click="goToPage(page - 1)"
-        :disabled="page - 1 < 1"
-        class="pagination-previous is-small m-1"
-      >
+      <button @click="page--" :disabled="page - 1 < 1" class="pagination-previous is-small m-1">
         {{ $t('pagination.previous') }}
       </button>
-      <button
-        @click="goToPage(page + 1)"
-        :disabled="page >= lastPage"
-        class="pagination-next is-small m-1"
-      >
+      <button @click="page++" :disabled="page >= lastPage" class="pagination-next is-small m-1">
         {{ $t('pagination.next') }}
       </button>
       <button @click="toTop" class="pagination-previous is-small m-1">To top</button>
@@ -89,7 +79,7 @@ Description: calculates and presents page numbers
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUpdated, ref, type Ref } from 'vue'
+import { computed, onMounted, onUpdated, ref, watch, type Ref } from 'vue'
 import { preferences } from '@/assets/fetchMethods'
 import { isBusy, hasSearch } from '@/assets/appState'
 import { isInView } from '@/assets/functions'
@@ -104,6 +94,11 @@ const goToPage = (newPage: number) => {
   emit('newSearch')
 }
 
+watch(page, (newVal) => {
+  onScreenBook.value = (newVal - 1) * preferences.resultsPerPage + 1
+  emit('newSearch')
+})
+
 const lastPage = computed(() => Math.floor((totalHits.value - 1) / preferences.resultsPerPage) + 1)
 const first = computed(() => (page.value - 1) * preferences.resultsPerPage + 1)
 
@@ -111,19 +106,8 @@ const onScreenBook = ref((page.value - 1) * preferences.resultsPerPage + 1)
 const onScreenSnippet = ref(1)
 const onScreenTotalSnippets = ref(1)
 
-const toTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  })
-}
-
-const toBottom = () => {
-  window.scrollTo({
-    top: document.body.scrollHeight,
-    behavior: 'smooth'
-  })
-}
+const toTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
+const toBottom = () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
 
 const lastResult = computed(() => {
   const last = page.value * preferences.resultsPerPage
