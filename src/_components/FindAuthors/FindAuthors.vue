@@ -23,6 +23,7 @@ Description: presents a 'search for authors' text box and retrieves authors ever
             id="findAuthors"
             class="input keyboardInput"
             type="text"
+            :disabled="disabled"
             :vki-id="uniqueId"
             v-model="authorText"
             @input="findAuthor"
@@ -67,7 +68,7 @@ Description: presents a 'search for authors' text box and retrieves authors ever
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import { sha1 } from 'object-hash'
 import { fetchData } from '@/assets/fetchMethods'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -75,10 +76,10 @@ import FilterTag from '@/_components/FilterTag/FilterTag.vue'
 
 const { multivalue, uniqueId } = defineProps(['multivalue', 'uniqueId'])
 
+const disabled: Ref = defineModel('disabled')
+
 const exclude = defineModel('exclude', { default: '' })
-const authorList = defineModel<Array<{ label: string; count: number }>>('authorList', {
-  default: []
-})
+const authorList: Ref = defineModel('authorList')
 
 const authorDropdownItems = ref<Array<{ label: string; count: number }>>([])
 const authorText = ref<string>('')

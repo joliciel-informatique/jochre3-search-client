@@ -18,6 +18,7 @@
       v-model:from-year="fromYear"
       v-model:doc-refs="docRefs"
       v-model:sort-by="sortBy"
+      v-model:facets="facets"
     />
     <FacetBar
       @newSearch="newSearch"
@@ -76,6 +77,14 @@ const router = useRouter()
 const route = useRoute()
 
 const showAdvancedSearchPanel = ref(false)
+// Hack: clear the authorList in case facets are selected
+// TODO: rethink structure of facets vs. authorList?
+watch(facets, () => {
+  const activeFacets = facets.value.filter((facet) => (facet.active ? true : null)).length
+  if (activeFacets) {
+    authorList.value = []
+  }
+})
 
 onMounted(() => {
   router.isReady().then(() => {
