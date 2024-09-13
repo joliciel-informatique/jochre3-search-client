@@ -65,7 +65,12 @@
   },
   "fix-metadata": {
     "title": "YI__Update metadata for \"{0}\"",
-    "instructions": "YI__Please present your suggested correction below.",
+    "instructions": {
+      "normal": "YI__Please suggest your correction below.",
+      "authorsNote": "YI__NOTE",
+      "authors": "YI__This individual may already be in our database under a different name.",
+      "authorsInstruction": "YI__You may submit alternative spellings for the same individual below."
+    },
     "field": "אַטריבוט:",
     "current-value": "איצטיקער אינהאַלט:",
     "new-value": "נײַער אינהאַלט:",

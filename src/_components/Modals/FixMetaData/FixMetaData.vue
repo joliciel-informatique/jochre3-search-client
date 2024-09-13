@@ -9,7 +9,9 @@
       <div v-if="!authenticated" class="is-italic has-text-weight-bold has-text-danger">
         {{ $t('fix-metadata.unauthenticated') }}
       </div>
-      <label class="label">{{ $t('fix-metadata.instructions') }}</label>
+
+      <div class="p-2 has-text-info">{{ $t('fix-metadata.instructions.normal') }}</div>
+
       <div class="pb-0 mb-0 field has-addons">
         <p class="control">
           <a class="button is-static level-item">{{ $t(`fix-metadata.field-type.${field}`) }}</a>
@@ -41,13 +43,28 @@
           </button>
         </p>
       </div>
-      <div class="field has-addons" v-if="showFindAuthorDropdown">
-        <FindAuthors
-          v-model:authorList="authorList"
-          v-model:exclude="value"
-          :label="$t('fix-metadata.or-merge-with')"
-          :multivalue="false"
-        />
+      <div v-if="showFindAuthorDropdown">
+        <div class="columns mt-3">
+          <div class="column is-one-fifth p-2 has-text-warning has-text-weight-semibold">
+            {{ $t('fix-metadata.instructions.authorsNote') }}
+          </div>
+          <div
+            class="column is-flex is-flex-direction-column p-2 has-text-warning has-text-weight-medium"
+          >
+            {{ $t('fix-metadata.instructions.authors') }}
+          </div>
+        </div>
+        <div class="p-2 has-text-info">
+          {{ $t('fix-metadata.instructions.authorsInstruction') }}
+        </div>
+        <div class="pb-0 mb-0 field has-addon">
+          <FindAuthors
+            v-model:authorList="authorList"
+            v-model:exclude="value"
+            :label="$t('fix-metadata.or-merge-with')"
+            :multivalue="false"
+          />
+        </div>
       </div>
     </template>
     <template #footer="modalBox">

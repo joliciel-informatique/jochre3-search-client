@@ -65,7 +65,12 @@
   },
   "fix-metadata": {
     "title": "Update metadata for \"{0}\"",
-    "instructions": "Please present your suggested correction below.",
+    "instructions": {
+      "normal": "Please suggest your correction below.",
+      "authorsNote": "NOTE",
+      "authors": "This individual may already be in our database under a different name.",
+      "authorsInstruction": "You may submit alternative spellings for the same individual below."
+    },
     "field": "Field:",
     "current-value": "Current value:",
     "new-value": "Value:",

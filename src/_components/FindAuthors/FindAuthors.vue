@@ -15,7 +15,6 @@ Description: presents a 'search for authors' text box and retrieves authors ever
 -->
 <template>
   <div class="columns" v-if="searchAuthors">
-    <p class="column is-flex is-vcentered is-3">{{ $t('search.author') }}</p>
     <span class="column field has-addons has-addons-left is-horizontal">
       <div class="control dropdown is-active is-expanded">
         <p class="control dropdown-trigger is-expanded">

@@ -23007,6 +23007,11 @@ a:hover {
   z-index: 39;
 }
 
+.dropdown-content {
+  z-index: 1000;
+  position: fixed;
+}
+
 /*
   Fix for drop-down getting hidden by modal-card-foot
   From https://stackoverflow.com/a/75182245/1417558
