@@ -84,7 +84,6 @@ Description: displays text snippets from the OCR text
 
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { useRouter } from 'vue-router'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faFileImage,
