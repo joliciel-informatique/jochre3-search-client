@@ -96,24 +96,33 @@ const authorList: Ref = ref<Array<{ label: string; count: number }>>([])
 const includeAuthor = computed(() => metadataModal.value.field === 'author')
 const includeAuthorInTranscription = computed(() => metadataModal.value.field === 'authorEnglish')
 
-// TODO: Is the url 'correct-metadata' correct?
-// Q: What does applyEverwhere do?
 const save = (closeFunc: Function) => {
+  const authorListValue = authorList.value[0]?.label
+
+  const newValue = authorListValue ? authorListValue : metadataModal.value.value
+  const applyEverywhere = authorListValue ? true : false
+  const capitalizedField = capitalizeFirstLetter(metadataModal.value.field)
+
   const data = JSON.stringify({
     docRef: metadataModal.value.docRef,
-    field: metadataModal.value.field,
-    value: metadataModal.value.value,
-    applyEverywhere: false
+    field: capitalizedField,
+    value: newValue,
+    applyEverywhere: applyEverywhere
   })
+
   fetchData('correct-metadata', 'post', data, 'application/json')
     .then((res) => {
       if (res.status === 200) {
-        // Report success to user
+        // TODO: Report success to user
       } else {
-        // Report failure to user
+        // TODO: Report failure to user
       }
       closeFunc()
     })
     .catch(() => closeFunc())
+}
+
+const capitalizeFirstLetter = (string: String) => {
+  return string.charAt(0).toUpperCase() + string.slice(1)
 }
 </script>
