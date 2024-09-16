@@ -543,6 +543,11 @@ a:hover {
   z-index: 39;
 }
 
+.dropdown-content {
+  z-index: 1000;
+  position: fixed;
+}
+
 // .container {
 // position: sticky;
 // }

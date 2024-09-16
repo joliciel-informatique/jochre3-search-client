@@ -14,72 +14,72 @@ NOTE:
 Description: presents a 'search for authors' text box and retrieves authors every key press.
 -->
 <template>
-    <div class="columns" v-show="searchAuthors">
-      <p class="column is-flex is-vcentered is-3">{{ $t('search.author') }}</p>
-      <span class="column field has-addons has-addons-left is-horizontal">
-        <div class="control dropdown is-active is-expanded">
+  <div class="columns" v-show="searchAuthors">
+    <span class="column field has-addons has-addons-left is-horizontal">
+      <div class="control dropdown is-active is-expanded">
+        <div
+          class="control dropdown-trigger is-expanded"
+          :class="showExcludeCheckbox ? 'has-icons-left' : ''"
+        >
+          <input
+            id="findAuthors"
+            class="input keyboardInput"
+            type="text"
+            :disabled="disabled"
+            :vki-id="uniqueId"
+            v-model="authorText"
+            @input="findAuthor"
+            autocomplete="one-time-code"
+            :placeholder="$t('search.authorPlaceholder')"
+          />
           <p
-            class="control dropdown-trigger is-expanded"
-            :class="excludeCheckbox ? 'has-icons-left' : ''"
+            v-if="showExcludeCheckbox"
+            class="control icon is-small is-left"
+            v-tooltip:bottom.tooltip="$t('search.excludeAuthors')"
           >
             <input
-              id="findAuthors"
-              class="input keyboardInput"
-              type="text"
+              type="checkbox"
               :disabled="disabled"
-              :vki-id="uniqueId"
-              v-model="authorText"
-              @input="findAuthor"
-              autocomplete="one-time-code"
-              :placeholder="$t('search.authorPlaceholder')"
+              class="is-clickable"
+              @click="excludeAuthors"
             />
-            <p v-if="excludeCheckbox" class="control icon is-small is-left" v-tooltip:bottom.tooltip="$t('search.excludeAuthors')">
-              <input type="checkbox" :disabled="disabled" class="is-clickable" @click="excludeAuthors"/>
-            </p>
-          </p>
-          <div
-            class="dropdown-menu"
-            id="dropdown-menu"
-            role="menu"
-            v-if="authorDropdownItems.length > 0"
-          >
-            <div class="dropdown-content">
-              <a
-                v-for="author of authorDropdownItems"
-                :key="sha1(author)"
-                class="dropdown-item"
-                @click="addAuthor(author)"
-              >
-                {{ author.label }}
-              </a>
-            </div>
-          </div>
-          <p class="control">
-            <button
-              class="button is-clickable is-medium is-info keyboardInputButton"
-              :vki-id="uniqueId"
-              :alt="$t('search.keyboard')"
-              :title="$t('search.keyboard')"
-            >
-              <font-awesome-icon icon="keyboard" />
-            </button>
           </p>
         </div>
-      </span>
-    </div>
-    <div
-    v-if="authorList.length"  
-    class="column flex is-flex is-flex-direction-row is-flex-wrap-wrap"
-    >
-      <div v-for="author of authorList" :key="sha1(author)">
-        <FilterTag
-          :label="author.label"
-          :count="author.count"
-          :showCount="false"
-          @func="delAuthor"
-        />
+        <div
+          class="dropdown-menu"
+          id="dropdown-menu"
+          role="menu"
+          v-if="authorDropdownItems.length > 0"
+        >
+          <div class="dropdown-content">
+            <a
+              v-for="author of authorDropdownItems"
+              :key="sha1(author)"
+              class="dropdown-item"
+              @click="addAuthor(author)"
+            >
+              {{ author.label }}
+            </a>
+          </div>
+        </div>
+        <p class="control">
+          <button
+            class="button is-clickable is-medium is-info keyboardInputButton"
+            :vki-id="uniqueId"
+            :alt="$t('search.keyboard')"
+            :title="$t('search.keyboard')"
+          >
+            <font-awesome-icon icon="keyboard" />
+          </button>
+        </p>
       </div>
+    </span>
+  </div>
+  <div v-if="authorList.length" class="column flex is-flex is-flex-direction-row is-flex-wrap-wrap">
+    <div v-for="author of authorList" :key="sha1(author)">
+      <FilterTag :label="author.label" :count="author.count" :showCount="false" @func="delAuthor" />
     </div>
+  </div>
 </template>
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
@@ -88,13 +88,17 @@ import { fetchData } from '@/assets/fetchMethods'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import FilterTag from '@/_components/FilterTag/FilterTag.vue'
 
-const { multivalue, uniqueId, excludeCheckbox } = defineProps([
-  'multivalue',
+const { multiValue, uniqueId, showExcludeCheckbox } = defineProps([
+  'multiValue',
   'uniqueId',
-  'excludeCheckbox'
+  'showExcludeCheckbox'
 ])
 
 const disabled: Ref = defineModel('disabled')
+const includeAuthor: Ref = defineModel('includeAuthor', { default: true })
+const includeAuthorInTranscription: Ref = defineModel('includeAuthorInTranscription', {
+  default: true
+})
 
 const exclude = defineModel('exclude', { default: '' })
 const excludeFromSearch = defineModel('excludeFromSearch')
@@ -105,7 +109,7 @@ const authorText = ref<string>('')
 const searchAuthors = ref<boolean>(true)
 
 const addAuthor = (author: { label: string; count: number }) => {
-  if (!multivalue) {
+  if (!multiValue) {
     authorList.value.length = 0
   }
   authorList.value.push(author)
@@ -125,7 +129,9 @@ const findAuthor = () => {
   if (authorText.value.length > 0) {
     const params: URLSearchParams = new URLSearchParams({
       prefix: authorText.value,
-      maxBins: '10'
+      maxBins: '10',
+      includeAuthor: includeAuthor.value,
+      includeAuthorInTranscription: includeAuthorInTranscription.value
     })
     fetchData('authors', 'get', params).then((response) =>
       response.json().then((result) => {

@@ -29,13 +29,14 @@
     }
   },
   "results": {
-    "show-image-snippet": "ווײַזן דעם פֿראַגמענט פֿון זײַטל",
-    "alternate-title": "טיטל אין טראַנסקריפציע:",
-    "volume": "באַנד:",
-    "author": "מחבר:",
-    "alternate-author": "מחבר אין טראַנסקריפציע:",
-    "publisher": "פֿאַרלאַג:",
-    "publication-year": "יאָר:",
+    "click-image-snippet": "גיט אַ קװעטש צו װײַזן דעם פֿראַגמענט פֿון זײַטל",
+    "tap-image-snippet": "גיט אַ טאַפּ צו װײַזן דעם פֿראַגמענט פֿון זײַטל",
+    "alternate-title": "טיטל אין טראַנסקריפציע",
+    "volume": "באַנד",
+    "author": "מחבר",
+    "alternate-author": "מחבר אין טראַנסקריפציע",
+    "publisher": "פֿאַרלאַג",
+    "publication-year": "יאָר",
     "document-reference": "אידענטיפֿיציר נומער: {0}",
     "result-count": "רעזולטאַטן געפֿונען אין {0} ביכער",
     "result-range": "(רעזולטאַטן {0} ביז {1})",
@@ -67,7 +68,12 @@
   },
   "fix-metadata": {
     "title": "YI__Update metadata for \"{0}\"",
-    "instructions": "YI__Please present your suggested correction below.",
+    "instructions": {
+      "normal": "YI__Please suggest your correction below.",
+      "authorsNote": "YI__NOTE",
+      "authors": "YI__This individual may already be in our database under a different name.",
+      "authorsInstruction": "YI__You may submit alternative spellings for the same individual below."
+    },
     "field": "אַטריבוט:",
     "current-value": "איצטיקער אינהאַלט:",
     "new-value": "נײַער אינהאַלט:",
