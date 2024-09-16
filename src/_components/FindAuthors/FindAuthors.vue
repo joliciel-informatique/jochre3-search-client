@@ -95,6 +95,10 @@ const { multiValue, uniqueId, showExcludeCheckbox } = defineProps([
 ])
 
 const disabled: Ref = defineModel('disabled')
+const includeAuthor: Ref = defineModel('includeAuthor', { default: true })
+const includeAuthorInTranscription: Ref = defineModel('includeAuthorInTranscription', {
+  default: true
+})
 
 const exclude = defineModel('exclude', { default: '' })
 const excludeFromSearch = defineModel('excludeFromSearch')
@@ -125,7 +129,9 @@ const findAuthor = () => {
   if (authorText.value.length > 0) {
     const params: URLSearchParams = new URLSearchParams({
       prefix: authorText.value,
-      maxBins: '10'
+      maxBins: '10',
+      includeAuthor: includeAuthor.value,
+      includeAuthorInTranscription: includeAuthorInTranscription.value
     })
     fetchData('authors', 'get', params).then((response) =>
       response.json().then((result) => {

@@ -63,6 +63,8 @@
             v-model:exclude="metadataModal.value"
             :multi-value="false"
             :show-exclude-checkbox="false"
+            v-model:include-author="includeAuthor"
+            v-model:include-author-in-transcription="includeAuthorInTranscription"
             unique-id="fix-metadata-find-authors"
           />
         </div>
@@ -91,6 +93,8 @@ const metadataModal: Ref = defineModel('metadataModal')
 const showFindAuthorDropdown = computed(() => metadataModal.value.field?.includes('author'))
 const isLeftToRight = ref(false)
 const authorList: Ref = ref<Array<{ label: string; count: number }>>([])
+const includeAuthor = computed(() => metadataModal.value.field === 'author')
+const includeAuthorInTranscription = computed(() => metadataModal.value.field === 'authorEnglish')
 
 // TODO: Is the url 'correct-metadata' correct?
 // Q: What does applyEverwhere do?
