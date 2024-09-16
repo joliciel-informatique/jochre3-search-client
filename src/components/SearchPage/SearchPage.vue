@@ -164,8 +164,8 @@ const isLoading = ref(false)
 // const { notLoading, loading } = stateStore
 
 const title = ref('')
-const fromYear = ref(0)
-const toYear = ref(0)
+const fromYear = ref()
+const toYear = ref()
 const docRefs = ref('')
 const sortBy = ref('Score')
 const strict = computed(() => !relatedWordForms.value)
