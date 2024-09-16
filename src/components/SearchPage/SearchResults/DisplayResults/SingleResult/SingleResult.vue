@@ -19,13 +19,7 @@ Description: presents OCR record metadata
               result.metadata.title ?? result.docRef
             }}</a>
             <button
-              @click="
-                emit('openMetadataModal', {
-                  docRef: result.docRef,
-                  field: 'title',
-                  value: result.metadata.title ?? result.docRef
-                })
-              "
+              @click="openMetadataModalForTitle"
               class="button is-small is-white is-pulled-right"
             >
               <span class="icon is-small fa-2xs">
@@ -48,27 +42,6 @@ Description: presents OCR record metadata
               :value="result.metadata[field]"
             />
           </div>
-          <!-- <SingleResultItem
-            :docRef="result.docRef"
-            field="titleEnglish"
-            :value="result.metadata.titleEnglish"
-            />
-            <SingleResultItem :docRef="result.docRef" field="author" :value="result.metadata.author" />
-            <SingleResultItem
-            :docRef="result.docRef"
-            field="authorEnglish"
-            :value="result.metadata.authorEnglish"
-            />
-            <SingleResultItem
-            :docRef="result.docRef"
-            field="publicationYear"
-            :value="result.metadata.publicationYear"
-            />
-      <SingleResultItem
-        :docRef="result.docRef"
-        field="publisher"
-        :value="result.metadata.publisher"
-        /> -->
         </div>
       </template>
     </AccordionCard>
@@ -118,4 +91,13 @@ const autoHide = () => {
 onMounted(() => {
   window.addEventListener('scroll', autoHide)
 })
+
+const openMetadataModalForTitle = () => {
+  metadataModal.value = {
+    open: true,
+    docRef: result.docRef,
+    field: 'title',
+    value: result.metadata.title ?? result.docRef
+  }
+}
 </script>

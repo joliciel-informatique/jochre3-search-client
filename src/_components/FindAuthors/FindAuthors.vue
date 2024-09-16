@@ -19,7 +19,7 @@ Description: presents a 'search for authors' text box and retrieves authors ever
       <div class="control dropdown is-active is-expanded">
         <div
           class="control dropdown-trigger is-expanded"
-          :class="excludeCheckbox ? 'has-icons-left' : ''"
+          :class="showExcludeCheckbox ? 'has-icons-left' : ''"
         >
           <input
             id="findAuthors"
@@ -33,7 +33,7 @@ Description: presents a 'search for authors' text box and retrieves authors ever
             :placeholder="$t('search.authorPlaceholder')"
           />
           <p
-            v-if="excludeCheckbox"
+            v-if="showExcludeCheckbox"
             class="control icon is-small is-left"
             v-tooltip:bottom.tooltip="$t('search.excludeAuthors')"
           >
@@ -88,10 +88,10 @@ import { fetchData } from '@/assets/fetchMethods'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import FilterTag from '@/_components/FilterTag/FilterTag.vue'
 
-const { multivalue, uniqueId, excludeCheckbox } = defineProps([
-  'multivalue',
+const { multiValue, uniqueId, showExcludeCheckbox } = defineProps([
+  'multiValue',
   'uniqueId',
-  'excludeCheckbox'
+  'showExcludeCheckbox'
 ])
 
 const disabled: Ref = defineModel('disabled')
@@ -105,7 +105,7 @@ const authorText = ref<string>('')
 const searchAuthors = ref<boolean>(true)
 
 const addAuthor = (author: { label: string; count: number }) => {
-  if (!multivalue) {
+  if (!multiValue) {
     authorList.value.length = 0
   }
   authorList.value.push(author)

@@ -34,8 +34,8 @@ Description: the advanced search toolbox
                 v-model:disabled="disabled"
                 v-model:exclude-from-search="excludeFromSearch"
                 :label="$t('search.author')"
-                :multivalue="true"
-                :excludeCheckbox="true"
+                :multi-value="true"
+                :show-exclude-checkbox="true"
                 unique-id="advanced-search-find-authors"
               />
             </span>
