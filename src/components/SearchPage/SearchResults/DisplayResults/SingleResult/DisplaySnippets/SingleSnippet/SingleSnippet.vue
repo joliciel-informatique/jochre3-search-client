@@ -39,7 +39,7 @@ Description: displays text snippets from the OCR text
       <button
         v-tooltip:bottom="$t('results.show-text')"
         class="card-header-icon is-large has-text-info p-1 m-1"
-        @click="router.push(`/text/${docRef}/page/${snippet.page}`)"
+        @click="openDeepLink(`/text/${docRef}/page/${snippet.page}`)"
       >
         <span class="icon">
           <font-awesome-icon icon="file-lines" size="lg" />
@@ -84,7 +84,6 @@ Description: displays text snippets from the OCR text
 
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { useRouter } from 'vue-router'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faFileImage,
@@ -97,7 +96,6 @@ import { ref, type Ref } from 'vue'
 library.add(faFileImage, faBookOpen, faFileLines, faAngleDown)
 
 const { index, snippet, docRef } = defineProps(['index', 'snippet', 'docRef'])
-const router = useRouter()
 const imageModal: Ref = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const image = ref('')
@@ -169,7 +167,5 @@ const openImageModal = () => {
   }
 }
 
-const openDeepLink = (url: string) => {
-  window.open(url, '_blank')
-}
+const openDeepLink = (url: string) => window.open(url, '_blank')
 </script>

@@ -52,7 +52,8 @@
   "navigation": {
     "back-tooltip": "This button takes you back in your search history",
     "forward-tooltip": "This button takes you forward in your search history",
-    "clear-tooltip": "This button will clear your search history"
+    "clear-tooltip": "This button will clear your search history",
+    "jump-to": "Jump to"
   },
   "preferences": {
     "title": "Update preferences",

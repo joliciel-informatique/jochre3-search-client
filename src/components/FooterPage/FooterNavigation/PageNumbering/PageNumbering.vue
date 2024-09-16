@@ -88,12 +88,6 @@ const emit = defineEmits(['newSearch'])
 const page: Ref = defineModel('page')
 const totalHits: Ref = defineModel('totalHits')
 
-const goToPage = (newPage: number) => {
-  page.value = newPage
-  onScreenBook.value = (newPage - 1) * preferences.resultsPerPage + 1
-  emit('newSearch')
-}
-
 watch(page, (newVal) => {
   onScreenBook.value = (newVal - 1) * preferences.resultsPerPage + 1
   emit('newSearch')

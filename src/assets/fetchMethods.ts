@@ -26,12 +26,12 @@ export const fetchData = async (
   params?: URLSearchParams | string,
   accept?: string,
   responseType?: string
-) => await fetch(makeRequest(url, params, method, accept, responseType))
+) => await fetch(makeRequest(url, method, params, accept, responseType))
 
 const makeRequest = (
   url?: string,
-  params?: URLSearchParams | string,
   method?: string,
+  params?: URLSearchParams | string,
   accept?: string,
   responseType?: string
 ) =>
