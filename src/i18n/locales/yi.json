@@ -51,7 +51,8 @@
   "navigation": {
     "back-tooltip": "YI__This button takes you back in your search history",
     "forward-tooltip": "YI__This button takes you forward in your search history",
-    "clear-tooltip": "YI__This button will clear your search history"
+    "clear-tooltip": "YI__This button will clear your search history",
+    "jump-to": "YI__Jump to"
   },
   "preferences": {
     "title": "דעם באַניצערס פּרעפֿערענצן",

@@ -1,16 +1,15 @@
-<script setup lang="ts">
-import TranscribedText from '../components/TranscribedText.vue'
-import Header from '@/components/HeaderPage/HeaderPage.vue'
-// import FooterDefault from '2/components/SearchPage/Footer/FooterDefault/FooterDefault.vue'
-</script>
-
 <template>
   <main
-    class="container hero is-fullheight"
+    class="hero is-widescreen"
     :class="{ 'rtl-align': $i18n.locale === 'yi', yiddish: $i18n.locale === 'yi' }"
   >
-    <Header />
+    <HeaderPage />
     <TranscribedText />
-    <!-- <FooterDefault /> -->
   </main>
+  <FooterPage />
 </template>
+<script setup lang="ts">
+import HeaderPage from '@/components/HeaderPage/HeaderPage.vue'
+import TranscribedText from '@/components/TranscribedText/TranscribedText.vue'
+import FooterPage from '@/components/FooterPage/FooterPage.vue'
+</script>

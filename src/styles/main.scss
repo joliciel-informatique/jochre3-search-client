@@ -537,6 +537,32 @@ a:hover {
   }
 }
 
+$menu-nested-list-margin: 1em;
+
+.transcribedText {
+  width: 100%;
+}
+
+.bookTitle {
+  display: block;
+  position: sticky;
+  top: 0;
+  background-color: white;
+}
+
+.table-of-contents {
+  display: block;
+  position: sticky;
+  top: 5vh;
+  left: 2vw;
+  height: 75vh;
+}
+
+.menu-list {
+  overflow-y: auto;
+  max-height: 62vh;
+}
+
 /* Pager mobile end */
 
 .dropdown-menu {

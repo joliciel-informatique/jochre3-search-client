@@ -24,6 +24,7 @@ const totalHits = defineModel('totalHits')
 const page = defineModel('page')
 const showFooterNavigation = defineModel('showing')
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
+const enableScrollBehavior = defineModel('enableScrollBehavior')
 
 /** Autohide footerbar upon scrolling */
 const bottomVisible = () =>
@@ -32,5 +33,5 @@ const bottomVisible = () =>
 
 const autoHide = () => (showFooterNavigation.value = !bottomVisible() ? true : false)
 
-onMounted(() => window.addEventListener('scroll', autoHide))
+onMounted(() => (enableScrollBehavior.value ? window.addEventListener('scroll', autoHide) : null))
 </script>
