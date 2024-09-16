@@ -6,6 +6,7 @@
     "query": "Please enter a search term",
     "search": "Search for",
     "search-button": "Search",
+    "excludeAuthors": "Checking this box will exclude selected authors from the query",
     "related-word-forms": "Strict",
     "related-word-forms-tooltip": "Checking this box will exclude related word forms (of the same stem/lemma) in search results (e.g. 'eat, 'eaten', 'ate')",
     "keyboard": "Open Yiddish on-screen keyboard",

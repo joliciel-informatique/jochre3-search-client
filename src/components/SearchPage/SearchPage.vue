@@ -18,6 +18,8 @@
       v-model:from-year="fromYear"
       v-model:doc-refs="docRefs"
       v-model:sort-by="sortBy"
+      v-model:facets="facets"
+      v-model:exclude-from-search="excludeFromSearch"
     />
     <FacetBar
       @newSearch="newSearch"
@@ -29,13 +31,6 @@
   <div
     class="container is-max-desktop is-flex-direction-column is-align-items-center has-text-centered p-5"
   >
-    <!-- <IndexSize
-      v-model:search-results="searchResults"
-      v-model:query="query"
-      v-model:is-loading="isLoading"
-      v-model:has-search="hasSearch"
-      v-model:facets="facets"
-    /> -->
     <DisplayResults
       v-model:is-loading="isLoading"
       v-model:image-modal="imageModal"
@@ -47,9 +42,21 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, computed, defineExpose, type Ref } from 'vue'
+import { onMounted, ref, computed, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchData, preferences } from '@/assets/fetchMethods'
+
+// Import Child components
+import SearchBar from './SearchBar/SearchBar.vue'
+import AdvancedSearch from './SearchBar/AdvancedSearch/AdvancedSearch.vue'
+import FacetBar from './SearchBar/FacetBar/FacetBar.vue'
+import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
+
+// Import interfaces
+import type { SearchResult, AggregationBin } from '@/assets/interfacesExternals'
+
+import { hasSearch } from '@/assets/appState'
+// import { setErrorMessage } from '@/_components/Modals/ErrorNotification/ErrorNotification.vue'
 
 const query = ref('')
 const searchResults: Ref = defineModel('searchResults')
@@ -59,14 +66,24 @@ const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
 
-// Import sub-components
-import SearchBar from './SearchBar/SearchBar.vue'
-import AdvancedSearch from './SearchBar/AdvancedSearch/AdvancedSearch.vue'
-import FacetBar from './SearchBar/FacetBar/FacetBar.vue'
-import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
-import type { SearchResult, AggregationBin } from '@/assets/interfacesExternals'
-import { hasSearch } from '@/assets/appState'
-import { setErrorMessage } from '@/_components/Modals/ErrorNotification/ErrorNotification.vue'
+const authorInclude = ref(false)
+const excludeFromSearch = ref(false)
+const authors = ref<Array<string>>([])
+const authorList = ref<Array<{ label: string; count: number; active: boolean }>>([])
+
+const relatedWordForms = ref(false)
+const isLoading = ref(false)
+
+// const stateStore = useStateStore()
+// const { isLoading } = storeToRefs(stateStore)
+// const { notLoading, loading } = stateStore
+
+const title = ref('')
+const fromYear = ref(0)
+const toYear = ref(0)
+const docRefs = ref('')
+const sortBy = ref('Score')
+const strict = computed(() => !relatedWordForms.value)
 
 // import { useStateStore } from '@/stores/StateStore'
 // import { storeToRefs } from 'pinia'
@@ -76,13 +93,23 @@ const router = useRouter()
 const route = useRoute()
 
 const showAdvancedSearchPanel = ref(false)
+const facets = ref<Array<AggregationBin>>([])
+// Hack: clear the authorList in case facets are selected
+// TODO: rethink structure of facets vs. authorList
+watch(facets, () => {
+  const activeFacets = facets.value.filter((facet) => (facet.active ? true : null)).length
+  if (activeFacets) {
+    authorList.value = []
+  }
+})
 
 onMounted(() => {
   router.isReady().then(() => {
     if (route.query['query']) query.value = (route.query['query'] as string).trim()
     if (route.query['strict']) relatedWordForms.value = route.query['strict'] !== 'true'
     if (route.query['page']) page.value = Number(route.query['page'])
-    if (route.query['authorInclude']) authorInclude.value = true
+    if (route.query['authorInclude'])
+      authorInclude.value = route.query['authorInclude'] as unknown as boolean
     if (route.query['title']) title.value = (route.query['title'] as string).trim()
     if (route.query['from-year'])
       fromYear.value = Number((route.query['from-year'] as string).trim())
@@ -144,7 +171,8 @@ const defineSearchParams = () => {
     {},
     query.value?.length ? { query: query.value.trim() } : null,
     strict.value.toString() !== null ? { strict: strict.value.toString() } : null,
-    authorInclude.value ? { 'author-include': authorInclude.value } : null,
+    authors.value.length ? { 'author-include': authorInclude.value } : null,
+    // authorInclude.value ? { 'author-include': authorInclude.value } : null,
     page.value ? (page.value > 0 ? { page: page.value?.toString() } : null) : null,
     title.value.trim().length > 0 ? { title: title.value.trim() } : null,
     toYear.value != null && toYear.value > 0 ? { 'to-year': toYear.value.toString() } : null,
@@ -152,23 +180,6 @@ const defineSearchParams = () => {
   )
 }
 
-const authorInclude = ref(false)
-const authors = ref<Array<string>>([])
-const authorList = ref<Array<{ label: string; count: number; active: boolean }>>([])
-const facets = ref<Array<AggregationBin>>([])
-const relatedWordForms = ref(false)
-const isLoading = ref(false)
-
-// const stateStore = useStateStore()
-// const { isLoading } = storeToRefs(stateStore)
-// const { notLoading, loading } = stateStore
-
-const title = ref('')
-const fromYear = ref()
-const toYear = ref()
-const docRefs = ref('')
-const sortBy = ref('Score')
-const strict = computed(() => !relatedWordForms.value)
 
 const resetSearchResults = () => {
   query.value = ''
@@ -195,6 +206,11 @@ const setShowAdvancedSearchPanel = () => {
   showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value
 }
 
+watch(excludeFromSearch, () => {
+  console.log(excludeFromSearch.value)
+  authorInclude.value = !excludeFromSearch.value
+})
+
 const search = async (facet: string | undefined = undefined) => {
   isLoading.value = true
 
@@ -208,7 +224,7 @@ const search = async (facet: string | undefined = undefined) => {
       }
       return currentFacet
     })
-    authorInclude.value = authorList.value.length ? true : false
+    authorInclude.value = facets.value.length ? true : false
   }
 
   hasSearch.value =
@@ -223,11 +239,16 @@ const search = async (facet: string | undefined = undefined) => {
   const params = new URLSearchParams(defineSearchParams())
   const facetParams = new URLSearchParams({ ...Object.fromEntries(params) })
 
-  authorInclude.value = false
+  // authorInclude.value = true
   if (facets.value)
     facets.value.forEach((facet) => (facet.active ? params.append('authors', facet.label) : null))
   if (docRefs.value)
     docRefs.value.split(/\W+/).forEach((docRef) => params.append('doc-refs', docRef))
+
+  if (authorList.value) {
+    authorList.value.forEach((author) => params.append('authors', author.label))
+  }
+
   params.append(
     'first',
     page.value ? ((page.value - 1) * preferences.resultsPerPage).toString() : '10'
@@ -256,7 +277,6 @@ const search = async (facet: string | undefined = undefined) => {
           .filter((author: string) => author)
         hasSearch.value = true
         isLoading.value = false
-        console.log(results)
         searchResults.value = results
         totalHits.value = totalCount
         if (authors.value.length > 0) {
@@ -275,8 +295,6 @@ const search = async (facet: string | undefined = undefined) => {
                     : { ...facet, active: false }
                 )
 
-                console.log(result.bins)
-
                 showAdvancedSearchPanel.value = false
                 q?.parentElement?.classList.remove('is-loading')
                 q?.removeAttribute('disabled')
@@ -293,7 +311,7 @@ const search = async (facet: string | undefined = undefined) => {
       })
     )
     .catch((error) => {
-      setErrorMessage(new Error(`Could not reach the search endpoint: ${error.message}`))
+      // Pass error to ErrorNotification dialog _component through HomeView
       isLoading.value = false
       hasSearch.value = true
       q?.parentElement?.classList.remove('is-loading')

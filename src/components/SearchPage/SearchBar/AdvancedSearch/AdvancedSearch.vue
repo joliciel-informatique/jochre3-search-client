@@ -29,8 +29,11 @@ Description: the advanced search toolbox
           <span class="column is-vcentered mt-1 p-1">
             <FindAuthors
               v-model:authorList="authorList"
+              v-model:disabled="disabled"
+              v-model:exclude-from-search="excludeFromSearch"
               :label="$t('search.author')"
               :multivalue="true"
+              :excludeCheckbox="true"
               unique-id="advanced-search-find-authors"
             />
           </span>
@@ -126,6 +129,7 @@ Description: the advanced search toolbox
 <script setup lang="ts">
 import FindAuthors from '@/_components/FindAuthors/FindAuthors.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { computed, type Ref } from 'vue'
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 
@@ -136,6 +140,11 @@ const fromYear = defineModel('fromYear')
 const toYear = defineModel('toYear')
 const docRefs = defineModel('docRefs')
 const sortBy = defineModel('sortBy')
+const facets: Ref = defineModel('facets')
+const excludeFromSearch = defineModel('excludeFromSearch')
+const disabled = computed(
+  () => facets.value.filter((facet: { active: string }) => (facet.active ? facet : null)).length
+)
 
 const beforeEnter = <Element,>(el: Element) => ((el as HTMLElement).style.height = '0')
 const enter = <Element,>(el: Element) => ((el as HTMLElement).style.height = '100%')
