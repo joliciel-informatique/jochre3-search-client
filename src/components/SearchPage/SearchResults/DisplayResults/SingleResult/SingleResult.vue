@@ -31,9 +31,6 @@ Description: presents OCR record metadata
       </template>
       <template #content>
         <div class="card-content">
-          <div class="is-italic is-size-6 has-text-centered">
-            {{ $t('results.document-reference', [result.docRef]) }}
-          </div>
           <div v-for="field in fields" :key="sha1(field)">
             <SingleResultItem
               v-model:metadata-modal="metadataModal"
@@ -42,6 +39,9 @@ Description: presents OCR record metadata
               :value="result.metadata[field]"
             />
           </div>
+        </div>
+        <div class="has-text-right is-size-7 pt-4">
+          {{ $t('results.document-reference') }}: <strong>{{ result.docRef }}</strong>
         </div>
       </template>
     </AccordionCard>
@@ -60,7 +60,7 @@ Description: presents OCR record metadata
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import SingleResultItem from './SingleResultItem.vue'
+import SingleResultItem from './SingleResultItem/SingleResultItem.vue'
 import DisplaySnippets from './DisplaySnippets/DisplaySnippets.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
