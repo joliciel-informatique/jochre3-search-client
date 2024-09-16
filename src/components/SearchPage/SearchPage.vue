@@ -173,7 +173,7 @@ const defineSearchParams = () => {
     strict.value.toString() !== null ? { strict: strict.value.toString() } : null,
     authors.value.length ? { 'author-include': authorInclude.value } : null,
     // authorInclude.value ? { 'author-include': authorInclude.value } : null,
-    page.value ? (page.value > 0 ? { page: page.value?.toString() } : null) : null,
+    page.value && page.value > 0 ? { page: page.value?.toString() } : null,
     title.value.trim().length > 0 ? { title: title.value.trim() } : null,
     toYear.value != null && toYear.value > 0 ? { 'to-year': toYear.value.toString() } : null,
     fromYear.value != null && fromYear.value > 0 ? { 'from-year': fromYear.value.toString() } : null
