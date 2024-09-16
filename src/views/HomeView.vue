@@ -1,8 +1,12 @@
 <template>
   <PreferencesSetup />
   <main
-    class="hero is-widescreen"
-    :class="{ 'rtl-align': $i18n.locale === 'yi', yiddish: $i18n.locale === 'yi' }"
+    :class="{
+      hero: true,
+      'is-widescreen': true,
+      'rtl-align': !preferences.isLeftToRight,
+      yiddish: !preferences.isLeftToRight
+    }"
   >
     <HeaderPage />
     <SearchPage
@@ -39,6 +43,9 @@ import ErrorNotification from '@/_components/Modals/ErrorNotification/ErrorNotif
 import LargeImage from '@/_components/Modals/LargeImage/LargeImage.vue'
 import FixMetaData from '@/_components/Modals/FixMetaData/FixMetaData.vue'
 import FixWord from '@/_components/Modals/FixWord/FixWord.vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const preferences = usePreferencesStore()
 
 // Props shared between SearchPage and FooterPage components
 const page = ref(1)

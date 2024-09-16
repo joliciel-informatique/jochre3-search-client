@@ -15,6 +15,11 @@
           <span class="column field has-addons has-addons-left is-horizontal">
             <p class="control is-expanded">
               <input
+                :class="{
+                  input: true,
+                  keyboardInput: true,
+                  'rtl-align': preferences.needsRightToLeft
+                }"
                 class="input keyboardInput"
                 type="text"
                 lang="yi"
@@ -55,6 +60,9 @@ import { onBeforeUpdate, ref, type Ref } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const preferences = usePreferencesStore()
 
 const wordImage = ref('')
 const wordLoading = ref(false)

@@ -72,7 +72,16 @@ Description: displays text snippets from the OCR text
           </div>
         </div>
         <div
-          class="column rtl-align snippet has-text-weight-medium rtl yiddish pr-2 pl-2"
+          :class="{
+            column: true,
+            snippet: true,
+            'has-text-weight-medium': true,
+            'pr-2': true,
+            'pl-2': true,
+            'rtl-align': preferences.needsRightToLeft,
+            rtl: preferences.needsRightToLeft,
+            yiddish: preferences.needsRightToLeft
+          }"
           v-html="snippet.text"
           @dblclick="openWordModal"
           v-touch:longtap="openWordModal"
@@ -93,6 +102,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { fetchData } from '@/assets/fetchMethods'
 import { ref, type Ref } from 'vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const preferences = usePreferencesStore()
+
 library.add(faFileImage, faBookOpen, faFileLines, faAngleDown)
 
 const { index, snippet, docRef } = defineProps(['index', 'snippet', 'docRef'])
