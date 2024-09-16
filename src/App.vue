@@ -16,7 +16,6 @@ const globalProperties = app?.appContext.config.globalProperties
 const i18n: VueI18n.VueI18n | undefined = globalProperties?.$i18n as VueI18n.VueI18n
 
 setLocale(i18n?.locale)
-console.log(`Setting token to ${useKeycloakStore().keycloak?.token}`)
 setToken(useKeycloakStore().keycloak?.token)
 setPreferences(usePreferencesStore())
 

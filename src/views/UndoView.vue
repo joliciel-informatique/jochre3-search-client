@@ -3,23 +3,24 @@
     :class="{
       container: true,
       hero: true,
-      'is-fullheight': true,
+      'is-widescreen': true,
       'rtl-align': !preferences.isLeftToRight,
       yiddish: !preferences.isLeftToRight
     }"
   >
-    <!-- <Header />
+    <HeaderPage />
     <div :class="{ 'ltr-align': $i18n.locale === 'yi', english: $i18n.locale === 'yi' }">
       <p v-if="responseCode == 200">Metadata correction {{ route.params.id }} undone.</p>
       <p v-if="responseCode != 200">An error occurred.</p>
       <p v-if="responseCode == 404">Metadata correction {{ route.params.id }} not found.</p>
     </div>
-    <FooterDefault /> -->
   </main>
+  <FooterPage />
 </template>
 
 <script setup lang="ts">
-import Header from '@/components/HeaderPage/HeaderPage.vue'
+import HeaderPage from '@/components/HeaderPage/HeaderPage.vue'
+import FooterPage from '@/components/FooterPage/FooterPage.vue'
 
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import axios from 'axios'
