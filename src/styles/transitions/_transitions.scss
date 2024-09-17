@@ -11,7 +11,7 @@ according to style policies.
 /** AccordionCard Transition Styles */
 .accordion-card .body {
   overflow: hidden;
-  transition: 150ms ease-out;
+  transition: 250ms ease-in-out;
 }
 
 .accordion-card .footer-icon {
@@ -27,16 +27,25 @@ according to style policies.
   transition-duration: 0.3s;
 }
 
+.notification .card {
+  transition: 150ms ease-in-out;
+}
+
+// .modal .modal-background {
+//   transition: all 500ms ease-in-out;
+// }
+
 /** AdvancedSearch Transition Styles */
 .advancedSearch .body {
   overflow: hidden;
-  transition: 150ms ease-out;
+  transition: all 150ms ease-out;
 }
 
-.fade .modal-background,
-.fade .modal-content {
-  transition: opacity 0.5s ease-out;
-}
+// .fade .modal,
+// .fade .notification-overlay {
+//   transform: opacity(100%);
+//   transition: all 150ms ease-in-out;
+// }
 
 // .fade .modal-card-head {
 //   transition: opacity 0.5s ease-in-out;

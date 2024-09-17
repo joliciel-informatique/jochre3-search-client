@@ -1,5 +1,5 @@
 <template>
-  <ModalBox v-model:data="metadataModal">
+  <ModalBox v-model:data="metadataModal" v-model:notification="notification">
     <template #header>
       <p class="modal-card-title">
         {{ $t('fix-metadata.title', [$t(`fix-metadata.field-type.${field}`)]) }}
@@ -70,8 +70,9 @@ import FindAuthors from '@/_components/FindAuthors/FindAuthors.vue'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-const showFindAuthorDropdown = computed(() => field.value.includes('author'))
 const metadataModal: Ref = defineModel('metadataModal')
+const notification = defineModel('notification')
+const showFindAuthorDropdown = computed(() => field.value.includes('author'))
 const isLeftToRight = ref(false)
 const authorList: Ref = ref<Array<{ label: string; count: number }>>([])
 
@@ -96,15 +97,34 @@ const save = (closeFunc: Function) => {
     value: metadataModal.value.value,
     applyEverywhere: false
   })
+
   fetchData('correct-metadata', 'post', data, 'application/json')
     .then((res) => {
       if (res.status === 200) {
-        // Report success to user
+        notification.value = {
+          show: true,
+          error: false,
+          delay: 2000,
+          msg: 'Thanks, we will review your suggestion!'
+        }
       } else {
-        // Report failure to user
+        notification.value = {
+          show: true,
+          error: true,
+          delay: 4000,
+          msg: `Something went wrong: ${res.status}: ${res.statusText}. Try again and if the error persists, contact us!`
+        }
       }
       closeFunc()
     })
-    .catch(() => closeFunc())
+    .catch((error) => {
+      notification.value = {
+        show: true,
+        error: true,
+        delay: 4000,
+        msg: `Something went wrong: ${error}. Try again and if the error persists, contact us!`
+      }
+      closeFunc()
+    })
 }
 </script>

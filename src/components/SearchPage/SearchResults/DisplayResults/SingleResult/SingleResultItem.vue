@@ -20,11 +20,6 @@ Description: display single metadata item
         <font-awesome-icon icon="pen-to-square" />
       </span>
     </button>
-    <!-- <button @click="visible = true" class="button is-small is-white">
-      <span class="icon is-small fa-2xs">
-        <font-awesome-icon icon="pen-to-square" />
-      </span>
-    </button> -->
   </div>
 </template>
 
@@ -43,7 +38,7 @@ title = field === 'publicationYear' ? `results.publication-year` : title
 
 const openMetadataModal = () => {
   metadataModal.value = {
-    open: true,
+    show: true,
     docRef: docRef,
     field: field,
     value: value

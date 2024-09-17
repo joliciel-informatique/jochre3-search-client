@@ -18,16 +18,7 @@ Description: presents OCR record metadata
             <a :href="result.metadata?.url" target="_blank">{{
               result.metadata.title ?? result.docRef
             }}</a>
-            <button
-              @click="
-                emit('openMetadataModal', {
-                  docRef: result.docRef,
-                  field: 'title',
-                  value: result.metadata.title ?? result.docRef
-                })
-              "
-              class="button is-small is-white is-pulled-right"
-            >
+            <button @click="openMetadataModal" class="button is-small is-white is-pulled-right">
               <span class="icon is-small fa-2xs">
                 <font-awesome-icon icon="pen-to-square" />
               </span>
@@ -48,27 +39,6 @@ Description: presents OCR record metadata
               :value="result.metadata[field]"
             />
           </div>
-          <!-- <SingleResultItem
-            :docRef="result.docRef"
-            field="titleEnglish"
-            :value="result.metadata.titleEnglish"
-            />
-            <SingleResultItem :docRef="result.docRef" field="author" :value="result.metadata.author" />
-            <SingleResultItem
-            :docRef="result.docRef"
-            field="authorEnglish"
-            :value="result.metadata.authorEnglish"
-            />
-            <SingleResultItem
-            :docRef="result.docRef"
-            field="publicationYear"
-            :value="result.metadata.publicationYear"
-            />
-      <SingleResultItem
-        :docRef="result.docRef"
-        field="publisher"
-        :value="result.metadata.publisher"
-        /> -->
         </div>
       </template>
     </AccordionCard>
@@ -77,6 +47,7 @@ Description: presents OCR record metadata
     <DisplaySnippets
       v-model:image-modal="imageModal"
       v-model:word-modal="wordModal"
+      v-model:notification="notification"
       :snippets="result.snippets"
       :docRef="result.docRef"
       :url="result.metadata.url"
@@ -107,8 +78,16 @@ const showing = ref(true)
 const imageModal = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const metadataModal = defineModel('metadataModal')
+const notification = defineModel('notification')
 
-const emit = defineEmits(['openMetadataModal', 'openWordModal'])
+const openMetadataModal = () => {
+  metadataModal.value = {
+    show: true,
+    docRef: result.docRef,
+    field: 'title',
+    value: result.metadata.title ?? result.docRef
+  }
+}
 
 /** Autohide card upon scrolling */
 const autoHide = () => {

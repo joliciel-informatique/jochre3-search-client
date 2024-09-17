@@ -30,6 +30,7 @@ Description: display results in SingleResult child component
             v-model:image-modal="imageModal"
             v-model:word-modal="wordModal"
             v-model:metadata-modal="metadataModal"
+            v-model:notification="notification"
             :result="result"
           />
         </div>
@@ -38,14 +39,13 @@ Description: display results in SingleResult child component
     </ul>
 
     <!-- Show index size page upon no search params -->
-    <IndexSize v-else v-model:is-loading="isLoading" />
+    <IndexSize v-else v-model:is-loading="isLoading" v-model:notification="notification" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { sha1 } from 'object-hash'
 import { preferences } from '@/assets/fetchMethods'
-import { hasSearch } from '@/assets/appState'
 import SingleResult from './SingleResult/SingleResult.vue'
 import IndexSize from './IndexSize/IndexSize.vue'
 
@@ -59,6 +59,7 @@ const isLoading = defineModel('isLoading')
 const imageModal = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const metadataModal = defineModel('metadataModal')
+const notification = defineModel('notification')
 const query: Ref = defineModel('query')
 const searchResults: Ref = defineModel('searchResults')
 </script>

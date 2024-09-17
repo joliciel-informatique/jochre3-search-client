@@ -18,23 +18,27 @@ Description: presents the current indexed number of books
 <script setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue'
 import { fetchData } from '@/assets/fetchMethods'
-// import { setErrorMessage } from '@/_components/Modals/ErrorNotification/ErrorNotification.vue'
 
 const isLoading: Ref = defineModel('isLoading')
+const notification: Ref = defineModel('notification')
 
 const indexSize = ref(0)
 
 onMounted(() => {
   fetchData('size', 'get', undefined, 'json')
-    .then((response) => {
+    .then((response) =>
       response.json().then((result) => {
         indexSize.value = result.size
         isLoading.value = false
       })
-    })
+    )
     .catch((error: any) => {
-      const msg = new Error(`Failed to retrieve index: ${error.message}`)
-      // setErrorMessage(msg)
+      notification.value = {
+        show: true,
+        error: true,
+        delay: 4000,
+        msg: `Failed to retrieve index: ${error.message}`
+      }
     })
 })
 </script>
