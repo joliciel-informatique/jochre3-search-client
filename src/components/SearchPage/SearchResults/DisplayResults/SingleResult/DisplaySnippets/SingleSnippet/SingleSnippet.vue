@@ -49,6 +49,22 @@ Description: displays text snippets from the OCR text
     <div class="card-content" :data-index="index" :data-docref="docRef" :data-page="snippet.page">
       <div class="columns">
         <div
+          v-if="preferences.displayLeftToRight === preferences.corpusLeftToRight"
+          :class="{
+            column: true,
+            snippet: true,
+            'has-text-weight-medium': true,
+            'pr-2': true,
+            'pl-2': true,
+            'rtl-align': preferences.needsRightToLeft,
+            rtl: preferences.needsRightToLeft,
+            yiddish: preferences.needsRightToLeft
+          }"
+          v-html="snippet.text"
+          @dblclick="openWordModal"
+          v-touch:longtap="openWordModal"
+        ></div>
+        <div
           class="column button is-flex is-align-items-center"
           :class="imageIsLoading ? 'is-loading' : ''"
           @click="image ? openImageModal() : toggleImageSnippet()"
@@ -72,6 +88,7 @@ Description: displays text snippets from the OCR text
           </div>
         </div>
         <div
+          v-if="preferences.displayLeftToRight !== preferences.corpusLeftToRight"
           :class="{
             column: true,
             snippet: true,

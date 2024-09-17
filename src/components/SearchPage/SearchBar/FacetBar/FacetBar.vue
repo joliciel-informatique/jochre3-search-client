@@ -16,7 +16,7 @@ Description: presents the facet bar
       <div class="column is-one-fifth">
         <span
           ><p>
-            Facets
+            {{ $t('search.facets') }}
             <span v-tooltip:bottom="$t('search.what-are-facets')">
               <FontAwesomeIcon icon="question-circle" />
             </span>

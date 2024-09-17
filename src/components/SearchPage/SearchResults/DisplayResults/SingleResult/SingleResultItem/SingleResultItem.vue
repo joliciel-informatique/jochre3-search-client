@@ -10,13 +10,28 @@ Methods: fixMetaData (imported)
 Description: display single metadata item
 -->
 <template>
-  <div class="has-text-left columns">
-    <span class="is-size-6 column is-one-quarter" :class="field === 'author' && preferences.needsLeftToRight ? 'ltr' : ''">
+  <div
+    :class="{
+      columns: true,
+      'has-text-left': preferences.displayLeftToRight,
+      'has-text-right': !preferences.displayLeftToRight
+    }"
+  >
+    <span class="is-size-6 column is-one-quarter">
       <strong>{{ $t(title) }}</strong
       >:
     </span>
     <span class="column">{{ value }}</span>
-    <button @click="openMetadataModal" class="button is-small is-white is-pulled-right">
+    <button
+      @click="openMetadataModal"
+      :class="{
+        button: true,
+        'is-small': true,
+        'is-white': true,
+        'is-pulled-right': preferences.displayLeftToRight,
+        'is-pulled-left': !preferences.displayLeftToRight
+      }"
+    >
       <span class="icon is-small fa-2xs">
         <font-awesome-icon icon="pen-to-square" />
       </span>

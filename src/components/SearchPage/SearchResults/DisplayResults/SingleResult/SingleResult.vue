@@ -81,8 +81,6 @@ const imageModal = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const metadataModal = defineModel('metadataModal')
 
-const emit = defineEmits(['openMetadataModal', 'openWordModal'])
-
 /** Autohide card upon scrolling */
 const autoHide = () => {
   showing.value = false
