@@ -6,6 +6,7 @@
       @setShowAdvancedSearchPanel="setShowAdvancedSearchPanel"
       v-model:show-advanced-search-panel="showAdvancedSearchPanel"
       v-model:query="query"
+      v-model:strict="strict"
       v-model:is-loading="isLoading"
     />
     <AdvancedSearch
@@ -71,19 +72,14 @@ const excludeFromSearch = ref(false)
 const authors = ref<Array<string>>([])
 const authorList = ref<Array<{ label: string; count: number; active: boolean }>>([])
 
-const relatedWordForms = ref(false)
+const strict = ref(false)
 const isLoading = ref(false)
-
-// const stateStore = useStateStore()
-// const { isLoading } = storeToRefs(stateStore)
-// const { notLoading, loading } = stateStore
 
 const title = ref('')
 const fromYear = ref(0)
 const toYear = ref(0)
 const docRefs = ref('')
 const sortBy = ref('Score')
-const strict = computed(() => !relatedWordForms.value)
 
 // import { useStateStore } from '@/stores/StateStore'
 // import { storeToRefs } from 'pinia'
@@ -106,7 +102,7 @@ watch(facets, () => {
 onMounted(() => {
   router.isReady().then(() => {
     if (route.query['query']) query.value = (route.query['query'] as string).trim()
-    if (route.query['strict']) relatedWordForms.value = route.query['strict'] !== 'true'
+    if (route.query['strict']) strict.value = route.query['strict'] === 'true'
     if (route.query['page']) page.value = Number(route.query['page'])
     if (route.query['authorInclude'])
       authorInclude.value = route.query['authorInclude'] as unknown as boolean
@@ -172,14 +168,12 @@ const defineSearchParams = () => {
     query.value?.length ? { query: query.value.trim() } : null,
     strict.value.toString() !== null ? { strict: strict.value.toString() } : null,
     authors.value.length ? { 'author-include': authorInclude.value } : null,
-    // authorInclude.value ? { 'author-include': authorInclude.value } : null,
     page.value && page.value > 0 ? { page: page.value?.toString() } : null,
     title.value.trim().length > 0 ? { title: title.value.trim() } : null,
     toYear.value != null && toYear.value > 0 ? { 'to-year': toYear.value.toString() } : null,
     fromYear.value != null && fromYear.value > 0 ? { 'from-year': fromYear.value.toString() } : null
   )
 }
-
 
 const resetSearchResults = () => {
   query.value = ''
@@ -194,7 +188,7 @@ const resetSearchResults = () => {
   fromYear.value = 0
   toYear.value = 0
   docRefs.value = ''
-  relatedWordForms.value = false
+  strict.value = false
   sortBy.value = 'Score'
   authorList.value = []
   showAdvancedSearchPanel.value = false
