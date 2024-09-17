@@ -34,7 +34,13 @@ Description: presents the search bar
             :placeholder="$t('search.query')"
           />
           <span
-            class="icon is-small is-left is-clickable"
+            :class="{
+              icon: true,
+              'is-small': true,
+              'is-clickable': true,
+              'is-left': preferences.displayLeftToRight,
+              'is-right': !preferences.displayLeftToRight
+            }"
             @click="emit('setShowAdvancedSearchPanel')"
           >
             <font-awesome-icon
@@ -42,13 +48,28 @@ Description: presents the search bar
             />
           </span>
           <span
-            class="icon is-small is-right is-clickable"
+            :class="{
+              icon: true,
+              'is-small': true,
+              'is-clickable': true,
+              'is-left': !preferences.displayLeftToRight,
+              'is-right': preferences.displayLeftToRight
+            }"
             @click="emit('resetSearchResults')"
             v-if="!isLoading"
           >
             <font-awesome-icon icon="circle-xmark" />
           </span>
-          <span class="icon is-small is-right is-loading" v-else></span>
+          <span
+            :class="{
+              icon: true,
+              'is-small': true,
+              'is-loading': true,
+              'is-left': !preferences.displayLeftToRight,
+              'is-right': preferences.displayLeftToRight
+            }"
+            v-else
+          ></span>
         </p>
         <p class="control">
           <button
@@ -86,6 +107,10 @@ import {
   faKeyboard,
   faXmarkCircle
 } from '@fortawesome/free-solid-svg-icons'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const preferences = usePreferencesStore()
+
 library.add(faMagnifyingGlassPlus, faMagnifyingGlassMinus, faKeyboard, faXmarkCircle)
 const query: Ref = defineModel('query')
 const isLoading = defineModel('isLoading')

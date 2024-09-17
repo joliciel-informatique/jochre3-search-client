@@ -4,8 +4,8 @@
     :class="{
       hero: true,
       'is-widescreen': true,
-      'rtl-align': !preferences.isLeftToRight,
-      yiddish: !preferences.isLeftToRight
+      'rtl-align': !preferences.displayLeftToRight,
+      yiddish: !preferences.displayLeftToRight
     }"
   >
     <HeaderPage />

@@ -7,28 +7,31 @@ export const usePreferencesStore = defineStore('preferences', () => {
   const snippetsPerResult = ref(20)
   const corpusLanguage = ref('yi')
 
-  const isLeftToRight = computed(() => language.value !== 'yi')
+  const displayLeftToRight = computed(() => language.value !== 'yi')
+
+  const corpusLeftToRight = computed(() => corpusLanguage.value !== 'yi')
 
   /**
    * Called by non top-level controls which are ALWAYS left-to-right (e.g. alternate author name)
    * Returns true if we need to add an explicit LTR class to a control.
    */
-  const needsLeftToRight = computed(() => !isLeftToRight.value)
+  const needsLeftToRight = computed(() => !displayLeftToRight.value)
 
   /**
    * Called by non top-level controls which are right-to-left IF the underlying corpus is right-to-left.
    *
    * Returns true if we need to add an explicit RTL class to a control.
    */
-  const needsRightToLeft = computed(() => corpusLanguage.value === 'yi' && isLeftToRight.value)
+  const needsRightToLeft = computed(() => !corpusLeftToRight.value && displayLeftToRight.value)
 
   return {
     language,
     resultsPerPage,
     snippetsPerResult,
     corpusLanguage,
-    isLeftToRight,
+    displayLeftToRight,
     needsLeftToRight,
-    needsRightToLeft
+    needsRightToLeft,
+    corpusLeftToRight
   }
 })

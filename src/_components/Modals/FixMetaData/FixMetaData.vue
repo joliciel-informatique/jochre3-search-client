@@ -24,8 +24,10 @@
             :title="$t('search.keyboard')"
             :vki-id="`${metadataModal.docRef}-${metadataModal.field}`"
             :class="{
-              'ltr-align': isLeftToRight && $i18n.locale === 'yi',
-              english: isLeftToRight && $i18n.locale === 'yi'
+              'ltr-align': fieldLeftToRight && preferences.needsLeftToRight,
+              english: fieldLeftToRight && preferences.needsLeftToRight,
+              'rtl-align': !fieldLeftToRight && preferences.needsRightToLeft,
+              yiddish: !fieldLeftToRight && preferences.needsRightToLeft
             }"
             v-model="metadataModal.value"
             :disabled="authorList.length > 0"
@@ -88,13 +90,17 @@ import { authenticated, fetchData } from '@/assets/fetchMethods'
 import FindAuthors from '@/_components/FindAuthors/FindAuthors.vue'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+const preferences = usePreferencesStore()
 
 const metadataModal: Ref = defineModel('metadataModal')
 const showFindAuthorDropdown = computed(() => metadataModal.value.field?.includes('author'))
-const isLeftToRight = ref(false)
 const authorList: Ref = ref<Array<{ label: string; count: number }>>([])
 const includeAuthor = computed(() => metadataModal.value.field === 'author')
 const includeAuthorInTranscription = computed(() => metadataModal.value.field === 'authorEnglish')
+const fieldLeftToRight = computed(() =>
+  ['authorEnglish', 'titleEnglish', 'publisher'].includes(metadataModal.value.field)
+)
 
 const save = (closeFunc: Function) => {
   const authorListValue = authorList.value[0]?.label

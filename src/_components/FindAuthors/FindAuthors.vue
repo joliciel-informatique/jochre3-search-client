@@ -19,7 +19,10 @@ Description: presents a 'search for authors' text box and retrieves authors ever
       <div class="control dropdown is-active is-expanded">
         <div
           class="control dropdown-trigger is-expanded"
-          :class="showExcludeCheckbox ? 'has-icons-left' : ''"
+          :class="{
+            'has-icons-left': showExcludeCheckbox && preferences.displayLeftToRight,
+            'has-icons-right': showExcludeCheckbox && !preferences.displayLeftToRight
+          }"
         >
           <input
             id="findAuthors"
@@ -32,9 +35,15 @@ Description: presents a 'search for authors' text box and retrieves authors ever
             autocomplete="one-time-code"
             :placeholder="$t('search.authorPlaceholder')"
           />
-          <p
+          <div
             v-if="showExcludeCheckbox"
-            class="control icon is-small is-left"
+            :class="{
+              control: true,
+              icon: true,
+              'is-small': true,
+              'is-left': preferences.displayLeftToRight,
+              'is-right': !preferences.displayLeftToRight
+            }"
             v-tooltip:bottom.tooltip="$t('search.excludeAuthors')"
           >
             <input
@@ -43,7 +52,7 @@ Description: presents a 'search for authors' text box and retrieves authors ever
               class="is-clickable"
               @click="excludeAuthors"
             />
-          </p>
+          </div>
         </div>
         <div
           class="dropdown-menu"
@@ -87,6 +96,9 @@ import { sha1 } from 'object-hash'
 import { fetchData } from '@/assets/fetchMethods'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import FilterTag from '@/_components/FilterTag/FilterTag.vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const preferences = usePreferencesStore()
 
 const { multiValue, uniqueId, showExcludeCheckbox } = defineProps([
   'multiValue',
