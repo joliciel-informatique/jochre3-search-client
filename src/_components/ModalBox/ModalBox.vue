@@ -27,6 +27,7 @@ import { ref, watch, type Ref } from 'vue'
 const active = ref('')
 const visible = ref(false)
 const data: Ref = defineModel('data')
+const authorList: Ref = defineModel('authorList')
 
 watch(data, (newv: { open: string }) => {
   visible.value = newv.open ? true : false
@@ -36,6 +37,7 @@ watch(data, (newv: { open: string }) => {
 const close = () => {
   visible.value = false
   active.value = ''
+  authorList.value = []
 }
 </script>
 <style scoped>
