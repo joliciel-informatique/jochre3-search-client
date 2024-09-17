@@ -1,16 +1,23 @@
-<script setup lang="ts">
-import TranscribedText from '../components/TranscribedText.vue'
-import Header from '@/components/HeaderPage/HeaderPage.vue'
-// import FooterDefault from '2/components/SearchPage/Footer/FooterDefault/FooterDefault.vue'
-</script>
-
 <template>
   <main
-    class="container hero is-fullheight"
-    :class="{ 'rtl-align': $i18n.locale === 'yi', yiddish: $i18n.locale === 'yi' }"
+    :class="{
+      hero: true,
+      'is-widescreen': true,
+      'rtl-align': !preferences.displayLeftToRight,
+      yiddish: !preferences.displayLeftToRight
+    }"
   >
-    <Header />
+    <HeaderPage />
     <TranscribedText />
-    <!-- <FooterDefault /> -->
   </main>
+  <FooterPage />
 </template>
+
+<script setup lang="ts">
+import HeaderPage from '@/components/HeaderPage/HeaderPage.vue'
+import TranscribedText from '@/components/TranscribedText/TranscribedText.vue'
+import FooterPage from '@/components/FooterPage/FooterPage.vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const preferences = usePreferencesStore()
+</script>

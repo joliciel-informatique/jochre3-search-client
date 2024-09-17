@@ -26,16 +26,19 @@ Description: the advanced search toolbox
         @keydown.esc="showAdvancedSearchPanel = false"
       >
         <div class="body-inner container is-max-desktop">
-          <span class="column is-vcentered mt-1 p-1">
-            <FindAuthors
-              v-model:authorList="authorList"
-              v-model:disabled="disabled"
-              v-model:exclude-from-search="excludeFromSearch"
-              :label="$t('search.author')"
-              :multivalue="true"
-              :excludeCheckbox="true"
-              unique-id="advanced-search-find-authors"
-            />
+          <span class="columns is-vcentered mt-1 p-1">
+            <p class="column is-flex is-vcentered is-3">{{ $t('search.author') }}</p>
+            <span class="column is-vcentered">
+              <FindAuthors
+                v-model:authorList="authorList"
+                v-model:disabled="disabled"
+                v-model:exclude-from-search="excludeFromSearch"
+                :label="$t('search.author')"
+                :multi-value="true"
+                :show-exclude-checkbox="true"
+                unique-id="advanced-search-find-authors"
+              />
+            </span>
           </span>
           <span class="columns is-vcentered mt-1 p-1">
             <p class="column is-3 is-flex is-vcentered">{{ $t('search.title') }}</p>

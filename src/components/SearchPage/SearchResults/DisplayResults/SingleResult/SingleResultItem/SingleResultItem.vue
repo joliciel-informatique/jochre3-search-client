@@ -10,12 +10,28 @@ Methods: fixMetaData (imported)
 Description: display single metadata item
 -->
 <template>
-  <div>
-    <strong>{{ $t(title) }}&nbsp;</strong>
-    <span :class="field === 'author' ? '' : ltr">
-      {{ value }}
+  <div
+    :class="{
+      columns: true,
+      'has-text-left': preferences.displayLeftToRight,
+      'has-text-right': !preferences.displayLeftToRight
+    }"
+  >
+    <span class="is-size-6 column is-one-quarter">
+      <strong>{{ $t(title) }}</strong
+      >:
     </span>
-    <button @click="openMetadataModal" class="button is-small is-white is-pulled-right">
+    <span class="column">{{ value }}</span>
+    <button
+      @click="openMetadataModal"
+      :class="{
+        button: true,
+        'is-small': true,
+        'is-white': true,
+        'is-pulled-right': preferences.displayLeftToRight,
+        'is-pulled-left': !preferences.displayLeftToRight
+      }"
+    >
       <span class="icon is-small fa-2xs">
         <font-awesome-icon icon="pen-to-square" />
       </span>
@@ -25,7 +41,9 @@ Description: display single metadata item
 
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { ltr } from '@/assets/appState'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const preferences = usePreferencesStore()
 
 const { field, value, docRef } = defineProps(['field', 'value', 'docRef'])
 

@@ -1,8 +1,12 @@
 <template>
   <PreferencesSetup />
   <main
-    class="hero is-widescreen"
-    :class="{ 'rtl-align': $i18n.locale === 'yi', yiddish: $i18n.locale === 'yi' }"
+    :class="{
+      hero: true,
+      'is-widescreen': true,
+      'rtl-align': !preferences.displayLeftToRight,
+      yiddish: !preferences.displayLeftToRight
+    }"
   >
     <HeaderPage />
     <SearchPage

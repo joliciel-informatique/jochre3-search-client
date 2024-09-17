@@ -8,7 +8,8 @@
     "search-button": "Search",
     "excludeAuthors": "Checking this box will exclude selected authors from the query",
     "related-word-forms": "Strict",
-    "what-are-facets": "Select a facet to filter/narrow your search results",
+    "facets": "Author facets",
+    "what-are-facets": "Author facets list the authors with the most books matching your search criteria. Click a facet to filter/narrow your search results.",
     "related-word-forms-tooltip": "Checking this box will exclude related word forms (of the same stem/lemma) in search results (e.g. 'eat, 'eaten', 'ate')",
     "keyboard": "Open Yiddish on-screen keyboard",
     "advanced": "Advanced search",
@@ -18,8 +19,8 @@
     "title": "Book title",
     "date-from": "Published between",
     "date-to": "and",
-    "document-reference": "Reference number(s)",
-    "document-reference-placeholder": "Add document reference numbers separated by a comma",
+    "document-reference": "Doucment reference(s)",
+    "document-reference-placeholder": "Add document references separated by a comma",
     "sort-by": "Sort by",
     "reset": "Clear results",
     "sort": {
@@ -29,14 +30,15 @@
     }
   },
   "results": {
-    "show-image-snippet": "Press to load original image",
-    "alternate-title": "Alternate title (Roman alphabet):",
-    "volume": "Volume:",
-    "author": "Author:",
-    "alternate-author": "Alternate author (Roman alphabet):",
-    "publisher": "Publisher:",
-    "publication-year": "Date:",
-    "document-reference": "Reference number: {0}",
+    "click-image-snippet": "Click to load original image",
+    "tap-image-snippet": "Tap to load original image",
+    "alternate-title": "Title in transcription",
+    "volume": "Volume",
+    "author": "Author",
+    "alternate-author": "Author in transcription",
+    "publisher": "Publisher",
+    "publication-year": "Date",
+    "document-reference": "Document reference: {0}",
     "result-count": "Found {0} relevant books",
     "result-range": "showing results {0} to {1}",
     "result-current-tooltip": "You are currently viewing this book and snippet",
@@ -51,7 +53,8 @@
   "navigation": {
     "back-tooltip": "This button takes you back in your search history",
     "forward-tooltip": "This button takes you forward in your search history",
-    "clear-tooltip": "This button will clear your search history"
+    "clear-tooltip": "This button will clear your search history",
+    "jump-to": "Jump to"
   },
   "preferences": {
     "title": "Update preferences",
@@ -67,17 +70,23 @@
   },
   "fix-metadata": {
     "title": "Update metadata for \"{0}\"",
-    "instructions": "Please present your suggested correction below.",
+    "instructions": {
+      "normal": "Please suggest your correction below.",
+      "authorsNote": "NOTE",
+      "authors": "This individual may already be in our database under a different name.",
+      "authorsInstruction": "You may submit alternative spellings for the same individual below."
+    },
+
     "field": "Field:",
     "current-value": "Current value:",
     "new-value": "Value:",
     "or-merge-with": "or merge with:",
     "field-type": {
       "title": "Title",
-      "titleEnglish": "Alternate title",
+      "titleEnglish": "Title in transcription",
       "volume": "Volume",
       "author": "Author",
-      "authorEnglish": "Alternate author",
+      "authorEnglish": "Author in transcription",
       "publisher": "Publisher",
       "publicationYear": "Date"
     },

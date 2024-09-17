@@ -39,7 +39,7 @@ Description: displays text snippets from the OCR text
       <button
         v-tooltip:bottom="$t('results.show-text')"
         class="card-header-icon is-large has-text-info p-1 m-1"
-        @click="router.push(`/text/${docRef}/page/${snippet.page}`)"
+        @click="openDeepLink(`/text/${docRef}/page/${snippet.page}`)"
       >
         <span class="icon">
           <font-awesome-icon icon="file-lines" size="lg" />
@@ -48,6 +48,22 @@ Description: displays text snippets from the OCR text
     </header>
     <div class="card-content" :data-index="index" :data-docref="docRef" :data-page="snippet.page">
       <div class="columns">
+        <div
+          v-if="preferences.displayLeftToRight === preferences.corpusLeftToRight"
+          :class="{
+            column: true,
+            snippet: true,
+            'has-text-weight-medium': true,
+            'pr-2': true,
+            'pl-2': true,
+            'rtl-align': preferences.needsRightToLeft,
+            rtl: preferences.needsRightToLeft,
+            yiddish: preferences.needsRightToLeft
+          }"
+          v-html="snippet.text"
+          @dblclick="openWordModal"
+          v-touch:longtap="openWordModal"
+        ></div>
         <div
           class="column button is-flex is-align-items-center"
           :class="imageIsLoading ? 'is-loading' : ''"
@@ -62,7 +78,7 @@ Description: displays text snippets from the OCR text
                   </span>
                 </button>
               </div>
-              <span :hidden="imageIsLoading">{{ $t('results.show-image-snippet') }}</span>
+              <span :hidden="imageIsLoading">{{ $t('results.click-image-snippet') }}</span>
             </div>
 
             <!-- Show snippet image -->
@@ -72,7 +88,17 @@ Description: displays text snippets from the OCR text
           </div>
         </div>
         <div
-          class="column rtl-align snippet has-text-weight-medium rtl yiddish pr-2 pl-2"
+          v-if="preferences.displayLeftToRight !== preferences.corpusLeftToRight"
+          :class="{
+            column: true,
+            snippet: true,
+            'has-text-weight-medium': true,
+            'pr-2': true,
+            'pl-2': true,
+            'rtl-align': preferences.needsRightToLeft,
+            rtl: preferences.needsRightToLeft,
+            yiddish: preferences.needsRightToLeft
+          }"
           v-html="snippet.text"
           @dblclick="openWordModal"
           v-touch:longtap="openWordModal"
@@ -84,7 +110,6 @@ Description: displays text snippets from the OCR text
 
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { useRouter } from 'vue-router'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faFileImage,
@@ -94,10 +119,13 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { fetchData } from '@/assets/fetchMethods'
 import { ref, type Ref } from 'vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const preferences = usePreferencesStore()
+
 library.add(faFileImage, faBookOpen, faFileLines, faAngleDown)
 
 const { index, snippet, docRef } = defineProps(['index', 'snippet', 'docRef'])
-const router = useRouter()
 const imageModal: Ref = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const notification = defineModel('notification')
@@ -175,7 +203,5 @@ const openImageModal = () => {
   }
 }
 
-const openDeepLink = (url: string) => {
-  window.open(url, '_blank')
-}
+const openDeepLink = (url: string) => window.open(url, '_blank')
 </script>
