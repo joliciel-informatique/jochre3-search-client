@@ -68,7 +68,7 @@ const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
 const notification: Ref = defineModel('notification')
 
-const authorInclude = ref(false)
+const authorInclude = ref(true)
 const excludeFromSearch = ref(false)
 const authorList = ref<Array<AggregationBin>>([])
 
@@ -137,7 +137,7 @@ const newSearch = () => {
   search().then((res) => {
     isLoading.value = res ? true : false
     const searchBar = document.querySelector('.searchBar') as HTMLDivElement
-    if (searchBar !== null && searchResults.value.length) {
+    if (searchBar !== null && searchResults.value?.length) {
       window.onscroll = () => {
         window.scrollY < searchBar.offsetTop
           ? searchBar.classList.add('stickySearchBarDocked')
@@ -189,7 +189,6 @@ const setShowAdvancedSearchPanel = () => {
 }
 
 watch(excludeFromSearch, () => {
-  console.log(excludeFromSearch.value)
   authorInclude.value = !excludeFromSearch.value
 })
 
@@ -213,6 +212,10 @@ const search = async () => {
     (fromYear.value != null && fromYear.value > 0) ||
     (toYear.value != null && toYear.value > 0) ||
     docRefs.value.length > 0
+
+  if (!hasSearch.value) {
+    return
+  }
 
   const params = new URLSearchParams(defineSearchParams())
 

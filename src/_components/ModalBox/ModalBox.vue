@@ -29,8 +29,8 @@ const notification: Ref = defineModel('notification')
 const authorList: Ref = defineModel('authorList')
 
 const close = () => {
-  data.value.show = false
-  notification.value.show = false
+  if (data.value) data.value.show = false
+  if (notification.value) notification.value.show = false
   authorList.value = []
 }
 </script>
