@@ -1,5 +1,5 @@
 <template>
-  <ModalBox v-model:data="metadataModal">
+  <ModalBox v-model:data="metadataModal" v-model:author-list="authorList">
     <template #header>
       <p class="modal-card-title">
         {{ $t('fix-metadata.title', [$t(`fix-metadata.field-type.${metadataModal.field}`)]) }}
