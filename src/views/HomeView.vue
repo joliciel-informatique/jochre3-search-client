@@ -54,7 +54,7 @@ const searchResults = ref<Array<SearchResult>>([])
 
 // Props for modal boxes
 const imageModal = ref({})
-const metadataModal = ref({})
+const metadataModal = ref({ field: 'author' })
 const wordModal = ref({})
 const notification = ref({})
 const searchPageRef = ref<InstanceType<typeof SearchPage>>()
