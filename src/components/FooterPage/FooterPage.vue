@@ -1,5 +1,11 @@
 <template>
-  <footer class="footer has-text-white mt-auto header-footer-content">
+  <footer
+    class="footer has-text-white mt-auto header-footer-content"
+    :class="{
+      'rtl-align': !preferences.displayLeftToRight,
+      yiddish: !preferences.displayLeftToRight
+    }"
+  >
     <Transition name="slide-up" mode="out-in">
       <div v-if="showFooterNavigation">
         <FooterNavigation
@@ -19,6 +25,9 @@
 import { onMounted } from 'vue'
 import FooterDefault from './FooterDefault/FooterDefault.vue'
 import FooterNavigation from './FooterNavigation/FooterNavigation.vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const preferences = usePreferencesStore()
 
 const totalHits = defineModel('totalHits')
 const page = defineModel('page')
