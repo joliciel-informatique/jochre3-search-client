@@ -24,7 +24,7 @@
           <div class="column is-4">
             <div class="control is-expanded">
               <span class="select is-fullwidth">
-                <select v-model="language" @change="setLocale($i18n as VueI18n.VueI18n)">
+                <select v-model="setToLanguage">
                   <option value="yi">ייִדיש</option>
                   <option value="en">English</option>
                 </select>
@@ -115,22 +115,13 @@ const preferences = usePreferencesStore()
 const keycloak = useKeycloakStore().keycloak
 const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
 const cookies = useCookies(['locale', 'resultsPerPage', 'snippetsPerResult'])
+const setToLanguage = ref(preferences.language)
 
 const storeLocaleInCookie = ref(true)
 const storeResultsPerPageInCookie = ref(true)
 const storeSnippetsPerResultInCookie = ref(true)
 
-const { language, resultsPerPage, snippetsPerResult } = storeToRefs(preferences)
-
-/**
- * Set language based on account preferences or cookie
- */
-const setLocale = (vi18n: VueI18n.VueI18n) => {
-  const lang = keycloak?.authenticated ? language.value : cookies.get('locale')
-  if (!lang) return vi18n.fallbackLocale
-  vi18n.locale = lang
-  language.value = lang
-}
+const { resultsPerPage, snippetsPerResult } = storeToRefs(preferences)
 
 const clearCookie = (cookie: string) => {
   cookies.remove(cookie)
@@ -153,7 +144,9 @@ const save = (vi18n: VueI18n.VueI18n) => {
     fetchData('preferences/user', 'post', params)
       .then((res) => {
         if (res.status === 200) {
-          if (storeLocaleInCookie.value) cookies.set('locale', language)
+          preferences.language = setToLanguage.value
+          vi18n.locale = setToLanguage.value
+          if (storeLocaleInCookie.value) cookies.set('locale', setToLanguage)
           if (storeResultsPerPageInCookie.value) cookies.set('resultsPerPage', resultsPerPage)
           if (storeSnippetsPerResultInCookie.value)
             cookies.set('snippetsPerResult', snippetsPerResult)
@@ -181,7 +174,6 @@ const save = (vi18n: VueI18n.VueI18n) => {
         }
       })
   }
-  vi18n.locale = language.value
   preferences.show = false
 }
 </script>
