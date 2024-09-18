@@ -83,12 +83,13 @@ Description: presents the search bar
         </p>
         <p v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
           <a class="button is-info is-clickable">
-            <label for="searchRelatedWordFormsCheckbox" class="mx-2 is-clickable">{{
+            <label for="strictSearchCheckbox" class="mx-2 is-clickable">{{
               $t('search.related-word-forms')
             }}</label>
             <input
-              id="searchRelatedWordFormsCheckbox"
+              id="strictSearchCheckbox"
               type="checkbox"
+              v-model="strict"
               @change="emit('newSearch')"
             />
           </a>
@@ -113,6 +114,7 @@ const preferences = usePreferencesStore()
 
 library.add(faMagnifyingGlassPlus, faMagnifyingGlassMinus, faKeyboard, faXmarkCircle)
 const query: Ref = defineModel('query')
+const strict: Ref = defineModel('strict')
 const isLoading = defineModel('isLoading')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
 const emit = defineEmits(['newSearch', 'resetSearchResults', 'setShowAdvancedSearchPanel'])

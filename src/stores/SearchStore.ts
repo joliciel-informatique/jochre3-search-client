@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-export const useStateStore = defineStore('state', () => {
+export const useSearchStore = defineStore('search', () => {
   // App is loading
   const isLoading = ref(false)
   const notLoading = () => (isLoading.value = false)
@@ -17,7 +17,7 @@ export const useStateStore = defineStore('state', () => {
   const fromYear = ref(0)
   const toYear = ref(0)
   const docRefs = ref('')
-  const relatedWordForms = ref(false)
+  const strict = ref(true)
   const sortBy = ref('Score')
   const authorList = ref([])
   const showAdvancedSearchPanel = ref(false)
@@ -26,15 +26,15 @@ export const useStateStore = defineStore('state', () => {
     query.value = ''
     notLoading
     hasSearch.value = false
-    facets.value = []
-    searchResults.value = []
+    // facets.value = []
+    // searchResults.value = []
 
     page.value = 1
     title.value = ''
     fromYear.value = 0
     toYear.value = 0
     docRefs.value = ''
-    relatedWordForms.value = false
+    strict.value = true
     sortBy.value = 'Score'
     authorList.value = []
     showAdvancedSearchPanel.value = false
@@ -42,15 +42,5 @@ export const useStateStore = defineStore('state', () => {
     window.history.replaceState({}, document.title, '/')
   }
 
-  // page.value = 1
-  // title.value = ''
-  // fromYear.value = 0
-  // toYear.value = 0
-  // docRefs.value = ''
-  // relatedWordForms.value = false
-  // sortBy.value = 'Score'
-  // authorList.value = []
-  // showAdvancedSearchPanel.value = false
-
-  return { isLoading, notLoading, loading, hasSearch }
+  return { query, strict }
 })
