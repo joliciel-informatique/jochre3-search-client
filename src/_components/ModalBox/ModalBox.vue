@@ -1,6 +1,14 @@
 <template>
   <Transition name="fade">
-    <div class="modal" :class="data.show ? 'is-active' : ''" v-if="data.show">
+    <div
+      class="modal"
+      :class="{
+        'is-active': data.show,
+        'rtl-align': !preferences.displayLeftToRight,
+        yiddish: !preferences.displayLeftToRight
+      }"
+      v-show="data.show"
+    >
       <div class="modal-background" @click="close"></div>
       <div class="modal-content">
         <header class="modal-card-head">
@@ -24,6 +32,9 @@
 </template>
 <script setup lang="ts">
 import { type Ref } from 'vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+const preferences = usePreferencesStore()
+
 const data: Ref = defineModel('data')
 const notification: Ref = defineModel('notification')
 const authorList: Ref = defineModel('authorList')
