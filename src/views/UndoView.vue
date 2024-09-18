@@ -1,15 +1,15 @@
 <template>
   <main
+    class="hero is-widescreen"
     :class="{
-      container: true,
-      hero: true,
-      'is-widescreen': true,
       'rtl-align': !preferences.displayLeftToRight,
       yiddish: !preferences.displayLeftToRight
     }"
   >
     <HeaderPage />
-    <div :class="{ 'ltr-align': $i18n.locale === 'yi', english: $i18n.locale === 'yi' }">
+    <div
+      :class="{ 'ltr-align': preferences.needsLeftToRight, english: preferences.needsLeftToRight }"
+    >
       <p v-if="responseCode == 200">Metadata correction {{ route.params.id }} undone.</p>
       <p v-if="responseCode != 200">An error occurred.</p>
       <p v-if="responseCode == 404">Metadata correction {{ route.params.id }} not found.</p>

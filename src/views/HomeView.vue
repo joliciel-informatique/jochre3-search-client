@@ -2,7 +2,10 @@
   <PreferencesSetup />
   <main
     class="hero is-widescreen"
-    :class="!preferences.displayLeftToRight ? 'rtl-align yiddish' : ''"
+    :class="{
+      'rtl-align': !preferences.displayLeftToRight,
+      yiddish: !preferences.displayLeftToRight
+    }"
   >
     <HeaderPage />
     <SearchPage
