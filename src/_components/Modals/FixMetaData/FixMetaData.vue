@@ -1,5 +1,9 @@
 <template>
-  <ModalBox v-model:data="metadataModal" v-model:notification="notification">
+  <ModalBox
+    v-model:data="metadataModal"
+    v-model:notification="notification"
+    v-model:author-list="authorList"
+  >
     <template #header>
       <p class="modal-card-title">
         {{ $t('fix-metadata.title', [$t(`fix-metadata.field-type.${metadataModal.field}`)]) }}
@@ -95,8 +99,7 @@ const preferences = usePreferencesStore()
 
 const metadataModal: Ref = defineModel('metadataModal')
 const notification = defineModel('notification')
-const showFindAuthorDropdown = computed(() => field.value.includes('author'))
-const isLeftToRight = ref(false)
+const showFindAuthorDropdown = computed(() => metadataModal.value.field?.includes('author'))
 const authorList: Ref = ref<Array<{ label: string; count: number }>>([])
 const includeAuthor = computed(() => metadataModal.value.field === 'author')
 const includeAuthorInTranscription = computed(() => metadataModal.value.field === 'authorEnglish')

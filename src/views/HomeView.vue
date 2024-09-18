@@ -1,9 +1,8 @@
 <template>
   <PreferencesSetup />
   <main
+    class="hero is-widescreen"
     :class="{
-      hero: true,
-      'is-widescreen': true,
       'rtl-align': !preferences.displayLeftToRight,
       yiddish: !preferences.displayLeftToRight
     }"
@@ -44,10 +43,13 @@ import LargeImage from '@/_components/Modals/LargeImage/LargeImage.vue'
 import FixMetaData from '@/_components/Modals/FixMetaData/FixMetaData.vue'
 import FixWord from '@/_components/Modals/FixWord/FixWord.vue'
 import Notification from '@/_components/Notifications/AppNotification/AppNotification.vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const preferences = usePreferencesStore()
 
 // Props shared between SearchPage and FooterPage components
 const page = ref(1)
-const totalHits = ref(0)
+const totalHits = ref()
 const searchResults = ref<Array<SearchResult>>([])
 
 // Props for modal boxes

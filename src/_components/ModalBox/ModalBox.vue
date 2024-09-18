@@ -26,10 +26,12 @@
 import { type Ref } from 'vue'
 const data: Ref = defineModel('data')
 const notification: Ref = defineModel('notification')
+const authorList: Ref = defineModel('authorList')
 
 const close = () => {
   data.value.show = false
   notification.value.show = false
+  authorList.value = []
 }
 </script>
 <style lang="css" scoped>

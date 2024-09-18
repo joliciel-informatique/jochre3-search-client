@@ -1,8 +1,7 @@
 <template>
   <main
+    class="hero is-widescreen"
     :class="{
-      hero: true,
-      'is-widescreen': true,
       'rtl-align': !preferences.displayLeftToRight,
       yiddish: !preferences.displayLeftToRight
     }"
