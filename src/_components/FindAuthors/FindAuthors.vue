@@ -28,6 +28,7 @@ Description: presents a 'search for authors' text box and retrieves authors ever
             id="findAuthors"
             class="input keyboardInput"
             type="text"
+            lang="yi"
             :disabled="disabled"
             :vki-id="uniqueId"
             v-model="authorText"
@@ -37,10 +38,8 @@ Description: presents a 'search for authors' text box and retrieves authors ever
           />
           <div
             v-if="showExcludeCheckbox"
+            class="control icon is-small"
             :class="{
-              control: true,
-              icon: true,
-              'is-small': true,
               'is-left': preferences.displayLeftToRight,
               'is-right': !preferences.displayLeftToRight
             }"
