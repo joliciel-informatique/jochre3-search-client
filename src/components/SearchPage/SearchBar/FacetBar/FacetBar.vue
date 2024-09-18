@@ -32,7 +32,7 @@ Description: presents the facet bar
             :count="facet.count"
             :active="facet.active"
             :showCount="true"
-            @func="emit('newSearch', facet.label)"
+            @func="toggleFacet(facet)"
           />
         </span>
       </div>
@@ -45,9 +45,16 @@ import { type Ref } from 'vue'
 import FilterTag from '@/_components/FilterTag/FilterTag.vue'
 import { sha1 } from 'object-hash'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+// Import interfaces
+import type { AggregationBin } from '@/assets/interfacesExternals'
 
 const isLoading = defineModel('isLoading')
 const facets: Ref = defineModel('facets')
 
 const emit = defineEmits(['newSearch'])
+
+const toggleFacet = (facet: AggregationBin) => {
+  facet.active = facet.active ? false : true
+  emit('newSearch')
+}
 </script>

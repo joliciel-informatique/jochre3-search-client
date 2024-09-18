@@ -71,17 +71,19 @@ const wordLoading = ref(false)
 const wordSuggestion = ref('')
 
 onBeforeUpdate(async () => {
-  const params: URLSearchParams = new URLSearchParams({
-    'doc-ref': wordModal.value.docRef,
-    'word-offset': (
-      wordModal.value.globalOffset + wordModal.value.selection.anchorOffset
-    ).toString()
-  })
+  if (wordModal.value.docRef && wordModal.value.selection) {
+    const params: URLSearchParams = new URLSearchParams({
+      'doc-ref': wordModal.value.docRef,
+      'word-offset': (
+        wordModal.value.globalOffset + wordModal.value.selection.anchorOffset
+      ).toString()
+    })
 
-  wordLoading.value = true
-  loadWordImage(params)
-  loadWordText(params)
-  wordLoading.value = false
+    wordLoading.value = true
+    loadWordImage(params)
+    loadWordText(params)
+    wordLoading.value = false
+  }
 })
 
 const loadWordImage = async (params: URLSearchParams) => {

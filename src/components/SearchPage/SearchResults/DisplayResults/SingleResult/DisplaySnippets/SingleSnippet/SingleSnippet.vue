@@ -197,7 +197,7 @@ const toggleImageSnippet = async () => {
 
 const openImageModal = () => {
   imageModal.value = {
-    open: true,
+    show: true,
     title: `Page ${snippet.page} for ${docRef}`,
     data: image.value ? image.value : null
   }

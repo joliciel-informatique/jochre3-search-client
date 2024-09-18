@@ -12,10 +12,10 @@ Description: display results in SingleResult child component
 <template>
   <div>
     <!-- Loading -->
-    <h1 v-if="isLoading">Loading</h1>
+    <h1 v-if="isLoading">{{ $t('loading') }}</h1>
 
     <!-- No results for query -->
-    <h1 v-else-if="query.length && !searchResults.length">
+    <h1 v-else-if="query.length && !searchResults?.length">
       <span class="no-results"> {{ $t('results.none') }}! </span>
       <div class="is-justify-content-center is-align-items-center no-results-image m-6">
         <FontAwesomeIcon class="fa-10x" icon="ban" />
@@ -23,7 +23,7 @@ Description: display results in SingleResult child component
     </h1>
 
     <!-- Display results -->
-    <ul v-else-if="searchResults.length">
+    <ul v-else-if="searchResults?.length">
       <li v-for="(result, index) of searchResults" :key="sha1(result)">
         <div>
           <SingleResult
