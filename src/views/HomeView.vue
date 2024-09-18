@@ -1,9 +1,8 @@
 <template>
   <PreferencesSetup />
   <main
+    class="hero is-widescreen"
     :class="{
-      hero: true,
-      'is-widescreen': true,
       'rtl-align': !preferences.displayLeftToRight,
       yiddish: !preferences.displayLeftToRight
     }"
@@ -49,7 +48,7 @@ const preferences = usePreferencesStore()
 
 // Props shared between SearchPage and FooterPage components
 const page = ref(1)
-const totalHits = ref(0)
+const totalHits = ref()
 const searchResults = ref<Array<SearchResult>>([])
 
 // Props for modal boxes

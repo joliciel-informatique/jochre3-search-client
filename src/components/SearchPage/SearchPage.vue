@@ -180,7 +180,6 @@ const defineSearchParams = () => {
   )
 }
 
-
 const resetSearchResults = () => {
   query.value = ''
   isLoading.value = false
