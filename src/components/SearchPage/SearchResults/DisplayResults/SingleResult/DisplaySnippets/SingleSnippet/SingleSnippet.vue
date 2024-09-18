@@ -56,9 +56,9 @@ Description: displays text snippets from the OCR text
             'has-text-weight-medium': true,
             'pr-2': true,
             'pl-2': true,
-            'rtl-align': preferences.needsRightToLeft,
-            rtl: preferences.needsRightToLeft,
-            yiddish: preferences.needsRightToLeft
+            'rtl-align': !preferences.corpusLeftToRight,
+            rtl: !preferences.corpusLeftToRight,
+            yiddish: !preferences.corpusLeftToRight
           }"
           v-html="snippet.text"
           @dblclick="openWordModal"
@@ -95,9 +95,9 @@ Description: displays text snippets from the OCR text
             'has-text-weight-medium': true,
             'pr-2': true,
             'pl-2': true,
-            'rtl-align': preferences.needsRightToLeft,
-            rtl: preferences.needsRightToLeft,
-            yiddish: preferences.needsRightToLeft
+            'rtl-align': !preferences.corpusLeftToRight,
+            rtl: !preferences.corpusLeftToRight,
+            yiddish: !preferences.corpusLeftToRight
           }"
           v-html="snippet.text"
           @dblclick="openWordModal"
