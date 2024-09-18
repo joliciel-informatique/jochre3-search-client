@@ -36,6 +36,7 @@
       v-model:image-modal="imageModal"
       v-model:word-modal="wordModal"
       v-model:metadata-modal="metadataModal"
+      v-model:notification="notification"
       v-model:query="query"
       v-model:search-results="searchResults"
     />
@@ -56,7 +57,6 @@ import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
 import type { SearchResult, AggregationBin } from '@/assets/interfacesExternals'
 
 import { hasSearch } from '@/assets/appState'
-// import { setErrorMessage } from '@/_components/Modals/ErrorNotification/ErrorNotification.vue'
 
 const query = ref('')
 const searchResults: Ref = defineModel('searchResults')
@@ -65,6 +65,7 @@ const page: Ref = defineModel('page')
 const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
+const notification: Ref = defineModel('notification')
 
 const authorInclude = ref(false)
 const excludeFromSearch = ref(false)
@@ -300,7 +301,14 @@ const search = async (facet: string | undefined = undefined) => {
                 return false
               })
             )
-            .catch((error) => console.error(error))
+            .catch((error) => {
+              notification.value = {
+                show: true,
+                error: true,
+                delay: 4000,
+                msg: `Error: ${error}`
+              }
+            })
         } else {
           q?.parentElement?.classList.remove('is-loading')
           q?.removeAttribute('disabled')
@@ -310,7 +318,12 @@ const search = async (facet: string | undefined = undefined) => {
       })
     )
     .catch((error) => {
-      // Pass error to ErrorNotification dialog _component through HomeView
+      notification.value = {
+        show: true,
+        error: true,
+        delay: 4000,
+        msg: `Error: ${error}`
+      }
       isLoading.value = false
       hasSearch.value = true
       q?.parentElement?.classList.remove('is-loading')

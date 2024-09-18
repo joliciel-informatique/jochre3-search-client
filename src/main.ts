@@ -20,7 +20,6 @@ import { mergeDeep } from './assets/deepMerge'
 
 import SearchPage from './components/SearchPage/SearchPage.vue'
 import { fetchData, setURL, setToken } from './assets/fetchMethods'
-import { setErrorMessage } from './_components/Modals/ErrorNotification/ErrorNotification.vue'
 
 import './styles/main.scss'
 import cookieConsent from './plugins/CookieConsentVue'
@@ -145,7 +144,6 @@ fetch(import.meta.env.BASE_URL + `conf/config-frontend.json?date=${Date.now()}`)
         // }))
         // .catch((error) => {
         //   const msg = new Error(`Failed to get user preferences: ${error.message}`)
-        //   setErrorMessage(msg)
         // })
 
         const i18n = axios
@@ -188,7 +186,7 @@ fetch(import.meta.env.BASE_URL + `conf/config-frontend.json?date=${Date.now()}`)
               return i18n
             } else {
               const msg = new Error(`Failed to get user preferences: ${reason}`)
-              setErrorMessage(msg)
+              // setErrorMessage(msg)
 
               // Don't mount the app
               // console.error(reason.message)

@@ -56,7 +56,7 @@ title = field === 'publicationYear' ? `results.publication-year` : title
 
 const openMetadataModal = () => {
   metadataModal.value = {
-    open: true,
+    show: true,
     docRef: docRef,
     field: field,
     value: value

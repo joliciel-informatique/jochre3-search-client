@@ -128,6 +128,7 @@ library.add(faFileImage, faBookOpen, faFileLines, faAngleDown)
 const { index, snippet, docRef } = defineProps(['index', 'snippet', 'docRef'])
 const imageModal: Ref = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
+const notification = defineModel('notification')
 const image = ref('')
 const imageIsLoading = ref(false)
 
@@ -151,7 +152,7 @@ const openWordModal = () => {
       const globalOffset = parseInt(globalOffsetStr)
 
       wordModal.value = {
-        open: true,
+        show: true,
         docRef: docRef,
         selection: selection,
         globalOffset: globalOffset
@@ -175,7 +176,12 @@ const toggleImageSnippet = async () => {
 
   const response = await fetchData('image-snippet', 'get', params, 'image/png', 'arraybuffer')
   if (response.status !== 200) {
-    // TODO: report failure to user
+    notification.value = {
+      show: true,
+      error: true,
+      delay: 4000,
+      msg: 'Something went wrong! Contact us if the error persists!'
+    }
   } else {
     image.value = await response.arrayBuffer().then(
       (buffer) =>

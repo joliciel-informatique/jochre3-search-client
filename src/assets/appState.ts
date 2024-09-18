@@ -5,5 +5,3 @@ export const setLocale = (value: string) => (locale = value)
 
 export const hasSearch = ref(false)
 export const isBusy = ref(false)
-
-export const showErrorNotification = ref(false)

@@ -1,5 +1,5 @@
 <template>
-  <ModalBox v-model:data="wordModal">
+  <ModalBox v-model:data="wordModal" v-model:notification="notification">
     <template #header>
       <p class="modal-card-title">{{ $t('fix-word.title') }}</p>
     </template>
@@ -64,9 +64,10 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
+const wordModal: Ref = defineModel('wordModal')
+const notification: Ref = defineModel('notification')
 const wordImage = ref('')
 const wordLoading = ref(false)
-const wordModal: Ref = defineModel('wordModal')
 const wordSuggestion = ref('')
 
 onBeforeUpdate(async () => {
@@ -86,8 +87,12 @@ onBeforeUpdate(async () => {
 const loadWordImage = async (params: URLSearchParams) => {
   const response = await fetchData('word-image', 'get', params, 'image/png', 'arraybuffer')
   if (response.status !== 200) {
-    // TODO: report failure to user
-    return null
+    notification.value = {
+      show: true,
+      error: true,
+      delay: 4000,
+      msg: 'Something went wrong! Contact us if this error persists!'
+    }
   } else {
     wordImage.value = await response.arrayBuffer().then(
       (buffer) =>
@@ -103,8 +108,12 @@ const loadWordImage = async (params: URLSearchParams) => {
 const loadWordText = async (params: URLSearchParams) => {
   const response = await fetchData('word-text', 'get', params, 'application/json')
   if (response.status !== 200) {
-    // TODO: report failure to user
-    return null
+    notification.value = {
+      show: true,
+      error: true,
+      delay: 4000,
+      msg: 'Sodmething went wrong! Contact us if the error persists!'
+    }
   } else {
     wordSuggestion.value = await response.json().then((result) => result.text)
   }
@@ -119,12 +128,30 @@ const save = (closeFunc: Function) => {
   fetchData('suggest-word', 'post', data, 'application/json')
     .then((res) => {
       if (res.status === 200) {
-        // TODO: report success to user
+        notification.value = {
+          show: true,
+          error: false,
+          delay: 4000,
+          msg: 'Thanks for your correction! The JOCHRE crew will review this suggestion.'
+        }
       } else {
-        // TODO: report failure to user
+        notification.value = {
+          show: true,
+          error: true,
+          delay: 4000,
+          msg: 'Something went wrong! Contact us if this error persists!'
+        }
       }
       closeFunc()
     })
-    .catch(() => closeFunc())
+    .catch((error) => {
+      notification.value = {
+        show: true,
+        error: true,
+        delay: 4000,
+        msg: `Something went wrong: ${error}! Contact us if this error persists!`
+      }
+      closeFunc()
+    })
 }
 </script>

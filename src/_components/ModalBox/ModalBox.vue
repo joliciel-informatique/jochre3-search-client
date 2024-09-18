@@ -1,6 +1,6 @@
 <template>
   <Transition name="fade">
-    <div class="modal fade" :class="active" v-show="visible">
+    <div class="modal" :class="data.show ? 'is-active' : ''" v-if="data.show">
       <div class="modal-background" @click="close"></div>
       <div class="modal-content">
         <header class="modal-card-head">
@@ -23,39 +23,25 @@
   </Transition>
 </template>
 <script setup lang="ts">
-import { ref, watch, type Ref } from 'vue'
-const active = ref('')
-const visible = ref(false)
+import { type Ref } from 'vue'
 const data: Ref = defineModel('data')
+const notification: Ref = defineModel('notification')
 const authorList: Ref = defineModel('authorList')
 
-watch(data, (newv: { open: string }) => {
-  visible.value = newv.open ? true : false
-  active.value = newv.open ? 'is-active' : ''
-})
-
 const close = () => {
-  visible.value = false
-  active.value = ''
+  data.value.show = false
+  notification.value.show = false
   authorList.value = []
 }
 </script>
-<style scoped>
-/* .modal-mask {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+<style lang="css" scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 250ms ease-in-out;
 }
-.modal-container {
-  width: 300px;
-  margin: 150px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-} */
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>

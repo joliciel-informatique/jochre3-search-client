@@ -8,7 +8,7 @@
       @before-leave="beforeLeave"
       @leave="leave"
     >
-      <div class="body" v-if="showing">
+      <div class="body" v-show="showing">
         <div class="body-inner">
           <slot name="content"></slot>
         </div>

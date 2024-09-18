@@ -15,6 +15,7 @@ Description: controls text snippets from the OCR text
       <SingleSnippet
         v-model:image-modal="imageModal"
         v-model:word-modal="wordModal"
+        v-model:notification="notification"
         :index="index"
         :snippet="snippet"
         :docRef="docRef"
@@ -30,6 +31,7 @@ import { sha1 } from 'object-hash'
 
 const imageModal = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
+const notification = defineModel('notification')
 
 defineProps(['snippets', 'docRef', 'url'])
 </script>

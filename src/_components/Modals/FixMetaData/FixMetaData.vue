@@ -1,5 +1,9 @@
 <template>
-  <ModalBox v-model:data="metadataModal" v-model:author-list="authorList">
+  <ModalBox
+    v-model:data="metadataModal"
+    v-model:notification="notification"
+    v-model:author-list="authorList"
+  >
     <template #header>
       <p class="modal-card-title">
         {{ $t('fix-metadata.title', [$t(`fix-metadata.field-type.${metadataModal.field}`)]) }}
@@ -94,6 +98,7 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 const preferences = usePreferencesStore()
 
 const metadataModal: Ref = defineModel('metadataModal')
+const notification = defineModel('notification')
 const showFindAuthorDropdown = computed(() => metadataModal.value.field?.includes('author'))
 const authorList: Ref = ref<Array<{ label: string; count: number }>>([])
 const includeAuthor = computed(() => metadataModal.value.field === 'author')
@@ -119,13 +124,31 @@ const save = (closeFunc: Function) => {
   fetchData('correct-metadata', 'post', data, 'application/json')
     .then((res) => {
       if (res.status === 200) {
-        // TODO: Report success to user
+        notification.value = {
+          show: true,
+          error: false,
+          delay: 2000,
+          msg: 'Thanks, we will review your suggestion!'
+        }
       } else {
-        // TODO: Report failure to user
+        notification.value = {
+          show: true,
+          error: true,
+          delay: 4000,
+          msg: `Something went wrong: ${res.status}: ${res.statusText}. Try again and if the error persists, contact us!`
+        }
       }
       closeFunc()
     })
-    .catch(() => closeFunc())
+    .catch((error) => {
+      notification.value = {
+        show: true,
+        error: true,
+        delay: 4000,
+        msg: `Something went wrong: ${error}. Try again and if the error persists, contact us!`
+      }
+      closeFunc()
+    })
 }
 
 const capitalizeFirstLetter = (string: String) => {
