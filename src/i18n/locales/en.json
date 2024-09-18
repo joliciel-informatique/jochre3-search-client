@@ -60,7 +60,11 @@
     "title": "Update preferences",
     "language": "Interface language",
     "results-per-page": "Results per page",
-    "snippets-per-result": "Snippets per book"
+    "snippets-per-result": "Snippets per book",
+    "clear-button": "Clear",
+    "cookies": "Cookie settings",
+    "clear-cookie-tooltip": "Remove this preference from my cookies",
+    "what-are-cookies-tooltip": "Cookies are tiny files with information meant to improve your experience on this site. See our privacy policy for more information."
   },
   "fix-word": {
     "title": "Fix a word",

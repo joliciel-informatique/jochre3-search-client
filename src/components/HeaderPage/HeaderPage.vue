@@ -21,7 +21,7 @@
       <div class="cell p-2">
         <div class="is-pulled-right">
           <button
-            @click="showPreferences"
+            @click="preferences.show = true"
             class="button is-small"
             :title="$t('header.preferences')"
           >
@@ -40,10 +40,6 @@
             </span>
           </button>
         </div>
-        <PreferencesModal
-          :visible="preferencesVisible"
-          @on-close-modal="hidePreferences"
-        ></PreferencesModal>
       </div>
     </div>
   </div>
@@ -55,13 +51,14 @@ import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faGear, faRightToBracket, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
-import PreferencesModal from '@/_components/Modals/Preferences/PreferencesModal.vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const preferences = usePreferencesStore()
 
 library.add(faGear, faRightToBracket, faRightFromBracket)
 
 const keycloak = useKeycloakStore().keycloak
 const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
-const preferencesVisible = ref<boolean>(false)
 const headerLinks = ref()
 
 const headerInfo = (info: {}) => {
@@ -73,16 +70,6 @@ const headerInfo = (info: {}) => {
     const linked = strippedLinks.map((link: string) => headerText[link])
     headerLinks.value = linked
   }
-}
-
-const showPreferences = () => {
-  preferencesVisible.value = true
-  console.log(`preferencesVisible: ${preferencesVisible.value}`)
-}
-
-const hidePreferences = () => {
-  preferencesVisible.value = false
-  console.log(`preferencesVisible: ${preferencesVisible.value}`)
 }
 
 const loginOrLogout = () => (authenticated.value ? keycloak?.logout() : keycloak?.login())
