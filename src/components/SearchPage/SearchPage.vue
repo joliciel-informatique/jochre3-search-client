@@ -8,6 +8,7 @@
       v-model:query="query"
       v-model:strict="strict"
       v-model:is-loading="isLoading"
+      v-model:open-keyboard="openKeyboard"
     />
     <AdvancedSearch
       @newSearch="newSearch"
@@ -21,12 +22,14 @@
       v-model:sort-by="sortBy"
       v-model:facets="facets"
       v-model:exclude-from-search="excludeFromSearch"
+      v-model:open-keyboard="openKeyboard"
     />
     <FacetBar
       @newSearch="newSearch"
       @resetSearchResults="resetSearchResults"
       v-model:is-loading="isLoading"
       v-model:facets="facets"
+      v-model:open-keyboard="openKeyboard"
     />
   </div>
   <div
@@ -60,6 +63,7 @@ import type { SearchResult, AggregationBin } from '@/assets/interfacesExternals'
 import { hasSearch } from '@/assets/appState'
 
 const query = ref('')
+
 const searchResults: Ref = defineModel('searchResults')
 const totalHits: Ref = defineModel('totalHits')
 const page: Ref = defineModel('page')
@@ -80,6 +84,8 @@ const fromYear = ref(0)
 const toYear = ref(0)
 const docRefs = ref('')
 const sortBy = ref('Score')
+
+const openKeyboard = defineModel('openKeyboard')
 
 // Startup variables: may move to App.vue or HomeView.vue
 const router = useRouter()
@@ -134,6 +140,7 @@ onMounted(() => {
 })
 
 const newSearch = () => {
+  openKeyboard.value = false
   search().then((res) => {
     isLoading.value = res ? true : false
     const searchBar = document.querySelector('.searchBar') as HTMLDivElement
@@ -180,6 +187,8 @@ const resetSearchResults = () => {
   sortBy.value = 'Score'
   authorList.value = []
   showAdvancedSearchPanel.value = false
+
+  openKeyboard.value = false
 
   window.history.replaceState({}, document.title, '/')
 }

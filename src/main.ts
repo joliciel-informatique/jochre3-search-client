@@ -46,7 +46,7 @@ directives(app)
 app.use(router)
 app.use(pinia)
 app.use<Vue3TouchEventsOptions>(Vue3TouchEvents, {})
-app.use(cookieConsent, cookieConsentConfig)
+// app.use(cookieConsent, cookieConsentConfig)
 
 app.component('SearchPage', SearchPage)
 

@@ -67,6 +67,7 @@
           <FindAuthors
             v-model:authorList="authorList"
             v-model:exclude="metadataModal.value"
+            v-model:open-keyboard="openKeyboard"
             :multi-value="false"
             :show-exclude-checkbox="false"
             v-model:include-author="includeAuthor"
@@ -96,6 +97,8 @@ import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 const preferences = usePreferencesStore()
+
+const openKeyboard = defineModel('openKeyboard')
 
 const metadataModal: Ref = defineModel('metadataModal')
 const notification = defineModel('notification')

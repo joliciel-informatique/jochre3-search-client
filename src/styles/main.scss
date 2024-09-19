@@ -4,6 +4,7 @@
 @import './CustomStyles/YBC.scss';
 @import './transitions/_transitions.scss';
 @import './components/ToolTip/_tooltip.scss';
+@import './components/Keyboard//keyboard';
 
 /** Overriding Bulma primary variables */
 $primary: $background-color-1;
@@ -69,8 +70,22 @@ $sticky-bar-undocked-height: 10vh;
   max-height: max-content;
 }
 
+html {
+  overflow-y: scroll;
+}
+
 .advancedSearchPanel {
   height: auto;
+}
+
+.keyboardOverlay {
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: -1;
+  // background-color: rgba($foreground-color-1, 0.5);
 }
 
 $column-gap: 0.1rem;
@@ -164,6 +179,12 @@ $notification-background-color: none;
 // .modal.is-active {
 // opacity: 1;
 // transition: all 500ms ease-in-out;
+// }
+
+// .hg-layout-default,
+// .hg-layout-shift,
+// .hg-layout-alt {
+//   width: 43rem;
 // }
 
 .modal {

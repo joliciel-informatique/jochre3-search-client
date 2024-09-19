@@ -20,8 +20,7 @@ Description: presents the search bar
           <input
             id="query"
             type="text"
-            class="input is-normal is-rounded keyboardInput"
-            vki-id="1"
+            class="input is-normal is-rounded"
             lang="yi"
             v-model="query"
             @keyup.enter="emit('newSearch')"
@@ -71,16 +70,11 @@ Description: presents the search bar
             v-else
           ></span>
         </p>
-        <p class="control">
-          <button
-            class="button is-clickable is-medium is-info keyboardInputButton"
-            vki-id="1"
-            :alt="$t('search.keyboard')"
-            :title="$t('search.keyboard')"
-          >
-            <font-awesome-icon icon="keyboard" />
-          </button>
-        </p>
+        <SimpleKeyboard
+          :attach-to="'query'"
+          v-model:value="query"
+          v-model:open-keyboard="openKeyboard"
+        />
         <p v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
           <a class="button is-info is-clickable">
             <label for="strictSearchCheckbox" class="mx-2 is-clickable">{{
@@ -109,6 +103,7 @@ import {
   faXmarkCircle
 } from '@fortawesome/free-solid-svg-icons'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import SimpleKeyboard from '@/_components/SimpleKeyboard/SimpleKeyboard.vue'
 
 const preferences = usePreferencesStore()
 
@@ -116,6 +111,7 @@ library.add(faMagnifyingGlassPlus, faMagnifyingGlassMinus, faKeyboard, faXmarkCi
 const query: Ref = defineModel('query')
 const strict: Ref = defineModel('strict')
 const isLoading = defineModel('isLoading')
+const openKeyboard = defineModel('openKeyboard')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
 const emit = defineEmits(['newSearch', 'resetSearchResults', 'setShowAdvancedSearchPanel'])
 </script>

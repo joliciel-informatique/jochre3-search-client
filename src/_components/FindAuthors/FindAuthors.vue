@@ -72,14 +72,20 @@ Description: presents a 'search for authors' text box and retrieves authors ever
             </div>
           </div>
           <p class="control">
-            <button
+            <SimpleKeyboard
+              :attach-to="uniqueId"
+              v-model:value="authorText"
+              v-model:open-keyboard="openKeyboard"
+            />
+
+            <!-- <button
               class="button is-clickable is-medium is-info keyboardInputButton"
               :vki-id="uniqueId"
               :alt="$t('search.keyboard')"
               :title="$t('search.keyboard')"
             >
               <font-awesome-icon icon="keyboard" />
-            </button>
+            </button> -->
           </p>
         </div>
       </span>
@@ -106,6 +112,7 @@ import { fetchData } from '@/assets/fetchMethods'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import FilterTag from '@/_components/FilterTag/FilterTag.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import SimpleKeyboard from '../SimpleKeyboard/SimpleKeyboard.vue'
 
 const preferences = usePreferencesStore()
 
@@ -114,6 +121,8 @@ const { multiValue, uniqueId, showExcludeCheckbox } = defineProps([
   'uniqueId',
   'showExcludeCheckbox'
 ])
+
+const openKeyboard = defineModel('openKeyboard')
 
 const disabled: Ref = defineModel('disabled')
 const includeAuthor: Ref = defineModel('includeAuthor', { default: true })

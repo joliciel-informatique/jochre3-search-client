@@ -17,6 +17,7 @@
       v-model:word-modal="wordModal"
       v-model:metadata-modal="metadataModal"
       v-model:notification="notification"
+      v-model:open-keyboard="openKeyboard"
     />
   </main>
   <FooterPage
@@ -28,7 +29,11 @@
   />
   <LargeImage v-model:image-modal="imageModal" />
   <FixWord v-model:word-modal="wordModal" v-model:notification="notification" />
-  <FixMetaData v-model:metadata-modal="metadataModal" v-model:notification="notification" />
+  <FixMetaData
+    v-model:metadata-modal="metadataModal"
+    v-model:notification="notification"
+    v-model:open-keyboard="openKeyboard"
+  />
   <Notification v-model:notification="notification" />
 </template>
 
@@ -58,6 +63,7 @@ const metadataModal = ref({ field: 'author' })
 const wordModal = ref({})
 const notification = ref({})
 const searchPageRef = ref<InstanceType<typeof SearchPage>>()
+const openKeyboard = ref(false)
 
 // Methods exposed by SearchPage
 const resetSearchResults = () => searchPageRef.value?.resetSearchResults()

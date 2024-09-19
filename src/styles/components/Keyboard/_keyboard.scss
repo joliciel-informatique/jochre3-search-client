@@ -1,0 +1,15 @@
+@import '../../CustomStyles/YBC.scss';
+
+.hg-theme-default {
+  font-family: Noto, serif;
+  font-size: 0.8rem;
+  font-style: normal;
+  position: fixed;
+  z-index: 100;
+  color: $foreground-color-1;
+}
+
+.hg-theme-default .hg-button-enter,
+.hg-button-alt {
+  max-width: 3rem;
+}
