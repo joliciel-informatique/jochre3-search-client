@@ -7,7 +7,7 @@
     }"
   >
     <Transition name="slide-up" mode="out-in">
-      <div v-if="showFooterNavigation">
+      <div v-if="totalHits">
         <FooterNavigation
           @newPage="emit('newPage')"
           @resetSearchResults="emit('resetSearchResults')"
@@ -46,7 +46,7 @@ const autoHide = () =>
   (showFooterNavigation.value = hasScrollBar() && bottomVisible() ? false : true)
 
 onMounted(() => {
-  showFooterNavigation.value = true
+  // showFooterNavigation.value = true
   window.addEventListener('scroll', autoHide)
 })
 </script>
