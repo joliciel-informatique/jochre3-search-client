@@ -332,6 +332,17 @@ span.icon.is-clickable:active {
   animation: 300ms ease-in-out;
 }
 
+.card-footer {
+  height: 2rem;
+  transition: all 100ms ease-in-out;
+}
+
+.card-footer:hover {
+  background-color: rgb(180, 220, 222);
+  cursor: pointer;
+  transition: all 100ms ease-in-out;
+}
+
 .card-footer > span {
   color: rgb(180, 220, 222);
   transform-origin: top;

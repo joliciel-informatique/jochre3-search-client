@@ -21,7 +21,7 @@
   <FooterPage
     v-model:total-hits="totalHits"
     v-model:page="page"
-    @newSearch="newSearch"
+    @newPage="newPage"
     @resetSearchResults="resetSearchResults"
     :search-results="searchResults"
   />
@@ -55,7 +55,7 @@ const searchResults = ref<Array<SearchResult>>([])
 
 // Props for modal boxes
 const imageModal = ref({})
-const metadataModal = ref({})
+const metadataModal = ref({ field: 'author' })
 const wordModal = ref({})
 const notification = ref({})
 const searchPageRef = ref<InstanceType<typeof SearchPage>>()
@@ -63,4 +63,5 @@ const searchPageRef = ref<InstanceType<typeof SearchPage>>()
 // Methods exposed by SearchPage
 const resetSearchResults = () => searchPageRef.value?.resetSearchResults()
 const newSearch = () => searchPageRef.value?.newSearch()
+const newPage = () => searchPageRef.value?.newPage()
 </script>

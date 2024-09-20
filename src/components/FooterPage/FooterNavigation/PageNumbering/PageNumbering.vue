@@ -84,13 +84,13 @@ import { preferences } from '@/assets/fetchMethods'
 import { isBusy, hasSearch } from '@/assets/appState'
 import { isInView } from '@/assets/functions'
 
-const emit = defineEmits(['newSearch'])
+const emit = defineEmits(['newPage'])
 const page: Ref = defineModel('page')
 const totalHits: Ref = defineModel('totalHits')
 
 watch(page, (newVal) => {
   onScreenBook.value = (newVal - 1) * preferences.resultsPerPage + 1
-  emit('newSearch')
+  emit('newPage')
 })
 
 const lastPage = computed(() => Math.floor((totalHits.value - 1) / preferences.resultsPerPage) + 1)
