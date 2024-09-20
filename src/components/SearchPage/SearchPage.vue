@@ -5,6 +5,7 @@
       @resetSearchResults="resetSearchResults"
       @setShowAdvancedSearchPanel="setShowAdvancedSearchPanel"
       v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+      v-model:advanced-search-options-changed="advancedSearchOptionsChanged"
       v-model:query="query"
       v-model:strict="strict"
       v-model:is-loading="isLoading"
@@ -13,6 +14,7 @@
       @newSearch="newSearch"
       @resetSearchResults="resetSearchResults"
       v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+      v-model:advanced-search-options-changed="advancedSearchOptionsChanged"
       v-model:author-list="authorList"
       v-model:title="title"
       v-model:to-year="toYear"
@@ -55,7 +57,7 @@ import FacetBar from './SearchBar/FacetBar/FacetBar.vue'
 import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
 
 // Import interfaces
-import type { SearchResult, AggregationBin } from '@/assets/interfacesExternals'
+import type { AggregationBin } from '@/assets/interfacesExternals'
 
 import { hasSearch } from '@/assets/appState'
 
@@ -67,6 +69,8 @@ const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
 const notification: Ref = defineModel('notification')
+
+const advancedSearchOptionsChanged = ref(false)
 
 const authorInclude = ref(true)
 const excludeFromSearch = ref(false)
@@ -143,6 +147,7 @@ const newSearch = () => {
 }
 
 const runSearch = () => {
+  showAdvancedSearchPanel.value = false
   search().then((res) => {
     isLoading.value = res ? true : false
     const searchBar = document.querySelector('.searchBar') as HTMLDivElement
@@ -189,13 +194,13 @@ const resetSearchResults = () => {
   sortBy.value = 'Score'
   authorList.value = []
   showAdvancedSearchPanel.value = false
+  advancedSearchOptionsChanged.value = false
 
   window.history.replaceState({}, document.title, '/')
 }
 
-const setShowAdvancedSearchPanel = () => {
-  showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value
-}
+const setShowAdvancedSearchPanel = () =>
+  (showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value)
 
 watch(excludeFromSearch, () => {
   authorInclude.value = !excludeFromSearch.value

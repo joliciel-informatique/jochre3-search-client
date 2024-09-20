@@ -23071,6 +23071,10 @@ a:hover {
   position: fixed;
 }
 
+.control.has-icons-left > span.icon.is-clicked {
+  color: rgb(238, 178, 17);
+}
+
 /*
   Fix for drop-down getting hidden by modal-card-foot
   From https://stackoverflow.com/a/75182245/1417558

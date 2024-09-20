@@ -120,7 +120,7 @@ Description: the advanced search toolbox
               {{ $t('search.reset') }}
             </button>
             &nbsp;
-            <button class="button is-info" @click="emit('newSearch')">
+            <button class="button is-info" @click="runSearch()">
               {{ $t('search.search-button') }}
             </button>
           </div>
@@ -137,6 +137,7 @@ import { computed, type Ref } from 'vue'
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
+const advancedSearchOptionsChanged = defineModel('advancedSearchOptionsChanged')
 const authorList = defineModel<Array<{ label: string; count: number }>>('authorList')
 const title = defineModel('title')
 const fromYear = defineModel('fromYear')
@@ -148,6 +149,11 @@ const excludeFromSearch = defineModel('excludeFromSearch')
 const disabled = computed(
   () => facets.value.filter((facet: { active: string }) => (facet.active ? facet : null)).length
 )
+
+const runSearch = () => {
+  advancedSearchOptionsChanged.value = true
+  emit('newSearch')
+}
 
 const beforeEnter = <Element,>(el: Element) => ((el as HTMLElement).style.height = '0')
 const enter = <Element,>(el: Element) => ((el as HTMLElement).style.height = '100%')

@@ -34,17 +34,18 @@ Description: presents the search bar
             :placeholder="$t('search.query')"
           />
           <span
-            :class="{
-              icon: true,
-              'is-small': true,
-              'is-clickable': true,
-              'is-left': preferences.displayLeftToRight,
-              'is-right': !preferences.displayLeftToRight
-            }"
+            class="is-small icon is-clickable"
+            :class="advancedSearchIcons"
             @click="emit('setShowAdvancedSearchPanel')"
           >
             <font-awesome-icon
-              :icon="!showAdvancedSearchPanel ? 'magnifying-glass-plus' : 'magnifying-glass-minus'"
+              :icon="
+                advancedSearchOptionsChanged
+                  ? faSliders
+                  : !showAdvancedSearchPanel
+                    ? faMagnifyingGlassPlus
+                    : faMagnifyingGlassMinus
+              "
             />
           </span>
           <span
@@ -99,23 +100,33 @@ Description: presents the search bar
   </div>
 </template>
 <script setup lang="ts">
-import type { Ref } from 'vue'
+import { computed, watch, type Ref } from 'vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
   faMagnifyingGlassPlus,
   faMagnifyingGlassMinus,
   faKeyboard,
-  faXmarkCircle
+  faXmarkCircle,
+  faSliders
 } from '@fortawesome/free-solid-svg-icons'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
+
+const advancedSearchOptionsChanged = defineModel('advancedSearchOptionsChanged')
+
+const advancedSearchIcons = computed(() => ({
+  'is-left': preferences.displayLeftToRight,
+  'is-right': !preferences.displayLeftToRight,
+  'is-clicked': advancedSearchOptionsChanged.value
+}))
 
 library.add(faMagnifyingGlassPlus, faMagnifyingGlassMinus, faKeyboard, faXmarkCircle)
 const query: Ref = defineModel('query')
 const strict: Ref = defineModel('strict')
 const isLoading = defineModel('isLoading')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
+
 const emit = defineEmits(['newSearch', 'resetSearchResults', 'setShowAdvancedSearchPanel'])
 </script>
