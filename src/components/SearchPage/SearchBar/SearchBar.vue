@@ -81,7 +81,7 @@ Description: presents the search bar
             <font-awesome-icon icon="keyboard" />
           </button>
         </p>
-        <p v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
+        <p class="control" v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
           <a class="button is-info is-clickable">
             <label for="strictSearchCheckbox" class="mx-2 is-clickable">{{
               $t('search.related-word-forms')

@@ -6,18 +6,6 @@
     <template #body>
       <div class="p-3">
         <div class="columns is-vcentered">
-          <div class="column"></div>
-          <div class="column is-5"></div>
-          <div class="column">
-            <span class="px-2">
-              {{ $t('preferences.cookies') }}
-            </span>
-            <span v-tooltip:top="$t('preferences.what-are-cookies-tooltip')">
-              <FontAwesomeIcon :icon="faQuestionCircle" />
-            </span>
-          </div>
-        </div>
-        <div class="columns is-vcentered">
           <div class="column is-5">
             <label class="label">{{ $t('preferences.language') }}</label>
           </div>
@@ -31,18 +19,6 @@
               </span>
             </div>
           </div>
-          <div class="column is-1 has-text-centered">
-            <input class="checkbox" type="checkbox" v-model="storeLocaleInCookie" />
-          </div>
-          <div class="column">
-            <button
-              class="button is-info is-pulled-right"
-              :disabled="!cookies.get('locale')"
-              @click="clearCookie('locale')"
-            >
-              {{ $t('preferences.clear-button') }}
-            </button>
-          </div>
         </div>
         <div class="columns is-vcentered">
           <div class="column is-5">
@@ -53,18 +29,6 @@
               <input class="input" type="number" v-model="resultsPerPage" />
             </div>
           </div>
-          <div class="column is-1 has-text-centered">
-            <input class="checkbox" type="checkbox" v-model="storeResultsPerPageInCookie" />
-          </div>
-          <div class="column">
-            <button
-              class="button is-info is-pulled-right"
-              :disabled="!cookies.get('resultsPerPage')"
-              @click="clearCookie('resultsPerPage')"
-            >
-              {{ $t('preferences.clear-button') }}
-            </button>
-          </div>
         </div>
         <div class="columns is-vcentered">
           <div class="column is-5">
@@ -74,18 +38,6 @@
             <div class="control is-expanded">
               <input class="input" type="number" v-model="snippetsPerResult" />
             </div>
-          </div>
-          <div class="column is-1 has-text-centered">
-            <input class="checkbox" type="checkbox" v-model="storeSnippetsPerResultInCookie" />
-          </div>
-          <div class="column">
-            <button
-              class="button is-info is-pulled-right"
-              :disabled="!cookies.get('snippetsPerResult')"
-              @click="clearCookie('snippetsPerResult')"
-            >
-              {{ $t('preferences.clear-button') }}
-            </button>
           </div>
         </div>
       </div>
@@ -107,8 +59,6 @@ import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import VueI18n from 'vue-i18n'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 
 const notification = defineModel('notification')
 const preferences = usePreferencesStore()
@@ -117,26 +67,12 @@ const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
 const cookies = useCookies(['locale', 'resultsPerPage', 'snippetsPerResult'])
 const setToLanguage = ref(preferences.language)
 
-const storeLocaleInCookie = ref(true)
-const storeResultsPerPageInCookie = ref(true)
-const storeSnippetsPerResultInCookie = ref(true)
-
 const { resultsPerPage, snippetsPerResult } = storeToRefs(preferences)
-
-const clearCookie = (cookie: string) => {
-  cookies.remove(cookie)
-  notification.value = {
-    show: true,
-    error: false,
-    delay: 2000,
-    msg: 'Successfully removed this cookie.'
-  }
-}
 
 const save = (vi18n: VueI18n.VueI18n) => {
   if (authenticated.value) {
     const params = JSON.stringify({
-      language: preferences.language,
+      language: setToLanguage.value,
       resultsPerPage: preferences.resultsPerPage,
       snippetsPerResult: preferences.snippetsPerResult
     })
@@ -146,10 +82,7 @@ const save = (vi18n: VueI18n.VueI18n) => {
         if (res.status === 200) {
           preferences.language = setToLanguage.value
           vi18n.locale = setToLanguage.value
-          if (storeLocaleInCookie.value) cookies.set('locale', setToLanguage)
-          if (storeResultsPerPageInCookie.value) cookies.set('resultsPerPage', resultsPerPage)
-          if (storeSnippetsPerResultInCookie.value)
-            cookies.set('snippetsPerResult', snippetsPerResult)
+
           notification.value = {
             show: true,
             error: false,
@@ -173,6 +106,19 @@ const save = (vi18n: VueI18n.VueI18n) => {
           msg: `There was an error: ${error} saving your preferences. You may want to reach out to us!`
         }
       })
+  } else {
+    preferences.language = setToLanguage.value
+    vi18n.locale = setToLanguage.value
+    cookies.set('locale', setToLanguage)
+    cookies.set('resultsPerPage', resultsPerPage)
+    cookies.set('snippetsPerResult', snippetsPerResult)
+
+    notification.value = {
+      show: true,
+      error: false,
+      delay: 2000,
+      msg: `Successfully saved your preferences!`
+    }
   }
   preferences.show = false
 }
