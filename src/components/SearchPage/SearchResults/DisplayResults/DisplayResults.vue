@@ -27,6 +27,7 @@ Description: display results in SingleResult child component
       <div class="column is-one-quarter">
         <ContentsTable v-model:search-results="searchResults" />
       </div>
+      <div class="column is-1"></div>
       <div class="column">
         <ul>
           <li v-for="(result, index) of searchResults" :key="sha1(result)">

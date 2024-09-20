@@ -1,6 +1,6 @@
 <template>
-  <div class="container table-of-contents">
-    <aside class="menu px-2">
+  <div class="box table-of-contents">
+    <aside class="menu p-2 my-3">
       <p class="menu-label">Table of Contents</p>
       <ul class="menu-list">
         <li class="px-2" v-for="(result, index) of searchResults" :key="result">
@@ -37,9 +37,11 @@ const searchResults: Ref = defineModel('searchResults')
 const scrollTo = (docRef: string) => {
   const pos = document.getElementById(docRef)
   if (pos) {
-    console.log(pos)
-    console.log(docRef)
-    // console.log(pos.style.top)
+    console.log(pos.offsetTop)
+    // var bodyRect = document.body.getBoundingClientRect(),
+    // elemRect = pos.getBoundingClientRect(),
+    // offset   = elemRect.top - bodyRect.top;
+    // console.log(pos.offsetTop, offset)
     window.scrollTo({ top: pos.offsetTop, behavior: 'smooth' })
   }
 }
