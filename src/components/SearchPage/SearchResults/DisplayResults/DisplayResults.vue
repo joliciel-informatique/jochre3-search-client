@@ -23,20 +23,27 @@ Description: display results in SingleResult child component
     </h1>
 
     <!-- Display results -->
-    <ul v-else-if="searchResults?.length">
-      <li v-for="(result, index) of searchResults" :key="sha1(result)">
-        <div>
-          <SingleResult
-            v-model:image-modal="imageModal"
-            v-model:word-modal="wordModal"
-            v-model:metadata-modal="metadataModal"
-            v-model:notification="notification"
-            :result="result"
-          />
-        </div>
-        <hr v-if="index !== preferences.resultsPerPage - 1" />
-      </li>
-    </ul>
+    <div class="columns" v-else-if="searchResults?.length">
+      <div class="column is-one-quarter">
+        <ContentsTable v-model:search-results="searchResults" />
+      </div>
+      <div class="column">
+        <ul>
+          <li v-for="(result, index) of searchResults" :key="sha1(result)">
+            <div>
+              <SingleResult
+                v-model:image-modal="imageModal"
+                v-model:word-modal="wordModal"
+                v-model:metadata-modal="metadataModal"
+                v-model:notification="notification"
+                :result="result"
+              />
+            </div>
+            <hr v-if="index !== preferences.resultsPerPage - 1" />
+          </li>
+        </ul>
+      </div>
+    </div>
 
     <!-- Show index size page upon no search params -->
     <IndexSize v-else v-model:is-loading="isLoading" v-model:notification="notification" />
@@ -53,6 +60,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { type Ref } from 'vue'
+import ContentsTable from './ContentsTable/ContentsTable.vue'
 library.add(faBan)
 
 const isLoading = defineModel('isLoading')

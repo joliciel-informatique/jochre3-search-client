@@ -619,6 +619,12 @@ $menu-nested-list-margin: 1em;
   position: fixed;
 }
 
+.table-of-contents {
+  // position: fixed;
+  // display: block;
+  z-index: 9;
+}
+
 // .container {
 // position: sticky;
 // }

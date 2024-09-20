@@ -29,9 +29,7 @@
       v-model:facets="facets"
     />
   </div>
-  <div
-    class="container is-max-desktop is-flex-direction-column is-align-items-center has-text-centered p-5"
-  >
+  <div class="container is-flex-direction-column is-align-items-center has-text-centered p-5">
     <DisplayResults
       v-model:is-loading="isLoading"
       v-model:image-modal="imageModal"
@@ -44,7 +42,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, computed, defineExpose, type Ref, watch } from 'vue'
+import { onMounted, ref, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchData, preferences } from '@/assets/fetchMethods'
 
@@ -55,7 +53,7 @@ import FacetBar from './SearchBar/FacetBar/FacetBar.vue'
 import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
 
 // Import interfaces
-import type { SearchResult, AggregationBin } from '@/assets/interfacesExternals'
+import type { AggregationBin } from '@/assets/interfacesExternals'
 
 import { hasSearch } from '@/assets/appState'
 
@@ -155,6 +153,8 @@ const runSearch = () => {
           '.card.metadata'
         ) as NodeListOf<HTMLDivElement>
         newSearchResults.forEach((result) => (result.style.top = `${searchBar?.offsetHeight}px`))
+        const toc = document.getElementsByClassName('table-of-contents')
+        toc[0].setAttribute('style', `top:${searchBar?.offsetHeight}px`)
       }
     }
   })

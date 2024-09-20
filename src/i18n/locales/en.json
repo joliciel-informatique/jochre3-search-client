@@ -44,6 +44,7 @@
     "result-current-tooltip": "You are currently viewing this book and snippet",
     "result-current-book": "{0}/{1}",
     "result-current-snippet": "{0}/{1}",
+    "result-unknown-author": "unknown author",
     "reset": "Clear results",
     "none": "Uh-oh! Your query did not return any results",
     "show-original-page": "Go to book (page {0})",

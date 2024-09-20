@@ -14,10 +14,10 @@ Description: presents the facet bar
     <hr />
     <div class="columns has-text-centered is-vcentered">
       <div class="column is-one-fifth">
-        <span
-          ><p>
+        <span>
+          <p>
             {{ $t('search.facets') }}
-            <span v-tooltip:bottom="$t('search.what-are-facets')">
+            <span>
               <FontAwesomeIcon icon="question-circle" />
             </span>
           </p>
