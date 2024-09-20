@@ -88,7 +88,8 @@ according to style policies.
 /** Footer navigation bar */
 /** ToolTip styling */
 [tooltip] {
-  position: relative;
+  position: fixed;
+  z-index: 2947835247835278300000000000000000000000000000000000000000000;
   /* position: TOP */
   /* position: BOTTOM */
   /* position: LEFT */
@@ -114,7 +115,6 @@ according to style policies.
 [tooltip]:before {
   content: "";
   border: 5px solid transparent; /* opinion 4 */
-  z-index: 1001; /* absurdity 1 */
 }
 [tooltip]:after {
   content: attr(tooltip); /* magic! */
@@ -132,12 +132,12 @@ according to style policies.
   white-space: normal;
   word-break: keep-all;
   overflow: visible;
+  text-overflow: none;
   padding: 0.5rem;
   border-radius: 0.3rem;
   box-shadow: 0 1em 2em -0.5em rgba(0, 0, 0, 0.35);
   background: rgb(48, 48, 48);
   color: #ffffff;
-  z-index: 1000; /* absurdity 2 */
 }
 [tooltip]:hover:before, [tooltip]:hover:after {
   display: block;

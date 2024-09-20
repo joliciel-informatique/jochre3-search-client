@@ -6,7 +6,8 @@
   & > * {
     display: inline-block;
   }
-  position: relative;
+  position: fixed;
+  z-index: $tt-z-index;
   &:before,
   &:after {
     text-transform: none; /* opinion 2 */
@@ -23,7 +24,7 @@
   &:before {
     content: '';
     border: 5px solid transparent; /* opinion 4 */
-    z-index: 1001; /* absurdity 1 */
+    // z-index: $tt-z-index; /* absurdity 1 */
   }
   &:after {
     content: attr(tooltip); /* magic! */
@@ -43,13 +44,14 @@
     white-space: normal;
     word-break: keep-all;
     overflow: $tt-content-overflow;
+    text-overflow: none;
     // text-overflow: $tt-text-overflow;
     padding: $tt-padding;
     border-radius: $tt-radius;
     box-shadow: 0 1em 2em -0.5em rgba(0, 0, 0, 0.35);
     background: $tt-background-color;
     color: $tt-color-of-font;
-    z-index: 1000; /* absurdity 2 */
+    // z-index: $tt-z-index; /* absurdity 2 */
   }
   &:hover:before,
   &:hover:after {

@@ -1,129 +1,125 @@
 <template>
-  <div class="modal" tabindex="100" :class="{ 'is-active': visible }">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">{{ $t('preferences.title') }}</p>
-        <button class="delete" aria-label="close" @click="onCancel"></button>
-      </header>
-      <section class="modal-card-body">
-        <div class="field">
-          <label class="label">{{ $t('preferences.language') }}</label>
-          <div class="control">
-            <div class="select">
-              <select v-model="preferences.language">
-                <option value="yi">ייִדיש</option>
-                <option value="en">English</option>
-              </select>
+  <ModalBox v-model:data="preferences" v-model:notification="notification">
+    <template #header>
+      <p class="modal-card-title">{{ $t('preferences.title') }}</p>
+    </template>
+    <template #body>
+      <div class="p-3">
+        <div class="columns is-vcentered">
+          <div class="column is-5">
+            <label class="label">{{ $t('preferences.language') }}</label>
+          </div>
+          <div class="column is-4">
+            <div class="control is-expanded">
+              <span class="select is-fullwidth">
+                <select v-model="setToLanguage">
+                  <option value="yi">ייִדיש</option>
+                  <option value="en">English</option>
+                </select>
+              </span>
             </div>
           </div>
         </div>
-        <div class="field">
-          <label class="label">{{ $t('preferences.results-per-page') }}</label>
-          <div class="control">
-            <input class="input" type="number" v-model="preferences.resultsPerPage" />
+        <div class="columns is-vcentered">
+          <div class="column is-5">
+            <label class="label">{{ $t('preferences.results-per-page') }}</label>
+          </div>
+          <div class="column is-4">
+            <div class="control">
+              <input class="input" type="number" v-model="resultsPerPage" />
+            </div>
           </div>
         </div>
-        <div class="field">
-          <label class="label">{{ $t('preferences.snippets-per-result') }}</label>
-          <div class="control">
-            <input class="input" type="number" v-model="preferences.snippetsPerResult" />
+        <div class="columns is-vcentered">
+          <div class="column is-5">
+            <label class="label">{{ $t('preferences.snippets-per-result') }}</label>
+          </div>
+          <div class="column is-4">
+            <div class="control is-expanded">
+              <input class="input" type="number" v-model="snippetsPerResult" />
+            </div>
           </div>
         </div>
-      </section>
-      <footer class="modal-card-foot">
-        <div class="buttons">
-          <button class="button is-link" @click="onSubmit($i18n as VueI18n.VueI18n)">
-            {{ $t('save') }}
-          </button>
-          <button class="button is-link is-light" @click="onCancel">
-            {{ $t('cancel') }}
-          </button>
-        </div>
-      </footer>
-    </div>
-    <button class="modal-close is-large" aria-label="close" @click="onCancel"></button>
-  </div>
+      </div>
+    </template>
+    <template #footer>
+      <button class="button is-link" @click="save($i18n as VueI18n.VueI18n)">
+        {{ $t('save') }}
+      </button>
+    </template>
+  </ModalBox>
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from 'vue'
-import axios from 'axios'
+import { ref } from 'vue'
+import { fetchData } from '@/assets/fetchMethods'
+import { storeToRefs } from 'pinia'
+import { useCookies } from '@vueuse/integrations/useCookies'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import VueI18n from 'vue-i18n'
-import { useCookies } from 'vue3-cookies'
+import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 
-defineProps(['visible'])
-const emit = defineEmits(['onCloseModal'])
-const keycloak = useKeycloakStore().keycloak
-const { cookies } = useCookies()
-
-const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
-
+const notification = defineModel('notification')
 const preferences = usePreferencesStore()
+const keycloak = useKeycloakStore().keycloak
+const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
+const cookies = useCookies(['locale', 'resultsPerPage', 'snippetsPerResult'])
+const setToLanguage = ref(preferences.language)
 
-const API_URL = inject('apiUrl')
+const { resultsPerPage, snippetsPerResult } = storeToRefs(preferences)
 
-const onSubmit = (vi18n: VueI18n.VueI18n) => {
-  console.log('onSubmit')
+const save = (vi18n: VueI18n.VueI18n) => {
   if (authenticated.value) {
-    // const params = JSON.stringify({
-    //   language: preferences.language,
-    //   resultsPerPage: preferences.resultsPerPage,
-    //   snippetsPerResult: preferences.snippetsPerResult
-    // })
+    const params = JSON.stringify({
+      language: setToLanguage.value,
+      resultsPerPage: preferences.resultsPerPage,
+      snippetsPerResult: preferences.snippetsPerResult
+    })
 
-    // fetchData('preferences/user', 'post', params)
-    // .then(() => {
-    //   // console.log('Saved preferences to database')
-    //   vi18n.locale = preferences.language
-    // })
-    // .catch((error) => setErrorMessage(new Error(`Failed to save user preferences: ${error.message}`)))
-    try {
-      axios
-        .post(
-          `${API_URL}/preferences/user`,
-          {
-            language: preferences.language,
-            resultsPerPage: preferences.resultsPerPage,
-            snippetsPerResult: preferences.snippetsPerResult
-          },
-          {
-            headers: {
-              accept: 'application/json',
-              Authorization: `Bearer ${keycloak?.token}`
-            }
+    fetchData('preferences/user', 'post', params)
+      .then((res) => {
+        if (res.status === 200) {
+          preferences.language = setToLanguage.value
+          vi18n.locale = setToLanguage.value
+
+          notification.value = {
+            show: true,
+            error: false,
+            delay: 2000,
+            msg: `Successfully saved your preferences!`
           }
-        )
-        .then(() => {
-          console.log('Saved preferences to database')
-          vi18n.locale = preferences.language
-        })
-        .catch((error) => {
-          cookies.set(
-            'preferences',
-            JSON.stringify(preferences, ['language', 'resultsPerPage', 'snippetsPerResult'])
-          )
-          console.error(error)
-        })
-    } catch (error) {
-      console.log(error)
-    }
+        } else {
+          notification.value = {
+            show: true,
+            error: true,
+            delay: 4000,
+            msg: 'There was an error saving your preferences. You may want to reach out to us!'
+          }
+        }
+      })
+      .catch((error) => {
+        notification.value = {
+          show: true,
+          error: true,
+          delay: 4000,
+          msg: `There was an error: ${error} saving your preferences. You may want to reach out to us!`
+        }
+      })
   } else {
-    console.log('Saving preferences in cookie')
-    cookies.set(
-      'preferences',
-      JSON.stringify(preferences, ['language', 'resultsPerPage', 'snippetsPerResult'])
-    )
-    vi18n.locale = preferences.language
-    console.log('Saved preferences in cookie')
-  }
-  emit('onCloseModal')
-}
+    preferences.language = setToLanguage.value
+    vi18n.locale = setToLanguage.value
+    cookies.set('locale', setToLanguage)
+    cookies.set('resultsPerPage', resultsPerPage)
+    cookies.set('snippetsPerResult', snippetsPerResult)
 
-const onCancel = () => {
-  console.log('onCancel')
-  emit('onCloseModal')
+    notification.value = {
+      show: true,
+      error: false,
+      delay: 2000,
+      msg: `Successfully saved your preferences!`
+    }
+  }
+  preferences.show = false
 }
 </script>
