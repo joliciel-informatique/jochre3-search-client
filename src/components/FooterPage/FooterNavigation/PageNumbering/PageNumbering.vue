@@ -71,9 +71,12 @@ Description: calculates and presents page numbers
       <button @click="toTop" class="pagination-previous is-small m-1">To top</button>
       <button @click="toBottom" class="pagination-previous is-small m-1">To bottom</button>
     </div>
+    <!-- <SearchInfo v-model:page="page" v-model:totalHits="totalHits" /> -->
     <div v-tooltip:left="$t('results.result-current-tooltip')" class="navigation-current">
-      {{ $t('results.result-current-book', [onScreenBook, lastResult]) }},
-      {{ $t('results.result-current-snippet', [onScreenSnippet, onScreenTotalSnippets]) }}
+      Book {{ $t('results.result-current-book', [onScreenBook, lastResult]) }} ({{
+        $t('results.result-current-snippet', [onScreenSnippet, onScreenTotalSnippets])
+      }}) of
+      {{ $t('results.result-count', [totalHits]) }}
     </div>
   </nav>
 </template>
@@ -83,6 +86,7 @@ import { computed, onMounted, onUpdated, ref, watch, type Ref } from 'vue'
 import { preferences } from '@/assets/fetchMethods'
 import { isBusy, hasSearch } from '@/assets/appState'
 import { isInView } from '@/assets/functions'
+import SearchInfo from '../SearchInfo/SearchInfo.vue'
 
 const emit = defineEmits(['newPage'])
 const page: Ref = defineModel('page')

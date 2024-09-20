@@ -22,24 +22,31 @@
   </footer>
 </template>
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import FooterDefault from './FooterDefault/FooterDefault.vue'
 import FooterNavigation from './FooterNavigation/FooterNavigation.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
+const emit = defineEmits(['newPage', 'resetSearchResults'])
+const showFooterNavigation = ref(false)
+
 const totalHits = defineModel('totalHits')
 const page = defineModel('page')
-const showFooterNavigation = defineModel('showing')
-const emit = defineEmits(['newPage', 'resetSearchResults'])
 
 /** Autohide footerbar upon scrolling */
 const bottomVisible = () =>
   document.documentElement.clientHeight + window.scrollY >=
   (document.documentElement.scrollHeight || document.documentElement.clientHeight)
 
-const autoHide = () => (showFooterNavigation.value = !bottomVisible() ? true : false)
+const hasScrollBar = () => document.body.scrollHeight > window.innerHeight
 
-onMounted(() => window.addEventListener('scroll', autoHide))
+const autoHide = () =>
+  (showFooterNavigation.value = hasScrollBar() && bottomVisible() ? false : true)
+
+onMounted(() => {
+  showFooterNavigation.value = true
+  window.addEventListener('scroll', autoHide)
+})
 </script>
