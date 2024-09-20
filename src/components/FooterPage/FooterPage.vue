@@ -9,7 +9,7 @@
     <Transition name="slide-up" mode="out-in">
       <div v-if="showFooterNavigation">
         <FooterNavigation
-          @newSearch="emit('newSearch')"
+          @newPage="emit('newPage')"
           @resetSearchResults="emit('resetSearchResults')"
           v-model:totalHits="totalHits"
           v-model:page="page"
@@ -32,7 +32,7 @@ const preferences = usePreferencesStore()
 const totalHits = defineModel('totalHits')
 const page = defineModel('page')
 const showFooterNavigation = defineModel('showing')
-const emit = defineEmits(['newSearch', 'resetSearchResults'])
+const emit = defineEmits(['newPage', 'resetSearchResults'])
 
 /** Autohide footerbar upon scrolling */
 const bottomVisible = () =>

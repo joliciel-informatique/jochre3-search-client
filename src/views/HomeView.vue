@@ -22,7 +22,7 @@
   <FooterPage
     v-model:total-hits="totalHits"
     v-model:page="page"
-    @newSearch="newSearch"
+    @newPage="newPage"
     @resetSearchResults="resetSearchResults"
     :search-results="searchResults"
   />
@@ -62,4 +62,5 @@ const searchPageRef = ref<InstanceType<typeof SearchPage>>()
 // Methods exposed by SearchPage
 const resetSearchResults = () => searchPageRef.value?.resetSearchResults()
 const newSearch = () => searchPageRef.value?.newSearch()
+const newPage = () => searchPageRef.value?.newPage()
 </script>

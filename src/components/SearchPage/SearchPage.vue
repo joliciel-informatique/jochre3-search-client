@@ -133,7 +133,16 @@ onMounted(() => {
   })
 })
 
+const newPage = () => {
+  runSearch()
+}
+
 const newSearch = () => {
+  page.value = 1
+  runSearch()
+}
+
+const runSearch = () => {
   search().then((res) => {
     isLoading.value = res ? true : false
     const searchBar = document.querySelector('.searchBar') as HTMLDivElement
@@ -312,6 +321,7 @@ const search = async () => {
 
 defineExpose({
   newSearch,
+  newPage,
   resetSearchResults
 })
 </script>
