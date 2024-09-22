@@ -68,8 +68,12 @@ Description: calculates and presents page numbers
       <button @click="page++" :disabled="page >= lastPage" class="pagination-next is-small m-1">
         {{ $t('pagination.next') }}
       </button>
-      <button @click="toTop" class="pagination-previous is-small m-1">To top</button>
-      <button @click="toBottom" class="pagination-previous is-small m-1">To bottom</button>
+      <button @click="toTop" class="pagination-previous is-small m-1">
+        {{ $t('pagination.top') }}
+      </button>
+      <button @click="toBottom" class="pagination-previous is-small m-1">
+        {{ $t('pagination.bottom') }}
+      </button>
     </div>
     <div v-tooltip:left="$t('results.result-current-tooltip')" class="navigation-current">
       {{

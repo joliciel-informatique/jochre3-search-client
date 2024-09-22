@@ -99,7 +99,9 @@
     "first": "first page",
     "next": "next page",
     "previous": "previous page",
-    "last": "last page"
+    "last": "last page",
+    "top": "To top",
+    "bottom": "To bottom"
   },
   "header": {
     "logo": "/images/jochreLogo.png",

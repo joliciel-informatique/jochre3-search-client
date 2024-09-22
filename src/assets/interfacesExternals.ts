@@ -12,6 +12,13 @@ export interface SizeResponse {
   size: number
 }
 
+export interface Preferences {
+  language: string
+  resultsPerPage: number
+  snippetsPerResult: number
+  $i18n: {}
+}
+
 export interface SearchResult {
   docRef: string
   metadata: Metadata
