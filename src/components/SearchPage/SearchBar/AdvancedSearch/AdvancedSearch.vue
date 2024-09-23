@@ -33,6 +33,7 @@ Description: the advanced search toolbox
                 v-model:authorList="authorList"
                 v-model:disabled="disabled"
                 v-model:exclude-from-search="excludeFromSearch"
+                v-model:simple-keyboard="simpleKeyboard"
                 :label="$t('search.author')"
                 :multi-value="true"
                 :show-exclude-checkbox="true"
@@ -46,8 +47,7 @@ Description: the advanced search toolbox
               <p class="control is-expanded">
                 <input
                   id="title"
-                  class="input keyboardInput"
-                  vki-id="2"
+                  class="input"
                   type="text"
                   lang="yi"
                   :placeholder="$t('search.title')"
@@ -57,8 +57,8 @@ Description: the advanced search toolbox
               </p>
               <p class="control">
                 <button
-                  class="button is-clickable is-medium is-info keyboardInputButton"
-                  vki-id="2"
+                  class="button is-clickable is-medium is-info"
+                  @click="toggleKeyboard('title')"
                   :alt="$t('search.keyboard')"
                   :title="$t('search.keyboard')"
                 >
@@ -145,9 +145,15 @@ const docRefs = defineModel('docRefs')
 const sortBy = defineModel('sortBy')
 const facets: Ref = defineModel('facets')
 const excludeFromSearch = defineModel('excludeFromSearch')
+const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 const disabled = computed(
   () => facets.value.filter((facet: { active: string }) => (facet.active ? facet : null)).length
 )
+
+const toggleKeyboard = (attachTo: string) => {
+  simpleKeyboard.value.attachTo = attachTo
+  simpleKeyboard.value.show = !simpleKeyboard.value.show
+}
 
 const runSearch = () => {
   emit('newSearch')

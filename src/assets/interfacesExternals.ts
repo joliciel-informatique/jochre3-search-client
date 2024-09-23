@@ -12,6 +12,12 @@ export interface SizeResponse {
   size: number
 }
 
+export interface SimpleKeyboardType {
+  show: boolean
+  attachTo: string
+  input: string
+}
+
 export interface Preferences {
   language: string
   resultsPerPage: number

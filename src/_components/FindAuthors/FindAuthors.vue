@@ -27,11 +27,10 @@ Description: presents a 'search for authors' text box and retrieves authors ever
           >
             <input
               id="findAuthors"
-              class="input keyboardInput"
+              class="input"
               type="text"
               lang="yi"
               :disabled="disabled"
-              :vki-id="uniqueId"
               v-model="authorText"
               @input="findAuthor"
               autocomplete="one-time-code"
@@ -72,20 +71,14 @@ Description: presents a 'search for authors' text box and retrieves authors ever
             </div>
           </div>
           <p class="control">
-            <SimpleKeyboard
-              :attach-to="uniqueId"
-              v-model:value="authorText"
-              v-model:open-keyboard="openKeyboard"
-            />
-
-            <!-- <button
-              class="button is-clickable is-medium is-info keyboardInputButton"
-              :vki-id="uniqueId"
+            <button
+              class="button is-clickable is-medium is-info"
+              @click="toggleKeyboard('findAuthors')"
               :alt="$t('search.keyboard')"
               :title="$t('search.keyboard')"
             >
               <font-awesome-icon icon="keyboard" />
-            </button> -->
+            </button>
           </p>
         </div>
       </span>
@@ -106,13 +99,13 @@ Description: presents a 'search for authors' text box and retrieves authors ever
   </div>
 </template>
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
+import { ref, watch, type Ref } from 'vue'
 import { sha1 } from 'object-hash'
 import { fetchData } from '@/assets/fetchMethods'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import FilterTag from '@/_components/FilterTag/FilterTag.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import SimpleKeyboard from '../SimpleKeyboard/SimpleKeyboard.vue'
+// import SimpleKeyboard from '../SimpleKeyboard/SimpleKeyboard.vue'
 
 const preferences = usePreferencesStore()
 
@@ -122,7 +115,12 @@ const { multiValue, uniqueId, showExcludeCheckbox } = defineProps([
   'showExcludeCheckbox'
 ])
 
-const openKeyboard = defineModel('openKeyboard')
+const simpleKeyboard: Ref = defineModel('simpleKeyboard')
+
+const toggleKeyboard = (attachTo: string) => {
+  simpleKeyboard.value.attachTo = attachTo
+  simpleKeyboard.value.show = !simpleKeyboard.value.show
+}
 
 const disabled: Ref = defineModel('disabled')
 const includeAuthor: Ref = defineModel('includeAuthor', { default: true })
@@ -145,6 +143,7 @@ const addAuthor = (author: { label: string; count: number }) => {
   authorList.value.push(author)
   authorText.value = ''
   authorDropdownItems.value = []
+  simpleKeyboard.value = { show: false, attachTo: null }
 }
 
 const delAuthor = (value: { label: string }) => {
@@ -171,7 +170,6 @@ const findAuthor = () => {
               .map((author: { label: string }) => author.label)
               .includes(author.label)
         )
-        // console.log(exclude.value)
         if (exclude.value) {
           authorDropdownItems.value = authorDropdownItems.value.filter(
             (author: { label: string; count: number }) => author.label !== exclude.value

@@ -8,7 +8,7 @@
       v-model:query="query"
       v-model:strict="strict"
       v-model:is-loading="isLoading"
-      v-model:open-keyboard="openKeyboard"
+      v-model:simpleKeyboard="simpleKeyboard"
     />
     <AdvancedSearch
       @newSearch="newSearch"
@@ -22,14 +22,13 @@
       v-model:sort-by="sortBy"
       v-model:facets="facets"
       v-model:exclude-from-search="excludeFromSearch"
-      v-model:open-keyboard="openKeyboard"
+      v-model:simpleKeyboard="simpleKeyboard"
     />
     <FacetBar
       @newSearch="newSearch"
       @resetSearchResults="resetSearchResults"
       v-model:is-loading="isLoading"
       v-model:facets="facets"
-      v-model:open-keyboard="openKeyboard"
     />
   </div>
   <div
@@ -47,7 +46,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, computed, defineExpose, type Ref, watch } from 'vue'
+import { onMounted, ref, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchData, preferences } from '@/assets/fetchMethods'
 
@@ -58,7 +57,7 @@ import FacetBar from './SearchBar/FacetBar/FacetBar.vue'
 import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
 
 // Import interfaces
-import type { AggregationBin } from '@/assets/interfacesExternals'
+import { type SimpleKeyboardType, type AggregationBin } from '@/assets/interfacesExternals'
 
 import { hasSearch } from '@/assets/appState'
 
@@ -85,7 +84,7 @@ const toYear = ref()
 const docRefs = ref('')
 const sortBy = ref('Score')
 
-const openKeyboard = defineModel('openKeyboard')
+const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 
 // Startup variables: may move to App.vue or HomeView.vue
 const router = useRouter()
@@ -94,6 +93,14 @@ const route = useRoute()
 const hasAdvancedSearchCriteria = ref(false)
 const showAdvancedSearchPanel = ref(false)
 const facets = ref<Array<AggregationBin>>([])
+
+watch(
+  simpleKeyboard,
+  (newv, oldv) => {
+    console.log('click', newv, oldv)
+  },
+  { deep: true }
+)
 
 onMounted(() => {
   router.isReady().then(() => {
@@ -143,7 +150,7 @@ const newSearch = () => {
 
 const runSearch = () => {
   hasAdvancedSearchCriteria.value = false
-  openKeyboard.value = false
+  // simpleKeyboard.value.show = false
   search().then((res) => {
     isLoading.value = res ? true : false
     const searchBar = document.querySelector('.searchBar') as HTMLDivElement
@@ -192,7 +199,7 @@ const resetSearchResults = () => {
   hasAdvancedSearchCriteria.value = false
   showAdvancedSearchPanel.value = false
 
-  openKeyboard.value = false
+  simpleKeyboard.value.show = false
 
   window.history.replaceState({}, document.title, '/')
 }

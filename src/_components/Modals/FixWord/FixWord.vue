@@ -86,6 +86,11 @@ onBeforeUpdate(async () => {
   }
 })
 
+const toggleKeyboard = (attachTo: string) => {
+  simpleKeyboard.value.attachTo = attachTo
+  simpleKeyboard.value.show = !simpleKeyboard.value.show
+}
+
 const loadWordImage = async (params: URLSearchParams) => {
   const response = await fetchData('word-image', 'get', params, 'image/png', 'arraybuffer')
   if (response.status !== 200) {

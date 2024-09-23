@@ -5,8 +5,12 @@
   font-size: 0.8rem;
   font-style: normal;
   position: fixed;
-  z-index: 100;
+  z-index: 38;
   color: $foreground-color-1;
+  min-width: 700px;
+  border: 0.1rem dashed gray;
+  padding: 1em;
+  margin-top: 0.5em;
 }
 
 .hg-theme-default .hg-button-enter,

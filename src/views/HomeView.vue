@@ -17,7 +17,7 @@
       v-model:word-modal="wordModal"
       v-model:metadata-modal="metadataModal"
       v-model:notification="notification"
-      v-model:open-keyboard="openKeyboard"
+      v-model:simple-keyboard="simpleKeyboard"
     />
   </main>
   <FooterPage
@@ -29,21 +29,26 @@
   />
   <Preferences v-model:notification="notification" />
   <LargeImage v-model:image-modal="imageModal" />
-  <FixWord v-model:word-modal="wordModal" v-model:notification="notification" />
+  <FixWord
+    v-model:word-modal="wordModal"
+    v-model:notification="notification"
+    v-model:simple-keyboard="simpleKeyboard"
+  />
   <FixMetaData
     v-model:metadata-modal="metadataModal"
     v-model:notification="notification"
-    v-model:open-keyboard="openKeyboard"
+    v-model:simple-keyboard="simpleKeyboard"
   />
   <Notification v-model:notification="notification" />
+  <SimpleKeyboard v-model:simple-keyboard="simpleKeyboard" />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import HeaderPage from '@/components/HeaderPage/HeaderPage.vue'
 import SearchPage from '@/components/SearchPage/SearchPage.vue'
 import FooterPage from '@/components/FooterPage/FooterPage.vue'
-import type { SearchResult } from '@/assets/interfacesExternals'
+import type { SearchResult, SimpleKeyboardType } from '@/assets/interfacesExternals'
 import LargeImage from '@/_components/Modals/LargeImage/LargeImage.vue'
 import FixMetaData from '@/_components/Modals/FixMetaData/FixMetaData.vue'
 import FixWord from '@/_components/Modals/FixWord/FixWord.vue'
@@ -51,6 +56,7 @@ import Notification from '@/_components/Notifications/AppNotification/AppNotific
 import PreferencesSetup from '@/_components/Modals/Preferences/PreferencesSetup.vue'
 import Preferences from '@/_components/Modals/Preferences/PreferencesModal.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import SimpleKeyboard from '@/_components/SimpleKeyboard/SimpleKeyboard.vue'
 
 const preferences = usePreferencesStore()
 
@@ -65,7 +71,11 @@ const metadataModal = ref({ field: 'author' })
 const wordModal = ref({})
 const notification = ref({})
 const searchPageRef = ref<InstanceType<typeof SearchPage>>()
-const openKeyboard = ref(false)
+const simpleKeyboard = ref({ show: false, attachTo: '', input: '' })
+
+watch(simpleKeyboard, (newV, oldV) => {
+  console.log(newV, oldV)
+})
 
 // Methods exposed by SearchPage
 const resetSearchResults = () => searchPageRef.value?.resetSearchResults()

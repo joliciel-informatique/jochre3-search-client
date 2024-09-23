@@ -22,11 +22,11 @@
         </p>
         <p class="control container">
           <input
-            class="input is-normal is-rounded keyboardInput"
+            class="input is-normal is-rounded"
             type="text"
+            :id="metadataModal.field"
             :alt="$t('search.keyboard')"
             :title="$t('search.keyboard')"
-            :vki-id="`${metadataModal.docRef}-${metadataModal.field}`"
             :class="{
               'ltr-align': fieldLeftToRight && preferences.needsLeftToRight,
               english: fieldLeftToRight && preferences.needsLeftToRight,
@@ -40,10 +40,10 @@
         </p>
         <p class="control">
           <button
-            class="button is-clickable is-medium is-info keyboardInputButton"
+            class="button is-clickable is-medium is-info"
             :alt="$t('search.keyboard')"
             :title="$t('search.keyboard')"
-            :vki-id="`${metadataModal.docRef}-${metadataModal.field}`"
+            @click="toggleKeyboard(metadataModal.field)"
           >
             <font-awesome-icon icon="keyboard" />
           </button>
@@ -67,7 +67,7 @@
           <FindAuthors
             v-model:authorList="authorList"
             v-model:exclude="metadataModal.value"
-            v-model:open-keyboard="openKeyboard"
+            v-model:simple-keyboard="simpleKeyboard"
             :multi-value="false"
             :show-exclude-checkbox="false"
             v-model:include-author="includeAuthor"
@@ -98,7 +98,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 const preferences = usePreferencesStore()
 
-const openKeyboard = defineModel('openKeyboard')
+const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 
 const metadataModal: Ref = defineModel('metadataModal')
 const notification = defineModel('notification')
@@ -109,6 +109,11 @@ const includeAuthorInTranscription = computed(() => metadataModal.value.field ==
 const fieldLeftToRight = computed(() =>
   ['authorEnglish', 'titleEnglish', 'publisher'].includes(metadataModal.value.field)
 )
+
+const toggleKeyboard = (attachTo: string) => {
+  simpleKeyboard.value.attachTo = attachTo
+  simpleKeyboard.value.show = !simpleKeyboard.value.show
+}
 
 const save = (closeFunc: Function) => {
   const authorListValue = authorList.value[0]?.label

@@ -90,6 +90,7 @@ according to style policies.
 /** ToolTip styling */
 [tooltip] {
   position: relative;
+  z-index: 9;
   /* position: TOP */
   /* position: BOTTOM */
   /* position: LEFT */
@@ -115,7 +116,6 @@ according to style policies.
 [tooltip]:before {
   content: "";
   border: 5px solid transparent; /* opinion 4 */
-  z-index: 1001; /* absurdity 1 */
 }
 [tooltip]:after {
   content: attr(tooltip); /* magic! */
@@ -133,12 +133,12 @@ according to style policies.
   white-space: normal;
   word-break: keep-all;
   overflow: visible;
+  text-overflow: none;
   padding: 0.5rem;
   border-radius: 0.3rem;
   box-shadow: 0 1em 2em -0.5em rgba(0, 0, 0, 0.35);
   background: rgb(48, 48, 48);
   color: #ffffff;
-  z-index: 1000; /* absurdity 2 */
 }
 [tooltip]:hover:before, [tooltip]:hover:after {
   display: block;
@@ -229,8 +229,12 @@ according to style policies.
   font-size: 0.8rem;
   font-style: normal;
   position: fixed;
-  z-index: 100;
+  z-index: 38;
   color: rgb(53, 129, 133);
+  min-width: 700px;
+  border: 0.1rem dashed gray;
+  padding: 1em;
+  margin-top: 0.5em;
 }
 
 .hg-theme-default .hg-button-enter,
@@ -248,6 +252,10 @@ according to style policies.
   max-height: -moz-max-content;
   max-height: max-content;
   z-index: 39;
+}
+
+input.keyboard-is-open {
+  background-color: lightgray;
 }
 
 .stickySearchBarUndocked {
@@ -270,7 +278,7 @@ html {
   height: 100%;
   width: 100%;
   position: fixed;
-  z-index: -1;
+  z-index: 10;
 }
 
 /** Footer styling */
@@ -365,6 +373,17 @@ span.icon.is-clickable:active {
 .card-header-icon > span:hover {
   color: rgb(238, 178, 17);
   animation: 300ms ease-in-out;
+}
+
+.card-footer {
+  height: 2rem;
+  transition: all 100ms ease-in-out;
+}
+
+.card-footer:hover {
+  background-color: rgb(180, 220, 222);
+  cursor: pointer;
+  transition: all 100ms ease-in-out;
 }
 
 .card-footer > span {
@@ -23093,6 +23112,10 @@ a:hover {
 .dropdown-content {
   z-index: 1000;
   position: fixed;
+}
+
+.control.has-icons-left > span.icon.is-clicked {
+  color: rgb(238, 178, 17);
 }
 
 /*

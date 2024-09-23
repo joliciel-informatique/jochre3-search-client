@@ -64,6 +64,10 @@ $sticky-bar-undocked-height: 10vh;
   z-index: 39;
 }
 
+input.keyboard-is-open {
+  background-color: lightgray;
+}
+
 .stickySearchBarUndocked {
   margin-top: 10px;
   // height: $sticky-bar-undocked-height;
@@ -84,7 +88,8 @@ html {
   height: 100%;
   width: 100%;
   position: fixed;
-  z-index: -1;
+  z-index: 10;
+  // background-color: yellow;
   // background-color: rgba($foreground-color-1, 0.5);
 }
 
@@ -315,7 +320,7 @@ $modal-background-background-color: $background-color-2-transparency-50;
 // @use '../../../node_modules/bulma/sass' with (
 // );
 // Modal
-// $modal-z: var(--bulma-modal-z),
+$modal-z: 38;
 // $modal-background-background-color: $background-color-1,
 // $modal-content-margin-mobile: var(--bulma-modal-content-margin-mobile),
 // $modal-content-spacing-mobile: var(--bulma-modal-content-spacing-mobile),
