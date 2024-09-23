@@ -88,7 +88,7 @@ according to style policies.
 /** Footer navigation bar */
 /** ToolTip styling */
 [tooltip] {
-  position: fixed;
+  position: relative;
   z-index: 2947835247835278300000000000000000000000000000000000000000000;
   /* position: TOP */
   /* position: BOTTOM */
@@ -23078,6 +23078,10 @@ a:hover {
 .table-of-contents {
   z-index: 9;
   height: 100vh;
+}
+
+.control.has-icons-left > span.icon.is-clicked {
+  color: rgb(238, 178, 17);
 }
 
 /*
