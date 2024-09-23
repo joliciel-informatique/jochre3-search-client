@@ -23,7 +23,7 @@
         </div>
         <hr />
         <ul class="menu-list m-2">
-          <li v-for="page in bookPages" :key="page">
+          <li v-for="page in bookPages" :key="sha1(page)">
             <a @click="scrollTo(page.page)"
               >{{ $t('transcribed-text.page', [page.label]) }}
               <span v-if="page.logicalNumber"
@@ -39,20 +39,26 @@
   </div>
 </template>
 <script setup lang="ts">
-import { watch } from 'vue'
-import { onMounted, ref } from 'vue'
+import { watch, onMounted, ref, type Ref } from 'vue'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
-import { fetchData } from '@/assets/fetchMethods.ts'
+import { sha1 } from 'object-hash'
+import { fetchData } from '@/assets/fetchMethods'
+
+interface BookPage {
+  page: number
+  label: string
+  logicalNumber: number
+}
 
 const route = useRoute()
 
 const docRef = ref('')
-const pageNumber = ref('')
+const pageNumber: Ref<number> = ref(0)
 const docText = ref('')
 const bookBody = ref()
 const bookTitle = ref('')
-const bookPages = ref('')
-const currentPage = ref()
+const bookPages: Ref<BookPage[]> = ref([])
+const currentPage: Ref<number> = ref(0)
 const firstPage = ref()
 
 onMounted(() => {
@@ -61,7 +67,7 @@ onMounted(() => {
     ? parseInt(route.params.page as string)
     : 1
   currentPage.value = pageNumber.value
-  updateText(docRef)
+  updateText()
 })
 
 const updateText = () => {
@@ -71,7 +77,7 @@ const updateText = () => {
     .then((res) => (docText.value = res))
     .then(() => document.getElementById(`page${route.params.page}`)?.scrollIntoView())
     .then(() => {
-      const footer = document.getElementsByClassName('footer')[0]
+      const footer = document.getElementsByClassName('footer')[0] as HTMLElement
       footer.style.position = 'sticky'
       footer.style.removeProperty('bottom')
     })
@@ -83,9 +89,10 @@ watch(docText, (newVal) => {
 
   bookTitle.value = (bookBody.value.firstChild as HTMLElement).innerText
 
-  const pages = Array.from(bookBody.value.querySelectorAll('div[id]:not([id=""])')).map((div) =>
-    div.id.replace('page', '')
-  )
+  const pages = Array.from(bookBody.value.querySelectorAll('div[id]:not([id=""])')).map((div) => {
+    const divElem = div as HTMLElement
+    return divElem.id.replace('page', '')
+  })
   bookPages.value = pages.map((page, idx) => {
     const pageNum = /^[+-]?\d+(\.\d+)?$/.test(page) ? parseInt(page) : 1
     if (idx === 0) firstPage.value = page
@@ -97,13 +104,15 @@ watch(docText, (newVal) => {
   })
 })
 
-const scrollTo = (page) => {
+const scrollTo = (page: number) => {
   const top =
-    document.getElementById(`page${page}`).getBoundingClientRect().top + window.pageYOffset ?? 0
+    document.getElementById(`page${page}`)?.getBoundingClientRect()?.top ??
+    0 + window.pageYOffset ??
+    0
   window.scrollTo({ top: top, behavior: 'smooth' })
 }
 
-const findPageNumber = (number) => {
+const findPageNumber = (number: number) => {
   const currentElement = bookBody.value.querySelector(`div#page${number}`)
   if (!currentElement) return number
   const textFragments = []
@@ -123,6 +132,6 @@ const findPageNumber = (number) => {
 // When URL is changed manually?
 onBeforeRouteUpdate(async (to) => {
   // react to route changes...
-  updateText(to.params.docRef as string)
+  updateText()
 })
 </script>
