@@ -614,9 +614,18 @@ $menu-nested-list-margin: 1em;
   z-index: 39;
 }
 
+.menu-list {
+  max-height: 100%;
+}
+
 .dropdown-content {
   z-index: 1000;
   position: fixed;
+}
+
+.table-of-contents {
+  z-index: 9;
+  height: 100vh;
 }
 
 .control.has-icons-left > span.icon.is-clicked {
