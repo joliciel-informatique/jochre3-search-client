@@ -100,7 +100,7 @@ watch(docText, (newVal) => {
       page: pageNum,
       label: page.replace('page', 'page '),
       logicalNumber: findPageNumber(pageNum)
-    }
+    } as BookPage
   })
 })
 
@@ -118,7 +118,9 @@ const findPageNumber = (number: number) => {
   const textFragments = []
   const walker = document.createTreeWalker(currentElement, NodeFilter.SHOW_TEXT)
   while (walker.nextNode()) {
-    textFragments.push(walker.currentNode)
+    if (walker.currentNode instanceof Text) {
+      textFragments.push(walker.currentNode)
+    }
   }
 
   const numbers = textFragments
