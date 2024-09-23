@@ -39,6 +39,7 @@
     "publisher": "Publisher",
     "publication-year": "Date",
     "document-reference": "Document reference: {0}",
+    "contents-table-header": "Table of contents",
     "result-count": "Found {0} relevant books",
     "result-range": "showing results {0} to {1}",
     "result-current-tooltip": "You are currently viewing this book and snippet",

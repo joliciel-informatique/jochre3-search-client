@@ -38,6 +38,7 @@
       v-model:notification="notification"
       v-model:query="query"
       v-model:search-results="searchResults"
+      v-model:page="page"
     />
   </div>
 </template>
