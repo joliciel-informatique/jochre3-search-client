@@ -92,6 +92,11 @@
     },
     "unauthenticated": "In order to fix document meta data, please login first."
   },
+  "transcribed-text": {
+    "table-of-contents": "Table of contents",
+    "page": "Page {0}",
+    "logical-page": "({0})"
+  },
   "cancel": "Cancel",
   "save": "Save changes",
   "error": "An error occurred.",
