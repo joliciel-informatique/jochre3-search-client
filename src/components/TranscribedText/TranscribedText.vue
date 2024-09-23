@@ -4,7 +4,7 @@
   </div>
   <div class="columns transcribedText">
     <div class="column table-of-contents is-one-fifth box p-3">
-      <p class="menu-label">Table of contents</p>
+      <p class="menu-label">{{ $t('transcribed-text.table-of-contents') }}</p>
       <aside class="menu p-2">
         <div class="p-2 mb-0 field has-addons">
           <p class="control">
@@ -25,8 +25,10 @@
         <ul class="menu-list m-2">
           <li v-for="page in bookPages" :key="page">
             <a @click="scrollTo(page.page)"
-              >Page {{ page.label }}
-              <span v-if="page.logicalNumber">({{ page.logicalNumber }})</span></a
+              >{{ $t('transcribed-text.page', [page.label]) }}
+              <span v-if="page.logicalNumber"
+                >{{ $t('transcribed-text.logical-page', [page.logicalNumber]) }})</span
+              ></a
             >
           </li>
         </ul>
@@ -54,8 +56,10 @@ const currentPage = ref()
 const firstPage = ref()
 
 onMounted(() => {
-  docRef.value = route.params.docRef
-  pageNumber.value = /^[+-]?\d+(\.\d+)?$/.test(route.params.page) ? parseInt(route.params.page) : 1
+  docRef.value = route.params.docRef as string
+  pageNumber.value = /^[+-]?\d+(\.\d+)?$/.test(route.params.page as string)
+    ? parseInt(route.params.page as string)
+    : 1
   currentPage.value = pageNumber.value
   updateText(docRef)
 })
