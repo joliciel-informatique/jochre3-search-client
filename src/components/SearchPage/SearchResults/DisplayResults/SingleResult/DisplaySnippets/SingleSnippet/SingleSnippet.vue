@@ -21,7 +21,7 @@ Description: displays text snippets from the OCR text
       </span>
     </div> -->
     <header class="card-header snippet">
-      <p class="card-header-title has-text-info">Page {{ snippet.page }}</p>
+      <p class="card-header-title has-text-info">{{ $t('results.page', [snippet.page]) }}</p>
 
       <!-- Open page in book -->
       <button
