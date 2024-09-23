@@ -11,7 +11,15 @@
       <div class="cell is-col-span-2 p-2">
         {{ headerInfo($tm('header')) }}
         <div class="title has-text-white py-4">{{ $t('header.title') }}</div>
-        <div class="beta-flyout">{{ $t('header.beta') }}</div>
+        <div
+          class="beta-flyout"
+          :class="{
+            'is-pulled-right': preferences.displayLeftToRight,
+            'is-pulled-left': !preferences.displayLeftToRight
+          }"
+        >
+          {{ $t('header.beta') }}
+        </div>
         <div class="link" v-for="link in headerLinks" :key="link">
           <a class="link-subtle" :href="link.link" :target="link.target">
             {{ link.title }}

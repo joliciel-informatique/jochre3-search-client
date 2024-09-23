@@ -48,7 +48,8 @@
     "none": "Uh-oh! Your query did not return any results",
     "show-original-page": "Go to book (page {0})",
     "show-text": "View transcribed text",
-    "word-fix-instructions": "(Double-click on a word to make an OCR correction)"
+    "word-fix-instructions": "(Double-click on a word to make an OCR correction)",
+    "page": "Page {0}"
   },
   "navigation": {
     "back-tooltip": "This button takes you back in your search history",
