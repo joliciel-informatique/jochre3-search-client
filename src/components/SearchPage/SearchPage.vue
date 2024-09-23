@@ -3,9 +3,8 @@
     <SearchBar
       @newSearch="newSearch"
       @resetSearchResults="resetSearchResults"
-      @setShowAdvancedSearchPanel="setShowAdvancedSearchPanel"
       v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-      v-model:advanced-search-options-changed="advancedSearchOptionsChanged"
+      v-model:has-advanced-search-criteria="hasAdvancedSearchCriteria"
       v-model:query="query"
       v-model:strict="strict"
       v-model:is-loading="isLoading"
@@ -14,7 +13,6 @@
       @newSearch="newSearch"
       @resetSearchResults="resetSearchResults"
       v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-      v-model:advanced-search-options-changed="advancedSearchOptionsChanged"
       v-model:author-list="authorList"
       v-model:title="title"
       v-model:to-year="toYear"
@@ -70,8 +68,6 @@ const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
 const notification: Ref = defineModel('notification')
 
-const advancedSearchOptionsChanged = ref(false)
-
 const authorInclude = ref(true)
 const excludeFromSearch = ref(false)
 const authorList = ref<Array<AggregationBin>>([])
@@ -80,8 +76,8 @@ const strict = ref(false)
 const isLoading = ref(false)
 
 const title = ref('')
-const fromYear = ref(0)
-const toYear = ref(0)
+const fromYear = ref()
+const toYear = ref()
 const docRefs = ref('')
 const sortBy = ref('Score')
 
@@ -89,6 +85,7 @@ const sortBy = ref('Score')
 const router = useRouter()
 const route = useRoute()
 
+const hasAdvancedSearchCriteria = ref(false)
 const showAdvancedSearchPanel = ref(false)
 const facets = ref<Array<AggregationBin>>([])
 
@@ -109,14 +106,6 @@ onMounted(() => {
       authorList.value = (route.query['authors'] as string[]).map((authorName) => {
         return { label: authorName, count: 10, active: false }
       })
-
-    showAdvancedSearchPanel.value =
-      authorList.value.length > 0 ||
-      title.value.length > 0 ||
-      (fromYear.value != null && fromYear.value > 0) ||
-      (toYear.value != null && toYear.value > 0) ||
-      docRefs.value.length > 0 ||
-      (sortBy.value.length > 0 && sortBy.value != 'Score')
 
     const stylesheet = document.createElement('link')
     stylesheet.type = 'text/css'
@@ -147,7 +136,7 @@ const newSearch = () => {
 }
 
 const runSearch = () => {
-  showAdvancedSearchPanel.value = false
+  hasAdvancedSearchCriteria.value = false
   search().then((res) => {
     isLoading.value = res ? true : false
     const searchBar = document.querySelector('.searchBar') as HTMLDivElement
@@ -187,20 +176,17 @@ const resetSearchResults = () => {
 
   page.value = 1
   title.value = ''
-  fromYear.value = 0
-  toYear.value = 0
+  fromYear.value = null
+  toYear.value = null
   docRefs.value = ''
   strict.value = false
   sortBy.value = 'Score'
   authorList.value = []
+  hasAdvancedSearchCriteria.value = false
   showAdvancedSearchPanel.value = false
-  advancedSearchOptionsChanged.value = false
 
   window.history.replaceState({}, document.title, '/')
 }
-
-const setShowAdvancedSearchPanel = () =>
-  (showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value)
 
 watch(excludeFromSearch, () => {
   authorInclude.value = !excludeFromSearch.value
@@ -226,6 +212,16 @@ const search = async () => {
     (fromYear.value != null && fromYear.value > 0) ||
     (toYear.value != null && toYear.value > 0) ||
     docRefs.value.length > 0
+
+  hasAdvancedSearchCriteria.value =
+    authorList.value.length > 0 ||
+    title.value.length > 0 ||
+    (fromYear.value != null && fromYear.value > 0) ||
+    (toYear.value != null && toYear.value > 0) ||
+    docRefs.value.length > 0 ||
+    (sortBy.value.length > 0 && sortBy.value != 'Score')
+
+  showAdvancedSearchPanel.value = false
 
   if (!hasSearch.value) {
     return

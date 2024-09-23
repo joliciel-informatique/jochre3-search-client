@@ -137,7 +137,6 @@ import { computed, type Ref } from 'vue'
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
-const advancedSearchOptionsChanged = defineModel('advancedSearchOptionsChanged')
 const authorList = defineModel<Array<{ label: string; count: number }>>('authorList')
 const title = defineModel('title')
 const fromYear = defineModel('fromYear')
@@ -151,7 +150,6 @@ const disabled = computed(
 )
 
 const runSearch = () => {
-  advancedSearchOptionsChanged.value = true
   emit('newSearch')
 }
 

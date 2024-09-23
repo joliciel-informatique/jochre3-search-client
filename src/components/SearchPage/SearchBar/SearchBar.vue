@@ -36,15 +36,15 @@ Description: presents the search bar
           <span
             class="is-small icon is-clickable"
             :class="advancedSearchIcons"
-            @click="emit('setShowAdvancedSearchPanel')"
+            @click="toggleAdvancedSearchPanel()"
           >
             <font-awesome-icon
               :icon="
-                advancedSearchOptionsChanged
-                  ? faSliders
-                  : !showAdvancedSearchPanel
-                    ? faMagnifyingGlassPlus
-                    : faMagnifyingGlassMinus
+                showAdvancedSearchPanel
+                  ? faMagnifyingGlassMinus
+                  : hasAdvancedSearchCriteria
+                    ? faSliders
+                    : faMagnifyingGlassPlus
               "
             />
           </span>
@@ -100,7 +100,7 @@ Description: presents the search bar
   </div>
 </template>
 <script setup lang="ts">
-import { computed, watch, type Ref } from 'vue'
+import { computed, type Ref } from 'vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
@@ -114,12 +114,12 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
-const advancedSearchOptionsChanged = defineModel('advancedSearchOptionsChanged')
+const hasAdvancedSearchCriteria = defineModel('hasAdvancedSearchCriteria')
 
 const advancedSearchIcons = computed(() => ({
   'is-left': preferences.displayLeftToRight,
   'is-right': !preferences.displayLeftToRight,
-  'is-clicked': advancedSearchOptionsChanged.value
+  'is-clicked': hasAdvancedSearchCriteria.value
 }))
 
 library.add(faMagnifyingGlassPlus, faMagnifyingGlassMinus, faKeyboard, faXmarkCircle)
@@ -128,5 +128,9 @@ const strict: Ref = defineModel('strict')
 const isLoading = defineModel('isLoading')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
 
-const emit = defineEmits(['newSearch', 'resetSearchResults', 'setShowAdvancedSearchPanel'])
+const toggleAdvancedSearchPanel = () => {
+  showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value
+}
+
+const emit = defineEmits(['newSearch', 'resetSearchResults'])
 </script>
