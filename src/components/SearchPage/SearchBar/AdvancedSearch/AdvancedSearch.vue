@@ -120,7 +120,7 @@ Description: the advanced search toolbox
               {{ $t('search.reset') }}
             </button>
             &nbsp;
-            <button class="button is-info" @click="emit('newSearch')">
+            <button class="button is-info" @click="runSearch()">
               {{ $t('search.search-button') }}
             </button>
           </div>
@@ -148,6 +148,10 @@ const excludeFromSearch = defineModel('excludeFromSearch')
 const disabled = computed(
   () => facets.value.filter((facet: { active: string }) => (facet.active ? facet : null)).length
 )
+
+const runSearch = () => {
+  emit('newSearch')
+}
 
 const beforeEnter = <Element,>(el: Element) => ((el as HTMLElement).style.height = '0')
 const enter = <Element,>(el: Element) => ((el as HTMLElement).style.height = '100%')

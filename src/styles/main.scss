@@ -619,6 +619,10 @@ $menu-nested-list-margin: 1em;
   position: fixed;
 }
 
+.control.has-icons-left > span.icon.is-clicked {
+  color: $foreground-color-3;
+}
+
 // .container {
 // position: sticky;
 // }
