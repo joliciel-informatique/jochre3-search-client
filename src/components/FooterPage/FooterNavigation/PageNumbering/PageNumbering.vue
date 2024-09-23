@@ -68,12 +68,23 @@ Description: calculates and presents page numbers
       <button @click="page++" :disabled="page >= lastPage" class="pagination-next is-small m-1">
         {{ $t('pagination.next') }}
       </button>
-      <button @click="toTop" class="pagination-previous is-small m-1">To top</button>
-      <button @click="toBottom" class="pagination-previous is-small m-1">To bottom</button>
+      <button @click="toTop" class="pagination-previous is-small m-1">
+        {{ $t('pagination.top') }}
+      </button>
+      <button @click="toBottom" class="pagination-previous is-small m-1">
+        {{ $t('pagination.bottom') }}
+      </button>
     </div>
     <div v-tooltip:left="$t('results.result-current-tooltip')" class="navigation-current">
-      {{ $t('results.result-current-book', [onScreenBook, lastResult]) }},
-      {{ $t('results.result-current-snippet', [onScreenSnippet, onScreenTotalSnippets]) }}
+      {{
+        $t('results.result-current-book-and-snippet', [
+          onScreenBook,
+          lastResult,
+          onScreenSnippet,
+          onScreenTotalSnippets,
+          totalHits
+        ])
+      }}
     </div>
   </nav>
 </template>
@@ -84,13 +95,13 @@ import { preferences } from '@/assets/fetchMethods'
 import { isBusy, hasSearch } from '@/assets/appState'
 import { isInView } from '@/assets/functions'
 
-const emit = defineEmits(['newSearch'])
+const emit = defineEmits(['newPage'])
 const page: Ref = defineModel('page')
 const totalHits: Ref = defineModel('totalHits')
 
 watch(page, (newVal) => {
   onScreenBook.value = (newVal - 1) * preferences.resultsPerPage + 1
-  emit('newSearch')
+  emit('newPage')
 })
 
 const lastPage = computed(() => Math.floor((totalHits.value - 1) / preferences.resultsPerPage) + 1)

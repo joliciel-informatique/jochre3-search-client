@@ -33,17 +33,18 @@ Description: presents the search bar
             :placeholder="$t('search.query')"
           />
           <span
-            :class="{
-              icon: true,
-              'is-small': true,
-              'is-clickable': true,
-              'is-left': preferences.displayLeftToRight,
-              'is-right': !preferences.displayLeftToRight
-            }"
-            @click="emit('setShowAdvancedSearchPanel')"
+            class="is-small icon is-clickable"
+            :class="advancedSearchIcons"
+            @click="toggleAdvancedSearchPanel()"
           >
             <font-awesome-icon
-              :icon="!showAdvancedSearchPanel ? 'magnifying-glass-plus' : 'magnifying-glass-minus'"
+              :icon="
+                showAdvancedSearchPanel
+                  ? faMagnifyingGlassMinus
+                  : hasAdvancedSearchCriteria
+                    ? faSliders
+                    : faMagnifyingGlassPlus
+              "
             />
           </span>
           <span
@@ -75,7 +76,7 @@ Description: presents the search bar
           v-model:value="query"
           v-model:open-keyboard="openKeyboard"
         />
-        <p v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
+        <p class="control" v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
           <a class="button is-info is-clickable">
             <label for="strictSearchCheckbox" class="mx-2 is-clickable">{{
               $t('search.related-word-forms')
@@ -93,19 +94,28 @@ Description: presents the search bar
   </div>
 </template>
 <script setup lang="ts">
-import type { Ref } from 'vue'
+import { computed, type Ref } from 'vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
   faMagnifyingGlassPlus,
   faMagnifyingGlassMinus,
   faKeyboard,
-  faXmarkCircle
+  faXmarkCircle,
+  faSliders
 } from '@fortawesome/free-solid-svg-icons'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import SimpleKeyboard from '@/_components/SimpleKeyboard/SimpleKeyboard.vue'
 
 const preferences = usePreferencesStore()
+
+const hasAdvancedSearchCriteria = defineModel('hasAdvancedSearchCriteria')
+
+const advancedSearchIcons = computed(() => ({
+  'is-left': preferences.displayLeftToRight,
+  'is-right': !preferences.displayLeftToRight,
+  'is-clicked': hasAdvancedSearchCriteria.value
+}))
 
 library.add(faMagnifyingGlassPlus, faMagnifyingGlassMinus, faKeyboard, faXmarkCircle)
 const query: Ref = defineModel('query')
@@ -113,5 +123,10 @@ const strict: Ref = defineModel('strict')
 const isLoading = defineModel('isLoading')
 const openKeyboard = defineModel('openKeyboard')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
-const emit = defineEmits(['newSearch', 'resetSearchResults', 'setShowAdvancedSearchPanel'])
+
+const toggleAdvancedSearchPanel = () => {
+  showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value
+}
+
+const emit = defineEmits(['newSearch', 'resetSearchResults'])
 </script>

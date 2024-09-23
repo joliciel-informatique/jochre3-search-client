@@ -14,14 +14,14 @@
         </div>
       </div>
     </Transition>
-    <div class="card-footer is-justify-content-end">
-      <span
+    <div class="card-footer is-justify-content-end is-clickable" @click="toggle()">
+      <!-- <span
         class="icon is-large is-clickable footer-icon"
         @click="toggle()"
         :class="{ rotate: !showing }"
       >
         <font-awesome-icon icon="circle-chevron-up" size="lg" />
-      </span>
+      </span> -->
     </div>
   </div>
 </template>

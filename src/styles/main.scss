@@ -251,6 +251,17 @@ span.icon.is-clickable:active {
   animation: 300ms ease-in-out;
 }
 
+.card-footer {
+  height: 2rem;
+  transition: all 100ms ease-in-out;
+}
+
+.card-footer:hover {
+  background-color: $foreground-color-2;
+  cursor: pointer;
+  transition: all 100ms ease-in-out;
+}
+
 .card-footer > span {
   color: $foreground-color-2;
   transform-origin: top;
@@ -627,6 +638,10 @@ $menu-nested-list-margin: 1em;
 .dropdown-content {
   z-index: 1000;
   position: fixed;
+}
+
+.control.has-icons-left > span.icon.is-clicked {
+  color: $foreground-color-3;
 }
 
 // .container {

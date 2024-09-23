@@ -13,13 +13,8 @@ Description: calculates and presents page numbers
   <div
     class="footerNavBar hero is-flex-direction-column is-align-items-center has-text-centered p-1 has-background-primary"
   >
-    <SearchInfo v-model:page="page" v-model:totalHits="totalHits" />
     <!-- <HistoryNavigator @resetSearchResults="emit('resetSearchResults')" :totalHits /> -->
-    <PageNumbering
-      @newSearch="emit('newSearch')"
-      v-model:page="page"
-      v-model:total-hits="totalHits"
-    />
+    <PageNumbering @newPage="emit('newPage')" v-model:page="page" v-model:total-hits="totalHits" />
   </div>
 </template>
 <script setup lang="ts">
@@ -27,7 +22,7 @@ Description: calculates and presents page numbers
 import PageNumbering from './PageNumbering/PageNumbering.vue'
 import SearchInfo from './SearchInfo/SearchInfo.vue'
 
-const emit = defineEmits(['newSearch', 'resetSearchResults'])
+const emit = defineEmits(['newPage', 'resetSearchResults'])
 const page = defineModel('page')
 const totalHits = defineModel('totalHits')
 </script>

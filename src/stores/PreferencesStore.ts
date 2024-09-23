@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
 export const usePreferencesStore = defineStore('preferences', () => {
+  const show = ref(false)
+  const storePreferencesInCookie = ref(true)
   const language = ref('yi')
   const resultsPerPage = ref(10)
   const snippetsPerResult = ref(20)
@@ -25,6 +27,8 @@ export const usePreferencesStore = defineStore('preferences', () => {
   const needsRightToLeft = computed(() => !corpusLeftToRight.value && displayLeftToRight.value)
 
   return {
+    show,
+    storePreferencesInCookie,
     language,
     resultsPerPage,
     snippetsPerResult,
