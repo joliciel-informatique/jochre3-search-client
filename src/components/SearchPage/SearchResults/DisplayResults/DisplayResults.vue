@@ -54,14 +54,16 @@ Description: display results in SingleResult child component
 <script setup lang="ts">
 import { sha1 } from 'object-hash'
 import { preferences } from '@/assets/fetchMethods'
-import SingleResult from './SingleResult/SingleResult.vue'
-import IndexSize from './IndexSize/IndexSize.vue'
+
+const SingleResult = () => import('./SingleResult/SingleResult.vue')
+const IndexSize = () => import('./IndexSize/IndexSize.vue')
+const ContentsTable = () => import('./ContentsTable/ContentsTable.vue')
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { type Ref } from 'vue'
-import ContentsTable from './ContentsTable/ContentsTable.vue'
+
 library.add(faBan)
 
 const isLoading = defineModel('isLoading')
