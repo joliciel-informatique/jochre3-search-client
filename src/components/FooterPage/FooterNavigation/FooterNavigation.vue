@@ -18,9 +18,10 @@ Description: calculates and presents page numbers
   </div>
 </template>
 <script setup lang="ts">
+import { defineAsyncComponent } from 'vue'
+const PageNumbering = defineAsyncComponent(() => import('./PageNumbering/PageNumbering.vue'))
+const SearchInfo = defineAsyncComponent(() => import('./SearchInfo/SearchInfo.vue'))
 // import HistoryNavigator from './HistoryNavigator/HistoryNavigator.vue'
-import PageNumbering from './PageNumbering/PageNumbering.vue'
-import SearchInfo from './SearchInfo/SearchInfo.vue'
 
 const emit = defineEmits(['newPage', 'resetSearchResults'])
 const page = defineModel('page')
