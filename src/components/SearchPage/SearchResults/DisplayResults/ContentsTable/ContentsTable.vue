@@ -28,8 +28,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { computed, type Ref } from 'vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
 const preferences = usePreferencesStore()
 
 const searchResults: Ref = defineModel('searchResults')
