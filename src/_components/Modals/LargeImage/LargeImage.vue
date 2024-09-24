@@ -1,0 +1,20 @@
+<template>
+  <ModalBox v-model:data="imageModal">
+    <template #header>
+      <p class="modal-card-title">{{ imageModal.title }}</p>
+    </template>
+    <template #body>
+      <div v-if="imageModal.data">
+        <img :src="imageModal.data" />
+      </div>
+    </template>
+    <template #footer></template>
+  </ModalBox>
+</template>
+
+<script setup lang="ts">
+import { type Ref } from 'vue'
+import ModalBox from '@/_components/ModalBox/ModalBox.vue'
+
+const imageModal: Ref = defineModel('imageModal')
+</script>
