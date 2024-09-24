@@ -8,8 +8,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { preferences } from '@/assets/fetchMethods'
 import { computed, type Ref } from 'vue'
+import { preferences } from '@/assets/fetchMethods'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCircleChevronDown } from '@fortawesome/free-solid-svg-icons'
 library.add(faCircleChevronDown)
