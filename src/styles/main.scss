@@ -231,7 +231,7 @@ span.icon.is-clickable:active {
 }
 
 .card-footer {
-  height: 2rem;
+  height: 100%;
   transition: all 100ms ease-in-out;
 }
 
@@ -239,15 +239,14 @@ span.icon.is-clickable:active {
   background-color: $foreground-color-2;
   cursor: pointer;
   transition: all 100ms ease-in-out;
+  & > span {
+    color: $background-color-2;
+  }
 }
 
 .card-footer > span {
   color: $foreground-color-2;
   transform-origin: top;
-}
-
-.card-footer > span:hover {
-  color: $foreground-color-3;
 }
 
 .card-content.hide {
