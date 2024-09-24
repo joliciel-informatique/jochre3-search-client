@@ -52,21 +52,17 @@ Description: display results in SingleResult child component
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, type Ref } from 'vue'
 import { sha1 } from 'object-hash'
 import { preferences } from '@/assets/fetchMethods'
-
-const SingleResult = defineAsyncComponent(() => import('./SingleResult/SingleResult.vue'))
-const IndexSize = defineAsyncComponent(() => import('./IndexSize/IndexSize.vue'))
-// import SingleResult from './SingleResult/SingleResult.vue'
-// import IndexSize from './IndexSize/IndexSize.vue'
-// const SingleResult = () => import('./SingleResult/SingleResult.vue')
-
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { type Ref } from 'vue'
-import ContentsTable from './ContentsTable/ContentsTable.vue'
+
+const SingleResult = defineAsyncComponent(() => import('./SingleResult/SingleResult.vue'))
+const IndexSize = defineAsyncComponent(() => import('./IndexSize/IndexSize.vue'))
+const ContentsTable = defineAsyncComponent(() => import('./ContentsTable/ContentsTable.vue'))
+
 library.add(faBan)
 
 const isLoading = defineModel('isLoading')
