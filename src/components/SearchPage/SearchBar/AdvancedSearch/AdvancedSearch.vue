@@ -130,9 +130,10 @@ Description: the advanced search toolbox
   </div>
 </template>
 <script setup lang="ts">
-import FindAuthors from '@/_components/FindAuthors/FindAuthors.vue'
+import { defineAsyncComponent, computed, type Ref } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { computed, type Ref } from 'vue'
+
+const FindAuthors = defineAsyncComponent(() => import('@/_components/FindAuthors/FindAuthors.vue'))
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 
