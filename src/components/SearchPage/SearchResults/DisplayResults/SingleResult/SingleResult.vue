@@ -58,8 +58,11 @@ Description: presents OCR record metadata
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import SingleResultItem from './SingleResultItem/SingleResultItem.vue'
-import DisplaySnippets from './DisplaySnippets/DisplaySnippets.vue'
+
+const SingleResultItem = () => import('./SingleResultItem/SingleResultItem.vue')
+const DisplaySnippets = () => import('./DisplaySnippets/DisplaySnippets.vue')
+const AccordionCard = () => import('@/_components/AccordionCard/AccordionCard.vue')
+
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faPenToSquare,
@@ -69,7 +72,7 @@ import {
   faCircleChevronUp
 } from '@fortawesome/free-solid-svg-icons'
 import { sha1 } from 'object-hash'
-import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
+
 library.add(faPenToSquare, faQuestionCircle, faBookOpen, faCircleChevronDown, faCircleChevronUp)
 const fields = ['titleEnglish', 'author', 'authorEnglish', 'publicationYear', 'publisher']
 const { result } = defineProps(['result'])
@@ -90,20 +93,6 @@ const openMetadataModal = () => {
 }
 
 /** Autohide card upon scrolling */
-const autoHide = () => {
-  showing.value = false
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', autoHide)
-})
-
-const openMetadataModalForTitle = () => {
-  metadataModal.value = {
-    open: true,
-    docRef: result.docRef,
-    field: 'title',
-    value: result.metadata.title ?? result.docRef
-  }
-}
+const autoHide = () => (showing.value = false)
+onMounted(() => window.addEventListener('scroll', autoHide))
 </script>
