@@ -3,10 +3,10 @@ version: '3.7'
 services:
   jochre3-search-client:
     container_name: jochre3-search-client
-    image: registry.gitlab.com/jochre/jochre3-search-client:0.1.0
+    image: registry.gitlab.com/jochre/jochre3-search-client:0.1.1
     restart: on-failure
     ports:
-      - '5173:8080'
+      - '5173:80'
     volumes:
       - ./favicon.ico:/app/dist/favicon.ico
       - ./frontend-config.json:/app/dist/conf/config.json
