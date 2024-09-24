@@ -26,7 +26,7 @@ Description: controls text snippets from the OCR text
 </template>
 
 <script setup lang="ts">
-import SingleSnippet from './SingleSnippet/SingleSnippet.vue'
+const SingleSnippet = () => import('./SingleSnippet/SingleSnippet.vue')
 import { sha1 } from 'object-hash'
 
 const imageModal = defineModel('imageModal')
