@@ -1,5 +1,8 @@
 {
   "Jochre": "יאָוקער",
+  "meta": {
+    "description": "YI__This is the frontend application to make JOCHRE OCR content searchable."
+  },
   "search": {
     "about": "זוך־מאַשין פֿונעם טעקסט־אינהאַלט פֿון די ביכער אין אונדזער דיגיטאַלישער ביבליאָטעק.",
     "index-size": "גרײס פֿון זוכצעטל: {0} ביכער.",

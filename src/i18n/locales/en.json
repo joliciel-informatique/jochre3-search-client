@@ -1,5 +1,8 @@
 {
   "Jochre": "Jochre",
+  "meta": {
+    "description": "This is the frontend application to make JOCHRE OCR content searchable."
+  },
   "search": {
     "about": "Full-text search engine.",
     "index-size": "Index size: {0} books.",
