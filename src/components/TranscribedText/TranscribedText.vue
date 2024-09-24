@@ -101,7 +101,7 @@ watch(docText, (newVal) => {
 const scrollTo = (page: number) => {
   const client = document.getElementById(`page${page}`)
   if (client) {
-    const top = client.getBoundingClientRect().top + window.pageYOffset ?? 0
+    const top = client.getBoundingClientRect().top + window.pageYOffset
     window.scrollTo({ top: top, behavior: 'smooth' })
   }
 }
