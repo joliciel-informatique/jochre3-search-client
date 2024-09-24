@@ -41,12 +41,12 @@ Description: presents the facet bar
   </div>
 </template>
 <script setup lang="ts">
-import { type Ref } from 'vue'
-import FilterTag from '@/_components/FilterTag/FilterTag.vue'
+import { defineAsyncComponent, type Ref } from 'vue'
 import { sha1 } from 'object-hash'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-// Import interfaces
 import type { AggregationBin } from '@/assets/interfacesExternals'
+
+const FilterTag = defineAsyncComponent(() => import('@/_components/FilterTag/FilterTag.vue'))
 
 const isLoading = defineModel('isLoading')
 const facets: Ref = defineModel('facets')
