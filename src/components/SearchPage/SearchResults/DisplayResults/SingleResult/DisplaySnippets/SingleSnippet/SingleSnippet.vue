@@ -109,6 +109,9 @@ Description: displays text snippets from the OCR text
 </template>
 
 <script setup lang="ts">
+import { ref, type Ref } from 'vue'
+import { fetchData } from '@/assets/fetchMethods'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -117,9 +120,6 @@ import {
   faFileLines,
   faAngleDown
 } from '@fortawesome/free-solid-svg-icons'
-import { fetchData } from '@/assets/fetchMethods'
-import { ref, type Ref } from 'vue'
-import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
