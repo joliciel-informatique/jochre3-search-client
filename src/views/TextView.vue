@@ -9,13 +9,18 @@
     <HeaderPage />
     <TranscribedText />
   </main>
-  <FooterPage />
+  <!-- <FooterPage /> -->
 </template>
 
 <script setup lang="ts">
-import HeaderPage from '@/components/HeaderPage/HeaderPage.vue'
-import TranscribedText from '@/components/TranscribedText/TranscribedText.vue'
-import FooterPage from '@/components/FooterPage/FooterPage.vue'
+import { defineAsyncComponent } from 'vue'
+
+const HeaderPage = defineAsyncComponent(() => import('@/components/HeaderPage/HeaderPage.vue'))
+const FooterPage = defineAsyncComponent(() => import('@/components/FooterPage/FooterPage.vue'))
+const TranscribedText = defineAsyncComponent(
+  () => import('@/components/TranscribedText/TranscribedText.vue')
+)
+
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
