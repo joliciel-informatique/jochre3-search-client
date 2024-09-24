@@ -1,8 +1,8 @@
 {
-  "login-required": false,
+  "login-required": true,
   "api-url": "https://jochre-search-api.joli-ciel.com",
   "keycloak": {
-    "url": "https://dev-login.joli-ciel.com/auth/",
+    "url": "https://dev-login.joli-ciel.com/",
     "realm": "jochre"
   },
   "en": {
@@ -11,14 +11,51 @@
     },
     "header": {
       "logo": "/images/yiddishbookcenter-ocr.jpg",
-      "title": "<span class=\"title has-text-white\">Yiddish Book Center's Full-Text Search</span><br><span class=\"beta-flyout\">Currently in beta</span><br>Go to <a href=\"http://www.yiddishbookcenter.org\" target=\"_blank\">yiddishbookcenter.org</a>"
+      "title": "Yiddish Book Center's Full-Text Search",
+      "beta": "Currently in beta",
+      "header": {
+        "text": "Go to {1}",
+        "1": {
+          "title": "yiddishbookcenter.org",
+          "link": "http://www.yiddishbookcenter.org",
+          "target": "blank"
+        }
+      }
     },
     "footer": {
-      "credits": "Texts scanned by the <a href=\"http://www.yiddishbookcenter.org\" target=\"_blank\">Yiddish Book Center</a><br><br>Texts OCR'd and indexed by <a href=\"https://gitlab.com/assafurieli\" target=\"_blank\">Assaf Urieli</a>, Joliciel Informatique<br><br>Lexicon by Yitskhok Niborski and the <a href=\"https://www.yiddishweb.com/\" target=\"_blank\">Maison de la Culture Yiddish</a>",
-      "credits-column-2": "Made possible by the generous support of The David and Barbara B. Hirschhorn Foundation, Inc.<br><br>"
-    },
-    "privacy": {
-      "policy": "<h1>Privacy Policy for the Jochre Yiddish Search Engine</h1><p>This is the Privacy Policy for Jochre Yiddish Search Engine, accessible from https://ocr.yiddishbookcenter.org</p>  <h2>Data deletion</h2><p>To request deletion of any data concerning you, please write to ocr{'@'}yiddishbookcenter.org</p><h2>Third Party Authentication</h2><p>If you use third party authentication to login to our site, such as a Google or Facebook account, we do not access any of your Google or Facebook Data outside of your username, name and picture. Your name and picture are for display purposes to you only, and are not stored in our website. Your username is used as a unique identifier to associate your account with your user preferences and with any OCR corrections you may make.</p><h2>Cookie Policy</h2><p><strong>What Are Cookies</strong></p><p>As is common practice with almost all professional websites this site uses cookies, which are tiny files that are downloaded to your computer, to improve your experience. This page describes what information they gather, how we use it and why we sometimes need to store these cookies. We will also share how you can prevent these cookies from being stored however this may downgrade or 'break' certain elements of the sites functionality.</p><p>For more general information on cookies see the Wikipedia article on HTTP Cookies.</p><p><strong>How We Use Cookies</strong></p><p>We use cookies for a variety of reasons detailed below. Unfortunately in most cases there are no industry standard options for disabling cookies without completely disabling the functionality and features they add to this site. It is recommended that you leave on all cookies if you are not sure whether you need them or not in case they are used to provide a service that you use.</p><p><strong>Disabling Cookies</strong></p><p>You can prevent the setting of cookies by adjusting the settings on your browser (see your browser Help for how to do this). Be aware that disabling cookies will affect the functionality of this and many other websites that you visit. Disabling cookies will usually result in also disabling certain functionality and features of the this site. Therefore it is recommended that you do not disable cookies.</p><p><strong>The Cookies We Set</strong></p><ul><li>    <p>Account related cookies</p>    <p>If you create an account with us then we will use cookies for the management of the signup process and general administration. These cookies will usually be deleted when you log out however in some cases they may remain afterwards to remember your site preferences when logged out.</p></li><li>    <p>Login related cookies</p>    <p>We use cookies when you are logged in so that we can remember this fact. This prevents you from having to log in every single time you visit a new page. These cookies are typically removed or cleared when you log out to ensure that you can only access restricted features and areas when logged in.</p></li><li>    <p>Site preferences cookies</p>    <p>In order to provide you with a great experience on this site we provide the functionality to set your preferences for how this site runs when you use it. In order to remember your preferences we need to set cookies so that this information can be called whenever you interact with a page is affected by your preferences.</p></li></ul><p><strong>Third Party Cookies</strong></p><p>In some special cases we also use cookies provided by trusted third parties. The following section details which third party cookies you might encounter through this site.</p><ul><li>    <p>This site uses Google Analytics which is one of the most widespread and trusted analytics solution on the web for helping us to understand how you use the site and ways that we can improve your experience. These cookies may track things such as how long you spend on the site and the pages that you visit so we can continue to produce engaging content.</p>    <p>For more information on Google Analytics cookies, see the official Google Analytics page.</p></li></ul><p><strong>More Information</strong></p><p>Hopefully that has clarified things for you and as was previously mentioned if there is something that you aren't sure whether you need or not it's usually safer to leave cookies enabled in case it does interact with one of the features you use on our site. This Cookies Policy was created with the help of the <a href=\"https://cookiepolicygenerator.com\">GDPR Cookies Policy Generator</a></p><p>However if you are still looking for more information then you can contact us through one of our preferred contact methods:</p><ul><li>Email: ocr{'@'}yiddishbookcenter.org</li></ul>"
+      "credits": [
+        [
+          {
+            "title": "Texts scanned by {1}",
+            "1": {
+              "title": "the Yiddish Book Center",
+              "link": "http://www.yiddishbookcenter.org",
+              "target": "blank"
+            }
+          },
+          {
+            "title": "Texts OCR'd and indexed by {1}, Joliciel Informatique",
+            "1": {
+              "title": "Assaf Urieli",
+              "link": "https://gitlab.com/assafurieli",
+              "target": "blank"
+            }
+          }
+        ],
+        [
+          {
+            "title": "Lexicon by Yitskhok Niborski and the {1}",
+            "1": {
+              "title": "Maison de la Culture Yiddish",
+              "link": "https://www.yiddishweb.com",
+              "target": "blank"
+            }
+          },
+          {
+            "title": "Made possible by the generous support of The David and Barbara B. Hirschhorn Foundation, Inc."
+          }
+        ]
+      ]
     }
   },
   "yi": {
@@ -26,11 +63,52 @@
       "about": "מיטן ייִדישן ביכער־צענטערס זוך־מאַשין, קענט איר זוכן אינעם גאַנצן טעקסט־אינהאַלט פֿון ייִדישע ביכער אין אונדזער דיגיטאַלישער ביבליאָטעק.<br><br>מיר אַרבעטן װײַטער אױסצובעסערן די אַפּליקאַציע. אױב איר האָט געפֿונען אַ פֿעלער, שיקט אַ בליצבריװ צו <a href=\"mailto:ocr{'@'}yiddishbookcenter.org\">ocr{'@'}yiddishbookcenter.org</a>.<br><br>איר קענט געפֿינען זוך־אינסטרוקציעס אױף יאָוקערס <a href=\"https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help\" target=\"_blank\">ניצער־װעגװײַזער</a>. באַמערקונגען, פֿראַגעס און אַנדערע אָפּרופֿן קען מען שיקן אױף <a href=\"https://www.yiddishbookcenter.org/full-text-search\" target=\"_blank\">אונדזער װעבזײַטל</a>.<br><br>"
     },
     "header": {
-      "title": "<span class=\"title has-text-white\">Yiddish Book Center's Full-Text Search</span><br><span class=\"beta-flyout\">Currently in beta</span><br>גײט צו <a href=\"http://www.yiddishbookcenter.org\" target=\"_blank\">yiddishbookcenter.org</a>"
+      "logo": "/images/yiddishbookcenter-ocr.jpg",
+      "title": "Yiddish Book Center's Full-Text Search",
+      "beta": "Currently in beta",
+      "header": {
+        "text": "גײט צו {1}",
+        "1": {
+          "title": "yiddishbookcenter.org",
+          "link": "http://www.yiddishbookcenter.org",
+          "target": "blank"
+        }
+      }
     },
     "footer": {
-      "credits": "טעקסטן סקאַנירט דורכן <a href=\"http://www.yiddishbookcenter.org\">ייִדישן ביכער־צענטער</a><br><br>אָפּטישע אותיות־דערקענונג און אינדעקסירונג פֿון <a href=\"https://gitlab.com/assafurieli\" target=\"blank\">אסף אוריאלי</a>, זשאָליסיעל אינפֿאָרמאַטיק<br><br>לעקסיקאָן פֿון יצחק ניבאָרסקי און דער <a href=\"https://www.yiddishweb.com/\" target=\"blank\">פּאַריזער ייִדיש־צענטער</a>",
-      "credits-column-2": "Made possible by the generous support of The David and Barbara B. Hirschhorn Foundation, Inc.<br><br>"
+      "credits": [
+        [
+          {
+            "title": "טעקסטן סקאַנירט דורכן {1}",
+            "1": {
+              "title": "ייִדישן ביכער־צענטער",
+              "link": "http://www.yiddishbookcenter.org",
+              "target": "blank"
+            }
+          },
+          {
+            "title": "אָפּטישע אותיות־דערקענונג און אינדעקסירונג פֿון {1}, זשאָליסיעל אינפֿאָרמאַטיק",
+            "1": {
+              "title": "אסף אוריאלי",
+              "link": "https://gitlab.com/assafurieli",
+              "target": "blank"
+            }
+          }
+        ],
+        [
+          {
+            "title": "לעקסיקאָן פֿון יצחק ניבאָרסקי און דער  {1}",
+            "1": {
+              "title": "פּאַריזער ייִדיש־צענטער",
+              "link": "https://www.yiddishweb.com",
+              "target": "blank"
+            }
+          },
+          {
+            "title": "דערמעגלעכט געװאָרן אַ דאַנק דעם ברײטן שטיץ פון דער דוד און באַרבאַראַ הירשהאָרן פֿונדאַציע."
+          }
+        ]
+      ]
     }
   }
 }

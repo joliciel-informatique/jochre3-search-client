@@ -52,7 +52,7 @@ app.component('SearchPage', SearchPage)
 
 console.log('Starting up')
 
-fetch(import.meta.env.BASE_URL + `conf/config-frontend.json?date=${Date.now()}`)
+fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
   .then((response) => response.json())
   .then((config) => {
     mergeDeep(customizedMessages, messages, config)
