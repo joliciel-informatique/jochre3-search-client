@@ -396,7 +396,6 @@ $modal-z: 38;
 // }
 
 .beta-flyout {
-  float: right;
   bottom: -1rem;
   right: 0;
   font-size: 1rem;
@@ -635,9 +634,18 @@ $menu-nested-list-margin: 1em;
   z-index: 99;
 }
 
+.menu-list {
+  max-height: 100%;
+}
+
 .dropdown-content {
   z-index: 99;
   position: fixed;
+}
+
+.table-of-contents {
+  z-index: 9;
+  height: 100vh;
 }
 
 .control.has-icons-left > span.icon.is-clicked {

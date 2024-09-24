@@ -22,7 +22,7 @@ import SearchPage from './components/SearchPage/SearchPage.vue'
 import { fetchData, setURL, setToken } from './assets/fetchMethods'
 
 import './styles/main.scss'
-import cookieConsent from './plugins/CookieConsentVue'
+import CookieConsentVue from './plugins/CookieConsentVue'
 
 const messages = {
   en: en,
@@ -46,13 +46,13 @@ directives(app)
 app.use(router)
 app.use(pinia)
 app.use<Vue3TouchEventsOptions>(Vue3TouchEvents, {})
-// app.use(cookieConsent, cookieConsentConfig)
+app.use(CookieConsentVue, cookieConsentConfig)
 
 app.component('SearchPage', SearchPage)
 
 console.log('Starting up')
 
-fetch(import.meta.env.BASE_URL + `conf/config-frontend.json?date=${Date.now()}`)
+fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
   .then((response) => response.json())
   .then((config) => {
     mergeDeep(customizedMessages, messages, config)

@@ -12,6 +12,12 @@ export interface SizeResponse {
   size: number
 }
 
+export interface BookPages {
+  page: number
+  label: string
+  logicalNumber: number
+}
+
 export interface SimpleKeyboardType {
   show: boolean
   attachTo: string

@@ -4,7 +4,7 @@
   </div>
   <div class="columns transcribedText">
     <div class="column table-of-contents is-one-fifth box p-3">
-      <p class="menu-label">Table of contents</p>
+      <p class="menu-label">{{ $t('transcribed-text.table-of-contents') }}</p>
       <aside class="menu p-2">
         <div class="p-2 mb-0 field has-addons">
           <p class="control">
@@ -23,10 +23,12 @@
         </div>
         <hr />
         <ul class="menu-list m-2">
-          <li v-for="page in bookPages" :key="page">
+          <li v-for="page in bookPages" :key="page.page">
             <a @click="scrollTo(page.page)"
-              >Page {{ page.label }}
-              <span v-if="page.logicalNumber">({{ page.logicalNumber }})</span></a
+              >{{ $t('transcribed-text.page', [page.label]) }}
+              <span v-if="page.logicalNumber"
+                >{{ $t('transcribed-text.logical-page', [page.logicalNumber]) }})</span
+              ></a
             >
           </li>
         </ul>
@@ -40,24 +42,27 @@
 import { watch } from 'vue'
 import { onMounted, ref } from 'vue'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
-import { fetchData } from '@/assets/fetchMethods.ts'
+import { fetchData } from '@/assets/fetchMethods'
+import { type BookPages } from '@/assets/interfacesExternals'
 
 const route = useRoute()
 
 const docRef = ref('')
-const pageNumber = ref('')
+const pageNumber = ref()
 const docText = ref('')
 const bookBody = ref()
 const bookTitle = ref('')
-const bookPages = ref('')
+const bookPages = ref<Array<BookPages>>([])
 const currentPage = ref()
 const firstPage = ref()
 
 onMounted(() => {
-  docRef.value = route.params.docRef
-  pageNumber.value = /^[+-]?\d+(\.\d+)?$/.test(route.params.page) ? parseInt(route.params.page) : 1
+  docRef.value = route.params.docRef as string
+  pageNumber.value = /^[+-]?\d+(\.\d+)?$/.test(route.params.page.toString())
+    ? parseInt(route.params.page as string)
+    : 1
   currentPage.value = pageNumber.value
-  updateText(docRef)
+  updateText()
 })
 
 const updateText = () => {
@@ -68,8 +73,7 @@ const updateText = () => {
     .then(() => document.getElementById(`page${route.params.page}`)?.scrollIntoView())
     .then(() => {
       const footer = document.getElementsByClassName('footer')[0]
-      footer.style.position = 'sticky'
-      footer.style.removeProperty('bottom')
+      footer.setAttribute('style', 'position:sticky;bottom:0')
     })
 }
 
@@ -80,9 +84,10 @@ watch(docText, (newVal) => {
   bookTitle.value = (bookBody.value.firstChild as HTMLElement).innerText
 
   const pages = Array.from(bookBody.value.querySelectorAll('div[id]:not([id=""])')).map((div) =>
-    div.id.replace('page', '')
+    (div as HTMLDivElement).id.replace('page', '')
   )
-  bookPages.value = pages.map((page, idx) => {
+
+  bookPages.value = pages.map((page: string, idx: number) => {
     const pageNum = /^[+-]?\d+(\.\d+)?$/.test(page) ? parseInt(page) : 1
     if (idx === 0) firstPage.value = page
     return {
@@ -93,13 +98,15 @@ watch(docText, (newVal) => {
   })
 })
 
-const scrollTo = (page) => {
-  const top =
-    document.getElementById(`page${page}`).getBoundingClientRect().top + window.pageYOffset ?? 0
-  window.scrollTo({ top: top, behavior: 'smooth' })
+const scrollTo = (page: number) => {
+  const client = document.getElementById(`page${page}`)
+  if (client) {
+    const top = client.getBoundingClientRect().top + window.pageYOffset
+    window.scrollTo({ top: top, behavior: 'smooth' })
+  }
 }
 
-const findPageNumber = (number) => {
+const findPageNumber = (number: number): number => {
   const currentElement = bookBody.value.querySelector(`div#page${number}`)
   if (!currentElement) return number
   const textFragments = []
@@ -109,16 +116,18 @@ const findPageNumber = (number) => {
   }
 
   const numbers = textFragments
-    .map((fragment) => (/^[+-]?\d+(\.\d+)?$/.test(fragment.data) ? fragment.data : null))
+    .map((fragment) =>
+      /^[+-]?\d+(\.\d+)?$/.test((fragment as Text).data) ? (fragment as Text).data : null
+    )
     .reverse()
     .filter((fragment) => fragment)
 
-  return numbers[0]
+  return numbers.length && numbers[0] ? parseInt(numbers[0]) : 0
 }
 
 // When URL is changed manually?
-onBeforeRouteUpdate(async (to) => {
+onBeforeRouteUpdate(async () => {
   // react to route changes...
-  updateText(to.params.docRef as string)
+  updateText()
 })
 </script>

@@ -39,19 +39,23 @@
     "publisher": "פֿאַרלאַג",
     "publication-year": "יאָר",
     "document-reference": "אידענטיפֿיציר נומער: {0}",
-    "result-count": "YI__{0} books total",
+    "contents-table-header": "תּוכן",
+    "result-count": "{0} ביכער סך־הכּל",
     "result-current-tooltip": "איצט קוקט איר אָן אָט דאָס בוך און פֿראַגמענט",
     "result-current-book-and-snippet": "בוך {0}/{1} ({2}/{3}) פֿון {4} ביכער סך־הכּל",
+    "result-unknown-author": "אומבאַקאַנטער מחבר",
     "reset": "אױסמעקן",
     "none": "נישטאָ קיין רעזולטאַטן",
     "show-original-page": "זען אינעם בוך (זײַטל {0})",
     "show-text": "װײַזן דעם טראַנסקריבירטן טעקסט",
-    "word-fix-instructions": "(טוט אַ טאָפּלקװעטש אױף אַ װאָרט כּדי אױסצובעסערן דעם OCR אַנאַליז)"
+    "word-fix-instructions": "(טוט אַ טאָפּלקװעטש אױף אַ װאָרט כּדי אױסצובעסערן דעם OCR אַנאַליז)",
+    "page": "זײַט {0}"
   },
   "navigation": {
     "back-tooltip": "דאָס קנעפּל שיקט איר צוריק אין אײַער זוך־געשיכטע",
     "forward-tooltip": "דאָס קנעפּל שיקט איר פֿאָראױס אין אײַער זוך־געשיכטע",
-    "clear-tooltip": "דאָס קנעפּל מעקט אָפּ אײַער זוך־געשיכטע"
+    "clear-tooltip": "דאָס קנעפּל מעקט אָפּ אײַער זוך־געשיכטע",
+    "jump-to": "שפּרינגט צו זײַט"
   },
   "preferences": {
     "title": "דעם באַניצערס פּרעפֿערענצן",
@@ -87,6 +91,11 @@
       "publicationYear": "יאָר"
     },
     "unauthenticated": "בכֿדי אױסצובעסערן אַן אַטריבוט, דאַרף מען ארײַנלאָגירן."
+  },
+  "transcribed-text": {
+    "table-of-contents": "תּוכן",
+    "page": "זײַט {0}",
+    "logical-page": "({0})"
   },
   "cancel": "אַנולירן",
   "save": "אױפֿהיטן די בײַטן",

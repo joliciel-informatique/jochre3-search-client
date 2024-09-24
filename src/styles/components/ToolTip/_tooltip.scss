@@ -3,11 +3,11 @@
 // https://codepen.io/tutsplus/pen/WROvdG => tooltip source code
 [tooltip] {
   // used for slot editing
+  position: relative;
+  z-index: $tt-z-index;
   & > * {
     display: inline-block;
   }
-  position: relative;
-  z-index: $tt-z-index;
   &:before,
   &:after {
     text-transform: none; /* opinion 2 */

@@ -31,9 +31,7 @@
       v-model:facets="facets"
     />
   </div>
-  <div
-    class="container is-max-desktop is-flex-direction-column is-align-items-center has-text-centered p-5"
-  >
+  <div class="container is-flex-direction-column is-align-items-center has-text-centered p-5">
     <DisplayResults
       v-model:is-loading="isLoading"
       v-model:image-modal="imageModal"
@@ -42,6 +40,7 @@
       v-model:notification="notification"
       v-model:query="query"
       v-model:search-results="searchResults"
+      v-model:page="page"
     />
   </div>
 </template>
@@ -163,6 +162,8 @@ const runSearch = () => {
           '.card.metadata'
         ) as NodeListOf<HTMLDivElement>
         newSearchResults.forEach((result) => (result.style.top = `${searchBar?.offsetHeight}px`))
+        const toc = document.getElementsByClassName('table-of-contents')
+        toc[0].setAttribute('style', `top:${searchBar?.offsetHeight + 10}px`)
       }
     }
   })
