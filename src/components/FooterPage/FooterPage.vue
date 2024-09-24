@@ -22,10 +22,13 @@
   </footer>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import FooterDefault from './FooterDefault/FooterDefault.vue'
-import FooterNavigation from './FooterNavigation/FooterNavigation.vue'
+import { defineAsyncComponent, onMounted, ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const FooterDefault = defineAsyncComponent(() => import('./FooterDefault/FooterDefault.vue'))
+const FooterNavigation = defineAsyncComponent(
+  () => import('./FooterNavigation/FooterNavigation.vue')
+)
 
 const preferences = usePreferencesStore()
 
@@ -45,8 +48,5 @@ const hasScrollBar = () => document.body.scrollHeight > window.innerHeight
 const autoHide = () =>
   (showFooterNavigation.value = hasScrollBar() && bottomVisible() ? false : true)
 
-onMounted(() => {
-  // showFooterNavigation.value = true
-  window.addEventListener('scroll', autoHide)
-})
+onMounted(() => window.addEventListener('scroll', autoHide))
 </script>
