@@ -27,8 +27,9 @@ Description: controls text snippets from the OCR text
 
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
-const SingleSnippet = defineAsyncComponent(() => import('./SingleSnippet/SingleSnippet.vue'))
 import { sha1 } from 'object-hash'
+
+const SingleSnippet = defineAsyncComponent(() => import('./SingleSnippet/SingleSnippet.vue'))
 
 const imageModal = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
