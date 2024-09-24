@@ -12,6 +12,12 @@ export interface SizeResponse {
   size: number
 }
 
+export interface BookPages {
+  page: number
+  label: string
+  logicalNumber: number
+}
+
 export interface Preferences {
   language: string
   resultsPerPage: number
