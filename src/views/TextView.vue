@@ -13,9 +13,9 @@
 </template>
 
 <script setup lang="ts">
-import HeaderPage from '@/components/HeaderPage/HeaderPage.vue'
-import TranscribedText from '@/components/TranscribedText/TranscribedText.vue'
-import FooterPage from '@/components/FooterPage/FooterPage.vue'
+const HeaderPage = () => import('@/components/HeaderPage/HeaderPage.vue')
+const TranscribedText = () => import('@/components/TranscribedText/TranscribedText.vue')
+const FooterPage = () => import('@/components/FooterPage/FooterPage.vue')
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
