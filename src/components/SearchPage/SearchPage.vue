@@ -48,10 +48,10 @@ import { useRouter, useRoute } from 'vue-router'
 import { fetchData, preferences } from '@/assets/fetchMethods'
 
 // Import Child components
-import SearchBar from './SearchBar/SearchBar.vue'
-import AdvancedSearch from './SearchBar/AdvancedSearch/AdvancedSearch.vue'
-import FacetBar from './SearchBar/FacetBar/FacetBar.vue'
-import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
+const SearchBar = () => import('./SearchBar/SearchBar.vue')
+const AdvancedSearch = () => import('./SearchBar/AdvancedSearch/AdvancedSearch.vue')
+const FacetBar = () => import('./SearchBar/FacetBar/FacetBar.vue')
+const DisplayResults = () => import('./SearchResults/DisplayResults/DisplayResults.vue')
 
 // Import interfaces
 import type { AggregationBin } from '@/assets/interfacesExternals'
