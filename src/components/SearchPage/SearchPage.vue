@@ -43,15 +43,19 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, defineExpose, type Ref, watch } from 'vue'
+import { defineAsyncComponent, onMounted, ref, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchData, preferences } from '@/assets/fetchMethods'
 
 // Import Child components
-import SearchBar from './SearchBar/SearchBar.vue'
-import AdvancedSearch from './SearchBar/AdvancedSearch/AdvancedSearch.vue'
-import FacetBar from './SearchBar/FacetBar/FacetBar.vue'
-import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
+const SearchBar = defineAsyncComponent(() => import('./SearchBar/SearchBar.vue'))
+const AdvancedSearch = defineAsyncComponent(
+  () => import('./SearchBar/AdvancedSearch/AdvancedSearch.vue')
+)
+const FacetBar = defineAsyncComponent(() => import('./SearchBar/FacetBar/FacetBar.vue'))
+const DisplayResults = defineAsyncComponent(
+  () => import('./SearchResults/DisplayResults/DisplayResults.vue')
+)
 
 // Import interfaces
 import type { AggregationBin } from '@/assets/interfacesExternals'
