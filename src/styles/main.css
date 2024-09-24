@@ -229,7 +229,7 @@ according to style policies.
   font-size: 0.8rem;
   font-style: normal;
   position: fixed;
-  z-index: 38;
+  z-index: 98;
   color: rgb(53, 129, 133);
   min-width: 700px;
   border: 0.1rem dashed gray;
@@ -251,7 +251,7 @@ according to style policies.
   top: 0;
   max-height: -moz-max-content;
   max-height: max-content;
-  z-index: 39;
+  z-index: 5;
 }
 
 input.keyboard-is-open {
@@ -278,7 +278,7 @@ html {
   height: 100%;
   width: 100%;
   position: fixed;
-  z-index: 10;
+  z-index: 97;
 }
 
 /** Footer styling */
@@ -287,7 +287,6 @@ html {
 }
 
 .footer-partners {
-  z-index: 15;
   position: relative;
   bottom: 0;
 }
@@ -296,19 +295,11 @@ html {
   background-color: rgb(237, 238, 230);
   position: sticky;
   bottom: 0;
-  z-index: 10;
-}
-
-.search-info-bar {
-  position: fixed;
-  top: 0px;
-  height: 100px;
-  z-index: 5;
 }
 
 .search-info {
   position: sticky;
-  z-index: 7;
+  z-index: 3;
   top: 0;
   align-content: center;
 }
@@ -346,7 +337,7 @@ html {
 
 .modal {
   display: flex;
-  z-index: 99;
+  z-index: 6;
 }
 
 .modal-card {
@@ -23039,7 +23030,7 @@ a:hover {
 .card.metadata {
   top: 0;
   position: sticky;
-  z-index: 5;
+  z-index: 2;
 }
 
 .card.snippet {
@@ -23106,11 +23097,11 @@ a:hover {
 
 /* Pager mobile end */
 .dropdown-menu {
-  z-index: 39;
+  z-index: 99;
 }
 
 .dropdown-content {
-  z-index: 1000;
+  z-index: 99;
   position: fixed;
 }
 
@@ -23127,14 +23118,8 @@ a:hover {
   border-color: rgb(210, 210, 210);
 }
 
-.no-results {
-  z-index: 0;
-}
-
 .no-results-image {
-  z-index: -1;
   opacity: 25%;
-  background-color: transparent;
 }
 
 .search-content {
@@ -23145,7 +23130,7 @@ a:hover {
 .footer {
   position: fixed;
   bottom: 0;
-  z-index: 10;
+  z-index: 4;
   width: 100%;
 }
 

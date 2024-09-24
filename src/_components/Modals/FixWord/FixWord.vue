@@ -15,24 +15,23 @@
           <span class="column field has-addons has-addons-left is-horizontal">
             <p class="control is-expanded">
               <input
+                id="wordCorrectionInput"
                 :class="{
                   input: true,
-                  keyboardInput: true,
                   'rtl-align': preferences.needsRightToLeft
                 }"
                 class="input keyboardInput"
                 type="text"
                 lang="yi"
                 v-model="wordSuggestion"
-                vki-id="fixWord"
               />
             </p>
             <p class="control">
               <button
-                class="button is-clickable is-medium is-info keyboardInputButton"
-                vki-id="fixWord"
+                class="button is-clickable is-medium is-info"
                 :alt="$t('search.keyboard')"
                 :title="$t('search.keyboard')"
+                @click="toggleKeyboard('wordCorrectionInput')"
               >
                 <font-awesome-icon icon="keyboard" />
               </button>
@@ -66,6 +65,7 @@ const preferences = usePreferencesStore()
 
 const wordModal: Ref = defineModel('wordModal')
 const notification: Ref = defineModel('notification')
+const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 const wordImage = ref('')
 const wordLoading = ref(false)
 const wordSuggestion = ref('')

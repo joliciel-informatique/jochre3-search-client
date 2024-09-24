@@ -57,11 +57,24 @@ const switchLayout = (button: string) => {
 const onKeyPress = (button: string) => {
   const el = document.getElementById(simpleKeyboard.value.attachTo) as HTMLInputElement // input element
   if (!switchLayout(button)) {
-    console.log(2)
-    const newVal = button === '{bksp}' ? el.value.slice(0, -1) : `${el.value}${button}`
-    simpleKeyboard.value.input = newVal
+    let newVal = ''
+    if (button === '{bksp}') {
+      newVal = el.value.slice(0, -1)
+    } else if (button === '{enter}') {
+      newVal = el.value
+      simpleKeyboard.value.show = false
+    } else {
+      newVal = `${el.value}${button}`
+    }
     el.value = newVal
+    simpleKeyboard.value.input = newVal
   }
+}
+
+const confirmKeyboard = (el: HTMLInputElement, newVal: string) => {
+  el.value = newVal
+  simpleKeyboard.value.input = newVal
+  simpleKeyboard.value.show = false
 }
 
 const positionKeyboard = () => {

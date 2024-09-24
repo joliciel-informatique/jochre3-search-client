@@ -61,7 +61,7 @@ $sticky-bar-undocked-height: 10vh;
   top: 0;
   // height: $sticky-bar-docked-height;
   max-height: max-content;
-  z-index: 39;
+  z-index: 5;
 }
 
 input.keyboard-is-open {
@@ -88,7 +88,7 @@ html {
   height: 100%;
   width: 100%;
   position: fixed;
-  z-index: 10;
+  z-index: 97;
   // background-color: yellow;
   // background-color: rgba($foreground-color-1, 0.5);
 }
@@ -108,7 +108,7 @@ $footer-bottom: 0;
 }
 
 .footer-partners {
-  z-index: 15;
+  // z-index: 15;
   position: relative;
   bottom: 0;
   // position: absolute;
@@ -118,25 +118,20 @@ $footer-bottom: 0;
   background-color: $background-color-4;
   position: sticky;
   bottom: 0;
-  z-index: 10;
+  // z-index: 5;
 }
 
-.search-info-bar {
-  position: fixed;
-  top: 0px;
-  height: 100px;
-  z-index: 5;
-}
+// .search-info-bar {
+//   position: fixed;
+//   top: 0px;
+//   height: 100px;
+//   z-indexs: 5;
+// }
 
 .search-info {
   position: sticky;
-  z-index: 7;
-  // padding: 10px;
+  z-index: 3;
   top: 0;
-  // height: 50px;
-  // bottom: 20px;
-  // width: 100vw;
-  // background-color: $background-color-4;
   align-content: center;
 }
 
@@ -194,7 +189,7 @@ $notification-background-color: none;
 
 .modal {
   display: flex;
-  z-index: 99;
+  z-index: 6;
 }
 
 .modal-card {
@@ -552,7 +547,7 @@ a:hover {
 .card.metadata {
   top: 0;
   position: sticky;
-  z-index: 5;
+  z-index: 2;
 }
 
 .card.snippet {
@@ -637,11 +632,11 @@ $menu-nested-list-margin: 1em;
 /* Pager mobile end */
 
 .dropdown-menu {
-  z-index: 39;
+  z-index: 99;
 }
 
 .dropdown-content {
-  z-index: 1000;
+  z-index: 99;
   position: fixed;
 }
 
@@ -672,29 +667,8 @@ $menu-nested-list-margin: 1em;
   border-color: $background-color-3;
 }
 
-.no-results {
-  z-index: 0;
-  // display: -webkit-flex;
-  // display: flex;
-  // -webkit-align-items: center;
-  // align-items: center;
-  // -webkit-justify-content: center;
-  // justify-content: center;
-
-  // width: 100vw;
-  // height: 100vh;
-  // margin: 0 auto;
-  // background: #f7f7f7;
-  // left: 50%;
-  // top: 50%;
-  // margin-left: -100px;
-  // margin-top: -100px;
-}
-
 .no-results-image {
-  z-index: -1;
   opacity: 25%;
-  background-color: transparent;
 }
 
 // &.is-active {
@@ -719,7 +693,7 @@ $menu-nested-list-margin: 1em;
 .footer {
   position: fixed;
   bottom: 0;
-  z-index: 10;
+  z-index: 4;
   width: 100%;
 }
 

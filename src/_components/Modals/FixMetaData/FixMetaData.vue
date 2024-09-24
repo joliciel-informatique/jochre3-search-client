@@ -23,7 +23,7 @@
         <p class="control container">
           <input
             class="input is-normal is-rounded"
-            type="text"
+            :type="metadataModal.field === 'publicationYear' ? 'number' : 'text'"
             :id="metadataModal.field"
             :alt="$t('search.keyboard')"
             :title="$t('search.keyboard')"
