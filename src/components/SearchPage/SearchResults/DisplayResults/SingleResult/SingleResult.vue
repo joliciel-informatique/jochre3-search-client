@@ -56,10 +56,8 @@ Description: presents OCR record metadata
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, defineAsyncComponent } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import SingleResultItem from './SingleResultItem/SingleResultItem.vue'
-import DisplaySnippets from './DisplaySnippets/DisplaySnippets.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faPenToSquare,
@@ -69,7 +67,15 @@ import {
   faCircleChevronUp
 } from '@fortawesome/free-solid-svg-icons'
 import { sha1 } from 'object-hash'
-import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
+
+const SingleResultItem = defineAsyncComponent(
+  () => import('./SingleResultItem/SingleResultItem.vue')
+)
+const DisplaySnippets = defineAsyncComponent(() => import('./DisplaySnippets/DisplaySnippets.vue'))
+const AccordionCard = defineAsyncComponent(
+  () => import('@/_components/AccordionCard/AccordionCard.vue')
+)
+
 library.add(faPenToSquare, faQuestionCircle, faBookOpen, faCircleChevronDown, faCircleChevronUp)
 const fields = ['titleEnglish', 'author', 'authorEnglish', 'publicationYear', 'publisher']
 const { result } = defineProps(['result'])
