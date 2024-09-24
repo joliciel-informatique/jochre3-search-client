@@ -17,7 +17,7 @@ Description: presents the facet bar
         <span>
           <p>
             {{ $t('search.facets') }}
-            <span>
+            <span v-tooltip:top="$t('search.what-are-facets')">
               <FontAwesomeIcon icon="question-circle" />
             </span>
           </p>
