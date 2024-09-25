@@ -15,13 +15,12 @@
           <span class="column field has-addons has-addons-left is-horizontal">
             <p class="control is-expanded">
               <input
+                class="input keyboardInput"
                 :class="{
-                  input: true,
-                  keyboardInput: true,
                   'rtl-align': preferences.needsRightToLeft
                 }"
-                class="input keyboardInput"
                 type="text"
+                name="fixWordSuggestionInput"
                 lang="yi"
                 v-model="wordSuggestion"
                 vki-id="fixWord"
