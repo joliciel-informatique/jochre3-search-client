@@ -1,6 +1,6 @@
 <template>
   <div
-    class="button is-info has-text-white is-small m-1"
+    class="button is-info is-small m-1"
     :class="active ? 'is-warning' : ''"
     :id="'filterTag-' + label"
     @click="clicked"

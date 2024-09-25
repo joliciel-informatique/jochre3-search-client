@@ -75,7 +75,7 @@ Description: calculates and presents page numbers
         {{ $t('pagination.bottom') }}
       </button>
     </div>
-    <div v-tooltip:left="$t('results.result-current-tooltip')" class="navigation-current">
+    <div v-tooltip:top="$t('results.result-current-tooltip')" class="navigation-current">
       {{
         $t('results.result-current-book-and-snippet', [
           onScreenBook,
