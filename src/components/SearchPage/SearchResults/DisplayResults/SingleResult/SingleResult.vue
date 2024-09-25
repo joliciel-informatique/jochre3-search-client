@@ -20,7 +20,11 @@ Description: presents OCR record metadata
                 result.metadata.title ?? result.docRef
               }}</a>
             </span>
-            <button @click="openMetadataModal" class="button is-small is-white">
+            <button
+              class="button is-small is-white is-pulled-right"
+              @click="openMetadataModal"
+              v-tooltip:left="$t('fix-metadata.edit-button-tooltip')"
+            >
               <span class="icon is-small fa-md">
                 <font-awesome-icon icon="pen-to-square" />
               </span>
