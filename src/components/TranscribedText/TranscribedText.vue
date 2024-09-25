@@ -35,7 +35,7 @@
       </aside>
     </div>
     <div class="column is-1"></div>
-    <div v-html="docText" class="column rtl-align yiddish m-3 p-3"></div>
+    <div v-html="docText" class="column rtl-align yiddish m-3 p-3" role="article"></div>
   </div>
 </template>
 <script setup lang="ts">
