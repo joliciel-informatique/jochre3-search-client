@@ -100,12 +100,13 @@ Description: presents a 'search for authors' text box and retrieves authors ever
   </div>
 </template>
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
+import { defineAsyncComponent, ref, type Ref } from 'vue'
 import { sha1 } from 'object-hash'
 import { fetchData } from '@/assets/fetchMethods'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import FilterTag from '@/_components/FilterTag/FilterTag.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const FilterTag = defineAsyncComponent(() => import('@/_components/FilterTag/FilterTag.vue'))
 
 const preferences = usePreferencesStore()
 

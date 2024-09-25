@@ -34,8 +34,9 @@
   </Transition>
 </template>
 <script setup lang="ts">
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { watch, type Ref } from 'vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 const notification: Ref = defineModel('notification')
 
 watch(notification, () =>

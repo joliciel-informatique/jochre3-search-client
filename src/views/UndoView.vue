@@ -19,9 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import HeaderPage from '@/components/HeaderPage/HeaderPage.vue'
-import FooterPage from '@/components/FooterPage/FooterPage.vue'
-
+import { defineAsyncComponent } from 'vue'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import axios from 'axios'
 import { inject, onMounted, ref } from 'vue'
@@ -29,6 +27,9 @@ import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
+
+const HeaderPage = defineAsyncComponent(() => import('@/components/HeaderPage/HeaderPage.vue'))
+const FooterPage = defineAsyncComponent(() => import('@/components/FooterPage/FooterPage.vue'))
 
 const route = useRoute()
 const keycloak = useKeycloakStore().keycloak

@@ -13,8 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import { type Ref } from 'vue'
-import ModalBox from '@/_components/ModalBox/ModalBox.vue'
+import { defineAsyncComponent, type Ref } from 'vue'
+const ModalBox = defineAsyncComponent(() => import('@/_components/ModalBox/ModalBox.vue'))
 
 const imageModal: Ref = defineModel('imageModal')
 </script>

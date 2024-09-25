@@ -51,14 +51,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { defineAsyncComponent, ref } from 'vue'
 import { fetchData } from '@/assets/fetchMethods'
 import { storeToRefs } from 'pinia'
 import { useCookies } from '@vueuse/integrations/useCookies'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import VueI18n from 'vue-i18n'
-import ModalBox from '@/_components/ModalBox/ModalBox.vue'
+
+const ModalBox = defineAsyncComponent(() => import('@/_components/ModalBox/ModalBox.vue'))
 
 const notification = defineModel('notification')
 const preferences = usePreferencesStore()

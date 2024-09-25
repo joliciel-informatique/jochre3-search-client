@@ -56,8 +56,6 @@ const Preferences = defineAsyncComponent(
 )
 
 import type { SearchResult } from '@/assets/interfacesExternals'
-// import PreferencesSetup from '@/_components/Modals/Preferences/PreferencesSetup.vue'
-// import Preferences from '@/_components/Modals/Preferences/PreferencesModal.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()

@@ -56,13 +56,14 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUpdate, ref, type Ref } from 'vue'
+import { defineAsyncComponent, onBeforeUpdate, ref, type Ref } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
+
+const ModalBox = defineAsyncComponent(() => import('@/_components/ModalBox/ModalBox.vue'))
 
 const wordModal: Ref = defineModel('wordModal')
 const notification: Ref = defineModel('notification')
