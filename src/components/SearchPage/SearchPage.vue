@@ -245,6 +245,7 @@ const search = async () => {
   params.append('sort', sortBy.value.trim())
   params.append('max-snippets', preferences.snippetsPerResult.toString())
   params.append('row-padding', '2')
+  params.append('physical-newlines', 'false')
 
   if (!hasActiveFacets) {
     const urlParams = new URLSearchParams({ ...Object.fromEntries(params) })
