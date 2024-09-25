@@ -2,6 +2,7 @@
   <Transition name="fade">
     <div
       class="modal"
+      role="dialog"
       :class="{
         'is-active': data.show,
         'rtl-align': !preferences.displayLeftToRight,

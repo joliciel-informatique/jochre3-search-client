@@ -1,6 +1,7 @@
 <template>
   <div
     class="container hero-body is-fluid has-background-primary has-text-white m-0 p-0 header-footer-content"
+    aria-role="banner"
   >
     <div class="grid">
       <div class="cell p-2">

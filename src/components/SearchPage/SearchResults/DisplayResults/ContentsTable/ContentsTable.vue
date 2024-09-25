@@ -1,5 +1,5 @@
 <template>
-  <div class="box table-of-contents">
+  <div class="box table-of-contents" role="navigation">
     <aside class="menu p-2 my-3">
       <p class="menu-label">{{ $t('results.contents-table-header') }}</p>
       <ul class="menu-list">
