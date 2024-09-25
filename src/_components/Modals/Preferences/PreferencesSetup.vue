@@ -9,7 +9,7 @@ import { useCookies } from '@vueuse/integrations/useCookies'
 import VueI18n from 'vue-i18n'
 
 const keycloak = useKeycloakStore().keycloak
-const cookies = useCookies(['locale', 'resultsPerPage', 'snippetsPerResult'])
+const cookies = useCookies(['locale', 'resultsPerPage', 'snippetsPerResult', 'authorFacetCount'])
 
 const preferences = usePreferencesStore()
 
@@ -30,6 +30,10 @@ onMounted(() => {
     if (cookies.get('snippetsPerResult')) {
       const snippetsPerResult = cookies.get('snippetsPerResult').value as number
       preferences.snippetsPerResult = snippetsPerResult
+    }
+    if (cookies.get('authorFacetCount')) {
+      const authorFacetCount = cookies.get('authorFacetCount').value as number
+      preferences.authorFacetCount = authorFacetCount
     }
 
     const globalProperties = app?.appContext.config.globalProperties
