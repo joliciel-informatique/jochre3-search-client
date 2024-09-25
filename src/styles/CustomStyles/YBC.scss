@@ -8,18 +8,37 @@ $transparent: transparent;
 
 $danger: hsl(348, 100%, 46%);
 
+$gold: rgb(238, 177, 17);
+$brown: rgb(121, 83, 0);
+$red: rgb(218, 32, 50);
+
+// Buttons is blue
+// $blue: rgb(32, 116, 162);
+$blue: #358185;
+// Banner is gray
+$gray: rgb(117, 117, 117);
+
+$flax: rgb(255, 240, 216);
+$green: rgb(93, 112, 114);
+$orange: rgb(209, 104, 79);
+$violet: rgb(136, 134, 158);
+$darkgold: rgb(194, 153, 49);
+$darkred: rgb(169, 70, 85);
+$warmgray: rgb(190, 191, 155);
+
 /** Background colors */
-$background-color-1: rgb(117, 117, 117);
-$background-color-2: rgb(48, 48, 48);
-$background-color-3: rgb(210, 210, 210);
-$background-color-4: rgb(237, 238, 230);
-$background-color-2-transparency-50: rgba(48, 48, 48, 0.5);
+$background-color-1: $gray;
+$background-color-2: $blue;
+$background-color-3: $flax;
+$background-color-4: $darkgold;
+
+$background-color-2-transparency-50: rgba($background-color-2, 0.5);
 
 /** Foreground colors */
-$foreground-color-1: rgb(53, 129, 133);
-$foreground-color-2: rgb(180, 220, 222);
-$foreground-color-3: rgb(238, 178, 17);
-$foreground-color-4: rgb(255, 255, 128);
+$foreground-color-1: $darkgold;
+$foreground-color-2: $brown;
+$foreground-color-3: $orange;
+$foreground-color-4: $red;
 
 /** Fonts & text */
 $font-family-1: 'Noto serif';
@@ -52,13 +71,13 @@ $nav-color-of-active-button: $foreground-color-2;
 /** ToolTip styling */
 $tt-min-width: 3em;
 $tt-max-width: 15em;
-$tt-z-index: 2947835247835278345458346098731468239476520972834509273452345;
+$tt-z-index: 1000;
 $tt-content-overflow: visible;
 $tt-text-line-height: $font-line-height-1;
 $tt-font: $font-family-1;
 $tt-font-size: $font-size-2;
 $tt-font-weight: $font-weight-1;
 $tt-color-of-font: $white;
-$tt-background-color: $background-color-2;
+$tt-background-color: $brown;
 $tt-padding: 0.5rem;
 $tt-radius: 0.3rem;

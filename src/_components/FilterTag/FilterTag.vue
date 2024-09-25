@@ -1,9 +1,9 @@
 <template>
   <div
-    :id="'filterTag-' + label"
-    class="button is-info has-text-white is-small m-1"
-    :aria-label="`filter ${label}`"
+    class="button is-info is-small m-1"
     :class="active ? 'is-warning' : ''"
+    :id="'filterTag-' + label"
+    :aria-label="`filter ${label}`"
     tabindex="0"
     @click="clicked"
     @keyup.enter="clicked"
