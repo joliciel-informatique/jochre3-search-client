@@ -67,6 +67,7 @@ Description: displays text snippets from the OCR text
         <div
           class="column button is-flex is-align-items-center"
           :class="imageIsLoading ? 'is-loading' : ''"
+          :alt="$t('results.click-image-snippet')"
           @click="image ? openImageModal() : toggleImageSnippet()"
         >
           <div>
@@ -83,7 +84,12 @@ Description: displays text snippets from the OCR text
 
             <!-- Show snippet image -->
             <div v-else>
-              <img class="image-snippet" :src="image" title="Image" />
+              <img
+                class="image-snippet"
+                :src="image"
+                title="Image"
+                :alt="`Image for page ${snippet.page}`"
+              />
             </div>
           </div>
         </div>

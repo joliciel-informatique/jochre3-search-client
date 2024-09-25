@@ -9,7 +9,7 @@
           {{ $t('fix-word.unauthenticated') }}
         </div>
         <div class="p-2 has-text-centered" v-if="wordImage !== ''">
-          <img :src="wordImage" />
+          <img :src="wordImage" :alt="$t('fix-word.image-alt', [wordSuggestion])" />
         </div>
         <div class="p-2 field has-addons">
           <span class="column field has-addons has-addons-left is-horizontal">

@@ -65,9 +65,13 @@
   },
   "fix-word": {
     "title": "Fix a word",
+    "image-alt": "An image that should read {0}",
     "instructions": "Please copy the above exactly below, including punctuation (niqqud, apostrophes, quotes, dashes and so on).",
     "warning": "Do not correct unclear text, i.e. text that is broken, partially visible etc.",
     "unauthenticated": "In order to fix a word, please login first."
+  },
+  "large-image": {
+    "image-alt": "An image of the text on {0}"
   },
   "fix-metadata": {
     "title": "Update metadata for \"{0}\"",
