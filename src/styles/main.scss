@@ -265,11 +265,11 @@ span.icon.is-clickable:active {
 }
 
 #query {
-  background-color: $info;
+  background-color: $background-color-3;
 }
 
 #searchBar > .container > .field > .control > .button.is-static {
-  background-color: $info;
+  background-color: $background-color-3;
 }
 
 // $line-height:
@@ -438,7 +438,7 @@ h1 {
 }
 
 a {
-  color: $background-color-3;
+  color: $foreground-color-3;
   text-decoration: none;
 }
 
@@ -481,6 +481,10 @@ a:hover {
 
 .highlight > span:hover {
   color: $foreground-color-3;
+}
+
+.link-light {
+  color: $background-color-3;
 }
 
 .link-subtle {

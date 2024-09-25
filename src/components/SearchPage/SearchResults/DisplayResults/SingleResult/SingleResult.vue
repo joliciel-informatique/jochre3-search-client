@@ -22,7 +22,7 @@ Description: presents OCR record metadata
                 'has-text-right': !preferences.displayLeftToRight
               }"
             >
-              <a :href="result.metadata?.url" target="_blank">{{
+              <a :href="result.metadata?.url" target="_blank" class="link-light">{{
                 result.metadata.title ?? result.docRef
               }}</a>
             </span>
