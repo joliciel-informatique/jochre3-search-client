@@ -28,7 +28,7 @@ Description: display results in SingleResult child component
         <ContentsTable v-model:search-results="searchResults" v-model:page="page" />
       </div>
       <div class="column is-1"></div>
-      <div class="column">
+      <div class="column" tabindex="-1">
         <ul>
           <li v-for="(result, index) of searchResults" :key="sha1(result)">
             <div>
@@ -37,6 +37,7 @@ Description: display results in SingleResult child component
                 v-model:word-modal="wordModal"
                 v-model:metadata-modal="metadataModal"
                 v-model:notification="notification"
+                :showing="index === 0 ? true : false"
                 :result="result"
               />
             </div>

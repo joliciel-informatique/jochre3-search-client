@@ -30,7 +30,9 @@ Description: display single metadata item
       }"
       v-tooltip:left="$t('fix-metadata.edit-button-tooltip')"
       aria-labelledby="edit"
+      tabindex="3"
       @click="openMetadataModal"
+      @keyup.enter="openMetadataModal"
     >
       <span class="icon is-small fa-md">
         <font-awesome-icon icon="pen-to-square" />

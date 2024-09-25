@@ -14,20 +14,30 @@ Description: calculates and presents page numbers
     class="pagination p-1"
     role="navigation"
     aria-label="pagination"
+    tabindex="2"
     v-if="totalHits > 0 && !isBusy && hasSearch"
   >
     <div>
       <ul class="pagination-list">
         <li v-if="page - 1 > 1">
-          <a @click="page = 1" class="pagination-link is-small m-1" aria-label="go to page 1">1</a>
+          <a
+            @click="page = 1"
+            @keyup.enter="page = 1"
+            class="pagination-link is-small m-1"
+            aria-label="go to page 1"
+            tabindex="2"
+            >1</a
+          >
         </li>
         <li v-if="page - 1 > 2">
           <span class="pagination-ellipsis">&hellip;</span>
         </li>
         <li v-if="page > 1">
           <a
-            @click="page--"
             class="pagination-link is-small m-1"
+            tabindex="2"
+            @click="page--"
+            @keyup.enter="page--"
             :aria-label="`go to page ${page - 1}`"
             >{{ page - 1 }}</a
           >
@@ -37,14 +47,17 @@ Description: calculates and presents page numbers
             class="pagination-link is-current is-small m-1 has-text-white"
             :aria-label="`go to page ${page}`"
             aria-current="page"
+            tabindex="2"
             >{{ page }}</a
           >
         </li>
         <li v-if="page < lastPage">
           <a
             @click="page++"
+            @keyup.enter="page++"
             class="pagination-link is-small m-1"
             :aria-label="`go to page ${page + 1}`"
+            tabindex="2"
             >{{ page + 1 }}</a
           >
         </li>
@@ -54,24 +67,36 @@ Description: calculates and presents page numbers
         <li v-if="page + 1 < lastPage">
           <a
             @click="page = lastPage"
+            @keyup.enter="page = lastPage"
             class="pagination-link is-small m-1"
             :aria-label="`go to lastpage ${lastPage}`"
+            tabindex="2"
             >{{ lastPage }}</a
           >
         </li>
       </ul>
     </div>
     <div>
-      <button class="pagination-previous is-small m-1" :disabled="page - 1 < 1" @click="page--">
+      <button
+        @click="page--"
+        @keyup.enter="page--"
+        :disabled="page - 1 < 1"
+        class="pagination-previous is-small m-1"
+      >
         {{ $t('pagination.previous') }}
       </button>
-      <button class="pagination-next is-small m-1" :disabled="page >= lastPage" @click="page++">
+      <button
+        @click="page++"
+        @keyup.enter="page++"
+        :disabled="page >= lastPage"
+        class="pagination-next is-small m-1"
+      >
         {{ $t('pagination.next') }}
       </button>
-      <button class="pagination-previous is-small m-1" @click="toTop">
+      <button @click="toTop" @keyup.enter="toTop" class="pagination-previous is-small m-1">
         {{ $t('pagination.top') }}
       </button>
-      <button class="pagination-previous is-small m-1" @click="toBottom">
+      <button @click="toBottom" @keyup.enter="toBottom" class="pagination-previous is-small m-1">
         {{ $t('pagination.bottom') }}
       </button>
     </div>

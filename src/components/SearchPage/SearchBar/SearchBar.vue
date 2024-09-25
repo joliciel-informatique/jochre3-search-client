@@ -38,7 +38,9 @@ Description: presents the search bar
             class="is-small icon is-clickable"
             aria-label="advanced search"
             :class="advancedSearchIcons"
+            tabindex="0"
             @click="toggleAdvancedSearchPanel()"
+            @keyup.enter="toggleAdvancedSearchPanel()"
           >
             <font-awesome-icon
               :icon="
@@ -51,27 +53,26 @@ Description: presents the search bar
             />
           </span>
           <span
+            class="icon is-small is-clickable"
             :class="{
-              icon: true,
-              'is-small': true,
-              'is-clickable': true,
               'is-left': !preferences.displayLeftToRight,
               'is-right': preferences.displayLeftToRight
             }"
+            tabindex="0"
             aria-label="reset"
             @click="emit('resetSearchResults')"
+            @keyup.enter="emit('resetSearchResults')"
             v-if="!isLoading"
           >
             <font-awesome-icon icon="circle-xmark" />
           </span>
           <span
+            class="icon is-small is-loading"
             :class="{
-              icon: true,
-              'is-small': true,
-              'is-loading': true,
               'is-left': !preferences.displayLeftToRight,
               'is-right': preferences.displayLeftToRight
             }"
+            aria-label="hidden"
             v-else
           ></span>
         </p>

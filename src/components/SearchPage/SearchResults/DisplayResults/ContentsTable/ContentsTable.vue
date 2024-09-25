@@ -1,11 +1,11 @@
 <template>
-  <div class="box table-of-contents" role="navigation">
+  <div class="box table-of-contents" role="navigation" tabindex="1">
     <aside class="menu p-2 my-3">
       <p class="menu-label">{{ $t('results.contents-table-header') }}</p>
       <ul class="menu-list">
         <li class="px-2" v-for="(result, index) of searchResults" :key="result">
           <div class="grid">
-            <a @click="scrollTo(result.docRef)">
+            <a @click="scrollTo(result.docRef)" @keyup.enter="scrollTo(result.docRef)" tabindex="0">
               <p class="cell is-size-7">{{ index + pageNumberOffset }}|</p>
               <p class="cell is-size-7 is-col-min-2">
                 {{ result.metadata.title }} ({{
