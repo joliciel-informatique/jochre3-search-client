@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { onMounted, ref, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { fetchData, preferences } from '@/assets/fetchMethods'
+import { fetchData } from '@/assets/fetchMethods'
 
 // Import Child components
 import SearchBar from './SearchBar/SearchBar.vue'
