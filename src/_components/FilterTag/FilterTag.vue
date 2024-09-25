@@ -1,9 +1,11 @@
 <template>
   <div
+    :id="'filterTag-' + label"
     class="button is-info has-text-white is-small m-1"
     :class="active ? 'is-warning' : ''"
-    :id="'filterTag-' + label"
+    tabindex="0"
     @click="clicked"
+    @keyup.enter="clicked"
   >
     <div>{{ label }} {{ count && showCount ? ' (' + count + ')' : '' }}</div>
   </div>

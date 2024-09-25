@@ -11,14 +11,19 @@ Description: presents OCR record metadata
 -->
 <template>
   <div :docRef="result.docRef" :id="result.docRef" class="card metadata my-3">
-    <AccordionCard :id="result.docRef" :showing="showing">
+    <AccordionCard :id="result.docRef" :showing="isCollapsed">
       <template #header>
         <div class="card-header">
-          <p class="card-header-title title yiddish">
+          <p class="card-header-title title yiddish" tabindex="3">
             <a :href="result.metadata?.url" target="_blank">{{
               result.metadata.title ?? result.docRef
             }}</a>
-            <button @click="openMetadataModal" class="button is-small is-white is-pulled-right">
+            <button
+              class="button is-small is-white is-pulled-right"
+              tabindex="3"
+              @click="openMetadataModal"
+              @keyup.enter="openMetadataModal"
+            >
               <span class="icon is-small fa-2xs">
                 <font-awesome-icon icon="pen-to-square" />
               </span>
@@ -37,7 +42,7 @@ Description: presents OCR record metadata
             />
           </div>
         </div>
-        <div class="has-text-right is-size-7 pt-4">
+        <div class="has-text-right is-size-7 pt-4" aria-label="document reference" tabindex="3">
           {{ $t('results.document-reference') }}: <strong>{{ result.docRef }}</strong>
         </div>
       </template>
@@ -72,9 +77,9 @@ import { sha1 } from 'object-hash'
 import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
 library.add(faPenToSquare, faQuestionCircle, faBookOpen, faCircleChevronDown, faCircleChevronUp)
 const fields = ['titleEnglish', 'author', 'authorEnglish', 'publicationYear', 'publisher']
-const { result } = defineProps(['result'])
-const showing = ref(true)
+const { result, showing } = defineProps(['result', 'showing'])
 
+const isCollapsed = ref(showing)
 const imageModal = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const metadataModal = defineModel('metadataModal')
@@ -91,7 +96,9 @@ const openMetadataModal = () => {
 
 /** Autohide card upon scrolling */
 const autoHide = () => {
-  showing.value = false
+  console.log('scrolling')
+  // Check if element is at the top of the screen
+  isCollapsed.value = false
 }
 
 onMounted(() => {

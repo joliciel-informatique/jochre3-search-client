@@ -23,7 +23,6 @@ Description: display single metadata item
     </span>
     <span class="column">{{ value }}</span>
     <button
-      @click="openMetadataModal"
       :class="{
         button: true,
         'is-small': true,
@@ -31,6 +30,9 @@ Description: display single metadata item
         'is-pulled-right': preferences.displayLeftToRight,
         'is-pulled-left': !preferences.displayLeftToRight
       }"
+      tabindex="3"
+      @click="openMetadataModal"
+      @keyup.enter="openMetadataModal"
     >
       <span class="icon is-small fa-2xs">
         <font-awesome-icon icon="pen-to-square" />
