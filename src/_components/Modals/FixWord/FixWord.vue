@@ -39,8 +39,8 @@
             </p>
           </span>
         </div>
-        <div class="p-2 has-text-info">{{ $t('fix-word.instructions') }}</div>
-        <div class="p-2 has-text-warning">{{ $t('fix-word.warning') }}</div>
+        <div class="p-2 has-text-warning">{{ $t('fix-word.instructions') }}</div>
+        <div class="p-2 has-text-danger">{{ $t('fix-word.warning') }}</div>
       </div>
     </template>
     <template #footer="modalBox">
