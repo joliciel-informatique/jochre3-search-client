@@ -7,6 +7,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
   const language = ref('yi')
   const resultsPerPage = ref(10)
   const snippetsPerResult = ref(20)
+  const authorFacetCount = ref(10)
   const corpusLanguage = ref('yi')
 
   const displayLeftToRight = computed(() => language.value !== 'yi')
@@ -32,6 +33,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
     language,
     resultsPerPage,
     snippetsPerResult,
+    authorFacetCount,
     corpusLanguage,
     displayLeftToRight,
     needsLeftToRight,

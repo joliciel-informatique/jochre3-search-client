@@ -12,7 +12,7 @@ Description: presents the facet bar
 <template>
   <div id="facetBar" v-if="!isLoading && facets.length">
     <hr />
-    <div class="columns has-text-centered is-vcentered">
+    <div class="columns has-text-centered is-vcentered has-text-info">
       <div class="column is-one-fifth">
         <span>
           <p>
@@ -45,7 +45,6 @@ import { type Ref } from 'vue'
 import FilterTag from '@/_components/FilterTag/FilterTag.vue'
 import { sha1 } from 'object-hash'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-// Import interfaces
 import type { AggregationBin } from '@/assets/interfacesExternals'
 
 const isLoading = defineModel('isLoading')

@@ -103,7 +103,7 @@ Description: calculates and presents page numbers
     <div
       class="navigation-current"
       :aria-label="`current position: book ${onScreenBook}, snippet ${onScreenSnippet}`"
-      v-tooltip:left="$t('results.result-current-tooltip')"
+      v-tooltip:top="$t('results.result-current-tooltip')"
     >
       {{
         $t('results.result-current-book-and-snippet', [

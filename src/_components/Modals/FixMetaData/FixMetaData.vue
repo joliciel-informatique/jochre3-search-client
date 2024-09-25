@@ -13,7 +13,7 @@
       <div v-if="!authenticated" class="is-italic has-text-weight-bold has-text-danger">
         {{ $t('fix-metadata.unauthenticated') }}
       </div>
-      <div class="p-2 has-text-info">{{ $t('fix-metadata.instructions.normal') }}</div>
+      <div class="p-2 has-text-warning">{{ $t('fix-metadata.instructions.normal') }}</div>
       <div class="pb-0 mb-0 field has-addons">
         <p class="control">
           <a class="button is-static level-item">{{
@@ -65,7 +65,7 @@
             {{ $t('fix-metadata.instructions.authors') }}
           </div>
         </div>
-        <div class="p-2 has-text-info">
+        <div class="p-2 has-text-warning">
           {{ $t('fix-metadata.instructions.authorsInstruction') }}
         </div>
         <div class="pb-0 mb-0 field has-addon">

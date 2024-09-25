@@ -58,6 +58,10 @@ import type { AggregationBin } from '@/assets/interfacesExternals'
 
 import { hasSearch } from '@/assets/appState'
 
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const preferences = usePreferencesStore()
+
 const query = ref('')
 const searchResults: Ref = defineModel('searchResults')
 const totalHits: Ref = defineModel('totalHits')
@@ -273,7 +277,7 @@ const search = async () => {
         totalHits.value = totalCount
         if (!hasActiveFacets) {
           facetParams.append('field', 'Author')
-          facetParams.append('maxBins', '10')
+          facetParams.append('maxBins', preferences.authorFacetCount.toString())
           return fetchData('aggregate', 'get', facetParams)
             .then((response) =>
               response.json().then((result) => {

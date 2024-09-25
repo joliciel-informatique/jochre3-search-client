@@ -50,6 +50,21 @@
             </div>
           </div>
         </div>
+        <div class="columns is-vcentered">
+          <div class="column is-5">
+            <span class="label">{{ $t('preferences.author-facet-count') }}</span>
+          </div>
+          <div class="column is-4">
+            <div class="control is-expanded">
+              <input
+                class="input"
+                type="number"
+                name="authorFacetCountInput"
+                v-model="authorFacetCount"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </template>
     <template #footer>
@@ -63,7 +78,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { fetchData } from '@/assets/fetchMethods'
-import { storeToRefs } from 'pinia'
 import { useCookies } from '@vueuse/integrations/useCookies'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
@@ -74,12 +88,21 @@ const notification = defineModel('notification')
 const preferences = usePreferencesStore()
 const keycloak = useKeycloakStore().keycloak
 const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
-const cookies = useCookies(['locale', 'resultsPerPage', 'snippetsPerResult'])
+const cookies = useCookies(['locale', 'resultsPerPage', 'snippetsPerResult', 'authorFacetCount'])
 const setToLanguage = ref(preferences.language)
 
-const { resultsPerPage, snippetsPerResult } = storeToRefs(preferences)
+const resultsPerPage = ref(preferences.resultsPerPage)
+const snippetsPerResult = ref(preferences.snippetsPerResult)
+const authorFacetCount = ref(preferences.authorFacetCount)
 
 const save = (vi18n: VueI18n.VueI18n) => {
+  preferences.language = setToLanguage.value
+  vi18n.locale = setToLanguage.value
+
+  preferences.resultsPerPage = resultsPerPage.value
+  preferences.snippetsPerResult = snippetsPerResult.value
+  preferences.authorFacetCount = authorFacetCount.value
+
   if (authenticated.value) {
     const params = JSON.stringify({
       language: setToLanguage.value,
@@ -90,9 +113,6 @@ const save = (vi18n: VueI18n.VueI18n) => {
     fetchData('preferences/user', 'post', params)
       .then((res) => {
         if (res.status === 200) {
-          preferences.language = setToLanguage.value
-          vi18n.locale = setToLanguage.value
-
           notification.value = {
             show: true,
             error: false,
@@ -117,11 +137,10 @@ const save = (vi18n: VueI18n.VueI18n) => {
         }
       })
   } else {
-    preferences.language = setToLanguage.value
-    vi18n.locale = setToLanguage.value
-    cookies.set('locale', setToLanguage)
-    cookies.set('resultsPerPage', resultsPerPage)
-    cookies.set('snippetsPerResult', snippetsPerResult)
+    cookies.set('locale', setToLanguage.value)
+    cookies.set('resultsPerPage', resultsPerPage.value)
+    cookies.set('snippetsPerResult', snippetsPerResult.value)
+    cookies.set('authorFacetCount', authorFacetCount.value)
 
     notification.value = {
       show: true,
