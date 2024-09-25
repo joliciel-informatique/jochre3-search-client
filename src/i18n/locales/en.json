@@ -64,7 +64,8 @@
     "title": "Update preferences",
     "language": "Interface language",
     "results-per-page": "Results per page",
-    "snippets-per-result": "Snippets per book"
+    "snippets-per-result": "Snippets per book",
+    "author-facet-count": "How many author name filters to show"
   },
   "fix-word": {
     "title": "Fix a word",
