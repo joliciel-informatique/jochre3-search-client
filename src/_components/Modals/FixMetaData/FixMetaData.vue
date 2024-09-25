@@ -32,8 +32,7 @@
             :class="{
               'ltr-align': fieldLeftToRight && preferences.needsLeftToRight,
               english: fieldLeftToRight && preferences.needsLeftToRight,
-              'rtl-align': !fieldLeftToRight && preferences.needsRightToLeft,
-              yiddish: !fieldLeftToRight && preferences.needsRightToLeft
+              'rtl-align': !fieldLeftToRight && preferences.needsRightToLeft
             }"
             v-model="metadataModal.value"
             :disabled="authorList.length > 0"

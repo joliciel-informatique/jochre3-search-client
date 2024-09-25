@@ -2,8 +2,7 @@
   <footer
     class="footer has-text-white mt-auto header-footer-content"
     :class="{
-      'rtl-align': !preferences.displayLeftToRight,
-      yiddish: !preferences.displayLeftToRight
+      'rtl-align': !preferences.displayLeftToRight
     }"
   >
     <Transition name="slide-up" mode="out-in">
