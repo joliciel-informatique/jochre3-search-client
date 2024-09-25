@@ -52,8 +52,7 @@ Description: displays text snippets from the OCR text
             'pr-2': true,
             'pl-2': true,
             'rtl-align': !preferences.corpusLeftToRight,
-            rtl: !preferences.corpusLeftToRight,
-            yiddish: !preferences.corpusLeftToRight
+            rtl: !preferences.corpusLeftToRight
           }"
           v-html="snippet.text"
           @dblclick="openWordModal"
@@ -103,8 +102,7 @@ Description: displays text snippets from the OCR text
             'pr-2': true,
             'pl-2': true,
             'rtl-align': !preferences.corpusLeftToRight,
-            rtl: !preferences.corpusLeftToRight,
-            yiddish: !preferences.corpusLeftToRight
+            rtl: !preferences.corpusLeftToRight
           }"
           v-html="snippet.text"
           tabindex="3"

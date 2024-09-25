@@ -5,8 +5,7 @@
       role="dialog"
       :class="{
         'is-active': data.show,
-        'rtl-align': !preferences.displayLeftToRight,
-        yiddish: !preferences.displayLeftToRight
+        'rtl-align': !preferences.displayLeftToRight
       }"
       v-show="data.show"
     >

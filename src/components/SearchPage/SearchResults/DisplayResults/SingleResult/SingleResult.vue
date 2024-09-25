@@ -14,14 +14,24 @@ Description: presents OCR record metadata
     <AccordionCard :id="result.docRef" :showing="isCollapsed">
       <template #header>
         <div class="card-header">
-          <p class="card-header-title title yiddish columns" tabindex="3">
-            <span class="column has-text-left">
+          <p class="card-header-title title columns" tabindex="3">
+            <span
+              class="column has-text-left"
+              :class="{
+                'has-text-left': preferences.displayLeftToRight,
+                'has-text-right': !preferences.displayLeftToRight
+              }"
+            >
               <a :href="result.metadata?.url" target="_blank">{{
                 result.metadata.title ?? result.docRef
               }}</a>
             </span>
             <button
-              class="button is-small is-white is-pulled-right"
+              class="button is-small is-white"
+              :class="{
+                'is-pulled-right': preferences.displayLeftToRight,
+                'is-pulled-left': !preferences.displayLeftToRight
+              }"
               tabindex="3"
               @click="openMetadataModal"
               @keyup.enter="openMetadataModal"
@@ -78,7 +88,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { sha1 } from 'object-hash'
 import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
 library.add(faPenToSquare, faQuestionCircle, faBookOpen, faCircleChevronDown, faCircleChevronUp)
+
+const preferences = usePreferencesStore()
 const fields = ['titleEnglish', 'author', 'authorEnglish', 'publicationYear', 'publisher']
 const { result, showing } = defineProps(['result', 'showing'])
 
