@@ -8,16 +8,8 @@
             <a @click="scrollTo(result.docRef)">
               <p class="cell is-size-7">{{ index + pageNumberOffset }}|</p>
               <p class="cell is-size-7 is-col-min-2">
-                {{
-                  !preferences.corpusLeftToRight && preferences.displayLeftToRight
-                    ? result.metadata.titleEnglish
-                    : result.metadata.title
-                }}
-
-                ({{
-                  !preferences.corpusLeftToRight && preferences.displayLeftToRight
-                    ? result.metadata.authorEnglish ?? $t('results.result-unknown-author')
-                    : result.metadata.author ?? $t('results.result-unknown-author')
+                {{ result.metadata.title }} ({{
+                  result.metadata.author ?? $t('results.result-unknown-author')
                 }})
               </p>
             </a>
