@@ -25,6 +25,7 @@
             class="input is-normal is-rounded keyboardInput"
             aria-label="open onscreen Yiddish keyboard"
             type="text"
+            name="fixMetadataInput"
             :alt="$t('search.keyboard')"
             :title="$t('search.keyboard')"
             :vki-id="`${metadataModal.docRef}-${metadataModal.field}`"
@@ -53,7 +54,10 @@
       </div>
       <div v-show="showFindAuthorDropdown">
         <div class="columns mt-3">
-          <div class="column is-one-fifth p-2 has-text-warning has-text-weight-semibold">
+          <div
+            class="column is-one-fifth p-2 has-text-warning has-text-weight-semibold"
+            role="document"
+          >
             {{ $t('fix-metadata.instructions.authorsNote') }}
           </div>
           <div

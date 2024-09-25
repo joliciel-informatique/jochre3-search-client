@@ -80,6 +80,7 @@ Description: the advanced search toolbox
             <span class="column field has-addons has-addons-left is-horizontal">
               <input
                 class="input"
+                name="documentRefsInput"
                 type="text"
                 aria-label="document reference numbers"
                 v-model="docRefs"
@@ -121,7 +122,12 @@ Description: the advanced search toolbox
             <p class="column is-flex is-vcentered is-1" id="searchSortBy">
               {{ $t('search.sort-by') }}
             </p>
-            <select class="column control select" aria-labelledby="searchSortBy" v-model="sortBy">
+            <select
+              class="column control select"
+              name="sortBySelect"
+              aria-labelledby="searchSortBy"
+              v-model="sortBy"
+            >
               <option value="Score">{{ $t('search.sort.score') }}</option>
               <option value="DateAscending">
                 {{ $t('search.sort.date-ascending') }}
