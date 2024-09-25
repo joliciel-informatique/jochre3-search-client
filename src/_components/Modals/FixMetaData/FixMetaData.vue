@@ -23,6 +23,7 @@
         <p class="control container">
           <input
             class="input is-normal is-rounded keyboardInput"
+            aria-label="open onscreen Yiddish keyboard"
             type="text"
             :alt="$t('search.keyboard')"
             :title="$t('search.keyboard')"
@@ -41,6 +42,7 @@
         <p class="control">
           <button
             class="button is-clickable is-medium is-info keyboardInputButton"
+            aria-label="open onscreen Yiddish keyboard"
             :alt="$t('search.keyboard')"
             :title="$t('search.keyboard')"
             :vki-id="`${metadataModal.docRef}-${metadataModal.field}`"

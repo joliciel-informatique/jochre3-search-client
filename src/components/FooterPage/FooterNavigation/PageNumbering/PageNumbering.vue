@@ -19,7 +19,7 @@ Description: calculates and presents page numbers
     <div>
       <ul class="pagination-list">
         <li v-if="page - 1 > 1">
-          <a @click="page = 1" class="pagination-link is-small m-1" aria-label="Goto page 1">1</a>
+          <a @click="page = 1" class="pagination-link is-small m-1" aria-label="go to page 1">1</a>
         </li>
         <li v-if="page - 1 > 2">
           <span class="pagination-ellipsis">&hellip;</span>
@@ -28,14 +28,14 @@ Description: calculates and presents page numbers
           <a
             @click="page--"
             class="pagination-link is-small m-1"
-            :aria-label="`Goto page ${page - 1}`"
+            :aria-label="`go to page ${page - 1}`"
             >{{ page - 1 }}</a
           >
         </li>
         <li>
           <a
             class="pagination-link is-current is-small m-1 has-text-white"
-            :aria-label="`Page ${page}`"
+            :aria-label="`go to page ${page}`"
             aria-current="page"
             >{{ page }}</a
           >
@@ -44,7 +44,7 @@ Description: calculates and presents page numbers
           <a
             @click="page++"
             class="pagination-link is-small m-1"
-            :aria-label="`Goto page ${page + 1}`"
+            :aria-label="`go to page ${page + 1}`"
             >{{ page + 1 }}</a
           >
         </li>
@@ -55,27 +55,31 @@ Description: calculates and presents page numbers
           <a
             @click="page = lastPage"
             class="pagination-link is-small m-1"
-            :aria-label="`Goto page ${lastPage}`"
+            :aria-label="`go to lastpage ${lastPage}`"
             >{{ lastPage }}</a
           >
         </li>
       </ul>
     </div>
     <div>
-      <button @click="page--" :disabled="page - 1 < 1" class="pagination-previous is-small m-1">
+      <button class="pagination-previous is-small m-1" :disabled="page - 1 < 1" @click="page--">
         {{ $t('pagination.previous') }}
       </button>
-      <button @click="page++" :disabled="page >= lastPage" class="pagination-next is-small m-1">
+      <button class="pagination-next is-small m-1" :disabled="page >= lastPage" @click="page++">
         {{ $t('pagination.next') }}
       </button>
-      <button @click="toTop" class="pagination-previous is-small m-1">
+      <button class="pagination-previous is-small m-1" @click="toTop">
         {{ $t('pagination.top') }}
       </button>
-      <button @click="toBottom" class="pagination-previous is-small m-1">
+      <button class="pagination-previous is-small m-1" @click="toBottom">
         {{ $t('pagination.bottom') }}
       </button>
     </div>
-    <div v-tooltip:left="$t('results.result-current-tooltip')" class="navigation-current">
+    <div
+      class="navigation-current"
+      :aria-label="`current position: book ${onScreenBook}, snippet ${onScreenSnippet}`"
+      v-tooltip:left="$t('results.result-current-tooltip')"
+    >
       {{
         $t('results.result-current-book-and-snippet', [
           onScreenBook,

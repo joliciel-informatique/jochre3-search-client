@@ -30,6 +30,7 @@
             <p class="control">
               <button
                 class="button is-clickable is-medium is-info keyboardInputButton"
+                aria-label="open onscreen Yiddish keyboard"
                 vki-id="fixWord"
                 :alt="$t('search.keyboard')"
                 :title="$t('search.keyboard')"
