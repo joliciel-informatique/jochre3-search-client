@@ -179,6 +179,11 @@ $notification-background-color: none;
   border-radius: 0.75rem;
 }
 
+.card-header-title.title {
+  padding-right: var(--bulma-card-content-padding);
+  padding-left: var(--bulma-card-content-padding);
+}
+
 $radius-rounded: 0.15rem;
 $border-radius: 0.15rem;
 $card-radius: 0.75rem;

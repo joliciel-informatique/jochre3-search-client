@@ -14,12 +14,14 @@ Description: presents OCR record metadata
     <AccordionCard :id="result.docRef" :showing="showing">
       <template #header>
         <div class="card-header">
-          <p class="card-header-title title yiddish">
-            <a :href="result.metadata?.url" target="_blank">{{
-              result.metadata.title ?? result.docRef
-            }}</a>
-            <button @click="openMetadataModal" class="button is-small is-white is-pulled-right">
-              <span class="icon is-small fa-2xs">
+          <p class="card-header-title title yiddish columns">
+            <span class="column has-text-left">
+              <a :href="result.metadata?.url" target="_blank">{{
+                result.metadata.title ?? result.docRef
+              }}</a>
+            </span>
+            <button @click="openMetadataModal" class="button is-small is-white">
+              <span class="icon is-small fa-md">
                 <font-awesome-icon icon="pen-to-square" />
               </span>
             </button>
@@ -37,7 +39,7 @@ Description: presents OCR record metadata
             />
           </div>
         </div>
-        <div class="has-text-right is-size-7 pt-4">
+        <div class="has-text-right is-size-7 px-2">
           {{ $t('results.document-reference') }}: <strong>{{ result.docRef }}</strong>
         </div>
       </template>
@@ -90,20 +92,6 @@ const openMetadataModal = () => {
 }
 
 /** Autohide card upon scrolling */
-const autoHide = () => {
-  showing.value = false
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', autoHide)
-})
-
-const openMetadataModalForTitle = () => {
-  metadataModal.value = {
-    open: true,
-    docRef: result.docRef,
-    field: 'title',
-    value: result.metadata.title ?? result.docRef
-  }
-}
+const autoHide = () => (showing.value = false)
+onMounted(() => window.addEventListener('scroll', autoHide))
 </script>

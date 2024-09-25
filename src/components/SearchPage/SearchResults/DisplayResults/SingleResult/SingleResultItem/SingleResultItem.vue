@@ -32,7 +32,7 @@ Description: display single metadata item
         'is-pulled-left': !preferences.displayLeftToRight
       }"
     >
-      <span class="icon is-small fa-2xs">
+      <span class="icon is-small fa-md">
         <font-awesome-icon icon="pen-to-square" />
       </span>
     </button>
