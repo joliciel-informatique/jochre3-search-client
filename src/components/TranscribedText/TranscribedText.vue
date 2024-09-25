@@ -3,7 +3,7 @@
     <h1 class="rtl-align yiddish">{{ bookTitle }}</h1>
   </div>
   <div class="columns transcribedText">
-    <div class="column table-of-contents is-one-fifth box p-3">
+    <div class="column table-of-contents-of-transcribed-text is-one-fifth box p-3">
       <p class="menu-label">{{ $t('transcribed-text.table-of-contents') }}</p>
       <aside class="menu p-2">
         <div class="p-2 mb-0 field has-addons">
