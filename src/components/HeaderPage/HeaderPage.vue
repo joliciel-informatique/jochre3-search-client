@@ -1,11 +1,17 @@
 <template>
   <div
     class="container hero-body is-fluid has-background-primary has-text-white m-0 p-0 header-footer-content"
+    aria-role="banner"
   >
     <div class="grid">
       <div class="cell p-2">
         <div class="is-pulled-left">
-          <img style="width: 100px; border: none" :src="$t('header.logo')" />
+          <img
+            style="width: 100px; border: none"
+            :src="$t('header.logo')"
+            :alt="$t('header.title')"
+            :title="$t('header.title')"
+          />
         </div>
       </div>
       <div class="cell is-col-span-2 p-2">

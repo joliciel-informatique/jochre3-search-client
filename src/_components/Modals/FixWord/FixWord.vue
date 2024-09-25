@@ -9,19 +9,18 @@
           {{ $t('fix-word.unauthenticated') }}
         </div>
         <div class="p-2 has-text-centered" v-if="wordImage !== ''">
-          <img :src="wordImage" />
+          <img :src="wordImage" :alt="$t('fix-word.image-alt', [wordSuggestion])" />
         </div>
         <div class="p-2 field has-addons">
           <span class="column field has-addons has-addons-left is-horizontal">
             <p class="control is-expanded">
               <input
+                class="input keyboardInput"
                 :class="{
-                  input: true,
-                  keyboardInput: true,
                   'rtl-align': preferences.needsRightToLeft
                 }"
-                class="input keyboardInput"
                 type="text"
+                name="fixWordSuggestionInput"
                 lang="yi"
                 v-model="wordSuggestion"
                 vki-id="fixWord"
@@ -30,6 +29,7 @@
             <p class="control">
               <button
                 class="button is-clickable is-medium is-info keyboardInputButton"
+                aria-label="open onscreen Yiddish keyboard"
                 vki-id="fixWord"
                 :alt="$t('search.keyboard')"
                 :title="$t('search.keyboard')"

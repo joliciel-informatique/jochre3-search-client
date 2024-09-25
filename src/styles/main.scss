@@ -179,6 +179,11 @@ $notification-background-color: none;
   border-radius: 0.75rem;
 }
 
+.card-header-title.title {
+  padding-right: var(--bulma-card-content-padding);
+  padding-left: var(--bulma-card-content-padding);
+}
+
 $radius-rounded: 0.15rem;
 $border-radius: 0.15rem;
 $card-radius: 0.75rem;
@@ -404,15 +409,6 @@ h1 {
   font-size: 24px;
 }
 
-.yiddish {
-  //font-family: 'Frank Ruhl Libre', serif;
-  // font-family: 'David Libre', serif;
-  // font-family: 'Noto', sans-serif;
-  // font-optical-sizing: auto;
-  // font-weight: 400;
-  // font-style: normal;
-}
-
 .english {
   font-family: serif;
   font-optical-sizing: auto;
@@ -594,18 +590,47 @@ $menu-nested-list-margin: 1em;
   background-color: white;
 }
 
-.table-of-contents {
+.table-of-contents-of-transcribed-text {
   display: block;
   position: sticky;
   top: 5vh;
   left: 2vw;
   height: 75vh;
+  z-index: 9;
+
+  & > .menu > .menu-list {
+    overflow-y: auto;
+    max-height: 62vh;
+  }
 }
 
-.menu-list {
-  overflow-y: auto;
-  max-height: 62vh;
+.table-of-contents {
+  display: block;
+  position: sticky;
+  top: 5vh;
+  left: 2vw;
+  // height: 100%;
+  z-index: 9;
 }
+
+.table-of-contents > .menu-list {
+  // display: block;
+  // position: sticky;
+  // top: 5vh;
+  // left: 2vw;
+  height: 100%;
+  // z-index: 9;
+}
+
+// .table-of-contents {
+// z-index: 9;
+// height: 100vh;
+// }
+
+// .menu-list {
+//   overflow-y: auto;
+//   // max-height: 62vh;
+// }
 
 /* Pager mobile end */
 
@@ -613,18 +638,9 @@ $menu-nested-list-margin: 1em;
   z-index: 39;
 }
 
-.menu-list {
-  max-height: 100%;
-}
-
 .dropdown-content {
   z-index: 1000;
   position: fixed;
-}
-
-.table-of-contents {
-  z-index: 9;
-  height: 100vh;
 }
 
 .control.has-icons-left > span.icon.is-clicked {

@@ -2,23 +2,23 @@
   <div v-if="totalHits > 0">
     <span class="is-centered">
       <button
-        @click="router.back()"
         class="button is-info is-small m-1"
         v-tooltip:top.tooltip="$t('navigation.back-tooltip')"
+        @click="router.back()"
       >
         {{ $t('back') }}
       </button>
       <button
-        @click="router.forward()"
         class="button is-info is-small m-1"
         v-tooltip:top.tooltip="$t('navigation.forward-tooltip')"
+        @click="router.forward()"
       >
         {{ $t('forward') }}
       </button>
       <button
-        @click="emit('resetSearchResults')"
         class="button is-info is-small m-1"
         v-tooltip:top.tooltip="$t('navigation.clear-tooltip')"
+        @click="emit('resetSearchResults')"
       >
         {{ $t('results.reset') }}
       </button>

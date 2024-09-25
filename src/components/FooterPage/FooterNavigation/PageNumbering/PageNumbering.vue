@@ -14,37 +14,50 @@ Description: calculates and presents page numbers
     class="pagination p-1"
     role="navigation"
     aria-label="pagination"
+    tabindex="2"
     v-if="totalHits > 0 && !isBusy && hasSearch"
   >
     <div>
       <ul class="pagination-list">
         <li v-if="page - 1 > 1">
-          <a @click="page = 1" class="pagination-link is-small m-1" aria-label="Goto page 1">1</a>
+          <a
+            @click="page = 1"
+            @keyup.enter="page = 1"
+            class="pagination-link is-small m-1"
+            aria-label="go to page 1"
+            tabindex="2"
+            >1</a
+          >
         </li>
         <li v-if="page - 1 > 2">
           <span class="pagination-ellipsis">&hellip;</span>
         </li>
         <li v-if="page > 1">
           <a
-            @click="page--"
             class="pagination-link is-small m-1"
-            :aria-label="`Goto page ${page - 1}`"
+            tabindex="2"
+            @click="page--"
+            @keyup.enter="page--"
+            :aria-label="`go to page ${page - 1}`"
             >{{ page - 1 }}</a
           >
         </li>
         <li>
           <a
             class="pagination-link is-current is-small m-1 has-text-white"
-            :aria-label="`Page ${page}`"
+            :aria-label="`go to page ${page}`"
             aria-current="page"
+            tabindex="2"
             >{{ page }}</a
           >
         </li>
         <li v-if="page < lastPage">
           <a
             @click="page++"
+            @keyup.enter="page++"
             class="pagination-link is-small m-1"
-            :aria-label="`Goto page ${page + 1}`"
+            :aria-label="`go to page ${page + 1}`"
+            tabindex="2"
             >{{ page + 1 }}</a
           >
         </li>
@@ -54,28 +67,44 @@ Description: calculates and presents page numbers
         <li v-if="page + 1 < lastPage">
           <a
             @click="page = lastPage"
+            @keyup.enter="page = lastPage"
             class="pagination-link is-small m-1"
-            :aria-label="`Goto page ${lastPage}`"
+            :aria-label="`go to lastpage ${lastPage}`"
+            tabindex="2"
             >{{ lastPage }}</a
           >
         </li>
       </ul>
     </div>
     <div>
-      <button @click="page--" :disabled="page - 1 < 1" class="pagination-previous is-small m-1">
+      <button
+        @click="page--"
+        @keyup.enter="page--"
+        :disabled="page - 1 < 1"
+        class="pagination-previous is-small m-1"
+      >
         {{ $t('pagination.previous') }}
       </button>
-      <button @click="page++" :disabled="page >= lastPage" class="pagination-next is-small m-1">
+      <button
+        @click="page++"
+        @keyup.enter="page++"
+        :disabled="page >= lastPage"
+        class="pagination-next is-small m-1"
+      >
         {{ $t('pagination.next') }}
       </button>
-      <button @click="toTop" class="pagination-previous is-small m-1">
+      <button @click="toTop" @keyup.enter="toTop" class="pagination-previous is-small m-1">
         {{ $t('pagination.top') }}
       </button>
-      <button @click="toBottom" class="pagination-previous is-small m-1">
+      <button @click="toBottom" @keyup.enter="toBottom" class="pagination-previous is-small m-1">
         {{ $t('pagination.bottom') }}
       </button>
     </div>
-    <div v-tooltip:left="$t('results.result-current-tooltip')" class="navigation-current">
+    <div
+      class="navigation-current"
+      :aria-label="`current position: book ${onScreenBook}, snippet ${onScreenSnippet}`"
+      v-tooltip:left="$t('results.result-current-tooltip')"
+    >
       {{
         $t('results.result-current-book-and-snippet', [
           onScreenBook,

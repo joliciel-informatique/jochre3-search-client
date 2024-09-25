@@ -19,17 +19,16 @@ onMounted(() => {
 
   if (!authenticated) {
     console.log(`Not authenticated. Getting preferences from cookie.`)
-    const language = cookies.get('locale').value as string
-    const resultsPerPage = cookies.get('resultsPerPage').value as number
-    const snippetsPerResult = cookies.get('snippetsPerResult').value as number
-
-    if (language) {
+    if (cookies.get('locale')) {
+      const language = cookies.get('locale').value as string
       preferences.language = language
     }
-    if (resultsPerPage) {
+    if (cookies.get('resultsPerPage')) {
+      const resultsPerPage = cookies.get('resultsPerPage').value as number
       preferences.resultsPerPage = resultsPerPage
     }
-    if (snippetsPerResult) {
+    if (cookies.get('snippetsPerResult')) {
+      const snippetsPerResult = cookies.get('snippetsPerResult').value as number
       preferences.snippetsPerResult = snippetsPerResult
     }
 

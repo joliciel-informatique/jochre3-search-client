@@ -1,5 +1,8 @@
 {
   "Jochre": "Jochre",
+  "meta": {
+    "description": "This is the frontend application to make JOCHRE OCR content searchable."
+  },
   "search": {
     "about": "Full-text search engine.",
     "index-size": "Index size: {0} books.",
@@ -8,8 +11,8 @@
     "search-button": "Search",
     "excludeAuthors": "Checking this box will exclude selected authors from the query",
     "related-word-forms": "Strict",
-    "facets": "Author facets",
-    "what-are-facets": "Author facets list the authors with the most books matching your search criteria. Click a facet to filter/narrow your search results.",
+    "facets": "Filter author by name",
+    "what-are-facets": "These are the authors with the most books matching your search criteria. Click an author name to filter/narrow your search results.",
     "related-word-forms-tooltip": "Checking this box will exclude related word forms (of the same stem/lemma) in search results (e.g. 'eat, 'eaten', 'ate')",
     "keyboard": "Open Yiddish on-screen keyboard",
     "advanced": "Advanced search",
@@ -65,12 +68,17 @@
   },
   "fix-word": {
     "title": "Fix a word",
+    "image-alt": "An image that should read {0}",
     "instructions": "Please copy the above exactly below, including punctuation (niqqud, apostrophes, quotes, dashes and so on).",
     "warning": "Do not correct unclear text, i.e. text that is broken, partially visible etc.",
     "unauthenticated": "In order to fix a word, please login first."
   },
+  "large-image": {
+    "image-alt": "An image of the text on {0}"
+  },
   "fix-metadata": {
     "title": "Update metadata for \"{0}\"",
+    "edit-button-tooltip": "Edit this value",
     "instructions": {
       "normal": "Please suggest your correction below.",
       "authorsNote": "NOTE",

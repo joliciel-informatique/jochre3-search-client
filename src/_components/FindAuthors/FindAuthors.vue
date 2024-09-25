@@ -26,10 +26,10 @@ Description: presents a 'search for authors' text box and retrieves authors ever
             }"
           >
             <input
-              id="findAuthors"
               class="input keyboardInput"
               type="text"
               lang="yi"
+              name="findAuthorInput"
               :disabled="disabled"
               :vki-id="uniqueId"
               v-model="authorText"
@@ -48,8 +48,9 @@ Description: presents a 'search for authors' text box and retrieves authors ever
             >
               <input
                 type="checkbox"
-                :disabled="disabled"
                 class="is-clickable"
+                name="findAuthorCheckbox"
+                :disabled="disabled"
                 @click="excludeAuthors"
               />
             </div>
@@ -74,6 +75,7 @@ Description: presents a 'search for authors' text box and retrieves authors ever
           <p class="control">
             <button
               class="button is-clickable is-medium is-info keyboardInputButton"
+              aria-label="open onscreen Yiddish keyboard"
               :vki-id="uniqueId"
               :alt="$t('search.keyboard')"
               :title="$t('search.keyboard')"
