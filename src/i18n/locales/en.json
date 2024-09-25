@@ -71,6 +71,7 @@
   },
   "fix-metadata": {
     "title": "Update metadata for \"{0}\"",
+    "edit-button-tooltip": "Edit this value",
     "instructions": {
       "normal": "Please suggest your correction below.",
       "authorsNote": "NOTE",

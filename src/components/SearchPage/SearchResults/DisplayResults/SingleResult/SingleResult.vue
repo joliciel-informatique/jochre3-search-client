@@ -18,7 +18,11 @@ Description: presents OCR record metadata
             <a :href="result.metadata?.url" target="_blank">{{
               result.metadata.title ?? result.docRef
             }}</a>
-            <button @click="openMetadataModal" class="button is-small is-white is-pulled-right">
+            <button
+              class="button is-small is-white is-pulled-right"
+              @click="openMetadataModal"
+              v-tooltip:left="$t('fix-metadata.edit-button-tooltip')"
+            >
               <span class="icon is-small fa-2xs">
                 <font-awesome-icon icon="pen-to-square" />
               </span>

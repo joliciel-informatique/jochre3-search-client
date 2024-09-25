@@ -11,8 +11,8 @@ Description: display single metadata item
 -->
 <template>
   <div
+    class="columns"
     :class="{
-      columns: true,
       'has-text-left': preferences.displayLeftToRight,
       'has-text-right': !preferences.displayLeftToRight
     }"
@@ -24,13 +24,12 @@ Description: display single metadata item
     <span class="column">{{ value }}</span>
     <button
       @click="openMetadataModal"
+      class="button is-small is-white"
       :class="{
-        button: true,
-        'is-small': true,
-        'is-white': true,
         'is-pulled-right': preferences.displayLeftToRight,
         'is-pulled-left': !preferences.displayLeftToRight
       }"
+      v-tooltip:left="$t('fix-metadata.edit-button-tooltip')"
     >
       <span class="icon is-small fa-2xs">
         <font-awesome-icon icon="pen-to-square" />
