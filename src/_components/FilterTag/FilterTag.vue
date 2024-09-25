@@ -1,6 +1,7 @@
 <template>
   <div
     class="button is-info has-text-white is-small m-1"
+    :aria-label="`filter ${label}`"
     :class="active ? 'is-warning' : ''"
     :id="'filterTag-' + label"
     @click="clicked"

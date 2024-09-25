@@ -14,12 +14,13 @@ Description: presents the search bar
     <div class="container is-max-desktop">
       <div class="pb-0 mb-0 field has-addons">
         <p class="control">
-          <a class="button is-static level-item">{{ $t('search.search') }}</a>
+          <a id="searchBarLabel" class="button is-static level-item">{{ $t('search.search') }}</a>
         </p>
         <p class="control container has-icons-left has-icons-right">
           <input
             id="query"
             type="text"
+            aria-labelledby="searchBarLabel"
             class="input is-normal is-rounded keyboardInput"
             vki-id="1"
             lang="yi"
@@ -35,6 +36,7 @@ Description: presents the search bar
           />
           <span
             class="is-small icon is-clickable"
+            aria-label="advanced search"
             :class="advancedSearchIcons"
             @click="toggleAdvancedSearchPanel()"
           >
@@ -56,6 +58,7 @@ Description: presents the search bar
               'is-left': !preferences.displayLeftToRight,
               'is-right': preferences.displayLeftToRight
             }"
+            aria-label="reset"
             @click="emit('resetSearchResults')"
             v-if="!isLoading"
           >
@@ -75,6 +78,7 @@ Description: presents the search bar
         <p class="control">
           <button
             class="button is-clickable is-medium is-info keyboardInputButton"
+            aria-label="open onscreen Yiddish keyboard"
             vki-id="1"
             :alt="$t('search.keyboard')"
             :title="$t('search.keyboard')"
@@ -90,6 +94,7 @@ Description: presents the search bar
             <input
               id="strictSearchCheckbox"
               type="checkbox"
+              aria-label="strict search"
               v-model="strict"
               @change="emit('newSearch')"
             />

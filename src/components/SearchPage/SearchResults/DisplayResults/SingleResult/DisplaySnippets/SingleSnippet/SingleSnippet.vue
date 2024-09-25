@@ -26,6 +26,7 @@ Description: displays text snippets from the OCR text
       <!-- Open page in book -->
       <button
         class="card-header-icon is-large has-text-info p-1 m-1"
+        aria-label="view book"
         v-tooltip:bottom="$t('results.show-original-page', [snippet.page])"
         v-if="snippet.deepLink"
         @click="openDeepLink(snippet.deepLink)"
@@ -37,8 +38,9 @@ Description: displays text snippets from the OCR text
 
       <!-- View transcribed text -->
       <button
-        v-tooltip:bottom="$t('results.show-text')"
         class="card-header-icon is-large has-text-info p-1 m-1"
+        aria-label="view transcription"
+        v-tooltip:bottom="$t('results.show-text')"
         @click="openDeepLink(`/text/${docRef}/page/${snippet.page}`)"
       >
         <span class="icon">

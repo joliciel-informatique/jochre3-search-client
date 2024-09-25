@@ -13,7 +13,7 @@
       <div class="modal-content">
         <header class="modal-card-head">
           <slot name="header"></slot>
-          <button class="delete" aria-label="close" @click="close"></button>
+          <button class="delete" aria-label="Close modal" @click="close"></button>
         </header>
         <section class="modal-card-body">
           <slot name="body"></slot>

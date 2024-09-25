@@ -2,7 +2,7 @@
   <div class="column is-flex is-vcentered bookTitle m-2">
     <h1 class="rtl-align yiddish">{{ bookTitle }}</h1>
   </div>
-  <div class="columns transcribedText">
+  <div class="columns transcribedText" role="navigation">
     <div class="column table-of-contents is-one-fifth box p-3">
       <p class="menu-label">{{ $t('transcribed-text.table-of-contents') }}</p>
       <aside class="menu p-2">
@@ -12,24 +12,24 @@
           </p>
           <p class="control container">
             <input
+              class="input is-normal is-rounded"
               type="number"
               :min="firstPage"
               :max="bookPages.length"
-              @change="scrollTo(currentPage)"
               v-model="currentPage"
-              class="input is-normal is-rounded"
+              @change="scrollTo(currentPage)"
             />
           </p>
         </div>
         <hr />
         <ul class="menu-list m-2">
           <li v-for="page in bookPages" :key="page.page">
-            <a @click="scrollTo(page.page)"
-              >{{ $t('transcribed-text.page', [page.label]) }}
-              <span v-if="page.logicalNumber"
-                >{{ $t('transcribed-text.logical-page', [page.logicalNumber]) }})</span
-              ></a
-            >
+            <a @click="scrollTo(page.page)">
+              {{ $t('transcribed-text.page', [page.label]) }}
+              <span v-if="page.logicalNumber">{{
+                $t('transcribed-text.logical-page', [page.logicalNumber])
+              }}</span>
+            </a>
           </li>
         </ul>
       </aside>
