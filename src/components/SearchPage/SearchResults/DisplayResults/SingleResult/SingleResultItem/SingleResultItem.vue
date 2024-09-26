@@ -28,7 +28,10 @@ Description: display single metadata item
         'is-pulled-right': preferences.displayLeftToRight,
         'is-pulled-left': !preferences.displayLeftToRight
       }"
-      v-tooltip:left="$t('fix-metadata.edit-button-tooltip')"
+      v-tooltip="[
+        preferences.displayLeftToRight ? 'left' : 'right',
+        $t('fix-metadata.edit-button-tooltip')
+      ]"
       aria-labelledby="edit"
       tabindex="3"
       @click="openMetadataModal"

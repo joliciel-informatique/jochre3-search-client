@@ -35,7 +35,10 @@ Description: presents OCR record metadata
               tabindex="3"
               @click="openMetadataModal"
               @keyup.enter="openMetadataModal"
-              v-tooltip:left="$t('fix-metadata.edit-button-tooltip')"
+              v-tooltip="[
+                preferences.displayLeftToRight ? 'left' : 'right',
+                $t('fix-metadata.edit-button-tooltip')
+              ]"
             >
               <span class="icon is-small fa-md">
                 <font-awesome-icon icon="pen-to-square" />

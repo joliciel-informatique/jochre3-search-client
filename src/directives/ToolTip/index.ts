@@ -12,10 +12,17 @@ const toolTipDirective = (app: App<Element>) => {
 }
 
 const init = (el: HTMLElement, binding: DirectiveBinding) => {
-  const position = binding.arg || 'top'
-  const tooltipText = binding.value || 'Tooltip text'
-  el.setAttribute('position', position)
-  el.setAttribute('tooltip', tooltipText)
+  if (Array.isArray(binding.value)) {
+    const position = binding.value[0] ?? 'top'
+    const tooltipText = binding.value[1] ?? 'Tooltip text'
+    el.setAttribute('position', position)
+    el.setAttribute('tooltip', tooltipText)
+  } else {
+    const position = binding.arg || 'top'
+    const tooltipText = binding.value || 'Tooltip text'
+    el.setAttribute('position', position)
+    el.setAttribute('tooltip', tooltipText)
+  }
 }
 
 export default toolTipDirective
