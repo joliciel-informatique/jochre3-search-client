@@ -14,7 +14,9 @@ Description: presents the search bar
     <div class="container is-max-desktop">
       <div class="pb-0 mb-0 field has-addons">
         <p class="control">
-          <a id="searchBarLabel" class="button is-static level-item">{{ $t('search.search') }}</a>
+          <a id="searchBarLabel" class="button is-info has-text-white is-static level-item">{{
+            $t('search.search')
+          }}</a>
         </p>
         <p class="control container has-icons-left has-icons-right">
           <input

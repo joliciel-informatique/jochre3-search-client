@@ -1,184 +1,782 @@
-<!-- AdvancedSearch
-Parent: SearchPage.vue
-Children: FindAuthors
-Siblings: None
+@charset "utf-8";
 
-NOTES: Local implementation for fade transition based on https://www.telerik.com/blogs/how-to-trap-focus-modal-vue-3
+// Import
+@import './CustomStyles/YBC.scss';
+@import './transitions/_transitions.scss';
+@import './components/ToolTip/_tooltip.scss';
 
-Props: search, resetSearchResults, newSearch, sortBy, toYear, fromYear, title, docRefs
-Variables: None
-Methods: None
+/** Overriding Bulma primary variables */
+$primary: $background-color-1;
+$info: $background-color-3;
+$link: $foreground-color-4;
+$family-primary: $font-family-1;
 
-Description: the advanced search toolbox
--->
-<template>
-  <div class="advancedSearch is-flex is-justify-content-center">
-    <Transition
-      name="advancedSearch"
-      @before-enter="beforeEnter"
-      @enter="enter"
-      @before-leave="beforeLeave"
-      @leave="leave"
-    >
-      <div
-        class="body modal-card m-3 p-3"
-        v-show="showAdvancedSearchPanel"
-        @keydown.esc="showAdvancedSearchPanel = false"
-      >
-        <div class="body-inner container is-max-desktop">
-          <span class="columns is-vcentered mt-1 p-1">
-            <p class="column is-flex is-vcentered is-3">
-              {{ $t('search.author') }}
-            </p>
-            <span class="column is-vcentered" :aria-label="$t('search.author')">
-              <FindAuthors
-                v-model:authorList="authorList"
-                v-model:disabled="disabled"
-                v-model:exclude-from-search="excludeFromSearch"
-                :label="$t('search.author')"
-                :multi-value="true"
-                :show-exclude-checkbox="true"
-                unique-id="advanced-search-find-authors"
-              />
-            </span>
-          </span>
-          <span class="columns is-vcentered mt-1 p-1">
-            <p class="column is-3 is-flex is-vcentered" id="searchTitle">
-              {{ $t('search.title') }}
-            </p>
-            <span class="column field has-addons has-addons-left is-horizontal">
-              <p class="control is-expanded">
-                <input
-                  id="title"
-                  class="input keyboardInput"
-                  aria-labelledby="searchTitle"
-                  vki-id="2"
-                  type="text"
-                  lang="yi"
-                  :placeholder="$t('search.title')"
-                  v-model="title"
-                  @keyup.enter="emit('newSearch')"
-                />
-              </p>
-              <p class="control">
-                <button
-                  class="button is-clickable is-medium is-info keyboardInputButton"
-                  aria-label="open onscreen Yiddish keyboard"
-                  vki-id="2"
-                  :alt="$t('search.keyboard')"
-                  :title="$t('search.keyboard')"
-                >
-                  <font-awesome-icon icon="keyboard" />
-                </button>
-              </p>
-            </span>
-          </span>
-          <span class="columns is-vcentered mt-1 p-1">
-            <p class="column is-flex is-vcentered is-3">
-              {{ $t('search.document-reference') }}
-            </p>
-            <span class="column field has-addons has-addons-left is-horizontal">
-              <input
-                class="input"
-                name="documentRefsInput"
-                type="text"
-                aria-label="document reference numbers"
-                v-model="docRefs"
-                :placeholder="$t('search.document-reference-placeholder')"
-              />
-            </span>
-          </span>
-          <span class="columns is-vcentered mt-1 p-1">
-            <p class="column is-flex is-vcentered is-3" id="searchDateFrom">
-              {{ $t('search.date-from') }}
-            </p>
-            <p class="column control is-2 has-text-centered">
-              <input
-                id="fromYear"
-                aria-labelledby="searchDateFrom"
-                class="input"
-                type="number"
-                placeholder="1700"
-                v-model="fromYear"
-                min="1700"
-                max="2000"
-              />
-            </p>
-            <p class="column is-flex is-vcentered is-1" id="searchToYear">
-              {{ $t('search.date-to') }}
-            </p>
-            <p class="column control is-2 has-text-centered">
-              <input
-                id="toYear"
-                class="input control"
-                aria-labelledby="searchToYear"
-                type="number"
-                placeholder="2000"
-                v-model="toYear"
-                min="1700"
-                max="2000"
-              />
-            </p>
-            <p class="column is-flex is-vcentered is-1" id="searchSortBy">
-              {{ $t('search.sort-by') }}
-            </p>
-            <select
-              class="column control select"
-              name="sortBySelect"
-              aria-labelledby="searchSortBy"
-              v-model="sortBy"
-            >
-              <option value="Score">{{ $t('search.sort.score') }}</option>
-              <option value="DateAscending">
-                {{ $t('search.sort.date-ascending') }}
-              </option>
-              <option value="DateDescending">
-                {{ $t('search.sort.date-descending') }}
-              </option>
-            </select>
-          </span>
-          <p class="has-text-info">{{ $t('search.field-instructions') }}</p>
-          <div class="field has-text-centered p-2">
-            <button class="button is-light" @click="emit('resetSearchResults')">
-              {{ $t('search.reset') }}
-            </button>
-            &nbsp;
-            <button class="button is-info" @click="runSearch()">
-              {{ $t('search.search-button') }}
-            </button>
-          </div>
-        </div>
-      </div>
-    </Transition>
-  </div>
-</template>
-<script setup lang="ts">
-import FindAuthors from '@/_components/FindAuthors/FindAuthors.vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { computed, type Ref } from 'vue'
+/** Bulma Card Element */
+$card-color: var(--bulma-text);
+$card-background-color: $white;
+$card-shadow: var(--bulma-shadow);
+$card-radius: 0.75rem;
+$card-header-background-color: $background-color-4;
+$card-header-color: $background-color-3;
+$card-header-padding: 0.75rem 1rem;
+$card-header-shadow: 0 0.125em 0.25em
+  hsla(var(--bulma-scheme-h), var(--bulma-scheme-s), var(--bulma-scheme-invert-l), 0.1);
+$card-header-weight: var(--bulma-weight-bold);
+$card-content-background-color: $transparent;
+$card-content-padding: 1.5rem;
+$card-footer-background-color: $transparent;
+$card-footer-border-top: 1px solid var(--bulma-border-weak);
+$card-footer-padding: 0.75rem;
+$card-media-margin: var(--bulma-block-spacing);
 
-const emit = defineEmits(['newSearch', 'resetSearchResults'])
+/** Bulma Pagination Element */
+$pagination-background-color: yellow;
+// $pagination-min-width: $nav-min-width;
+$pagination-item-background-color: pink;
+$pagination-item-border-style: $nav-border-around-buttons;
+$pagination-item-font-size: $nav-size-of-font;
+$pagination-item-margin: $nav-margin-of-buttons;
+$pagination-item-padding-left: $nav-padding-of-buttons;
+$pagination-item-padding-right: $nav-padding-of-buttons;
+$pagination-nav-padding-left: $nav-padding-between-buttons;
+$pagination-nav-padding-right: $nav-padding-between-buttons;
+$pagination-disabled-color: $background-color-2;
+$pagination-disabled-background-color: $nav-color-of-disabled-background;
+$pagination-disabled-border-color: blue;
+$pagination-current-background-color: red;
+$pagination-current-border-color: green;
+$pagination-current-color: teal;
+$pagination-ellipsis-color: purple;
 
-const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
-const authorList = defineModel<Array<{ label: string; count: number }>>('authorList')
-const title = defineModel('title')
-const fromYear = defineModel('fromYear')
-const toYear = defineModel('toYear')
-const docRefs = defineModel('docRefs')
-const sortBy = defineModel('sortBy')
-const facets: Ref = defineModel('facets')
-const excludeFromSearch = defineModel('excludeFromSearch')
-const disabled = computed(
-  () => facets.value.filter((facet: { active: string }) => (facet.active ? facet : null)).length
-)
+$pagination-margin: 0.25rem;
 
-const runSearch = () => {
-  emit('newSearch')
+$hr-margin: 0;
+$hr-background-color: $background-color-3;
+
+$sticky-bar-undocked-height: 10vh;
+
+/** Header styling */
+.stickySearchBarDocked {
+  position: sticky;
+  top: 0;
+  // height: $sticky-bar-docked-height;
+  max-height: max-content;
+  z-index: 39;
 }
 
-const beforeEnter = <Element,>(el: Element) => ((el as HTMLElement).style.height = '0')
-const enter = <Element,>(el: Element) => ((el as HTMLElement).style.height = '100%')
-const beforeLeave = <Element,>(el: Element) =>
-  ((el as HTMLElement).style.height = `${(el as HTMLElement).scrollHeight}px`)
-const leave = <Element,>(el: Element) => ((el as HTMLElement).style.height = '0')
-</script>
+.stickySearchBarUndocked {
+  margin-top: 10px;
+  // height: $sticky-bar-undocked-height;
+  max-height: max-content;
+}
+
+.advancedSearchPanel {
+  height: auto;
+}
+
+$column-gap: 0.1rem;
+$label-spacing: 0.75rem;
+$block-spacing: 0.5rem;
+
+/** Footer styling */
+$footer-padding: 0;
+$footer-background-color: $background-color-1;
+$footer-position: fixed;
+
+$footer-bottom: 0;
+.header-footer-content {
+  flex: 0 1 auto;
+}
+
+.footer-partners {
+  z-index: 15;
+  position: relative;
+  bottom: 0;
+  // position: absolute;
+}
+
+.footerNavBar {
+  background-color: $background-color-4;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+.search-info-bar {
+  position: fixed;
+  top: 0px;
+  height: 100px;
+  z-index: 5;
+}
+
+.search-info {
+  position: sticky;
+  z-index: 7;
+  // padding: 10px;
+  top: 0;
+  // height: 50px;
+  // bottom: 20px;
+  // width: 100vw;
+  // background-color: $background-color-4;
+  align-content: center;
+}
+
+.search-info-background {
+  position: relative;
+  // left: -10%;
+  // width: 120%;
+  display: block;
+  padding: 5px 0px 5px 0px;
+  // height: 70px;
+  text-align: center;
+  overflow: visible;
+  // background-color: $background-color-4;
+  // justify-content: center;
+}
+
+$notification-background-color: none;
+
+.navigation-current {
+  font-weight: $font-weight-2;
+  font-family: $font-family-1;
+  font-size: $font-size-2;
+}
+
+.search-info-text {
+  position: relative;
+  font-weight: 700;
+  // text-align: justify;
+  // left: 20px;
+}
+.notification-overlay {
+  display: flex;
+  z-index: 100;
+  justify-content: right;
+  align-items: flex-end;
+  top: 0;
+  left: 0;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+// .notification.is-active {
+// .modal.is-active {
+
+.notification-overlay {
+  display: flex;
+  z-index: 100;
+  justify-content: right;
+  align-items: flex-end;
+  top: 0;
+  left: 0;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+// .notification.is-active {
+// .modal.is-active {
+// opacity: 1;
+// transition: all 500ms ease-in-out;
+// }
+
+.modal {
+  display: flex;
+  z-index: 99;
+}
+
+.modal-card {
+  width: 100%;
+}
+
+.card-header-title {
+  border-radius: 0.75rem;
+}
+
+.card-header-title.title {
+  padding-right: var(--bulma-card-content-padding);
+  padding-left: var(--bulma-card-content-padding);
+}
+
+$radius-rounded: 0.15rem;
+$border-radius: 0.15rem;
+$card-radius: 0.75rem;
+$radius: 0.15rem;
+$control-radius-small: 0.1rem;
+$input-is-rounded: 0.15rem;
+
+// $input-radius: 0.15rem;
+// $input-icon-color: $background-color-3;
+
+$input-icon-hover-color: $background-color-3;
+$input-icon-active-color: $foreground-color-1;
+// $input-icon-focus-color: $foreground-color-1;
+// $icon-hover-color: $foreground-color-3;
+
+// span.icon.is-clickable {
+//   color: $background-color-3;
+// }
+
+$modal-background-background-color: $background-color-4;
+
+span.icon.is-clickable:hover {
+  transition: 300ms ease-in-out;
+  color: $foreground-color-3;
+}
+
+span.icon.is-clickable:active {
+  color: $foreground-color-1;
+}
+
+// $input-background-l: 100%;
+// $input-background-l-delta: 0%;
+
+// $input-h: 52;
+// $input-s: 28%;
+// $input-border-l: 30%;
+// $input-border-l-delta: 60%;
+// $input-hover-border-l-delta: 90%,
+// $input-active-border-l-delta: 94%,
+// $input-focus-h: 54deg;
+// $input-focus-s: 0%;
+// $input-focus-l: 100%;
+.card-header {
+  position: sticky;
+}
+
+.card-header-icon > span:hover {
+  color: $foreground-color-3;
+  animation: 300ms ease-in-out;
+}
+
+.card-footer {
+  height: 2rem;
+  transition: all 100ms ease-in-out;
+}
+
+.card-footer:hover {
+  background-color: $foreground-color-2;
+  cursor: pointer;
+  transition: all 100ms ease-in-out;
+}
+
+.card-footer > span {
+  color: $foreground-color-2;
+  transform-origin: top;
+}
+
+.card-footer > span:hover {
+  color: $foreground-color-3;
+}
+
+.card-content.hide {
+  height: 0;
+}
+
+#facetBar .columns {
+  margin-bottom: 0px;
+}
+
+#query {
+  background-color: $background-color-2;
+  border-color: $blue;
+  cursor: pointer;
+}
+
+#query::placeholder {
+  opacity: 30%;
+  color: $gray;
+  font-style: italic;
+  transition: opacity 250ms ease-in-out;
+}
+
+#query:hover::placeholder {
+  opacity: 100%;
+}
+
+#searchBar > .container > .field > .control > .button.is-static {
+  background-color: $background-color-3;
+}
+
+// $line-height:
+// $modal-card-spacing: var(--bulma-modal-card-spacing);
+// $modal-card-head-background-color: var(--bulma-modal-card-head-background-color);
+// $modal-card-head-padding: var(--bulma-modal-card-head-padding);
+// $modal-card-head-radius: var(--bulma-modal-card-head-radius);
+// $modal-card-title-color: var(--bulma-modal-card-title-color);
+// $modal-card-title-line-height: var(--bulma-modal-card-title-line-height);
+// $modal-card-title-size: var(--bulma-modal-card-title-size);
+// $modal-card-foot-background-color: var(--bulma-modal-card-foot-background-color);
+// $modal-card-foot-radius: var(--bulma-modal-card-foot-radius);
+// $modal-card-body-background-color: var(--bulma-modal-card-body-background-color);
+// $modal-card-body-padding: var(--bulma-modal-card-body-padding);
+// $
+
+// $input-h: 0;
+// $input-s: 0;
+// $input-l: 0;
+// $button-h: 0;
+// $button-s: 0;
+// $button-l: 0;
+
+// $button-static-background-color: $transparent;
+// $button-text-hover-background-color: $transparent;
+
+// $input-focus-shadow-size: 0.1875em 0.1875em 0.1875em 0.1875em,
+// $input-color-l: 0%,
+// $input-focus-shadow-alpha:,
+// $input-disabled-color:,
+// $input-disabled-background-color:,
+// $input-disabled-border-color:,
+// $input-disabled-placeholder-color:,
+// $input-arrow:,
+// $input-radius:,
+// $input-shadow: none;
+
+$modal-background-background-color: $background-color-2-transparency-50;
+
+@import '../../node_modules/bulma/sass';
+// @import 'bulma/sass';
+
+// @use '../../../node_modules/bulma/sass' with (
+// );
+// Modal
+// $modal-z: var(--bulma-modal-z),
+// $modal-background-background-color: $background-color-1,
+// $modal-content-margin-mobile: var(--bulma-modal-content-margin-mobile),
+// $modal-content-spacing-mobile: var(--bulma-modal-content-spacing-mobile),
+// $modal-content-spacing-tablet: var(--bulma-modal-content-spacing-tablet),
+// $modal-close-dimensions: var(--bulma-modal-close-dimensions),
+// $modal-close-right: var(--bulma-modal-close-right),
+// $modal-close-top: var(--bulma-modal-close-top),
+// $modal-breakpoint: var(--bulma-)
+// @import '../../../node_modules/bulma/sass';
+// :root {
+//   --bulma-primary-h: 92deg;
+//   --bulma-primary-s: 42%;
+//   --bulma-link-h: 183deg;
+//   --bulma-link-s: 43%;
+//   --bulma-link-l: 36%;
+//   --bulma-info-h: 183deg;
+//   --bulma-info-s: 43%;
+//   --bulma-info-l: 36%;
+//   --bulma-success-h: 200deg;
+//   --bulma-success-s: 60%;
+//   --bulma-success-l: 63%;
+//   --bulma-scheme-h: 146;
+//   --bulma-scheme-s: 18%;
+//   --bulma-family-primary: Inter,SF Pro,Segoe UI,Roboto,Oxygen,Ubuntu,Helvetica Neue,Helvetica,Arial,Noto,sans-serif;
+//   --bulma-family-secondary: Inter,SF Pro,Segoe UI,Roboto,Oxygen,Ubuntu,Helvetica Neue,Helvetica,Arial,Noto,sans-serif;
+//   --bulma-block-spacing: 1.25rem;
+// --bulma-radius: 0.35rem;
+// }
+// .modal {
+//   --bulma-modal-card-head-radius: 1rem;
+//   --bulma-modal-card-title-size: 2.5rem;
+//   --bulma-modal-card-foot-radius: 1rem;
+// }
+// .pagination {
+//   --bulma-pagination-item-h: 292;
+//   --bulma-pagination-item-s: 0%;
+//   --bulma-pagination-item-background-l-delta: 1%;
+//   --bulma-pagination-item-hover-background-l-delta: 0%;
+//   --bulma-pagination-item-active-background-l-delta: 0%;
+//   --bulma-pagination-item-border-width: 2px;
+//   --bulma-pagination-item-color-l: 70%;
+//   --bulma-pagination-item-outer-shadow-a: .15;
+//   --bulma-pagination-current-color: #eeb211;
+//   --bulma-pagination-current-background-color: #eeb211;
+//   --bulma-pagination-current-border-color: #eeb211;
+//   --bulma-pagination-ellipsis-color: #d2d2d2;
+//   --bulma-pagination-selected-item-h: 46deg;
+//   --bulma-pagination-selected-item-s: 90%;
+//   --bulma-pagination-selected-item-l: 100%;
+//   --bulma-pagination-selected-item-background-l: 48%;
+//   --bulma-pagination-selected-item-border-l: 46%;
+//   --bulma-pagination-selected-item-color-l: 100%;
+// }
+// .input {
+// --bulma-input-h: 52;
+// --bulma-input-s: 28%;
+// --bulma-input-border-l: 30%;
+// --bulma-input-border-l-delta: 60%;
+// --bulma-input-hover-border-l-delta: 90%;
+// --bulma-input-active-border-l-delta: 94%;
+// --bulma-input-focus-h: 54deg;
+// --bulma-input-focus-s: 0%;
+// --bulma-input-focus-l: 100%;
+// --bulma-input-focus-shadow-size: 0.1875em 0.1875em 0.1875em 0.1875em;
+// --bulma-input-color-l: 0%;
+// --bulma-input-background-l: 0%;
+// --bulma-input-background-l-delta: 100%;
+// --bulma-input-radius: 0.35rem;
+// }
+// Bulma Import
+.custom-background-light {
+  background-color: #edeee6;
+}
+
+// .current-page-color {
+// background-color: #eeb211;
+// border-color: #eeb211;
+// }
+
+.beta-flyout {
+  bottom: -1rem;
+  right: 0;
+  font-size: 1rem;
+  color: #eeb211;
+}
+
+* {
+  font-family: inherit;
+  text-align: inherit;
+  direction: inherit;
+}
+
+/* Required for sticky footer */
+html {
+  height: 100%;
+  overflow: auto;
+}
+
+body {
+  height: auto;
+  background-color: #fff;
+  // --bulma-body-line-height: 1.25em;
+  /*font-family: 'Times New Roman', Times, serif;*/
+}
+
+h1 {
+  font-size: 24px;
+}
+
+.english {
+  font-family: serif;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
+}
+
+.title {
+  font-size: 24px;
+  vertical-align: top;
+}
+
+.text-snippet {
+  text-indent: 3ch;
+  text-align: justify;
+}
+
+a {
+  color: $foreground-color-3;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+  // color: #eeb211;
+}
+
+.rtl-align {
+  text-align: right;
+  direction: rtl;
+}
+
+.ltr-align {
+  text-align: left;
+  direction: ltr;
+  unicode-bidi: bidi-override;
+}
+
+.ltr {
+  direction: ltr;
+  unicode-bidi: bidi-override;
+}
+
+.highlight {
+  padding: 0.02rem;
+  background-color: yellow;
+  border-radius: 0.2em;
+  box-shadow: 0 1px 1px 1px rgba($foreground-color-1, 0.5);
+  font-weight: bold;
+  border: none;
+  // outline: 1px #e0e0e0 solid;
+  cursor: pointer !important;
+}
+
+.highlight > span {
+  color: $green;
+  animation: 300ms ease-in-out;
+}
+
+.highlight > span:hover {
+  color: $foreground-color-3;
+}
+
+.link-light {
+  color: $background-color-3;
+}
+
+.link-subtle {
+  color: $background-color-4;
+}
+
+/* Bootstrap RTL fixes start */
+
+.rtl .alert-dismissible .close {
+  left: 0;
+  right: auto;
+}
+
+.rtl .alert {
+  padding: 0.75rem 1.25rem;
+}
+
+.rtl .alert-dismissible {
+  padding-left: 4rem;
+}
+
+.rtl .modal-header .close {
+  margin: -1rem auto -1rem -1rem;
+}
+
+.rtl .form-check {
+  padding-left: 0;
+  padding-right: 1.25rem;
+}
+
+.rtl .form-check-input {
+  margin-left: 0.125rem;
+  margin-right: -1.25rem;
+}
+
+.rtl .modal-footer > :first-child {
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+
+.rtl .modal-footer > :last-child {
+  margin-left: 0;
+  margin-right: 0.25rem;
+}
+
+.unfocused {
+  display: none;
+}
+
+.image-snippet {
+  width: 100%;
+}
+
+.card.metadata {
+  top: 0;
+  position: sticky;
+  z-index: 5;
+}
+
+.card.snippet {
+  z-index: 1;
+}
+
+.card-footer {
+  background-color: $foreground-color-1;
+}
+
+.card-header.snippet {
+  background-color: $background-color-4;
+}
+
+// .snippet br:nth-child(even) {
+//   display: none;
+// }
+// .snippet br {
+//   // display: inline-block;
+//   margin: -10px;
+//   // margin: 10px 0;
+//   line-height: 0;
+//   // max-height: 0px;
+// }
+
+.snippet span {
+  line-height: 1em;
+}
+
+.snippet.rtl {
+  border-left: 0;
+  border-right: 3px #ccc solid;
+  padding: 0 10px 0 0;
+}
+
+/* Bootstrap RTL fixes end */
+
+/* Pager mobile start */
+
+@media screen and (max-width: 576px) {
+  .page-first,
+  .page-last,
+  .page-next,
+  .page-prev {
+    flex-basis: 25%;
+    margin-bottom: 0.5rem;
+    order: -1;
+  }
+
+  .page-item {
+    flex-grow: 1;
+    text-align: center;
+  }
+}
+
+$menu-nested-list-margin: 1em;
+
+.transcribedText {
+  width: 100%;
+}
+
+.bookTitle {
+  display: block;
+  position: sticky;
+  top: 0;
+  background-color: white;
+}
+
+.table-of-contents-of-transcribed-text {
+  display: block;
+  position: sticky;
+  top: 5vh;
+  left: 2vw;
+  height: 75vh;
+  z-index: 9;
+
+  & > .menu > .menu-list {
+    overflow-y: auto;
+    max-height: 62vh;
+  }
+}
+
+.table-of-contents {
+  display: block;
+  position: sticky;
+  top: 5vh;
+  left: 2vw;
+  // height: 100%;
+  z-index: 9;
+}
+
+.table-of-contents > .menu-list {
+  // display: block;
+  // position: sticky;
+  // top: 5vh;
+  // left: 2vw;
+  height: 100%;
+  // z-index: 9;
+}
+
+// .table-of-contents {
+// z-index: 9;
+// height: 100vh;
+// }
+
+// .menu-list {
+//   overflow-y: auto;
+//   max-height: 62vh;
+// }
+
+.menu-list {
+  max-height: 100%;
+}
+
+/* Pager mobile end */
+
+.dropdown-menu {
+  z-index: 39;
+}
+
+.dropdown-content {
+  z-index: 1000;
+  position: fixed;
+}
+
+.control.has-icons-left > span.icon.is-clicked {
+  color: $foreground-color-3;
+}
+
+// .container {
+// position: sticky;
+// }
+
+/*
+  Fix for drop-down getting hidden by modal-card-foot
+  From https://stackoverflow.com/a/75182245/1417558
+*/
+// .modal.has-overflow {
+//   position: fixed !important;
+//   overflow: auto !important;
+// }
+// .modal .modal-content,
+// .modal .modal-card,
+// .modal .modal-card-body {
+//   overflow: visible !important;
+// }
+
+.pagination {
+  border-top: 1px solid;
+  border-color: $background-color-3;
+}
+
+.no-results {
+  z-index: 0;
+  // display: -webkit-flex;
+  // display: flex;
+  // -webkit-align-items: center;
+  // align-items: center;
+  // -webkit-justify-content: center;
+  // justify-content: center;
+
+  // width: 100vw;
+  // height: 100vh;
+  // margin: 0 auto;
+  // background: #f7f7f7;
+  // left: 50%;
+  // top: 50%;
+  // margin-left: -100px;
+  // margin-top: -100px;
+}
+
+.no-results-image {
+  z-index: -1;
+  opacity: 25%;
+  background-color: transparent;
+}
+
+// &.is-active {
+//   visibility: visible;
+//   .modal-background {
+//     opacity: 1;
+//     @include box_shadow_dark();
+//     background-color: rgba(0, 0, 0, 0.85);
+//    }
+
+//   .modal-content {
+//     transform: scale(1);
+//     opacity: 1;
+//   }
+// }
+
+.search-content {
+  position: sticky;
+  flex: 1 1 auto;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  z-index: 10;
+  width: 100%;
+}
+
+.searchBar {
+  background-color: $background-color-1;
+}
