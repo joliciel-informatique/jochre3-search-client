@@ -437,6 +437,11 @@ h1 {
   vertical-align: top;
 }
 
+.text-snippet {
+  text-indent: 3ch;
+  text-align: justify;
+}
+
 a {
   color: $foreground-color-3;
   text-decoration: none;
