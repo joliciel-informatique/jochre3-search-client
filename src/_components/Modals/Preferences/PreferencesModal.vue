@@ -107,7 +107,8 @@ const save = (vi18n: VueI18n.VueI18n) => {
     const params = JSON.stringify({
       language: setToLanguage.value,
       resultsPerPage: preferences.resultsPerPage,
-      snippetsPerResult: preferences.snippetsPerResult
+      snippetsPerResult: preferences.snippetsPerResult,
+      authorFacetCount: preferences.authorFacetCount
     })
 
     fetchData('preferences/user', 'post', params)
