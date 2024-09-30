@@ -11,6 +11,7 @@
     },
     "header": {
       "logo": "/images/yiddishbookcenter-ocr.jpg",
+      "alt": "Yiddish Book Center's Full-Text Search",
       "title": "Yiddish Book Center's Full-Text Search",
       "beta": "Currently in beta",
       "header": {

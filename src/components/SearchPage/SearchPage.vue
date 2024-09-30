@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { onMounted, ref, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { fetchData, preferences } from '@/assets/fetchMethods'
+import { fetchData } from '@/assets/fetchMethods'
 
 // Import Child components
 import SearchBar from './SearchBar/SearchBar.vue'
@@ -57,6 +57,10 @@ import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
 import type { AggregationBin } from '@/assets/interfacesExternals'
 
 import { hasSearch } from '@/assets/appState'
+
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const preferences = usePreferencesStore()
 
 const query = ref('')
 const searchResults: Ref = defineModel('searchResults')
@@ -245,6 +249,7 @@ const search = async () => {
   params.append('sort', sortBy.value.trim())
   params.append('max-snippets', preferences.snippetsPerResult.toString())
   params.append('row-padding', '2')
+  params.append('physical-newlines', 'false')
 
   if (!hasActiveFacets) {
     const urlParams = new URLSearchParams({ ...Object.fromEntries(params) })
@@ -272,7 +277,7 @@ const search = async () => {
         totalHits.value = totalCount
         if (!hasActiveFacets) {
           facetParams.append('field', 'Author')
-          facetParams.append('maxBins', '10')
+          facetParams.append('maxBins', preferences.authorFacetCount.toString())
           return fetchData('aggregate', 'get', facetParams)
             .then((response) =>
               response.json().then((result) => {

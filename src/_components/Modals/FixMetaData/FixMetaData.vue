@@ -13,7 +13,7 @@
       <div v-if="!authenticated" class="is-italic has-text-weight-bold has-text-danger">
         {{ $t('fix-metadata.unauthenticated') }}
       </div>
-      <div class="p-2 has-text-info">{{ $t('fix-metadata.instructions.normal') }}</div>
+      <div class="p-2 has-text-warning">{{ $t('fix-metadata.instructions.normal') }}</div>
       <div class="pb-0 mb-0 field has-addons">
         <p class="control">
           <a class="button is-static level-item">{{
@@ -23,15 +23,16 @@
         <p class="control container">
           <input
             class="input is-normal is-rounded keyboardInput"
+            aria-label="open onscreen Yiddish keyboard"
             type="text"
+            name="fixMetadataInput"
             :alt="$t('search.keyboard')"
             :title="$t('search.keyboard')"
             :vki-id="`${metadataModal.docRef}-${metadataModal.field}`"
             :class="{
               'ltr-align': fieldLeftToRight && preferences.needsLeftToRight,
               english: fieldLeftToRight && preferences.needsLeftToRight,
-              'rtl-align': !fieldLeftToRight && preferences.needsRightToLeft,
-              yiddish: !fieldLeftToRight && preferences.needsRightToLeft
+              'rtl-align': !fieldLeftToRight && preferences.needsRightToLeft
             }"
             v-model="metadataModal.value"
             :disabled="authorList.length > 0"
@@ -41,6 +42,7 @@
         <p class="control">
           <button
             class="button is-clickable is-medium is-info keyboardInputButton"
+            aria-label="open onscreen Yiddish keyboard"
             :alt="$t('search.keyboard')"
             :title="$t('search.keyboard')"
             :vki-id="`${metadataModal.docRef}-${metadataModal.field}`"
@@ -51,7 +53,10 @@
       </div>
       <div v-show="showFindAuthorDropdown">
         <div class="columns mt-3">
-          <div class="column is-one-fifth p-2 has-text-warning has-text-weight-semibold">
+          <div
+            class="column is-one-fifth p-2 has-text-warning has-text-weight-semibold"
+            role="document"
+          >
             {{ $t('fix-metadata.instructions.authorsNote') }}
           </div>
           <div
@@ -60,7 +65,7 @@
             {{ $t('fix-metadata.instructions.authors') }}
           </div>
         </div>
-        <div class="p-2 has-text-info">
+        <div class="p-2 has-text-warning">
           {{ $t('fix-metadata.instructions.authorsInstruction') }}
         </div>
         <div class="pb-0 mb-0 field has-addon">

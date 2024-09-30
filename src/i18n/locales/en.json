@@ -1,5 +1,8 @@
 {
   "Jochre": "Jochre",
+  "meta": {
+    "description": "This is the frontend application to make JOCHRE OCR content searchable."
+  },
   "search": {
     "about": "Full-text search engine.",
     "index-size": "Index size: {0} books.",
@@ -39,7 +42,7 @@
     "publisher": "Publisher",
     "publication-year": "Date",
     "document-reference": "Document reference: {0}",
-    "contents-table-header": "Table of contents",
+    "contents-table-header": "Search results",
     "result-count": "{0} books total",
     "result-current-tooltip": "You are currently viewing this book and snippet",
     "result-current-book-and-snippet": "Book {0}/{1} ({2}/{3}) of {4} books total",
@@ -61,16 +64,22 @@
     "title": "Update preferences",
     "language": "Interface language",
     "results-per-page": "Results per page",
-    "snippets-per-result": "Snippets per book"
+    "snippets-per-result": "Snippets per book",
+    "author-facet-count": "How many author name filters to show"
   },
   "fix-word": {
     "title": "Fix a word",
+    "image-alt": "An image that should read {0}",
     "instructions": "Please copy the above exactly below, including punctuation (niqqud, apostrophes, quotes, dashes and so on).",
     "warning": "Do not correct unclear text, i.e. text that is broken, partially visible etc.",
     "unauthenticated": "In order to fix a word, please login first."
   },
+  "large-image": {
+    "image-alt": "An image of the text on {0}"
+  },
   "fix-metadata": {
     "title": "Update metadata for \"{0}\"",
+    "edit-button-tooltip": "Edit this value",
     "instructions": {
       "normal": "Please suggest your correction below.",
       "authorsNote": "NOTE",

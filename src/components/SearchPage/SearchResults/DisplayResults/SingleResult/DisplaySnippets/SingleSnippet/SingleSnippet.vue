@@ -11,24 +11,17 @@ Description: displays text snippets from the OCR text
 -->
 <template>
   <div :docRef="docRef" :index="index" class="card snippet m-2">
-    <!-- Instructions
-    <div
-      v-tooltip:top="$t('results.word-fix-instructions')"
-      class="card-footer-item is-large p-1 m-1"
-    >
-      <span class="icon">
-        <font-awesome-icon icon="question-circle" size="lg" />
-      </span>
-    </div> -->
     <header class="card-header snippet">
       <p class="card-header-title has-text-info">{{ $t('results.page', [snippet.page]) }}</p>
 
       <!-- Open page in book -->
       <button
         class="card-header-icon is-large has-text-info p-1 m-1"
+        aria-label="view book"
         v-tooltip:bottom="$t('results.show-original-page', [snippet.page])"
         v-if="snippet.deepLink"
         @click="openDeepLink(snippet.deepLink)"
+        @keyup.enter="openDeepLink(snippet.deepLink)"
       >
         <span class="icon">
           <font-awesome-icon icon="book-open" size="lg" />
@@ -37,9 +30,11 @@ Description: displays text snippets from the OCR text
 
       <!-- View transcribed text -->
       <button
-        v-tooltip:bottom="$t('results.show-text')"
         class="card-header-icon is-large has-text-info p-1 m-1"
+        aria-label="view transcription"
+        v-tooltip:bottom="$t('results.show-text')"
         @click="openDeepLink(`/text/${docRef}/page/${snippet.page}`)"
+        @keyup.enter="openDeepLink(`/text/${docRef}/page/${snippet.page}`)"
       >
         <span class="icon">
           <font-awesome-icon icon="file-lines" size="lg" />
@@ -57,8 +52,7 @@ Description: displays text snippets from the OCR text
             'pr-2': true,
             'pl-2': true,
             'rtl-align': !preferences.corpusLeftToRight,
-            rtl: !preferences.corpusLeftToRight,
-            yiddish: !preferences.corpusLeftToRight
+            rtl: !preferences.corpusLeftToRight
           }"
           v-html="snippet.text"
           @dblclick="openWordModal"
@@ -67,10 +61,17 @@ Description: displays text snippets from the OCR text
         <div
           class="column button is-flex is-align-items-center"
           :class="imageIsLoading ? 'is-loading' : ''"
+          tabindex="3"
+          :alt="$t('results.click-image-snippet')"
           @click="image ? openImageModal() : toggleImageSnippet()"
+          @keyup.enter="image ? openImageModal() : toggleImageSnippet()"
         >
           <div>
-            <div v-if="!image" class="is-flex is-flex-direction-column is-align-items-center m-2">
+            <div
+              v-if="!image"
+              class="is-flex is-flex-direction-column is-align-items-center m-2"
+              visibility:hidden
+            >
               <div class="p-3" :hidden="imageIsLoading">
                 <button class="is-large is-flex is-align-items-center">
                   <span class="icon" :hidden="imageIsLoading">
@@ -83,7 +84,12 @@ Description: displays text snippets from the OCR text
 
             <!-- Show snippet image -->
             <div v-else>
-              <img class="image-snippet" :src="image" title="Image" />
+              <img
+                class="image-snippet"
+                :src="image"
+                title="Image"
+                :alt="`Image for page ${snippet.page}`"
+              />
             </div>
           </div>
         </div>
@@ -96,10 +102,10 @@ Description: displays text snippets from the OCR text
             'pr-2': true,
             'pl-2': true,
             'rtl-align': !preferences.corpusLeftToRight,
-            rtl: !preferences.corpusLeftToRight,
-            yiddish: !preferences.corpusLeftToRight
+            rtl: !preferences.corpusLeftToRight
           }"
           v-html="snippet.text"
+          tabindex="3"
           @dblclick="openWordModal"
           v-touch:longtap="openWordModal"
         ></div>

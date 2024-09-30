@@ -75,7 +75,7 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
     const keycloakStore = useKeycloakStore()
     keycloakStore.keycloak = keycloak
 
-    const preferencesStore = usePreferencesStore()
+    const preferences = usePreferencesStore()
 
     const loginRequired: boolean = config['login-required'] ?? false
     console.warn(`Login required: ${loginRequired}`)
@@ -96,7 +96,7 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
 
         const i18n = createI18n({
           legacy: false,
-          locale: preferencesStore.language,
+          locale: preferences.language,
           fallbackLocale: 'en',
           messages: customizedMessages
         })
@@ -127,6 +127,7 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
           language: string
           resultsPerPage: number
           snippetsPerResult: number
+          authorFacetCount?: number
         }
 
         // return fetchData('preferences/user', 'get')
@@ -156,19 +157,24 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
           .then((response) => {
             const language = response.data.language
             if (language) {
-              preferencesStore.language = language
+              preferences.language = language
             }
             const resultsPerPage = response.data.resultsPerPage
             if (resultsPerPage) {
-              preferencesStore.resultsPerPage = resultsPerPage
+              preferences.resultsPerPage = resultsPerPage
             }
             const snippetsPerResult = response.data.snippetsPerResult
             if (snippetsPerResult) {
-              preferencesStore.snippetsPerResult = snippetsPerResult
+              preferences.snippetsPerResult = snippetsPerResult
             }
+            const authorFacetCount = response.data.authorFacetCount
+            if (authorFacetCount) {
+              preferences.authorFacetCount = authorFacetCount
+            }
+
             const i18n = createI18n({
               legacy: false,
-              locale: preferencesStore.language,
+              locale: preferences.language,
               fallbackLocale: 'en',
               messages: customizedMessages
             })
@@ -179,19 +185,12 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
               console.log('No preferences for user')
               const i18n = createI18n({
                 legacy: false,
-                locale: preferencesStore.language,
+                locale: preferences.language,
                 fallbackLocale: 'en',
                 messages: customizedMessages
               })
               return i18n
             } else {
-              const msg = new Error(`Failed to get user preferences: ${reason}`)
-              // setErrorMessage(msg)
-
-              // Don't mount the app
-              // console.error(reason.message)
-              // throw reason
-
               const i18n = createI18n({
                 legacy: false,
                 locale: 'en',

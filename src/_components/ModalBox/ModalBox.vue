@@ -2,10 +2,10 @@
   <Transition name="fade">
     <div
       class="modal"
+      role="dialog"
       :class="{
         'is-active': data.show,
-        'rtl-align': !preferences.displayLeftToRight,
-        yiddish: !preferences.displayLeftToRight
+        'rtl-align': !preferences.displayLeftToRight
       }"
       v-show="data.show"
     >
@@ -13,7 +13,7 @@
       <div class="modal-content">
         <header class="modal-card-head">
           <slot name="header"></slot>
-          <button class="delete" aria-label="close" @click="close"></button>
+          <button class="delete" aria-label="Close modal" @click="close"></button>
         </header>
         <section class="modal-card-body">
           <slot name="body"></slot>
