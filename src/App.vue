@@ -14,10 +14,20 @@ import VueI18n from 'vue-i18n'
 const app = getCurrentInstance()
 const globalProperties = app?.appContext.config.globalProperties
 const i18n: VueI18n.VueI18n | undefined = globalProperties?.$i18n as VueI18n.VueI18n
+const translate: ((key: string) => string) | undefined = globalProperties?.$t
 
 setLocale(i18n?.locale)
 setToken(useKeycloakStore().keycloak?.token)
 setPreferences(usePreferencesStore())
+
+if (translate) {
+  document.title = translate('meta.title')
+
+  const metaElement = document.head.querySelector('meta[name="description"]')
+  if (metaElement && metaElement instanceof HTMLMetaElement) {
+    metaElement.content = translate('meta.description')
+  }
+}
 
 // Reload when back button pushed
 window.onpopstate = function () {
