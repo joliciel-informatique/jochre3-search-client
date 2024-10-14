@@ -74,7 +74,7 @@ Description: presents a 'search for authors' text box and retrieves authors ever
           </div>
           <p class="control">
             <button
-              class="button is-clickable is-large is-info keyboardInputButton"
+              class="button is-clickable is-info keyboardInputButton"
               aria-label="open onscreen Yiddish keyboard"
               :vki-id="uniqueId"
               :alt="$t('search.keyboard')"

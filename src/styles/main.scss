@@ -58,10 +58,10 @@ $small-font-size: $font-size-2;
 // $control-line-height: $font-line-height-1;
 // $body-line-height: $font-line-height-1;
 
-// $control-size: $font-size-1;
 $size-small: $font-size-1;
 $size-normal: $font-size-3;
 $size-medium: $font-size-3;
+$control-size: $font-size-3;
 
 $hr-margin: 0;
 $hr-background-color: $background-color-3;
@@ -282,6 +282,24 @@ span.icon.is-clickable:active {
 
 #searchBar > .container > .field > .control > .button.is-static {
   background-color: $background-color-3;
+  color: $foreground-color-2;
+}
+
+#searchBar > .container > .field > .control > .button {
+  border: 0px;
+  height: 100%;
+  line-height: unset;
+  font-size: unset;
+}
+
+.control .button {
+  border: 0px;
+  height: 100%;
+}
+
+#query {
+  border: 0px;
+  box-shadow: none;
 }
 
 // $line-height:
@@ -426,10 +444,16 @@ html {
   overflow: auto;
 }
 
+:root {
+  --bulma-body-line-height: unset;
+  --bulma-font-size: 0;
+}
+
 body {
   height: auto;
   background-color: #fff;
-  // --bulma-body-line-height: 1.25em;
+  // --bulma-body-line-height: unset;
+  // --bulma-control-size: 0;
   /*font-family: 'Times New Roman', Times, serif;*/
 }
 
