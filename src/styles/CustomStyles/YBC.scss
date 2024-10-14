@@ -40,16 +40,17 @@ $foreground-color-2: $brown;
 $foreground-color-3: $orange;
 $foreground-color-4: $red;
 
+$font-family: 'Noto Serif Hebrew';
+
 /** Fonts & text */
-$font-family-1: 'Noto Serif Hebrew';
+$font-family-1: $font-family;
 $font-weight-1: 200;
-$font-line-height-1: 1;
-$font-size-1: 1em;
-
-$font-size-2: 0.9em;
 $font-weight-2: 800;
-
-$font-size-3: 0.8em;
+$font-line-height-1: 1em;
+$font-size-1: 0.6em;
+$font-size-2: 0.9em;
+$font-size-3: 1em;
+$font-size-title: 1.45em;
 
 /** Footer navigation bar */
 $nav-margin-of-buttons: 0.25em;

@@ -50,6 +50,19 @@ $pagination-ellipsis-color: purple;
 
 $pagination-margin: 0.25rem;
 
+$body-font-size: $font-size-3;
+$title-size: $font-size-title;
+
+$small-font-size: $font-size-2;
+
+// $control-line-height: $font-line-height-1;
+// $body-line-height: $font-line-height-1;
+
+// $control-size: $font-size-1;
+$size-small: $font-size-1;
+$size-normal: $font-size-3;
+$size-medium: $font-size-3;
+
 $hr-margin: 0;
 $hr-background-color: $background-color-3;
 
@@ -432,7 +445,7 @@ h1 {
 }
 
 .title {
-  font-size: 24px;
+  // font-size: $font-title-size;
   vertical-align: top;
 }
 

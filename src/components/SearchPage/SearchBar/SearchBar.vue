@@ -78,7 +78,7 @@ Description: presents the search bar
         </p>
         <p class="control">
           <button
-            class="button is-clickable is-medium is-info keyboardInputButton"
+            class="button is-clickable is-large is-info keyboardInputButton"
             aria-label="open onscreen Yiddish keyboard"
             vki-id="1"
             :alt="$t('search.keyboard')"
