@@ -14,7 +14,9 @@ Description: presents the search bar
     <div class="container is-max-desktop">
       <div class="pb-0 mb-0 field has-addons">
         <p class="control">
-          <a id="searchBarLabel" class="button is-static is-info">{{ $t('search.search') }}</a>
+          <span>
+            <a id="searchBarLabel" class="button is-static is-info">{{ $t('search.search') }}</a>
+          </span>
         </p>
         <p class="control container has-icons-left has-icons-right">
           <input
@@ -88,17 +90,17 @@ Description: presents the search bar
           </button>
         </p>
         <p class="control" v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
-          <a class="button is-clickable">
-            <label for="strictSearchCheckbox" class="mx-2 is-clickable">{{
-              $t('search.related-word-forms')
-            }}</label>
-            <input
-              id="strictSearchCheckbox"
-              type="checkbox"
-              aria-label="strict search"
-              v-model="strict"
-              @change="emit('newSearch')"
-            />
+          <a class="button is-static is-clickable">
+            <label for="strictSearchCheckbox" class="mx-2 is-clickable"
+              >{{ $t('search.related-word-forms') }}
+              <span
+                ><input
+                  id="strictSearchCheckbox"
+                  type="checkbox"
+                  aria-label="strict search"
+                  v-model="strict"
+                  @change="emit('newSearch')" /></span
+            ></label>
           </a>
         </p>
       </div>

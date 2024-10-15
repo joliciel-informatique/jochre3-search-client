@@ -276,33 +276,10 @@ span.icon.is-clickable:active {
   margin-bottom: 0px;
 }
 
-// #query {
-//   background-color: $white;
-// }
-
-// // #query:future,
-// // #query:current,
-// #query:focus,
-// #query:focus-visible,
-// #query:focus-within,
-// #query:not(:empty),
-// #query:visited {
-//   background-color: $white;
-// }
-
-// #query input:autofill {
-//   background-color: red;
-// }
-
-// #query input:focus,
-// #query input:active {
-//   border: 0;
-// }
-
 input[type='text']:focus,
 input[type='text']:visited,
 input[type='text']:not(:focus) {
-  background-color: white; /* Change to your desired color */
+  background-color: white;
 }
 
 input:-webkit-autofill,
@@ -311,32 +288,15 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   font-style: italic;
   -webkit-text-fill-color: $warmgray;
-  // box-shadow:
-  //   inset 0 0 0 1px rgba(255, 255, 255, 0),
-  //   inset 0 0 0 100px rgba(255, 255, 255, 1);
   transition:
     background-color 0s 600000s,
     color 0s 600000s !important;
-  // transition:
-  // border-color 0s 600000s,
-  // color 0s 600000s !important;
 }
-
-// box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0), inset 0 0 0 100px rgba(255, 255, 255,1);
-
-// input:-webkit-autofill,
-// input:-webkit-autofill:focus {
-
-// }
 
 #query:focus,
 #query:active,
 #query:selected {
   border: 0;
-}
-
-#query input {
-  background-color: red;
 }
 
 #searchBar > .container > .field > .control > .button.is-static {
@@ -349,6 +309,27 @@ input:-webkit-autofill:active {
   height: 100%;
   line-height: unset;
   font-size: unset;
+
+  svg {
+    path {
+      color: $background-color-1;
+    }
+  }
+
+  &:hover {
+    svg {
+      path {
+        transition: 300ms ease-in-out;
+        color: $foreground-color-1;
+      }
+    }
+  }
+
+  // &.is-clickable {
+  //   label {
+  //     color: $foreground-color-2;
+  //   }
+  // }
 }
 
 .tag {
@@ -375,7 +356,11 @@ input:-webkit-autofill:active {
 
 .control > .button {
   box-shadow: none;
-  line-height: 0;
+  line-height: unset;
+}
+
+.control > .button > span > input[type='checkbox'] {
+  vertical-align: middle;
 }
 
 // $line-height:
