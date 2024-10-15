@@ -7,8 +7,8 @@
 
 /** Overriding Bulma primary variables */
 $primary: $background-color-1;
-$info: $background-color-3;
-$link: $foreground-color-4;
+$info: $background-color-2;
+$link: $foreground-color-1;
 $family-primary: $font-family-1;
 
 /** Bulma Card Element */
@@ -16,7 +16,7 @@ $card-color: var(--bulma-text);
 $card-background-color: $white;
 $card-shadow: var(--bulma-shadow);
 $card-radius: 0.75rem;
-$card-header-background-color: $background-color-4;
+$card-header-background-color: $background-color-2;
 $card-header-color: $background-color-3;
 $card-header-padding: 0.75rem 1rem;
 $card-header-shadow: 0 0.125em 0.25em
@@ -24,7 +24,7 @@ $card-header-shadow: 0 0.125em 0.25em
 $card-header-weight: var(--bulma-weight-bold);
 $card-content-background-color: $transparent;
 $card-content-padding: 1.5rem;
-$card-footer-background-color: $transparent;
+$card-footer-background-color: $background-color-2;
 $card-footer-border-top: 1px solid var(--bulma-border-weak);
 $card-footer-padding: 0.75rem;
 $card-media-margin: var(--bulma-block-spacing);
@@ -208,7 +208,7 @@ $input-is-rounded: 0.15rem;
 // $input-radius: 0.15rem;
 // $input-icon-color: $background-color-3;
 
-$input-icon-hover-color: $background-color-3;
+$input-icon-hover-color: $background-color-2;
 $input-icon-active-color: $foreground-color-1;
 // $input-icon-focus-color: $foreground-color-1;
 // $icon-hover-color: $foreground-color-3;
@@ -221,7 +221,7 @@ $modal-background-background-color: $background-color-4;
 
 span.icon.is-clickable:hover {
   transition: 300ms ease-in-out;
-  color: $foreground-color-3;
+  color: $foreground-color-1;
 }
 
 span.icon.is-clickable:active {
@@ -255,7 +255,7 @@ span.icon.is-clickable:active {
 }
 
 .card-footer:hover {
-  background-color: $foreground-color-2;
+  background-color: $background-color-5;
   cursor: pointer;
   transition: all 100ms ease-in-out;
   & > span {
@@ -264,7 +264,7 @@ span.icon.is-clickable:active {
 }
 
 .card-footer > span {
-  color: $foreground-color-2;
+  color: $background-color-5;
   transform-origin: top;
 }
 
@@ -276,12 +276,71 @@ span.icon.is-clickable:active {
   margin-bottom: 0px;
 }
 
-#query {
-  background-color: $background-color-3;
+// #query {
+//   background-color: $white;
+// }
+
+// // #query:future,
+// // #query:current,
+// #query:focus,
+// #query:focus-visible,
+// #query:focus-within,
+// #query:not(:empty),
+// #query:visited {
+//   background-color: $white;
+// }
+
+// #query input:autofill {
+//   background-color: red;
+// }
+
+// #query input:focus,
+// #query input:active {
+//   border: 0;
+// }
+
+input[type='text']:focus,
+input[type='text']:visited,
+input[type='text']:not(:focus) {
+  background-color: white; /* Change to your desired color */
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  font-style: italic;
+  -webkit-text-fill-color: $warmgray;
+  // box-shadow:
+  //   inset 0 0 0 1px rgba(255, 255, 255, 0),
+  //   inset 0 0 0 100px rgba(255, 255, 255, 1);
+  transition:
+    background-color 0s 600000s,
+    color 0s 600000s !important;
+  // transition:
+  // border-color 0s 600000s,
+  // color 0s 600000s !important;
+}
+
+// box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0), inset 0 0 0 100px rgba(255, 255, 255,1);
+
+// input:-webkit-autofill,
+// input:-webkit-autofill:focus {
+
+// }
+
+#query:focus,
+#query:active,
+#query:selected {
+  border: 0;
+}
+
+#query input {
+  background-color: red;
 }
 
 #searchBar > .container > .field > .control > .button.is-static {
-  background-color: $background-color-3;
+  background-color: $white;
   color: $foreground-color-2;
 }
 
@@ -312,6 +371,11 @@ span.icon.is-clickable:active {
 #query {
   border: 0px;
   box-shadow: none;
+}
+
+.control > .button {
+  box-shadow: none;
+  line-height: 0;
 }
 
 // $line-height:
@@ -491,7 +555,7 @@ h1 {
 }
 
 a {
-  color: $foreground-color-3;
+  color: $foreground-color-1;
   text-decoration: none;
 }
 
@@ -602,11 +666,11 @@ a:hover {
 }
 
 .card-footer {
-  background-color: $foreground-color-1;
+  background-color: $background-color-2;
 }
 
 .card-header.snippet {
-  background-color: $background-color-4;
+  background-color: $background-color-2;
 }
 
 // .snippet br:nth-child(even) {
@@ -721,7 +785,7 @@ $menu-nested-list-margin: 1em;
 }
 
 .control.has-icons-left > span.icon.is-clicked {
-  color: $foreground-color-3;
+  color: $foreground-color-1;
 }
 
 // .container {

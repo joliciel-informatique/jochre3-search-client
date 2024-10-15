@@ -78,7 +78,7 @@ Description: presents the search bar
         </p>
         <p class="control">
           <button
-            class="button is-info keyboardInputButton"
+            class="button keyboardInputButton"
             aria-label="open onscreen Yiddish keyboard"
             vki-id="1"
             :alt="$t('search.keyboard')"
@@ -88,7 +88,7 @@ Description: presents the search bar
           </button>
         </p>
         <p class="control" v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
-          <a class="button is-info is-clickable">
+          <a class="button is-clickable">
             <label for="strictSearchCheckbox" class="mx-2 is-clickable">{{
               $t('search.related-word-forms')
             }}</label>
