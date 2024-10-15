@@ -1,5 +1,5 @@
 /** Default YBC JOCHRE CSS Configuration for https://ocr.yiddishbookcenter.org/ */
-@import url('https://fonts.googleapis.com/css?family=Noto Serif');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@100..900&display=swap');
 
 /** Base colors */
 $white: #ffffff;
@@ -41,7 +41,7 @@ $foreground-color-3: $orange;
 $foreground-color-4: $red;
 
 /** Fonts & text */
-$font-family-1: 'Noto serif';
+$font-family-1: 'Noto Serif Hebrew';
 $font-weight-1: 200;
 $font-line-height-1: 1;
 $font-size-1: 1em;
