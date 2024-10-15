@@ -44,6 +44,7 @@
     "publication-year": "Date",
     "document-reference": "Document reference: {0}",
     "contents-table-header": "Search results",
+    "contents-table-subheader": "Found {0} books, showing {1}/{2}",
     "result-count": "{0} books total",
     "result-current-tooltip": "You are currently viewing this book and snippet",
     "result-current-book-and-snippet": "Book {0}/{1} ({2}/{3}) of {4} books total",

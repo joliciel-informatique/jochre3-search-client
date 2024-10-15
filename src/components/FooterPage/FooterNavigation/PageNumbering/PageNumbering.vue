@@ -104,17 +104,7 @@ Description: calculates and presents page numbers
       class="navigation-current"
       :aria-label="`current position: book ${onScreenBook}, snippet ${onScreenSnippet}`"
       v-tooltip:top="$t('results.result-current-tooltip')"
-    >
-      {{
-        $t('results.result-current-book-and-snippet', [
-          onScreenBook,
-          lastResult,
-          onScreenSnippet,
-          onScreenTotalSnippets,
-          totalHits
-        ])
-      }}
-    </div>
+    ></div>
   </nav>
 </template>
 
@@ -142,11 +132,6 @@ const onScreenTotalSnippets = ref(1)
 
 const toTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 const toBottom = () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
-
-const lastResult = computed(() => {
-  const last = page.value * preferences.resultsPerPage
-  return totalHits.value < last ? totalHits.value : last
-})
 
 const check = () => {
   Array.from(document.querySelectorAll('.card.metadata')).every((doc, idx) => {

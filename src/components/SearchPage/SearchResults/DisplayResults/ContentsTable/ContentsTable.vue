@@ -2,6 +2,9 @@
   <div class="box table-of-contents" role="navigation" tabindex="1">
     <aside class="menu p-2 my-3">
       <p class="menu-label">{{ $t('results.contents-table-header') }}</p>
+      <p class="menu-label">
+        {{ $t('results.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
+      </p>
       <ul class="menu-list">
         <li class="px-2" v-for="(result, index) of searchResults" :key="result">
           <div class="grid">
@@ -26,8 +29,15 @@ const preferences = usePreferencesStore()
 
 const searchResults: Ref = defineModel('searchResults')
 const page: Ref = defineModel('page')
+const totalHits: Ref = defineModel('totalHits')
 
 const pageNumberOffset = computed(() => (page.value - 1) * preferences.resultsPerPage + 1) // Same line as in SearchInfo: firstResult
+
+const firstResult = computed(() => (page.value - 1) * preferences.resultsPerPage + 1)
+const lastResult = computed(() => {
+  const last = page.value * preferences.resultsPerPage
+  return totalHits.value < last ? totalHits.value : last
+})
 
 const scrollTo = (docRef: string) => {
   const pos = document.getElementById(docRef)
