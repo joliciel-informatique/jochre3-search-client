@@ -1,6 +1,6 @@
 <template>
   <div
-    class="button is-info is-small m-1"
+    class="button is-info is-small p-2 m-1"
     :class="active ? 'is-warning' : ''"
     :id="'filterTag-' + label"
     :aria-label="`filter ${label}`"

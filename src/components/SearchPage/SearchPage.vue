@@ -39,6 +39,7 @@
       v-model:query="query"
       v-model:search-results="searchResults"
       v-model:page="page"
+      v-model:total-hits="totalHits"
     />
   </div>
 </template>

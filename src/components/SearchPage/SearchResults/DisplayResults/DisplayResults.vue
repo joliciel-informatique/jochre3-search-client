@@ -25,7 +25,11 @@ Description: display results in SingleResult child component
     <!-- Display results -->
     <div class="columns" v-else-if="searchResults?.length">
       <div class="column is-one-quarter">
-        <ContentsTable v-model:search-results="searchResults" v-model:page="page" />
+        <ContentsTable
+          v-model:search-results="searchResults"
+          v-model:page="page"
+          v-model:total-hits="totalHits"
+        />
       </div>
       <div class="column is-1"></div>
       <div class="column" tabindex="-1">
@@ -69,6 +73,7 @@ const isLoading = defineModel('isLoading')
 const imageModal = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const page = defineModel('page')
+const totalHits = defineModel('totalHits')
 const metadataModal = defineModel('metadataModal')
 const notification = defineModel('notification')
 const query: Ref = defineModel('query')

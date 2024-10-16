@@ -6,11 +6,16 @@
     "realm": "jochre"
   },
   "en": {
+    "meta": {
+      "title": "Yiddish Book Center Digital Library Full-Text Search",
+      "description": "Search text content of documents in the Yiddish Book Center's digital library."
+    },
     "search": {
       "about": "With Yiddish Book Center's Full-Text search, you can search the complete contents of Yiddish books in our digital library. This application (powered by the Jochre engine) uses machine learning to correct the OCR and improve character recognition over time. <br><br>This site is currently in beta. Please send feedback and error reports to <a href=\"mailto:ocr{'@'}yiddishbookcenter.org\">ocr{'@'}yiddishbookcenter.org</a>. <br><br>For help with this site, please see the Jochre <a href=\"https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help\" target=\"_blank\">user's guide</a>. Comments, questions, and other feedback may be submitted on our <a href=\"https://www.yiddishbookcenter.org/full-text-search\" target=\"_blank\">website here</a><br><br>"
     },
     "header": {
       "logo": "/images/yiddishbookcenter-ocr.jpg",
+      "logo-url": "http://www.yiddishbookcenter.org",
       "title": "Yiddish Book Center's Full-Text Search",
       "beta": "Currently in beta",
       "header": {
