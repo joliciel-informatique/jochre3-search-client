@@ -48,6 +48,9 @@ $pagination-current-border-color: green;
 $pagination-current-color: teal;
 $pagination-ellipsis-color: purple;
 
+// $modal-content-width: 100%;
+$modal-z: 100;
+
 $pagination-margin: 0.25rem;
 
 $body-font-size: $font-size-3;
@@ -83,8 +86,9 @@ $sticky-bar-undocked-height: 10vh;
   max-height: max-content;
 }
 
-.advancedSearchPanel {
+.advancedSearch .body {
   height: auto;
+  width: 100%;
 }
 
 $column-gap: 0.1rem;
@@ -217,7 +221,7 @@ $input-icon-active-color: $foreground-color-1;
 //   color: $background-color-3;
 // }
 
-$modal-background-background-color: $background-color-4;
+// $modal-background-background-color: $background-color-4;
 
 span.icon.is-clickable:hover {
   transition: 300ms ease-in-out;
@@ -363,10 +367,6 @@ input:-webkit-autofill:active {
   vertical-align: middle;
 }
 
-// $line-height:
-// $modal-card-spacing: var(--bulma-modal-card-spacing);
-// $modal-card-head-background-color: var(--bulma-modal-card-head-background-color);
-// $modal-card-head-padding: var(--bulma-modal-card-head-padding);
 // $modal-card-head-radius: var(--bulma-modal-card-head-radius);
 // $modal-card-title-color: var(--bulma-modal-card-title-color);
 // $modal-card-title-line-height: var(--bulma-modal-card-title-line-height);
@@ -375,7 +375,6 @@ input:-webkit-autofill:active {
 // $modal-card-foot-radius: var(--bulma-modal-card-foot-radius);
 // $modal-card-body-background-color: var(--bulma-modal-card-body-background-color);
 // $modal-card-body-padding: var(--bulma-modal-card-body-padding);
-// $
 
 // $input-h: 0;
 // $input-s: 0;
@@ -398,9 +397,14 @@ input:-webkit-autofill:active {
 // $input-radius:,
 // $input-shadow: none;
 
-$modal-background-background-color: $background-color-2-transparency-50;
+// $modal-background-background-color: $background-color-2-transparency-50;
 
 @import '../../node_modules/bulma/sass';
+// $modal-card-spacing: var(--bulma-modal-card-spacing);
+// $modal-card-head-background-color: var(--bulma-modal-card-head-background-color);
+// $modal-card-head-padding: var(--bulma-modal-card-head-padding);
+
+// $modal-content-width: 100%;
 // @import 'bulma/sass';
 
 // @use '../../../node_modules/bulma/sass' with (
@@ -416,7 +420,11 @@ $modal-background-background-color: $background-color-2-transparency-50;
 // $modal-close-top: var(--bulma-modal-close-top),
 // $modal-breakpoint: var(--bulma-)
 // @import '../../../node_modules/bulma/sass';
-// :root {
+:root {
+}
+.modal {
+  // --bulma-modal-content-width: 100vw;
+}
 //   --bulma-primary-h: 92deg;
 //   --bulma-primary-s: 42%;
 //   --bulma-link-h: 183deg;

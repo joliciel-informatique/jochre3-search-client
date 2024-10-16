@@ -21,7 +21,7 @@ Description: the advanced search toolbox
       @leave="leave"
     >
       <div
-        class="body modal-card m-3 p-3"
+        class="body m-3 p-3"
         v-show="showAdvancedSearchPanel"
         @keydown.esc="showAdvancedSearchPanel = false"
       >
