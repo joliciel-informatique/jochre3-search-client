@@ -1,0 +1,160 @@
+<!doctype html>
+<html class="login-pf">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Welcome to JOCHRE</title>
+    <!-- <link rel="icon" href="/resources/tem3w/login/keycloak/img/favicon.ico" /> -->
+    <link href="./patternfly.min.css" rel="stylesheet" />
+    <link href="../node_modules/patternfly/dist/css/patternfly.min.css" rel="stylesheet" />
+    <link
+      href="../node_modules/patternfly/dist/css/patternfly-additions.min.css"
+      rel="stylesheet"
+    />
+    <link href="./pficon.css" rel="stylesheet" />
+    <link href="./login.css" rel="stylesheet" />
+    <script src="/resources/tem3w/login/keycloak/js/menu-button-links.js" type="module"></script>
+    <script type="module">
+      import { checkCookiesAndSetTimer } from '/resources/tem3w/login/keycloak/js/authChecker.js'
+
+      checkCookiesAndSetTimer(
+        '91402624-0e13-41b8-9200-6e2d324aa9a6',
+        'XYHwPJ0ZKT8',
+        '/realms/jochre/login-actions/restart?client_id=jochre&tab_id=XYHwPJ0ZKT8&skip_logout=true'
+      )
+    </script>
+  </head>
+
+  <body class="">
+    <div class="login-pf-page">
+      <div id="kc-header" class="login-pf-page-header">
+        <div id="kc-header-wrapper" class="">Welcome to JOCHRE</div>
+      </div>
+      <div class="card-pf">
+        <header class="login-pf-header">
+          <h1 id="kc-page-title">Sign in to start your search</h1>
+        </header>
+        <div id="kc-content">
+          <div id="kc-content-wrapper">
+            <div id="kc-form">
+              <div id="kc-form-wrapper">
+                <form
+                  id="kc-form-login"
+                  onsubmit="login.disabled = true; return true;"
+                  action="https://dev-login.joli-ciel.com/realms/jochre/login-actions/authenticate?session_code=hDIUz2Oq0Kis80vNZZF3UEple1LEdutHGwH-0iFFk28&amp;execution=42bbb4e2-ce62-4d40-ade2-2d1ce8408d5a&amp;client_id=jochre&amp;tab_id=XYHwPJ0ZKT8"
+                  method="post"
+                >
+                  <div class="form-group">
+                    <label for="username" class="pf-c-form__label pf-c-form__label-text"
+                      >Email</label
+                    >
+
+                    <input
+                      tabindex="2"
+                      id="username"
+                      class="pf-c-form-control"
+                      name="username"
+                      value=""
+                      type="text"
+                      autofocus
+                      autocomplete="username"
+                      aria-invalid=""
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="password" class="pf-c-form__label pf-c-form__label-text"
+                      >Password</label
+                    >
+
+                    <div class="pf-c-input-group">
+                      <input
+                        tabindex="3"
+                        id="password"
+                        class="pf-c-form-control"
+                        name="password"
+                        type="password"
+                        autocomplete="current-password"
+                        aria-invalid=""
+                      />
+                      <button
+                        class="pf-c-button pf-m-control"
+                        type="button"
+                        aria-label="Show password"
+                        aria-controls="password"
+                        data-password-toggle
+                        tabindex="4"
+                        data-icon-show="fa fa-eye"
+                        data-icon-hide="fa fa-eye-slash"
+                        data-label-show="Show password"
+                        data-label-hide="Hide password"
+                      >
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="form-group login-pf-settings">
+                    <div id="kc-form-options">
+                      <div class="checkbox">
+                        <label>
+                          <input tabindex="5" id="rememberMe" name="rememberMe" type="checkbox" />
+                          Remember me
+                        </label>
+                      </div>
+                    </div>
+                    <div class="">
+                      <span
+                        ><a
+                          tabindex="6"
+                          href="/realms/jochre/login-actions/reset-credentials?client_id=jochre&amp;tab_id=XYHwPJ0ZKT8"
+                          >Forgot Password?</a
+                        ></span
+                      >
+                    </div>
+                  </div>
+
+                  <div id="kc-form-buttons" class="form-group">
+                    <input type="hidden" id="id-hidden-input" name="credentialId" />
+                    <input
+                      tabindex="7"
+                      class="pf-c-button pf-m-primary pf-m-block btn-lg"
+                      name="login"
+                      id="kc-login"
+                      type="submit"
+                      value="Sign In"
+                    />
+                  </div>
+                </form>
+              </div>
+            </div>
+            <script
+              type="module"
+              src="/resources/tem3w/login/keycloak/js/passwordVisibility.js"
+            ></script>
+
+            <div id="kc-info" class="login-pf-signup">
+              <div id="kc-info-wrapper" class="">
+                <div id="kc-registration-container">
+                  <div id="kc-registration">
+                    <span
+                      >New user?
+                      <a
+                        tabindex="8"
+                        href="/realms/jochre/login-actions/registration?client_id=jochre&amp;tab_id=XYHwPJ0ZKT8"
+                        >Register</a
+                      ></span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

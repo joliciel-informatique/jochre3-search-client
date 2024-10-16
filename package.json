@@ -31,6 +31,7 @@
     "keycloak-js": "^22.0.5",
     "mitt": "^3.0.1",
     "object-hash": "^3.0.0",
+    "patternfly": "^3.59.5",
     "pinia": "^2.1.7",
     "universal-cookie": "^7.2.0",
     "vanilla-cookieconsent": "^3.0.1",
