@@ -12,7 +12,7 @@ Description: presents the facet bar
 <template>
   <div id="facetBar" v-if="!isLoading && facets.length">
     <hr />
-    <div class="columns has-text-centered is-vcentered has-text-info">
+    <div class="columns has-text-centered is-vcentered has-text-white">
       <div class="column is-one-fifth">
         <span>
           <p>

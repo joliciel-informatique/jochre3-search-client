@@ -6,8 +6,8 @@
         <li class="px-2" v-for="(result, index) of searchResults" :key="result">
           <div class="grid">
             <a @click="scrollTo(result.docRef)" @keyup.enter="scrollTo(result.docRef)" tabindex="0">
-              <p class="cell is-size-7">{{ index + pageNumberOffset }}|</p>
-              <p class="cell is-size-7 is-col-min-2">
+              <p class="cell is-size-4">{{ index + pageNumberOffset }}|</p>
+              <p class="cell is-size-5 is-col-min-2">
                 {{ result.metadata.title }} ({{
                   result.metadata.author ?? $t('results.result-unknown-author')
                 }})

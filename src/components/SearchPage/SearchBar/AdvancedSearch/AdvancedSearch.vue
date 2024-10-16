@@ -62,7 +62,7 @@ Description: the advanced search toolbox
               </p>
               <p class="control">
                 <button
-                  class="button is-clickable is-medium is-info keyboardInputButton"
+                  class="button is-clickable is-info keyboardInputButton"
                   aria-label="open onscreen Yiddish keyboard"
                   vki-id="2"
                   :alt="$t('search.keyboard')"

@@ -208,8 +208,12 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
       expireTimes: '30d'
     })
 
-    myI18n.then((i18nResolved) => {
-      app.use(i18nResolved)
-      app.mount('#app')
-    })
+    myI18n
+      .then((i18nResolved) => {
+        app.use(i18nResolved)
+        app.mount('#app')
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   })

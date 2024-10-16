@@ -11,8 +11,8 @@ Description: presents the current indexed number of books
 -->
 <template>
   <div>
-    <div v-html="$t('search.about')"></div>
-    <div>{{ $t('search.index-size', [indexSize]) }}</div>
+    <div class="is-size-5" v-html="$t('search.about')"></div>
+    <div class="is-size-5">{{ $t('search.index-size', [indexSize]) }}</div>
   </div>
 </template>
 <script setup lang="ts">
