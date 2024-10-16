@@ -77,6 +77,7 @@
     "unauthenticated": "In order to fix a word, please login first."
   },
   "large-image": {
+    "title": "Page {0} for {1}",
     "image-alt": "An image of the text on {0}"
   },
   "fix-metadata": {

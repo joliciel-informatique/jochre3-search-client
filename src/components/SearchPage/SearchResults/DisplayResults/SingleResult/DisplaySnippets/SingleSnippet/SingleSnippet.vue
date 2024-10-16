@@ -63,8 +63,16 @@ Description: displays text snippets from the OCR text
           :class="imageIsLoading ? 'is-loading' : ''"
           tabindex="3"
           :alt="$t('results.click-image-snippet')"
-          @click="image ? openImageModal() : toggleImageSnippet()"
-          @keyup.enter="image ? openImageModal() : toggleImageSnippet()"
+          @click="
+            image
+              ? openImageModal($t('large-image.title', [snippet.page, docRef]))
+              : toggleImageSnippet()
+          "
+          @keyup.enter="
+            image
+              ? openImageModal($t('large-image.title', [snippet.page, docRef]))
+              : toggleImageSnippet()
+          "
         >
           <div>
             <div
@@ -201,10 +209,10 @@ const toggleImageSnippet = async () => {
   imageIsLoading.value = false
 }
 
-const openImageModal = () => {
+const openImageModal = (title: string) => {
   imageModal.value = {
     show: true,
-    title: `Page ${snippet.page} for ${docRef}`,
+    title: title,
     data: image.value ? image.value : null
   }
 }
