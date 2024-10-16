@@ -6,7 +6,7 @@
     <div class="grid">
       <div class="cell p-2">
         <div class="is-pulled-left">
-          <a :href="$t('header.logo_url')">
+          <a :href="$t('header.logo-url')">
             <img
               style="width: 100px; border: none"
               :src="$t('header.logo')"
