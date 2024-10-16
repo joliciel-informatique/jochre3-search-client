@@ -55,7 +55,7 @@ import FacetBar from './SearchBar/FacetBar/FacetBar.vue'
 import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
 
 // Import interfaces
-import type { AggregationBin } from '@/assets/interfacesExternals'
+import { type SearchResult, type AggregationBin } from '@/assets/interfacesExternals'
 
 import { hasSearch } from '@/assets/appState'
 
@@ -64,7 +64,7 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 const preferences = usePreferencesStore()
 
 const query = ref('')
-const searchResults: Ref = defineModel('searchResults')
+const searchResults = defineModel<Array<SearchResult>>('searchResults')
 const totalHits: Ref = defineModel('totalHits')
 const page: Ref = defineModel('page')
 const imageModal: Ref = defineModel('imageModal')
