@@ -123,6 +123,7 @@
   },
   "header": {
     "logo": "/images/jochreLogo.png",
+    "logo-url": "/",
     "title": "",
     "preferences": "Preferences",
     "login": "Login",

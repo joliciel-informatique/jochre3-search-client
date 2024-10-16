@@ -6,12 +6,13 @@
     <div class="grid">
       <div class="cell p-2">
         <div class="is-pulled-left">
-          <img
-            style="width: 100px; border: none"
-            :src="$t('header.logo')"
-            :alt="$t('header.title')"
-            :title="$t('header.title')"
-          />
+          <a :href="$t('header.logo-url')">
+            <img
+              style="width: 100px; border: none"
+              :src="$t('header.logo')"
+              :alt="$t('header.title')"
+              :title="$t('header.title')"
+          /></a>
         </div>
       </div>
       <div class="cell is-col-span-2 p-2">
