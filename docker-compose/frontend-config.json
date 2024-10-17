@@ -1,8 +1,8 @@
 {
   "login-required": true,
-  "api-url": "https://jochre-search-api.joli-ciel.com",
+  "api-url": "https://ocr-test.yiddishbookcenter.org/api",
   "keycloak": {
-    "url": "https://dev-login.joli-ciel.com/",
+    "url": "https://ocr-test.yiddishbookcenter.org/login/",
     "realm": "jochre"
   },
   "en": {
@@ -15,14 +15,14 @@
     },
     "header": {
       "logo": "/images/yiddishbookcenter-ocr.jpg",
-      "logo-url": "http://www.yiddishbookcenter.org",
+      "logo-url": "https://www.yiddishbookcenter.org",
       "title": "Yiddish Book Center's Full-Text Search",
       "beta": "Currently in beta",
       "header": {
         "text": "Go to {1}",
         "1": {
           "title": "yiddishbookcenter.org",
-          "link": "http://www.yiddishbookcenter.org",
+          "link": "https://www.yiddishbookcenter.org",
           "target": "blank"
         }
       }
@@ -34,7 +34,7 @@
             "title": "Texts scanned by {1}",
             "1": {
               "title": "the Yiddish Book Center",
-              "link": "http://www.yiddishbookcenter.org",
+              "link": "https://www.yiddishbookcenter.org",
               "target": "blank"
             }
           },
