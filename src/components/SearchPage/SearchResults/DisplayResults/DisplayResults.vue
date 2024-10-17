@@ -24,7 +24,7 @@ Description: display results in SingleResult child component
 
     <!-- Display results -->
     <div class="columns" v-else-if="searchResults?.length">
-      <div class="column is-4">
+      <div class="column is-3">
         <ContentsTable
           v-model:search-results="searchResults"
           v-model:page="page"
@@ -36,8 +36,7 @@ Description: display results in SingleResult child component
           v-model:total-hits="totalHits"
         />
       </div>
-      <div class="column is-1"></div>
-      <div class="column" tabindex="-1">
+      <div class="column mr-6 ml-6" tabindex="-1">
         <ul>
           <li v-for="result of searchResults" :key="sha1(result)">
             <div v-show="selectedEntry?.docRef === result.docRef">
@@ -52,6 +51,14 @@ Description: display results in SingleResult child component
             </div>
           </li>
         </ul>
+      </div>
+      <div class="column is-2">
+        <FacetBar
+          @newSearch="emit('newSearch')"
+          @resetSearchResults="emit('resetSearchResults')"
+          v-model:is-loading="isLoading"
+          v-model:facets="facets"
+        />
       </div>
     </div>
 
@@ -72,7 +79,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { ref, type Ref } from 'vue'
 import ContentsTable from './ContentsTable/ContentsTable.vue'
 import type { SearchResult } from '@/assets/interfacesExternals'
+import FacetBar from './FacetBar/FacetBar.vue'
 library.add(faBan)
+
+const emit = defineEmits(['newSearch', 'resetSearchResults'])
 
 const isLoading = defineModel('isLoading')
 const imageModal = defineModel('imageModal')
@@ -84,4 +94,5 @@ const notification = defineModel('notification')
 const query: Ref = defineModel('query')
 const searchResults = defineModel<Array<SearchResult> | undefined>('searchResults')
 const selectedEntry = ref<SearchResult>()
+const facets: Ref = defineModel('facets')
 </script>
