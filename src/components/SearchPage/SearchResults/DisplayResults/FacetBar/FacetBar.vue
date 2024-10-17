@@ -30,9 +30,9 @@ Description: presents the facet bar
           <div
             class="column container is-flex is-flex-direction-column is-justify-content-start is-flex-wrap-wrap"
             :class="
-              preferences.displayLeftToRight
-                ? 'is-align-items-flex-start'
-                : 'is-align-items-flex-end'
+              preferences.displayLeftToRight !== preferences.corpusLeftToRight
+                ? 'is-align-items-flex-end'
+                : 'is-align-items-flex-start'
             "
           >
             <span v-for="facet of facets" v-bind:key="sha1(facet)">
