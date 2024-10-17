@@ -110,6 +110,9 @@ $card-media-margin: var(--bulma-block-spacing);
 //   background-color: green;
 // }
 
+// $modal-content-width: 100%;
+$modal-z: 100;
+
 $body-font-size: $font-size-3;
 $title-size: $font-size-title;
 
@@ -143,8 +146,9 @@ $sticky-bar-undocked-height: 10vh;
   max-height: max-content;
 }
 
-.advancedSearchPanel {
+.advancedSearch .body {
   height: auto;
+  width: 100%;
 }
 
 $column-gap: 0.1rem;
@@ -277,7 +281,7 @@ $input-icon-active-color: $foreground-color-1;
 //   color: $background-color-3;
 // }
 
-$modal-background-background-color: $background-color-4;
+// $modal-background-background-color: $background-color-4;
 
 span.icon.is-clickable:hover {
   transition: 300ms ease-in-out;
@@ -392,7 +396,6 @@ input:-webkit-autofill:active {
   vertical-align: middle;
 }
 
-// $line-height:
 // $modal-card-spacing: var(--bulma-modal-card-spacing);
 // $modal-card-head-background-color: var(--bulma-modal-card-head-background-color);
 // $modal-card-head-padding: var(--bulma-modal-card-head-padding);
@@ -404,7 +407,6 @@ input:-webkit-autofill:active {
 // $modal-card-foot-radius: var(--bulma-modal-card-foot-radius);
 // $modal-card-body-background-color: var(--bulma-modal-card-body-background-color);
 // $modal-card-body-padding: var(--bulma-modal-card-body-padding);
-// $
 
 // $input-h: 0;
 // $input-s: 0;
@@ -427,7 +429,7 @@ input:-webkit-autofill:active {
 // $input-radius:,
 // $input-shadow: none;
 
-$modal-background-background-color: $background-color-2-transparency-50;
+// $modal-background-background-color: $background-color-2-transparency-50;
 
 @import '../../node_modules/bulma/sass';
 
@@ -472,7 +474,13 @@ $modal-background-background-color: $background-color-2-transparency-50;
 // $modal-close-top: var(--bulma-modal-close-top),
 // $modal-breakpoint: var(--bulma-)
 // @import '../../../node_modules/bulma/sass';
-// :root {
+
+:root {
+}
+.modal {
+  // --bulma-modal-content-width: 100vw;
+}
+
 //   --bulma-primary-h: 92deg;
 //   --bulma-primary-s: 42%;
 //   --bulma-link-h: 183deg;
