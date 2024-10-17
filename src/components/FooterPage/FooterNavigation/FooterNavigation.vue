@@ -21,6 +21,7 @@ Description: calculates and presents page numbers
 <script setup lang="ts">
 // import HistoryNavigator from './HistoryNavigator/HistoryNavigator.vue'
 import PageNumbering from './PageNumbering/PageNumbering.vue'
+// import SearchInfo from './SearchInfo/SearchInfo.vue'
 
 const emit = defineEmits(['newPage', 'resetSearchResults'])
 const page = defineModel('page')
