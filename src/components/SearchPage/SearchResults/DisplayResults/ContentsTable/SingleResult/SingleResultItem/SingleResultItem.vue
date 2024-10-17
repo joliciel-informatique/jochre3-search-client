@@ -11,19 +11,16 @@ Description: display single metadata item
 -->
 <template>
   <div
-    class="columns"
+    class="columns p-2 has-text-white"
     :class="{
       'has-text-left': preferences.displayLeftToRight,
       'has-text-right': !preferences.displayLeftToRight
     }"
   >
-    <span class="is-size-6 column is-one-quarter">
-      <strong>{{ $t(title) }}</strong
-      >:
-    </span>
+    <span class="column is-6"> {{ $t(title) }}</span>
     <span class="column">{{ value }}</span>
-    <button
-      class="button is-small is-white"
+    <span
+      class="column is-1 icon menu-list-icon is-clickable"
       :class="{
         'is-pulled-right': preferences.displayLeftToRight,
         'is-pulled-left': !preferences.displayLeftToRight
@@ -37,10 +34,10 @@ Description: display single metadata item
       @click="openMetadataModal"
       @keyup.enter="openMetadataModal"
     >
-      <span class="icon is-small fa-md">
+      <span class="icon fa-sm">
         <font-awesome-icon icon="pen-to-square" />
       </span>
-    </button>
+    </span>
   </div>
 </template>
 

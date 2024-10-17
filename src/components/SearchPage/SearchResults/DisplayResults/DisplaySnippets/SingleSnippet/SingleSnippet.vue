@@ -10,15 +10,15 @@ Methods: getSelectedWord (local), toggleImageSnippet (local), fetchData (importe
 Description: displays text snippets from the OCR text
 -->
 <template>
-  <div :docRef="docRef" :index="index" class="card snippet m-2">
+  <div :docRef="docRef" :index="index" class="card snippet m-4">
     <header class="card-header snippet">
-      <p class="card-header-title has-text-info">{{ $t('results.page', [snippet.page]) }}</p>
+      <p class="card-header-title">{{ $t('results.page', [snippet.page]) }}</p>
 
       <!-- Open page in book -->
       <button
-        class="card-header-icon is-large has-text-info p-1 m-1"
+        class="card-header-icon is-large p-1 m-1"
         aria-label="view book"
-        v-tooltip:bottom="$t('results.show-original-page', [snippet.page])"
+        v-tooltip:top="$t('results.show-original-page', [snippet.page])"
         v-if="snippet.deepLink"
         @click="openDeepLink(snippet.deepLink)"
         @keyup.enter="openDeepLink(snippet.deepLink)"
@@ -30,9 +30,9 @@ Description: displays text snippets from the OCR text
 
       <!-- View transcribed text -->
       <button
-        class="card-header-icon is-large has-text-info p-1 m-1"
+        class="card-header-icon is-large p-1 m-1"
         aria-label="view transcription"
-        v-tooltip:bottom="$t('results.show-text')"
+        v-tooltip:top="$t('results.show-text')"
         @click="openDeepLink(`/text/${docRef}/page/${snippet.page}`)"
         @keyup.enter="openDeepLink(`/text/${docRef}/page/${snippet.page}`)"
       >

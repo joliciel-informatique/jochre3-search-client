@@ -22,14 +22,10 @@
       v-model:facets="facets"
       v-model:exclude-from-search="excludeFromSearch"
     />
-    <FacetBar
-      @newSearch="newSearch"
-      @resetSearchResults="resetSearchResults"
-      v-model:is-loading="isLoading"
-      v-model:facets="facets"
-    />
   </div>
-  <div class="container is-flex-direction-column is-align-items-center has-text-centered p-5">
+  <div
+    class="container is-fluid is-flex-direction-column is-align-items-center has-text-centered p-5"
+  >
     <DisplayResults
       v-model:is-loading="isLoading"
       v-model:image-modal="imageModal"
@@ -40,6 +36,9 @@
       v-model:search-results="searchResults"
       v-model:page="page"
       v-model:total-hits="totalHits"
+      v-model:facets="facets"
+      @newSearch="newSearch"
+      @resetSearchResults="resetSearchResults"
     />
   </div>
 </template>
@@ -51,11 +50,10 @@ import { fetchData } from '@/assets/fetchMethods'
 // Import Child components
 import SearchBar from './SearchBar/SearchBar.vue'
 import AdvancedSearch from './SearchBar/AdvancedSearch/AdvancedSearch.vue'
-import FacetBar from './SearchBar/FacetBar/FacetBar.vue'
 import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
 
 // Import interfaces
-import type { AggregationBin } from '@/assets/interfacesExternals'
+import { type SearchResult, type AggregationBin } from '@/assets/interfacesExternals'
 
 import { hasSearch } from '@/assets/appState'
 
@@ -64,7 +62,7 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 const preferences = usePreferencesStore()
 
 const query = ref('')
-const searchResults: Ref = defineModel('searchResults')
+const searchResults = defineModel<Array<SearchResult>>('searchResults')
 const totalHits: Ref = defineModel('totalHits')
 const page: Ref = defineModel('page')
 const imageModal: Ref = defineModel('imageModal')

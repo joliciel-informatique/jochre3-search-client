@@ -24,30 +24,41 @@ Description: display results in SingleResult child component
 
     <!-- Display results -->
     <div class="columns" v-else-if="searchResults?.length">
-      <div class="column is-one-quarter">
+      <div class="column is-3">
         <ContentsTable
           v-model:search-results="searchResults"
           v-model:page="page"
+          v-model:image-modal="imageModal"
+          v-model:metadata-modal="metadataModal"
+          v-model:notification="notification"
+          v-model:word-modal="wordModal"
+          v-model:selected-entry="selectedEntry"
           v-model:total-hits="totalHits"
         />
       </div>
-      <div class="column is-1"></div>
-      <div class="column" tabindex="-1">
+      <div class="column mr-6 ml-6" tabindex="-1">
         <ul>
-          <li v-for="(result, index) of searchResults" :key="sha1(result)">
-            <div>
-              <SingleResult
+          <li v-for="result of searchResults" :key="sha1(result)">
+            <div v-show="selectedEntry?.docRef === result.docRef">
+              <DisplaySnippets
                 v-model:image-modal="imageModal"
-                v-model:word-modal="wordModal"
-                v-model:metadata-modal="metadataModal"
                 v-model:notification="notification"
-                :showing="index === 0 ? true : false"
-                :result="result"
+                v-model:word-modal="wordModal"
+                :snippets="result.snippets"
+                :doc-ref="result.docRef"
+                :url="result.metadata.url"
               />
             </div>
-            <hr v-if="index !== preferences.resultsPerPage - 1" />
           </li>
         </ul>
+      </div>
+      <div class="column is-2">
+        <FacetBar
+          @newSearch="emit('newSearch')"
+          @resetSearchResults="emit('resetSearchResults')"
+          v-model:is-loading="isLoading"
+          v-model:facets="facets"
+        />
       </div>
     </div>
 
@@ -58,16 +69,20 @@ Description: display results in SingleResult child component
 
 <script setup lang="ts">
 import { sha1 } from 'object-hash'
-import { preferences } from '@/assets/fetchMethods'
-import SingleResult from './SingleResult/SingleResult.vue'
+// import { preferences } from '@/assets/fetchMethods'
+import DisplaySnippets from './DisplaySnippets/DisplaySnippets.vue'
 import IndexSize from './IndexSize/IndexSize.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { type Ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import ContentsTable from './ContentsTable/ContentsTable.vue'
+import type { SearchResult } from '@/assets/interfacesExternals'
+import FacetBar from './FacetBar/FacetBar.vue'
 library.add(faBan)
+
+const emit = defineEmits(['newSearch', 'resetSearchResults'])
 
 const isLoading = defineModel('isLoading')
 const imageModal = defineModel('imageModal')
@@ -77,5 +92,7 @@ const totalHits = defineModel('totalHits')
 const metadataModal = defineModel('metadataModal')
 const notification = defineModel('notification')
 const query: Ref = defineModel('query')
-const searchResults: Ref = defineModel('searchResults')
+const searchResults = defineModel<Array<SearchResult> | undefined>('searchResults')
+const selectedEntry = ref<SearchResult>()
+const facets: Ref = defineModel('facets')
 </script>
