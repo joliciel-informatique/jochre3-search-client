@@ -12,6 +12,20 @@
 @use './components/Card/Card';
 @use './components/FooterPage/FooterPage';
 @use './components/DisplaySnippets/DisplaySnippets.scss';
+@use 'bulma-switch-control';
+
+// @forward 'bulma-extensions/bulma-switch/src/sass/index' with (
+// $switch-background: red,
+// $switch-background-active: $background-color-1,
+// $switch-radius: 10,
+// $switch-margin: 1rem,
+// $switch-paddle-background: $white,
+// $switch-paddle-offset: 0.25rem,
+// $switch-paddle-transition: all 0.25s ease-out,
+// $switch-focus: 1px dotted yellow,
+// $switch-paddle-background-active: pink,
+// $size-normal: $size-normal
+// );
 
 @use 'bulma/sass' with (
   // Default theme values
@@ -31,6 +45,7 @@
   $control-size: $font-size-3,
 
   $body-line-height: unset,
+  // $size-normal: $size-normal,
   // $font-size: 0,
   $hr-margin: 0,
   $hr-background-color: $background-color-3,

@@ -3,7 +3,19 @@
     <div class="column box table-of-contents" role="navigation" tabindex="1">
       <aside class="column columns menu p-2 my-3">
         <div id="searchResultsList" class="column">
-          <p class="menu-label">{{ $t('results.contents-table-header') }}</p>
+          <p class="menu-label">
+            {{ $t('results.contents-table-header') }}
+          </p>
+          <p class="menu-label">
+            <label class="switch is-rounded is-small">
+              <input id="" type="checkbox" v-model="displayPerBook" :checked="displayPerBook" />
+              <span class="check"></span>
+              <span class="control-label">Snippets per book</span>
+              <span v-tooltip:top="$t('search.display-snippets-per-book')">
+                <FontAwesomeIcon icon="question-circle" />
+              </span>
+            </label>
+          </p>
           <p class="menu-label">
             {{ $t('results.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
           </p>
@@ -38,18 +50,21 @@
 <script setup lang="ts">
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { computed, onMounted, ref, type Ref } from 'vue'
-// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faCircleChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faCircleChevronDown, faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core'
-library.add(faCircleChevronDown)
+library.add(faCircleChevronDown, faQuestionCircle)
+
+import { storeToRefs } from 'pinia'
 
 import SingleResult from './SingleResult/SingleResult.vue'
 import type { SearchResult } from '@/assets/interfacesExternals'
+
 const preferences = usePreferencesStore()
 
-const showing = ref(true)
+const { displayPerBook } = storeToRefs(preferences)
 
-// const toggle = () => (showing.value = !showing.value)
+const showing = ref(true)
 
 const searchResults = defineModel<Array<SearchResult>>('searchResults')
 const page: Ref = defineModel('page')

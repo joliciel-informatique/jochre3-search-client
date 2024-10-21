@@ -14,6 +14,7 @@
     "related-word-forms": "Strict",
     "facets": "Filter by author name",
     "what-are-facets": "These are the authors with the most books matching your search criteria. Click an author name to filter/narrow your search results.",
+    "display-snippets-per-book": "Toggle this switch to display snippets per book rather than a continuous list. Your setting will be saved in your preferences.",
     "related-word-forms-tooltip": "Checking this box will exclude related word forms (of the same stem/lemma) in search results (e.g. 'eat, 'eaten', 'ate')",
     "keyboard": "Open Yiddish on-screen keyboard",
     "advanced": "Advanced search",
@@ -67,7 +68,8 @@
     "language": "Interface language",
     "results-per-page": "Results per page",
     "snippets-per-result": "Snippets per book",
-    "author-facet-count": "How many author name filters to show"
+    "author-facet-count": "How many author name filters to show",
+    "display-snippets-per-book": "Show snippets per book?"
   },
   "fix-word": {
     "title": "Fix a word",
