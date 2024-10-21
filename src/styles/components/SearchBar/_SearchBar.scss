@@ -1,0 +1,20 @@
+@use 'styles/custom/_Custom' as *;
+
+.stickySearchBarDocked {
+  position: sticky;
+  top: 0;
+  // height: $sticky-bar-docked-height;
+  max-height: max-content;
+  z-index: 39;
+}
+
+.stickySearchBarUndocked {
+  margin-top: 10px;
+  // height: $sticky-bar-undocked-height;
+  max-height: max-content;
+}
+
+.advancedSearch .body {
+  height: auto;
+  width: 100%;
+}
