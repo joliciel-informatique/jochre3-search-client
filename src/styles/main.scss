@@ -1,14 +1,17 @@
 @charset "utf-8";
 
-// @forward './custom/_Custom';
 @use 'styles/custom/_Custom' as *;
-// @forward './custom/_Custom';
 
+@use './components/HeaderPage/HeaderPage';
 @use './transitions/_transitions';
 @use './components/ToolTip/_ToolTip';
 @use './components/SearchBar/_SearchBar';
 @use './components/FacetBar/_FacetBar';
 @use './components/ToC/_ToC';
+@use './components/FindAuthors/FindAuthors';
+@use './components/Card/Card';
+@use './components/FooterPage/FooterPage';
+@use './components/DisplaySnippets/DisplaySnippets.scss';
 
 @use 'bulma/sass' with (
   // Default theme values
@@ -52,85 +55,30 @@
   $footer-background-color: $background-color-1,
 
   $radius-rounded: 0.15rem,
-  // $border-radius: 0.15rem,
   $card-radius: 0.75rem,
   $radius: 0.15rem,
   $control-radius-small: 0.1rem,
-  // $input-is-rounded: 0.15rem,
-  // $input-radius: 0.15rem;
-  // $input-icon-color: $background-color-3;
-  $input-icon-hover-color: $background-color-2,
-
-  // $input-icon-active-color: $foreground-color-1,
-  // $input-icon-focus-color: $foreground-color-1;
-  // $icon-hover-color: $foreground-color-3;
-  // Notification Component
-  // /** Bulma Menu Component */ $menu-item-h: 221deg,
+  $input-icon-hover-color: $background-color-2
 );
 
-$sticky-bar-undocked-height: 10vh;
-$footer-position: fixed;
-$footer-bottom: 0;
-$notification-background-color: none;
-
-/*************************
-    Bulma Card Component
-    With added classes
-**************************/
-.card-header {
-  position: sticky;
+* {
+  font-family: inherit;
+  text-align: inherit;
+  direction: inherit;
 }
 
-.card-header-icon > span {
-  color: $white;
-}
-
-.card-header-icon > span:hover {
-  color: $foreground-color-3;
-  animation: 300ms ease-in-out;
-}
-
-.card-footer {
+html {
   height: 100%;
-  transition: all 100ms ease-in-out;
+  overflow: auto;
 }
 
-.card-footer:hover {
-  background-color: $background-color-5;
-  cursor: pointer;
-  transition: all 100ms ease-in-out;
-  & > span {
-    color: $background-color-2;
-  }
+body {
+  height: auto;
+  background-color: #fff;
 }
 
-.card-footer > span {
-  color: $background-color-5;
-  transform-origin: top;
-}
-
-.card-content.hide {
-  height: 0;
-}
-
-/** Header styling */
-
-.header-footer-content {
-  flex: 0 1 auto;
-}
-
-.footer-partners {
-  z-index: 15;
-  position: relative;
-  bottom: 0;
-  // position: absolute;
-}
-
-.footerNavBar {
-  background-color: $background-color-4;
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
+h1 {
+  font-size: 24px;
 }
 
 .search-info-bar {
@@ -140,81 +88,6 @@ $notification-background-color: none;
   z-index: 5;
 }
 
-// .search-info {
-//   position: sticky;
-//   z-index: 7;
-//   top: 0;
-//   align-content: center;
-// }
-
-// .search-info-background {
-//   position: relative;
-//   // left: -10%;
-//   // width: 120%;
-//   display: block;
-//   padding: 5px 0px 5px 0px;
-//   // height: 70px;
-//   text-align: center;
-//   overflow: visible;
-//   // background-color: $background-color-4;
-//   // justify-content: center;
-// }
-
-// .navigation-current {
-//   font-weight: $font-weight-2;
-//   font-family: $font-family-1;
-//   font-size: $font-size-2;
-// }
-
-// .search-info-text {
-//   position: relative;
-//   font-weight: 700;
-//   // text-align: justify;
-//   // left: 20px;
-// }
-
-// .notification-overlay {
-//   display: flex;
-//   z-index: 100;
-//   justify-content: right;
-//   align-items: flex-end;
-//   top: 0;
-//   left: 0;
-//   position: fixed;
-//   width: 100%;
-//   height: 100%;
-// }
-
-// .notification.is-active {
-// .modal.is-active {
-// opacity: 1;
-// transition: all 500ms ease-in-out;
-// }
-
-// .modal {
-//   display: flex;
-//   z-index: 99;
-// }
-
-// .modal-card {
-//   width: 100%;
-// }
-
-// .card-header-title {
-//   border-radius: 0.75rem;
-// }
-
-// .card-header-title.title {
-//   padding-right: var(--bulma-card-content-padding);
-//   padding-left: var(--bulma-card-content-padding);
-// }
-
-// span.icon.is-clickable {
-//   color: $background-color-3;
-// }
-
-// $modal-background-background-color: $background-color-4;
-
 span.icon.is-clickable:hover {
   transition: 300ms ease-in-out;
   color: $foreground-color-1;
@@ -222,10 +95,6 @@ span.icon.is-clickable:hover {
 
 span.icon.is-clickable:active {
   color: $foreground-color-1;
-}
-
-#facetBar .columns {
-  margin-bottom: 0px;
 }
 
 input[type='text']:focus,
@@ -245,39 +114,6 @@ input:-webkit-autofill:active {
     color 0s 600000s !important;
 }
 
-#query:focus,
-#query:active,
-#query:selected {
-  border: 0;
-}
-
-#searchBar > .container > .field > .control > .button.is-static {
-  background-color: $white;
-  color: $foreground-color-2;
-}
-
-#searchBar > .container > .field > .control > .button {
-  border: 0px;
-  height: 100%;
-  line-height: unset;
-  font-size: unset;
-
-  svg {
-    path {
-      color: $background-color-1;
-    }
-  }
-
-  &:hover {
-    svg {
-      path {
-        transition: 300ms ease-in-out;
-        color: $foreground-color-1;
-      }
-    }
-  }
-}
-
 .tag {
   line-height: 0;
 }
@@ -295,11 +131,6 @@ input:-webkit-autofill:active {
   line-height: unset;
 }
 
-#query {
-  border: 0px;
-  box-shadow: none;
-}
-
 .control > .button {
   box-shadow: none;
   line-height: unset;
@@ -307,39 +138,6 @@ input:-webkit-autofill:active {
 
 .control > .button > span > input[type='checkbox'] {
   vertical-align: middle;
-}
-
-// Bulma Import
-.custom-background-light {
-  background-color: #edeee6;
-}
-
-.beta-flyout {
-  bottom: -1rem;
-  right: 0;
-  font-size: 1rem;
-  color: #eeb211;
-}
-
-* {
-  font-family: inherit;
-  text-align: inherit;
-  direction: inherit;
-}
-
-/* Required for sticky footer */
-html {
-  height: 100%;
-  overflow: auto;
-}
-
-body {
-  height: auto;
-  background-color: #fff;
-}
-
-h1 {
-  font-size: 24px;
 }
 
 .english {
@@ -350,7 +148,6 @@ h1 {
 }
 
 .title {
-  // font-size: $font-title-size;
   vertical-align: top;
 }
 
@@ -373,25 +170,6 @@ h1 {
 .ltr {
   direction: ltr;
   unicode-bidi: bidi-override;
-}
-
-.highlight {
-  padding: 0.02rem;
-  background-color: yellow;
-  border-radius: 0.2em;
-  box-shadow: 0 1px 1px 1px rgba($foreground-color-1, 0.5);
-  font-weight: bold;
-  border: none;
-  cursor: pointer !important;
-}
-
-.highlight > span {
-  color: $green;
-  animation: 300ms ease-in-out;
-}
-
-.highlight > span:hover {
-  color: $foreground-color-3;
 }
 
 .link-light {
@@ -528,25 +306,16 @@ $menu-nested-list-margin: 1em;
   }
 }
 
-.table-of-contents {
-  display: block;
-  position: sticky;
-  top: 5vh;
-  left: 2vw;
-  // height: 100%;
-  z-index: 9;
-}
-
 /* Pager mobile end */
 
-.dropdown-menu {
-  z-index: 39;
-}
+// .dropdown-menu {
+//   z-index: 39;
+// }
 
-.dropdown-content {
-  z-index: 1000;
-  position: fixed;
-}
+// .dropdown-content {
+//   z-index: 1000;
+//   position: fixed;
+// }
 
 .control.has-icons-left > span.icon.is-clicked {
   color: $foreground-color-1;
@@ -570,15 +339,4 @@ $menu-nested-list-margin: 1em;
 .search-content {
   position: sticky;
   flex: 1 1 auto;
-}
-
-.footer {
-  position: fixed;
-  bottom: 0;
-  z-index: 10;
-  width: 100%;
-}
-
-.searchBar {
-  background-color: $background-color-1;
 }

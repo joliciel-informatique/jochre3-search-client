@@ -2,7 +2,7 @@
   <div class="columns">
     <div class="column box table-of-contents" role="navigation" tabindex="1">
       <aside class="column columns menu p-2 my-3">
-        <div class="column">
+        <div id="searchResultsList" class="column">
           <p class="menu-label">{{ $t('results.contents-table-header') }}</p>
           <p class="menu-label">
             {{ $t('results.contents-table-subheader', [totalHits, firstResult, lastResult]) }}

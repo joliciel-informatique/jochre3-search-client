@@ -19,7 +19,7 @@
         {{ headerInfo($tm('header')) }}
         <div class="title has-text-white py-4">{{ $t('header.title') }}</div>
         <div
-          class="beta-flyout"
+          class="header-beta-flyout"
           :class="{
             'is-pulled-right': preferences.displayLeftToRight,
             'is-pulled-left': !preferences.displayLeftToRight

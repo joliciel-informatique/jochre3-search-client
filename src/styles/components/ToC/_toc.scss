@@ -5,10 +5,22 @@
   position: sticky;
   top: 5vh;
   left: 2vw;
-  height: 75vh;
   background-color: $background-color-1;
+
   .transcribed-text {
     z-index: 9;
-    height: 100vh;
+  }
+
+  .menu-list {
+    overflow-y: scroll;
+    max-height: 100vh;
+  }
+
+  #facetBar {
+    max-height: 100vh;
+  }
+
+  #searchResultsList {
+    height: 100%;
   }
 }

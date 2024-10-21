@@ -44,6 +44,7 @@ $foreground-color-1: $darkgold;
 $foreground-color-2: $darkgrey;
 $foreground-color-3: $orange;
 $foreground-color-4: $red;
+$foreground-color-5: $gold;
 
 $font-family: 'Noto Serif Hebrew';
 
@@ -87,3 +88,13 @@ $tt-color-of-font: $white;
 $tt-background-color: $blue;
 $tt-padding: 0.5rem;
 $tt-radius: 0.3rem;
+
+/** Snippet styling */
+$hl-color: $foreground-color-5;
+$hl-text-color: $black;
+$hl-text-hover-color: $white;
+$hl-box-radius: 0.4em;
+$hl-box-padding: 0.05em 0.2em 0.05em 0.2em;
+$hl-box-shadow: 0 0 0.15em 0.15em;
+$hl-box-shadow-color: $foreground-color-5;
+$hl-box-shadow-color-alpha: 0.5;
