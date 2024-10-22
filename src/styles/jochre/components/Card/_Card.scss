@@ -8,9 +8,11 @@
   color: $white;
 }
 
-.card-header-icon > span:hover {
-  color: $foreground-color-3;
-  animation: 300ms ease-in-out;
+.card-header-icon:hover {
+  > span {
+    color: $foreground-color-3;
+    transition: color 250ms ease-in-out;
+  }
 }
 
 .card-footer {
