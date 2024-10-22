@@ -14,11 +14,18 @@ Description: presents the search bar
     <div class="container is-max-desktop">
       <div class="pb-0 mb-0 field has-addons">
         <p class="control">
-          <span>
-            <a id="searchBarLabel" class="button is-static is-info">{{ $t('search.search') }}</a>
-          </span>
+          <a id="searchBarLabel" class="button is-static has-icons-right"
+            >{{ $t('search.search') }}
+            <span
+              class="icon is-small mx-2"
+              aria-label="advanced search"
+              :class="advancedSearchIcons"
+            >
+              <font-awesome-icon :icon="faSliders" />
+            </span>
+          </a>
         </p>
-        <p class="control container has-icons-left has-icons-right">
+        <p class="control container has-icons-right">
           <input
             id="query"
             type="text"
@@ -36,24 +43,6 @@ Description: presents the search bar
             "
             :placeholder="$t('search.query')"
           />
-          <span
-            class="is-small icon is-clickable"
-            aria-label="advanced search"
-            :class="advancedSearchIcons"
-            tabindex="0"
-            @click="toggleAdvancedSearchPanel()"
-            @keyup.enter="toggleAdvancedSearchPanel()"
-          >
-            <font-awesome-icon
-              :icon="
-                showAdvancedSearchPanel
-                  ? faMagnifyingGlassMinus
-                  : hasAdvancedSearchCriteria
-                    ? faSliders
-                    : faMagnifyingGlassPlus
-              "
-            />
-          </span>
           <span
             class="icon is-small is-clickable"
             :class="{
@@ -104,6 +93,28 @@ Description: presents the search bar
           </a>
         </p>
       </div>
+      <div class="columns py-3 field">
+        <p class="column is-one-fifth control">
+          <button @click="toggleAdvancedSearchPanel()">
+            <font-awesome-icon
+              :icon="showAdvancedSearchPanel ? faMagnifyingGlassMinus : faMagnifyingGlassPlus"
+            />
+            {{ $t('search.advanced-search') }}
+          </button>
+        </p>
+        <p class="column is-one-fifth control">
+          <a
+            href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
+            target="_blank"
+            class="has-text-white"
+          >
+            <span>
+              <font-awesome-icon :icon="faBookOpen" />
+              {{ $t('search.user-guide') }}
+            </span>
+          </a>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -116,7 +127,8 @@ import {
   faMagnifyingGlassMinus,
   faKeyboard,
   faXmarkCircle,
-  faSliders
+  faSliders,
+  faBookOpen
 } from '@fortawesome/free-solid-svg-icons'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
@@ -136,9 +148,8 @@ const strict: Ref = defineModel('strict')
 const isLoading = defineModel('isLoading')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
 
-const toggleAdvancedSearchPanel = () => {
-  showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value
-}
+const toggleAdvancedSearchPanel = () =>
+  (showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value)
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 </script>

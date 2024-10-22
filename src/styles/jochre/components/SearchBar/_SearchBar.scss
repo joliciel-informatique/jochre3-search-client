@@ -43,20 +43,20 @@
   line-height: unset;
   font-size: unset;
 
-  svg {
-    path {
-      color: $background-color-1;
-    }
-  }
+  // svg {
+  //   path {
+  //     color: $background-color-1;
+  //   }
+  // }
 
-  &:hover {
-    svg {
-      path {
-        transition: 300ms ease-in-out;
-        color: $foreground-color-1;
-      }
-    }
-  }
+  // &:hover {
+  //   svg {
+  //     path {
+  //       transition: 300ms ease-in-out;
+  //       color: $foreground-color-1;
+  //     }
+  //   }
+  // }
 }
 
 .searchBar {
