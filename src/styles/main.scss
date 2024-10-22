@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-@use 'styles/custom/_Custom' as *;
+@use './custom/Custom' as *;
 
 @use './jochre/jochre.scss';
 
@@ -168,17 +168,6 @@ $menu-nested-list-margin: 1em;
     max-height: 62vh;
   }
 }
-
-/* Pager mobile end */
-
-// .dropdown-menu {
-//   z-index: 39;
-// }
-
-// .dropdown-content {
-//   z-index: 1000;
-//   position: fixed;
-// }
 
 .control.has-icons-left > span.icon.is-clicked {
   color: $foreground-color-1;

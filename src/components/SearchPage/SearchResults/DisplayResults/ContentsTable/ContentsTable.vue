@@ -1,50 +1,48 @@
 <template>
-  <div class="columns">
-    <div class="column box table-of-contents" role="navigation" tabindex="1">
-      <aside class="column columns menu p-2 my-3">
-        <div id="searchResultsList" class="column">
-          <p class="menu-label">
-            {{ $t('results.contents-table-header') }}
-          </p>
-          <p class="menu-label">
-            <label class="switch is-rounded is-small">
-              <input id="" type="checkbox" v-model="displayPerBook" :checked="displayPerBook" />
-              <span class="check" :class="preferences.language === 'yi' ? 'rtl' : ''"></span>
-              <span class="control-label">{{ $t('search.snippets-per-book') }}</span>
-              <span v-tooltip:top="$t('search.display-snippets-per-book')">
-                <FontAwesomeIcon icon="question-circle" />
-              </span>
-            </label>
-          </p>
-          <p class="menu-label">
-            {{ $t('results.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
-          </p>
-          <ul class="menu-list">
-            <li class="px-2" v-for="(result, index) of searchResults" :key="result.docRef">
-              <a
-                @click="selectEntry(result)"
-                @keyup.enter="selectEntry(result)"
-                tabindex="0"
-                class="grid"
-                :class="selectedEntry?.docRef === result.docRef ? 'is-active' : ''"
-              >
-                <SingleResult
-                  v-model:image-modal="imageModal"
-                  v-model:word-modal="wordModal"
-                  v-model:metadata-modal="metadataModal"
-                  v-model:notification="notification"
-                  v-model:showing="showing"
-                  v-model:selectedEntry="selectedEntry"
-                  :result
-                  :index
-                  :page-number-offset
-                />
-              </a>
-            </li>
-          </ul>
-        </div>
-      </aside>
-    </div>
+  <div class="box table-of-contents" role="navigation" tabindex="1">
+    <aside class="menu p-2 my-3">
+      <div id="searchResultsList">
+        <p class="menu-label">
+          {{ $t('results.contents-table-header') }}
+        </p>
+        <p class="menu-label">
+          <label class="switch is-rounded is-small">
+            <input id="" type="checkbox" v-model="displayPerBook" :checked="displayPerBook" />
+            <span class="check" :class="preferences.language === 'yi' ? 'rtl' : ''"></span>
+            <span class="control-label">{{ $t('search.snippets-per-book') }}</span>
+            <span v-tooltip:top="$t('search.display-snippets-per-book')">
+              <FontAwesomeIcon icon="question-circle" />
+            </span>
+          </label>
+        </p>
+        <p class="menu-label">
+          {{ $t('results.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
+        </p>
+        <ul class="menu-list">
+          <li class="px-2" v-for="(result, index) of searchResults" :key="result.docRef">
+            <a
+              @click="selectEntry(result)"
+              @keyup.enter="selectEntry(result)"
+              tabindex="0"
+              class="grid"
+              :class="selectedEntry?.docRef === result.docRef ? 'is-active' : ''"
+            >
+              <SingleResult
+                v-model:image-modal="imageModal"
+                v-model:word-modal="wordModal"
+                v-model:metadata-modal="metadataModal"
+                v-model:notification="notification"
+                v-model:showing="showing"
+                v-model:selectedEntry="selectedEntry"
+                :result
+                :index
+                :page-number-offset
+              />
+            </a>
+          </li>
+        </ul>
+      </div>
+    </aside>
   </div>
 </template>
 <script setup lang="ts">
