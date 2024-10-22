@@ -1,0 +1,23 @@
+@use 'styles/custom/_Custom' as *;
+
+.highlight {
+  padding: 0.02rem;
+  color: $hl-text-color;
+  background-color: $hl-color;
+  border-radius: $hl-box-radius;
+  padding: $hl-box-padding;
+  box-shadow: $hl-box-shadow rgba($hl-box-shadow-color, $hl-box-shadow-color-alpha);
+  font-weight: bold;
+  border: none;
+  cursor: pointer !important;
+}
+
+// .highlight > span {
+// color: $green;
+// animation: 300ms ease-in-out;
+// }
+
+.highlight > span:hover {
+  color: $hl-text-hover-color;
+  transition: all 200ms ease-in-out;
+}

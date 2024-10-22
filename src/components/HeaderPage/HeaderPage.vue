@@ -19,7 +19,7 @@
         {{ headerInfo($tm('header')) }}
         <div class="title has-text-white py-4">{{ $t('header.title') }}</div>
         <div
-          class="beta-flyout"
+          class="header-beta-flyout"
           :class="{
             'is-pulled-right': preferences.displayLeftToRight,
             'is-pulled-left': !preferences.displayLeftToRight
@@ -42,8 +42,8 @@
           >
             <span class="icon is-small">
               <font-awesome-icon icon="gear" />
-            </span></button
-          >&nbsp;
+            </span>
+          </button>
           <button
             @click="loginOrLogout"
             class="button is-small"
@@ -53,6 +53,14 @@
               <font-awesome-icon icon="right-to-bracket" v-if="!authenticated" />
               <font-awesome-icon icon="right-from-bracket" v-if="authenticated" />
             </span>
+          </button>
+          <button
+            @click="language = language === 'yi' ? 'en' : 'yi'"
+            class="button is-small"
+            :title="authenticated ? $t('header.logout') : $t('header.login')"
+          >
+            <span v-if="language === 'yi'">YI</span>
+            <span v-if="language === 'en'">EN</span>
           </button>
         </div>
       </div>
@@ -69,6 +77,10 @@ import { faGear, faRightToBracket, faRightFromBracket } from '@fortawesome/free-
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
+
+import { storeToRefs } from 'pinia'
+
+const { language } = storeToRefs(preferences)
 
 library.add(faGear, faRightToBracket, faRightFromBracket)
 

@@ -6,8 +6,6 @@ $white: #ffffff;
 $black: #000000;
 $transparent: transparent;
 
-// $danger: hsl(348, 100%, 46%);
-
 $gold: rgb(238, 177, 17);
 $brown: rgb(121, 83, 0);
 $red: rgb(218, 32, 50);
@@ -46,8 +44,12 @@ $foreground-color-1: $darkgold;
 $foreground-color-2: $darkgrey;
 $foreground-color-3: $orange;
 $foreground-color-4: $red;
+$foreground-color-5: $gold;
 
 $font-family: 'Noto Serif Hebrew';
+
+/** Sizing */
+$size-normal: 0.5em;
 
 /** Fonts & text */
 $font-family-1: $font-family;
@@ -89,3 +91,13 @@ $tt-color-of-font: $white;
 $tt-background-color: $blue;
 $tt-padding: 0.5rem;
 $tt-radius: 0.3rem;
+
+/** Snippet styling */
+$hl-color: $foreground-color-5;
+$hl-text-color: $black;
+$hl-text-hover-color: $white;
+$hl-box-radius: 0.4em;
+$hl-box-padding: 0.05em 0.2em 0.05em 0.2em;
+$hl-box-shadow: 0 0 0.15em 0.15em;
+$hl-box-shadow-color: $foreground-color-5;
+$hl-box-shadow-color-alpha: 0.5;

@@ -1,0 +1,64 @@
+@use 'styles/custom/_Custom' as *;
+
+// $sticky-bar-undocked-height: 10vh;
+
+.stickySearchBarDocked {
+  position: sticky;
+  top: 0;
+  // height: $sticky-bar-docked-height;
+  max-height: max-content;
+  z-index: 39;
+}
+
+.stickySearchBarUndocked {
+  margin-top: 10px;
+  // height: $sticky-bar-undocked-height;
+  max-height: max-content;
+}
+
+.advancedSearch .body {
+  height: auto;
+  width: 100%;
+}
+
+#query {
+  border: 0px;
+  box-shadow: none;
+}
+
+#query:focus,
+#query:active,
+#query:selected {
+  border: 0;
+}
+
+#searchBar > .container > .field > .control > .button.is-static {
+  background-color: $white;
+  color: $foreground-color-2;
+}
+
+#searchBar > .container > .field > .control > .button {
+  border: 0px;
+  height: 100%;
+  line-height: unset;
+  font-size: unset;
+
+  svg {
+    path {
+      color: $background-color-1;
+    }
+  }
+
+  &:hover {
+    svg {
+      path {
+        transition: 300ms ease-in-out;
+        color: $foreground-color-1;
+      }
+    }
+  }
+}
+
+.searchBar {
+  background-color: $background-color-1;
+}

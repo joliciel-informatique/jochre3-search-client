@@ -1,0 +1,26 @@
+@use 'styles/custom/_Custom' as *;
+
+.table-of-contents {
+  display: static;
+  position: sticky;
+  top: 5vh;
+  left: 2vw;
+  background-color: $background-color-1;
+
+  .transcribed-text {
+    z-index: 9;
+  }
+
+  .menu-list {
+    overflow-y: scroll;
+    max-height: 100vh;
+  }
+
+  #facetBar {
+    max-height: 100vh;
+  }
+
+  #searchResultsList {
+    height: 100%;
+  }
+}

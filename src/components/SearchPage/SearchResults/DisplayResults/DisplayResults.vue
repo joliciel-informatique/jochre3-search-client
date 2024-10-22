@@ -39,7 +39,19 @@ Description: display results in SingleResult child component
       <div class="column mr-6 ml-6" tabindex="-1">
         <ul>
           <li v-for="result of searchResults" :key="sha1(result)">
-            <div v-show="selectedEntry?.docRef === result.docRef">
+            <div v-if="preferences.displayPerBook">
+              <div v-show="selectedEntry?.docRef === result.docRef">
+                <DisplaySnippets
+                  v-model:image-modal="imageModal"
+                  v-model:notification="notification"
+                  v-model:word-modal="wordModal"
+                  :snippets="result.snippets"
+                  :doc-ref="result.docRef"
+                  :url="result.metadata.url"
+                />
+              </div>
+            </div>
+            <div v-else>
               <DisplaySnippets
                 v-model:image-modal="imageModal"
                 v-model:notification="notification"
@@ -69,7 +81,6 @@ Description: display results in SingleResult child component
 
 <script setup lang="ts">
 import { sha1 } from 'object-hash'
-// import { preferences } from '@/assets/fetchMethods'
 import DisplaySnippets from './DisplaySnippets/DisplaySnippets.vue'
 import IndexSize from './IndexSize/IndexSize.vue'
 
@@ -81,6 +92,10 @@ import ContentsTable from './ContentsTable/ContentsTable.vue'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import FacetBar from './FacetBar/FacetBar.vue'
 library.add(faBan)
+
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const preferences = usePreferencesStore()
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 
