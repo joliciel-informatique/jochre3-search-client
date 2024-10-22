@@ -14,7 +14,8 @@
 @forward './components/ToC/_ToC';
 @forward './components/FindAuthors/FindAuthors';
 @forward './components/Card/Card';
-@forward './components/DisplaySnippets/DisplaySnippets.scss';
+@forward './components/DisplaySnippets/DisplaySnippets';
+@forward './components/SingleSnippet/SingleSnippet';
 
 // Directive Styling
 @forward './components/ToolTip/_ToolTip';
