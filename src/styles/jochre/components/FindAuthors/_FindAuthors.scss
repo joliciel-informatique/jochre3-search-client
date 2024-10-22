@@ -1,0 +1,10 @@
+@use 'styles/custom/_Custom' as *;
+
+.dropdown-menu {
+  z-index: 39;
+}
+
+.dropdown-content {
+  z-index: 1000;
+  position: fixed;
+}

@@ -1,0 +1,37 @@
+@use 'styles/custom/_Custom' as *;
+
+.card-header {
+  position: sticky;
+}
+
+.card-header-icon > span {
+  color: $white;
+}
+
+.card-header-icon > span:hover {
+  color: $foreground-color-3;
+  animation: 300ms ease-in-out;
+}
+
+.card-footer {
+  height: 100%;
+  transition: all 100ms ease-in-out;
+}
+
+.card-footer:hover {
+  background-color: $background-color-5;
+  cursor: pointer;
+  transition: all 100ms ease-in-out;
+  & > span {
+    color: $background-color-2;
+  }
+}
+
+.card-footer > span {
+  color: $background-color-5;
+  transform-origin: top;
+}
+
+.card-content.hide {
+  height: 0;
+}
