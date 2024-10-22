@@ -31,6 +31,7 @@
                 type="number"
                 name="resultsPerPageInput"
                 v-model="resultsPerPage"
+                @onchange="preferences.resultsPerPage = resultsPerPage"
               />
             </div>
           </div>
@@ -105,16 +106,8 @@ const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
 const cookies = useCookies(['locale', 'resultsPerPage', 'snippetsPerResult', 'authorFacetCount'])
 const setToLanguage = ref(preferences.language)
 
-const { resultsPerPage, snippetsPerResult, authorFacetCount, displayPerBook } =
-  storeToRefs(preferences)
-// const preferences = usePreferencesStore()
-
-// const { displayPerBook } = storeToRefs(preferences)
-
-// const resultsPerPage = ref(preferences.resultsPerPage)
-// const snippetsPerResult = ref(preferences.snippetsPerResult)
-// const authorFacetCount = ref(preferences.authorFacetCount)
-// const displayPerBook = ref(preferences.displayPerBook)
+const resultsPerPage = ref(preferences.resultsPerPage)
+const { snippetsPerResult, authorFacetCount, displayPerBook } = storeToRefs(preferences)
 
 const save = (vi18n: VueI18n.VueI18n) => {
   preferences.language = setToLanguage.value

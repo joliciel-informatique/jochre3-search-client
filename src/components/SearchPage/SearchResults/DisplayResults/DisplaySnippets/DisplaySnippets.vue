@@ -63,5 +63,5 @@ const wordModal = defineModel('wordModal')
 const notification = defineModel('notification')
 const selectedEntry = defineModel<SearchResult>('selectedEntry')
 
-console.log(selectedEntry?.value?.docRef, docRef, displayPerBook.value)
+console.log(selectedEntry.value, docRef)
 </script>

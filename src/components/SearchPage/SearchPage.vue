@@ -40,6 +40,7 @@
       v-model:notification="notification"
       v-model:query="query"
       v-model:search-results="searchResults"
+      v-model:first-search-result="firstSearchResult"
       v-model:page="page"
       v-model:total-hits="totalHits"
       v-model:facets="facets"
@@ -73,6 +74,7 @@ import { storeToRefs } from 'pinia'
 const { resultsPerPage } = storeToRefs(preferences)
 
 const query = ref('')
+const firstSearchResult = ref<SearchResult>()
 const searchResults = defineModel<Array<SearchResult>>('searchResults')
 const totalHits: Ref = defineModel('totalHits')
 const page: Ref = defineModel('page')
@@ -274,6 +276,7 @@ const search = async () => {
         hasSearch.value = true
         isLoading.value = false
         searchResults.value = results
+        firstSearchResult.value = results[0]
         totalHits.value = totalCount
         if (!hasActiveFacets) {
           facetParams.append('field', 'Author')
