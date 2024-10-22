@@ -6,15 +6,15 @@
     }"
   >
     <Transition name="slide-up" mode="out-in">
-      <div v-if="totalHits">
+      <!-- <div v-if="totalHits">
         <FooterNavigation
           @newPage="emit('newPage')"
           @resetSearchResults="emit('resetSearchResults')"
           v-model:totalHits="totalHits"
           v-model:page="page"
         />
-      </div>
-      <div v-else-if="!totalHits">
+      </div> -->
+      <div v-if="!totalHits">
         <FooterDefault />
       </div>
     </Transition>
@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import FooterDefault from './FooterDefault/FooterDefault.vue'
-import FooterNavigation from './FooterNavigation/FooterNavigation.vue'
+// import FooterNavigation from './FooterNavigation/FooterNavigation.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()

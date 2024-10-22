@@ -22,6 +22,12 @@
       v-model:facets="facets"
       v-model:exclude-from-search="excludeFromSearch"
     />
+    <FooterNavigation
+      @newPage="newPage()"
+      @resetSearchResults="resetSearchResults()"
+      v-model:totalHits="totalHits"
+      v-model:page="page"
+    />
   </div>
   <div
     class="container is-fluid is-flex-direction-column is-align-items-center has-text-centered p-5"
@@ -51,6 +57,7 @@ import { fetchData } from '@/assets/fetchMethods'
 import SearchBar from './SearchBar/SearchBar.vue'
 import AdvancedSearch from './SearchBar/AdvancedSearch/AdvancedSearch.vue'
 import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
+import FooterNavigation from '../FooterPage/FooterNavigation/FooterNavigation.vue'
 
 // Import interfaces
 import { type SearchResult, type AggregationBin } from '@/assets/interfacesExternals'
