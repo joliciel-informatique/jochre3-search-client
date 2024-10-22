@@ -1,7 +1,7 @@
 <template>
   <div class="box table-of-contents" role="navigation" tabindex="1">
-    <aside class="column columns menu p-2 my-3">
-      <div id="searchResultsList" class="column">
+    <aside class="menu p-2 my-3">
+      <div id="searchResultsList">
         <p class="menu-label">
           {{ $t('results.contents-table-header') }}
         </p>

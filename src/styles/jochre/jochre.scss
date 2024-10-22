@@ -1,5 +1,5 @@
 // Loading custom style
-@use 'styles/custom/_Custom' as *;
+@use '../custom/Custom' as *;
 
 // Transitions
 @forward './transitions/_transitions';

@@ -158,10 +158,6 @@ const runSearch = () => {
         window.scrollY < searchBar.offsetTop
           ? searchBar.classList.add('stickySearchBarDocked')
           : searchBar.classList.remove('stickySearchBarUndocked')
-        const newSearchResults = document.querySelectorAll(
-          '.card.metadata'
-        ) as NodeListOf<HTMLDivElement>
-        newSearchResults.forEach((result) => (result.style.top = `${searchBar?.offsetHeight}px`))
       }
     }
   })

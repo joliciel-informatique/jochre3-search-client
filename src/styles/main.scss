@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-@use 'styles/custom/_Custom' as *;
+@use './custom/Custom' as *;
 
 @use './jochre/jochre.scss';
 
@@ -168,49 +168,6 @@ $menu-nested-list-margin: 1em;
     max-height: 62vh;
   }
 }
-
-.table-of-contents {
-  display: block;
-  position: sticky;
-  top: 14vh;
-  left: 2vw;
-  // height: 100%;
-  z-index: 9;
-}
-
-// .table-of-contents > .menu-list {
-// display: block;
-// position: sticky;
-// top: 5vh;
-// left: 2vw;
-// height: 100%;
-// z-index: 9;
-// }
-
-// .table-of-contents {
-// z-index: 9;
-// height: 100vh;
-// }
-
-// .menu-list {
-//   overflow-y: auto;
-//   max-height: 62vh;
-// }
-
-// .menu-list {
-//   max-height: 100%;
-// }
-
-/* Pager mobile end */
-
-// .dropdown-menu {
-//   z-index: 39;
-// }
-
-// .dropdown-content {
-//   z-index: 1000;
-//   position: fixed;
-// }
 
 .control.has-icons-left > span.icon.is-clicked {
   color: $foreground-color-1;

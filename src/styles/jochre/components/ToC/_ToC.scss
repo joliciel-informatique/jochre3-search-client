@@ -1,18 +1,20 @@
-@use 'styles/custom/_Custom' as *;
+@use '../../../custom/Custom' as *;
 
 .table-of-contents {
-  display: static;
+  display: block;
   position: sticky;
-  top: 5vh;
+  top: 15vh;
   left: 2vw;
   background-color: $background-color-1;
 
   .transcribed-text {
     z-index: 9;
   }
-  #facetBar {
-    max-height: 100vh;
-  }
+
+  // .menu-list {
+  //   overflow-y: scroll;
+  //   max-height: 100vh;
+  // }
 
   #searchResultsList {
     height: 100%;
