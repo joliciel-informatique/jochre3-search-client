@@ -68,6 +68,10 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
+import { storeToRefs } from 'pinia'
+
+const { resultsPerPage } = storeToRefs(preferences)
+
 const query = ref('')
 const searchResults = defineModel<Array<SearchResult>>('searchResults')
 const totalHits: Ref = defineModel('totalHits')
@@ -199,9 +203,8 @@ const resetSearchResults = () => {
   window.history.replaceState({}, document.title, '/')
 }
 
-watch(excludeFromSearch, () => {
-  authorInclude.value = !excludeFromSearch.value
-})
+watch(excludeFromSearch, () => (authorInclude.value = !excludeFromSearch.value))
+watch(resultsPerPage, () => search())
 
 const search = async () => {
   isLoading.value = true
@@ -247,11 +250,8 @@ const search = async () => {
 
   const facetParams = new URLSearchParams({ ...Object.fromEntries(params) })
 
-  params.append(
-    'first',
-    page.value ? ((page.value - 1) * preferences.resultsPerPage).toString() : '10'
-  )
-  params.append('max', preferences.resultsPerPage.toString())
+  params.append('first', page.value ? ((page.value - 1) * resultsPerPage.value).toString() : '10')
+  params.append('max', resultsPerPage.value.toString())
   params.append('sort', sortBy.value.trim())
   params.append('max-snippets', preferences.snippetsPerResult.toString())
   params.append('row-padding', '2')
