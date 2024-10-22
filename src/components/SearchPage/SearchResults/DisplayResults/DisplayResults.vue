@@ -32,7 +32,7 @@ Description: display results in SingleResult child component
           v-model:metadata-modal="metadataModal"
           v-model:notification="notification"
           v-model:word-modal="wordModal"
-          v-model:selected-entry="selectedEntry"
+          v-model:selected-entry="firstSearchResult"
           v-model:total-hits="totalHits"
         />
       </div>
@@ -43,7 +43,7 @@ Description: display results in SingleResult child component
               v-model:image-modal="imageModal"
               v-model:notification="notification"
               v-model:word-modal="wordModal"
-              v-model:selected-entry="selectedEntry"
+              v-model:selected-entry="firstSearchResult"
               :snippets="result.snippets"
               :doc-ref="result.docRef"
               :url="result.metadata.url"
@@ -74,7 +74,7 @@ import IndexSize from './IndexSize/IndexSize.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { ref, type Ref } from 'vue'
+import { type Ref } from 'vue'
 import ContentsTable from './ContentsTable/ContentsTable.vue'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import FacetBar from './FacetBar/FacetBar.vue'
@@ -90,7 +90,7 @@ const totalHits = defineModel('totalHits')
 const metadataModal = defineModel('metadataModal')
 const notification = defineModel('notification')
 const query: Ref = defineModel('query')
-const searchResults = defineModel<Array<SearchResult> | undefined>('searchResults')
-const selectedEntry = ref<SearchResult>(searchResults.value[0])
+const searchResults = defineModel<Array<SearchResult>>('searchResults')
+const firstSearchResult = defineModel<SearchResult>('firstSearchResult')
 const facets: Ref = defineModel('facets')
 </script>
