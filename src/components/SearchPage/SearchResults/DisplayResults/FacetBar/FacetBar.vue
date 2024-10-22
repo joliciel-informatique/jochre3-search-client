@@ -19,7 +19,7 @@ Description: presents the facet bar
             :class="preferences.displayLeftToRight ? 'has-text-left' : 'has-text-right'"
           >
             <p>
-              {{ $t('search.facets') }}
+              {{ $t('search.facets', [preferences.authorFacetCount]) }}
               <span v-tooltip:top="$t('search.what-are-facets')">
                 <FontAwesomeIcon icon="question-circle" />
               </span>

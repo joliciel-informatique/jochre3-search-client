@@ -62,6 +62,7 @@
                 type="number"
                 name="authorFacetCountInput"
                 v-model="authorFacetCount"
+                @onchange="preferences.authorFacetCount = authorFacetCount"
               />
             </div>
           </div>
@@ -107,7 +108,8 @@ const cookies = useCookies(['locale', 'resultsPerPage', 'snippetsPerResult', 'au
 const setToLanguage = ref(preferences.language)
 
 const resultsPerPage = ref(preferences.resultsPerPage)
-const { snippetsPerResult, authorFacetCount, displayPerBook } = storeToRefs(preferences)
+const authorFacetCount = ref(preferences.authorFacetCount)
+const { snippetsPerResult, displayPerBook } = storeToRefs(preferences)
 
 const save = (vi18n: VueI18n.VueI18n) => {
   preferences.language = setToLanguage.value

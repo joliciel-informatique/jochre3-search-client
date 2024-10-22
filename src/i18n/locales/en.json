@@ -14,7 +14,7 @@
     "search-button": "Search",
     "excludeAuthors": "Checking this box will exclude selected authors from the query",
     "related-word-forms": "Strict",
-    "facets": "Filter by author name",
+    "facets": "Top {0} authors",
     "what-are-facets": "These are the authors with the most books matching your search criteria. Click an author name to filter/narrow your search results.",
     "snippets-per-book": "Snippets per book",
     "display-snippets-per-book": "Toggle this switch to display snippets per book rather than a continuous list. Your setting will be saved in your preferences.",
