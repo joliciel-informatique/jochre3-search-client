@@ -71,7 +71,7 @@ const preferences = usePreferencesStore()
 
 import { storeToRefs } from 'pinia'
 
-const { resultsPerPage } = storeToRefs(preferences)
+const { resultsPerPage, authorFacetCount } = storeToRefs(preferences)
 
 const query = ref('')
 const firstSearchResult = ref<SearchResult>()
@@ -201,6 +201,7 @@ const resetSearchResults = () => {
 
 watch(excludeFromSearch, () => (authorInclude.value = !excludeFromSearch.value))
 watch(resultsPerPage, () => search())
+watch(authorFacetCount, () => search())
 
 const search = async () => {
   isLoading.value = true
