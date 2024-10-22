@@ -36,23 +36,8 @@ Description: presents the search bar
             "
             :placeholder="$t('search.query')"
           />
-          <span
-            class="is-small icon is-clickable"
-            aria-label="advanced search"
-            :class="advancedSearchIcons"
-            tabindex="0"
-            @click="toggleAdvancedSearchPanel()"
-            @keyup.enter="toggleAdvancedSearchPanel()"
-          >
-            <font-awesome-icon
-              :icon="
-                showAdvancedSearchPanel
-                  ? faMagnifyingGlassMinus
-                  : hasAdvancedSearchCriteria
-                    ? faSliders
-                    : faMagnifyingGlassPlus
-              "
-            />
+          <span class="is-small icon" aria-label="advanced search" :class="advancedSearchIcons">
+            <font-awesome-icon :icon="hasAdvancedSearchCriteria ? faSliders : ''" />
           </span>
           <span
             class="icon is-small is-clickable"
@@ -104,6 +89,24 @@ Description: presents the search bar
           </a>
         </p>
       </div>
+      <div class="columns py-3">
+        <div class="column is-one-fifth">
+          <button @click="toggleAdvancedSearchPanel()">
+            Advanced search
+            <font-awesome-icon
+              :icon="showAdvancedSearchPanel ? faMagnifyingGlassMinus : faMagnifyingGlassPlus"
+            />
+          </button>
+        </div>
+        <div class="column">
+          <a
+            href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
+            target="_blank"
+          >
+            <p>User guide</p>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -136,9 +139,8 @@ const strict: Ref = defineModel('strict')
 const isLoading = defineModel('isLoading')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
 
-const toggleAdvancedSearchPanel = () => {
-  showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value
-}
+const toggleAdvancedSearchPanel = () =>
+  (showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value)
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 </script>
