@@ -19,7 +19,7 @@ Description: displays text snippets from the OCR text
 
       <!-- Open page in book -->
       <button
-        class="card-header-icon is-large p-1 m-1"
+        class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column"
         aria-label="view book"
         v-tooltip:top="$t('results.show-original-page', [snippet.page])"
         v-if="snippet.deepLink"
@@ -29,19 +29,21 @@ Description: displays text snippets from the OCR text
         <span class="icon">
           <font-awesome-icon icon="book-open" size="lg" />
         </span>
+        <span class="is-size-7">Open page</span>
       </button>
 
       <!-- View transcribed text -->
       <button
-        class="card-header-icon is-large p-1 m-1"
+        class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column"
         aria-label="view transcription"
         v-tooltip:top="$t('results.show-text')"
         @click="openDeepLink(`/text/${docRef}/page/${snippet.page}`)"
         @keyup.enter="openDeepLink(`/text/${docRef}/page/${snippet.page}`)"
-      >
+        >
         <span class="icon">
           <font-awesome-icon icon="file-lines" size="lg" />
         </span>
+        <span class="is-size-7">Open transcription</span>
       </button>
     </header>
     <div class="card-content" :data-index="index" :data-docref="docRef" :data-page="snippet.page">
