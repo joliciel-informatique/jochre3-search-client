@@ -98,34 +98,6 @@ input:-webkit-autofill:active {
   color: $background-color-4;
 }
 
-.image-snippet {
-  width: 100%;
-}
-
-.card.metadata {
-  top: 0;
-  position: sticky;
-  z-index: 5;
-}
-
-.card.snippet {
-  z-index: 1;
-}
-
-.card-header.snippet {
-  background-color: $background-color-2;
-}
-
-.snippet span {
-  line-height: 1em;
-}
-
-.snippet.rtl {
-  border-left: 0;
-  border-right: 3px #ccc solid;
-  padding: 0 10px 0 0;
-}
-
 @media screen and (max-width: 576px) {
   .page-first,
   .page-last,

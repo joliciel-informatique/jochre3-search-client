@@ -39,28 +39,15 @@ Description: display results in SingleResult child component
       <div class="column mr-6 ml-6" tabindex="-1">
         <ul>
           <li v-for="result of searchResults" :key="sha1(result)">
-            <div v-if="preferences.displayPerBook">
-              <div v-show="selectedEntry?.docRef === result.docRef">
-                <DisplaySnippets
-                  v-model:image-modal="imageModal"
-                  v-model:notification="notification"
-                  v-model:word-modal="wordModal"
-                  :snippets="result.snippets"
-                  :doc-ref="result.docRef"
-                  :url="result.metadata.url"
-                />
-              </div>
-            </div>
-            <div v-else>
-              <DisplaySnippets
-                v-model:image-modal="imageModal"
-                v-model:notification="notification"
-                v-model:word-modal="wordModal"
-                :snippets="result.snippets"
-                :doc-ref="result.docRef"
-                :url="result.metadata.url"
-              />
-            </div>
+            <DisplaySnippets
+              v-model:image-modal="imageModal"
+              v-model:notification="notification"
+              v-model:word-modal="wordModal"
+              v-model:selected-entry="selectedEntry"
+              :snippets="result.snippets"
+              :doc-ref="result.docRef"
+              :url="result.metadata.url"
+            />
           </li>
         </ul>
       </div>
@@ -93,10 +80,6 @@ import type { SearchResult } from '@/assets/interfacesExternals'
 import FacetBar from './FacetBar/FacetBar.vue'
 library.add(faBan)
 
-import { usePreferencesStore } from '@/stores/PreferencesStore'
-
-const preferences = usePreferencesStore()
-
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 
 const isLoading = defineModel('isLoading')
@@ -108,6 +91,6 @@ const metadataModal = defineModel('metadataModal')
 const notification = defineModel('notification')
 const query: Ref = defineModel('query')
 const searchResults = defineModel<Array<SearchResult> | undefined>('searchResults')
-const selectedEntry = ref<SearchResult>()
+const selectedEntry = ref<SearchResult>(searchResults.value[0])
 const facets: Ref = defineModel('facets')
 </script>
