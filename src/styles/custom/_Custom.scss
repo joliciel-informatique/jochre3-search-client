@@ -1,5 +1,16 @@
 /** Default YBC JOCHRE CSS Configuration for https://ocr.yiddishbookcenter.org/ */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@100..900&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@100..900&display=swap');
+// @import url('../fonts/ramahu/RamahU.woff');
+
+@font-face {
+  font-family: 'Ramahu';
+  src: url('../fonts/ramahu/RamahU.eot');
+  src:
+    url('../fonts/ramahu/RamahU.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/ramahu/RamahU.woff') format('woff'),
+    url('../fonts/ramahu/RamahU.ttf') format('truetype'),
+    url('../fonts/ramahu/RamahU.svg#svgFontName') format('svg');
+}
 
 /** Base colors */
 $white: #ffffff;
@@ -46,7 +57,7 @@ $foreground-color-3: $orange;
 $foreground-color-4: $red;
 $foreground-color-5: $gold;
 
-$font-family: 'Noto Serif Hebrew';
+$font-family: 'Ramahu', Fallback, sans-serif;
 
 /** Sizing */
 $size-normal: 0.5em;
