@@ -1,38 +1,36 @@
 <template>
-  <div class="columns">
-    <div class="column box table-of-contents" role="navigation" tabindex="1">
-      <aside class="column columns menu p-2 my-3">
-        <div class="column">
-          <p class="menu-label">{{ $t('results.contents-table-header') }}</p>
-          <p class="menu-label">
-            {{ $t('results.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
-          </p>
-          <ul class="menu-list">
-            <li class="px-2" v-for="(result, index) of searchResults" :key="result.docRef">
-              <a
-                @click="selectEntry(result)"
-                @keyup.enter="selectEntry(result)"
-                tabindex="0"
-                class="grid"
-                :class="selectedEntry?.docRef === result.docRef ? 'is-active' : ''"
-              >
-                <SingleResult
-                  v-model:image-modal="imageModal"
-                  v-model:word-modal="wordModal"
-                  v-model:metadata-modal="metadataModal"
-                  v-model:notification="notification"
-                  v-model:showing="showing"
-                  v-model:selectedEntry="selectedEntry"
-                  :result
-                  :index
-                  :page-number-offset
-                />
-              </a>
-            </li>
-          </ul>
-        </div>
-      </aside>
-    </div>
+  <div class="box table-of-contents" role="navigation" tabindex="1">
+    <aside class="column columns menu p-2 my-3">
+      <div class="column">
+        <p class="menu-label">{{ $t('results.contents-table-header') }}</p>
+        <p class="menu-label">
+          {{ $t('results.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
+        </p>
+        <ul class="menu-list">
+          <li class="px-2" v-for="(result, index) of searchResults" :key="result.docRef">
+            <a
+              @click="selectEntry(result)"
+              @keyup.enter="selectEntry(result)"
+              tabindex="0"
+              class="grid"
+              :class="selectedEntry?.docRef === result.docRef ? 'is-active' : ''"
+            >
+              <SingleResult
+                v-model:image-modal="imageModal"
+                v-model:word-modal="wordModal"
+                v-model:metadata-modal="metadataModal"
+                v-model:notification="notification"
+                v-model:showing="showing"
+                v-model:selectedEntry="selectedEntry"
+                :result
+                :index
+                :page-number-offset
+              />
+            </a>
+          </li>
+        </ul>
+      </div>
+    </aside>
   </div>
 </template>
 <script setup lang="ts">
