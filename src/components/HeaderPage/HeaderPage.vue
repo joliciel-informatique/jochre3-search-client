@@ -54,6 +54,14 @@
               <font-awesome-icon icon="right-from-bracket" v-if="authenticated" />
             </span>
           </button>
+          <button
+            @click="language = language === 'yi' ? 'en' : 'yi'"
+            class="button is-small"
+            :title="authenticated ? $t('header.logout') : $t('header.login')"
+          >
+            <span v-if="language === 'yi'">YI</span>
+            <span v-if="language === 'en'">EN</span>
+          </button>
         </div>
       </div>
     </div>
@@ -69,6 +77,10 @@ import { faGear, faRightToBracket, faRightFromBracket } from '@fortawesome/free-
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
+
+import { storeToRefs } from 'pinia'
+
+const { language } = storeToRefs(preferences)
 
 library.add(faGear, faRightToBracket, faRightFromBracket)
 
