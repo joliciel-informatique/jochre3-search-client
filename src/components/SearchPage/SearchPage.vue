@@ -162,9 +162,6 @@ const runSearch = () => {
           '.card.metadata'
         ) as NodeListOf<HTMLDivElement>
         newSearchResults.forEach((result) => (result.style.top = `${searchBar?.offsetHeight}px`))
-        const toc = document.getElementsByClassName('table-of-contents')
-        console.log(toc)
-        toc[0].setAttribute('style', `top:${searchBar?.offsetHeight + 10}px`)
       }
     }
   })
