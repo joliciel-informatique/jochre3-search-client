@@ -36,8 +36,8 @@ Description: presents the search bar
             "
             :placeholder="$t('search.query')"
           />
-          <span class="is-small icon" aria-label="advanced search" :class="advancedSearchIcons">
-            <font-awesome-icon :icon="hasAdvancedSearchCriteria ? faSliders : ''" />
+          <span class="icon is-small" aria-label="advanced search" :class="advancedSearchIcons">
+            <font-awesome-icon :icon="faSliders" />
           </span>
           <span
             class="icon is-small is-clickable"
@@ -92,18 +92,18 @@ Description: presents the search bar
       <div class="columns py-3">
         <div class="column is-one-fifth">
           <button @click="toggleAdvancedSearchPanel()">
-            Advanced search
+            {{ $t('search.advanced-search') }}
             <font-awesome-icon
               :icon="showAdvancedSearchPanel ? faMagnifyingGlassMinus : faMagnifyingGlassPlus"
             />
           </button>
         </div>
-        <div class="column">
+        <div class="column is-one-fifth">
           <a
             href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
             target="_blank"
           >
-            <p>User guide</p>
+            {{ $t('search.user-guide') }}
           </a>
         </div>
       </div>
