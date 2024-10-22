@@ -9,8 +9,8 @@
           <p class="menu-label">
             <label class="switch is-rounded is-small">
               <input id="" type="checkbox" v-model="displayPerBook" :checked="displayPerBook" />
-              <span class="check"></span>
-              <span class="control-label">Snippets per book</span>
+              <span class="check" :class="preferences.language === 'yi' ? 'rtl' : ''"></span>
+              <span class="control-label">{{ $t('search.snippets-per-book') }}</span>
               <span v-tooltip:top="$t('search.display-snippets-per-book')">
                 <FontAwesomeIcon icon="question-circle" />
               </span>

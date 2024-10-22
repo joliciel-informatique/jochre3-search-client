@@ -42,8 +42,8 @@
           >
             <span class="icon is-small">
               <font-awesome-icon icon="gear" />
-            </span></button
-          >&nbsp;
+            </span>
+          </button>
           <button
             @click="loginOrLogout"
             class="button is-small"

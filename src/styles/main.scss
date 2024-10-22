@@ -2,79 +2,7 @@
 
 @use 'styles/custom/_Custom' as *;
 
-@use './components/HeaderPage/HeaderPage';
-@use './transitions/_transitions';
-@use './components/ToolTip/_ToolTip';
-@use './components/SearchBar/_SearchBar';
-@use './components/FacetBar/_FacetBar';
-@use './components/ToC/_ToC';
-@use './components/FindAuthors/FindAuthors';
-@use './components/Card/Card';
-@use './components/FooterPage/FooterPage';
-@use './components/DisplaySnippets/DisplaySnippets.scss';
-@use 'bulma-switch-control';
-
-// @forward 'bulma-extensions/bulma-switch/src/sass/index' with (
-// $switch-background: red,
-// $switch-background-active: $background-color-1,
-// $switch-radius: 10,
-// $switch-margin: 1rem,
-// $switch-paddle-background: $white,
-// $switch-paddle-offset: 0.25rem,
-// $switch-paddle-transition: all 0.25s ease-out,
-// $switch-focus: 1px dotted yellow,
-// $switch-paddle-background-active: pink,
-// $size-normal: $size-normal
-// );
-
-@use 'bulma/sass' with (
-  // Default theme values
-  $primary: $background-color-1,
-  $info: $background-color-2,
-  $link: $background-color-2,
-  $family-primary: $font-family-1,
-
-  $body-font-size: $font-size-3,
-  $title-size: $font-size-title,
-
-  $small-font-size: $font-size-2,
-
-  $size-small: $font-size-1,
-  $size-normal: $font-size-3,
-  $size-medium: $font-size-3,
-  $control-size: $font-size-3,
-
-  $body-line-height: unset,
-  // $size-normal: $size-normal,
-  // $font-size: 0,
-  $hr-margin: 0,
-  $hr-background-color: $background-color-3,
-
-  // Modal Component
-  $modal-z: 100,
-
-  // Card Component
-  $card-background-color: $white,
-  $card-header-background-color: $background-color-2,
-  $card-header-color: $white,
-  $card-content-background-color: $white,
-  $card-footer-background-color: $background-color-2,
-
-  // Footer Component
-  $column-gap: 0.1rem,
-  $label-spacing: 0.75rem,
-  $block-spacing: 0.5rem,
-
-  // Footer styling
-  $footer-padding: 0,
-  $footer-background-color: $background-color-1,
-
-  $radius-rounded: 0.15rem,
-  $card-radius: 0.75rem,
-  $radius: 0.15rem,
-  $control-radius-small: 0.1rem,
-  $input-icon-hover-color: $background-color-2
-);
+@use './jochre/jochre.scss';
 
 * {
   font-family: inherit;
@@ -94,13 +22,6 @@ body {
 
 h1 {
   font-size: 24px;
-}
-
-.search-info-bar {
-  position: fixed;
-  top: 0px;
-  height: 100px;
-  z-index: 5;
 }
 
 span.icon.is-clickable:hover {
@@ -127,10 +48,6 @@ input:-webkit-autofill:active {
   transition:
     background-color 0s 600000s,
     color 0s 600000s !important;
-}
-
-.tag {
-  line-height: 0;
 }
 
 .control .button {
@@ -166,11 +83,6 @@ input:-webkit-autofill:active {
   vertical-align: top;
 }
 
-.text-snippet {
-  text-indent: 3ch;
-  text-align: justify;
-}
-
 .rtl-align {
   text-align: right;
   direction: rtl;
@@ -182,68 +94,12 @@ input:-webkit-autofill:active {
   unicode-bidi: bidi-override;
 }
 
-.ltr {
-  direction: ltr;
-  unicode-bidi: bidi-override;
-}
-
-.link-light {
-  color: $background-color-3;
-}
-
 .link-subtle {
   color: $background-color-4;
 }
 
-/* Bootstrap RTL fixes start */
-
-.rtl .alert-dismissible .close {
-  left: 0;
-  right: auto;
-}
-
-.rtl .alert {
-  padding: 0.75rem 1.25rem;
-}
-
-.rtl .alert-dismissible {
-  padding-left: 4rem;
-}
-
-.rtl .modal-header .close {
-  margin: -1rem auto -1rem -1rem;
-}
-
-.rtl .form-check {
-  padding-left: 0;
-  padding-right: 1.25rem;
-}
-
-.rtl .form-check-input {
-  margin-left: 0.125rem;
-  margin-right: -1.25rem;
-}
-
-.rtl .modal-footer > :first-child {
-  margin-left: 0.25rem;
-  margin-right: 0;
-}
-
-.rtl .modal-footer > :last-child {
-  margin-left: 0;
-  margin-right: 0.25rem;
-}
-
-.unfocused {
-  display: none;
-}
-
 .image-snippet {
   width: 100%;
-}
-
-.cell.is-size-4 {
-  text-align-last: justify;
 }
 
 .card.metadata {
@@ -254,10 +110,6 @@ input:-webkit-autofill:active {
 
 .card.snippet {
   z-index: 1;
-}
-
-.card-footer {
-  background-color: $background-color-2;
 }
 
 .card-header.snippet {
@@ -273,10 +125,6 @@ input:-webkit-autofill:active {
   border-right: 3px #ccc solid;
   padding: 0 10px 0 0;
 }
-
-/* Bootstrap RTL fixes end */
-
-/* Pager mobile start */
 
 @media screen and (max-width: 576px) {
   .page-first,

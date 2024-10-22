@@ -1,7 +1,7 @@
 @use 'styles/custom/_Custom' as *;
 
 .table-of-contents {
-  display: block;
+  display: static;
   position: sticky;
   top: 5vh;
   left: 2vw;
