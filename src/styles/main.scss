@@ -141,7 +141,7 @@ $menu-nested-list-margin: 1em;
   }
 }
 
-.control.has-icons-left > span.icon.is-clicked {
+.icon.is-clicked > svg > path {
   color: $foreground-color-1;
 }
 

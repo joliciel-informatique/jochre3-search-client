@@ -14,11 +14,18 @@ Description: presents the search bar
     <div class="container is-max-desktop">
       <div class="pb-0 mb-0 field has-addons">
         <p class="control">
-          <span>
-            <a id="searchBarLabel" class="button is-static is-info">{{ $t('search.search') }}</a>
-          </span>
+          <a id="searchBarLabel" class="button is-static has-icons-right"
+            >{{ $t('search.search') }}
+            <span
+              class="icon is-small mx-2"
+              aria-label="advanced search"
+              :class="advancedSearchIcons"
+            >
+              <font-awesome-icon :icon="faSliders" />
+            </span>
+          </a>
         </p>
-        <p class="control container has-icons-left has-icons-right">
+        <p class="control container has-icons-right">
           <input
             id="query"
             type="text"
@@ -36,9 +43,6 @@ Description: presents the search bar
             "
             :placeholder="$t('search.query')"
           />
-          <span class="icon is-small" aria-label="advanced search" :class="advancedSearchIcons">
-            <font-awesome-icon :icon="faSliders" />
-          </span>
           <span
             class="icon is-small is-clickable"
             :class="{
