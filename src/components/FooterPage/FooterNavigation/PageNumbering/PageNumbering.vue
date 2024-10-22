@@ -34,7 +34,7 @@ Description: calculates and presents page numbers
         </li>
         <li v-if="page > 1">
           <a
-            class="pagination-link is-small m-1"
+            class="pagination-link is-small m-1 has-text-white"
             tabindex="2"
             @click="page--"
             @keyup.enter="page--"
@@ -55,7 +55,7 @@ Description: calculates and presents page numbers
           <a
             @click="page++"
             @keyup.enter="page++"
-            class="pagination-link is-small m-1"
+            class="pagination-link is-small m-1 has-text-white"
             :aria-label="`go to page ${page + 1}`"
             tabindex="2"
             >{{ page + 1 }}</a
@@ -68,7 +68,7 @@ Description: calculates and presents page numbers
           <a
             @click="page = lastPage"
             @keyup.enter="page = lastPage"
-            class="pagination-link is-small m-1"
+            class="pagination-link is-small m-1 has-text-white"
             :aria-label="`go to lastpage ${lastPage}`"
             tabindex="2"
             >{{ lastPage }}</a
@@ -81,7 +81,7 @@ Description: calculates and presents page numbers
         @click="page--"
         @keyup.enter="page--"
         :disabled="page - 1 < 1"
-        class="pagination-previous is-small m-1"
+        class="pagination-previous is-small m-1 has-text-white"
       >
         {{ $t('pagination.previous') }}
       </button>
@@ -89,14 +89,22 @@ Description: calculates and presents page numbers
         @click="page++"
         @keyup.enter="page++"
         :disabled="page >= lastPage"
-        class="pagination-next is-small m-1"
+        class="pagination-next is-small m-1 has-text-white"
       >
         {{ $t('pagination.next') }}
       </button>
-      <button @click="toTop" @keyup.enter="toTop" class="pagination-previous is-small m-1">
+      <button
+        @click="toTop"
+        @keyup.enter="toTop"
+        class="pagination-previous is-small m-1 has-text-white"
+      >
         {{ $t('pagination.top') }}
       </button>
-      <button @click="toBottom" @keyup.enter="toBottom" class="pagination-previous is-small m-1">
+      <button
+        @click="toBottom"
+        @keyup.enter="toBottom"
+        class="pagination-previous is-small m-1 has-text-white"
+      >
         {{ $t('pagination.bottom') }}
       </button>
     </div>
