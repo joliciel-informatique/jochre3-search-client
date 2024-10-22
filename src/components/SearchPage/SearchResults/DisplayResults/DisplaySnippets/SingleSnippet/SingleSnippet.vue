@@ -11,7 +11,10 @@ Description: displays text snippets from the OCR text
 -->
 <template>
   <div :docRef="docRef" :index="index" class="card snippet m-4">
-    <header class="card-header snippet">
+    <header
+      class="card-header"
+      :class="selectedEntry.docRef === docRef ? 'selected-snippet' : 'snippet'"
+    >
       <p class="card-header-title">{{ $t('results.page', [snippet.page]) }}</p>
 
       <!-- Open page in book -->
@@ -143,6 +146,8 @@ const { index, snippet, docRef } = defineProps(['index', 'snippet', 'docRef'])
 const imageModal: Ref = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const notification = defineModel('notification')
+const selectedEntry: Ref = defineModel('selectedEntry')
+
 const image = ref('')
 const imageIsLoading = ref(false)
 
