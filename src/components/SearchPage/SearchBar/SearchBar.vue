@@ -89,23 +89,27 @@ Description: presents the search bar
           </a>
         </p>
       </div>
-      <div class="columns py-3">
-        <div class="column is-one-fifth">
+      <div class="columns py-3 field">
+        <p class="column is-one-fifth control">
           <button @click="toggleAdvancedSearchPanel()">
-            {{ $t('search.advanced-search') }}
             <font-awesome-icon
               :icon="showAdvancedSearchPanel ? faMagnifyingGlassMinus : faMagnifyingGlassPlus"
             />
+            {{ $t('search.advanced-search') }}
           </button>
-        </div>
-        <div class="column is-one-fifth">
+        </p>
+        <p class="column is-one-fifth control">
           <a
             href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
             target="_blank"
+            class="has-text-white"
           >
-            {{ $t('search.user-guide') }}
+            <span>
+              <font-awesome-icon :icon="faBookOpen" />
+              {{ $t('search.user-guide') }}
+            </span>
           </a>
-        </div>
+        </p>
       </div>
     </div>
   </div>
@@ -119,7 +123,8 @@ import {
   faMagnifyingGlassMinus,
   faKeyboard,
   faXmarkCircle,
-  faSliders
+  faSliders,
+  faBookOpen
 } from '@fortawesome/free-solid-svg-icons'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
