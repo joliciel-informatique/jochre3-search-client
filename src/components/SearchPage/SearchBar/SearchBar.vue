@@ -14,16 +14,7 @@ Description: presents the search bar
     <div class="container is-max-desktop">
       <div class="pb-0 mb-0 field has-addons">
         <p class="control">
-          <a id="searchBarLabel" class="button is-static has-icons-right"
-            >{{ $t('search.search') }}
-            <span
-              class="icon is-small mx-2"
-              aria-label="advanced search"
-              :class="advancedSearchIcons"
-            >
-              <font-awesome-icon :icon="faSliders" />
-            </span>
-          </a>
+          <a id="searchBarLabel" class="button is-static">{{ $t('search.search') }} </a>
         </p>
         <p class="control container has-icons-right">
           <input
@@ -97,7 +88,13 @@ Description: presents the search bar
         <p class="column is-one-fifth control">
           <button @click="toggleAdvancedSearchPanel()">
             <font-awesome-icon
-              :icon="showAdvancedSearchPanel ? faMagnifyingGlassMinus : faMagnifyingGlassPlus"
+              :icon="
+                showAdvancedSearchPanel
+                  ? faMagnifyingGlassMinus
+                  : hasAdvancedSearchCriteria
+                    ? faSliders
+                    : faMagnifyingGlassPlus
+              "
             />
             {{ $t('search.advanced-search') }}
           </button>
