@@ -1,0 +1,178 @@
+<!-- DisplayFacets
+Parent: SearchPage.vue
+Children: None
+Siblings: None
+
+Props: updateSearch, resetSearchResults, searchResults, facets
+Variables: None
+Methods: None
+
+Description: presents the facet bar
+-->
+<template>
+  <div class="box table-of-contents" role="navigation" tabindex="1">
+    <aside class="menu">
+      <div>
+        <span
+          class="facet-bar-title menu-label is-align-items-center p-2"
+          :class="preferences.displayLeftToRight ? 'has-text-left' : 'has-text-right'"
+        >
+          <p>{{ $t('search.facets') }}</p>
+          <div class="dropdown is-hoverable">
+            <div class="dropdown-trigger">
+              <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
+                <span>{{ authorFacetCount > 0 ? authorFacetCount : 'all' }}</span>
+                <span class="icon is-small">
+                  <FontAwesomeIcon icon="angle-down" aria-hidden="true" />
+                </span>
+              </button>
+            </div>
+            <div class="dropdown-menu" id="author-facet-dropdown-menu" role="menu">
+              <div class="dropdown-content">
+                <div v-for="val of facetCount" :key="val">
+                  <a
+                    class="dropdown-item"
+                    :class="val === authorFacetCount ? 'is-active' : ''"
+                    href="#"
+                    @click.prevent="updateFacetCount(val)"
+                    >{{ val }}</a
+                  >
+                </div>
+                <hr class="dropdown-divider" />
+                <a href="#" @click.prevent="updateFacetCount(0)" class="dropdown-item">All</a>
+                <hr class="dropdown-divider" />
+                <div class="dropdown-item">
+                  <input
+                    type="number"
+                    min="1"
+                    max="100"
+                    v-model="authorFacetCount"
+                    @input="preferences.authorFacetCount = authorFacetCount"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <p>
+            {{ $t('search.facets-authors') }}
+            <span v-tooltip:top="$t('search.what-are-facets')">
+              <FontAwesomeIcon icon="question-circle" />
+            </span>
+          </p>
+        </span>
+        <div>
+          <span>
+            <p class="pb-3">
+              <input
+                class="input mb-2"
+                v-model="filterValue"
+                type="text"
+                :placeholder="$t('search.filter')"
+              />
+              <span class="menu-label p-2" v-if="filterValue !== undefined">
+                {{ $t('search.relevant-facets', [filteredFacets?.length]) }}
+              </span>
+            </p>
+          </span>
+        </div>
+      </div>
+      <div>
+        <div
+          class="container is-flex is-flex-direction-column is-justify-content-start is-flex-wrap-wrap"
+          :class="
+            preferences.displayLeftToRight !== preferences.corpusLeftToRight
+              ? 'is-align-items-flex-end'
+              : 'is-align-items-flex-start'
+          "
+        >
+          <span v-for="facet of filteredFacets" v-bind:key="sha1(facet)">
+            <FilterTag
+              :label="facet.label"
+              :count="facet.count"
+              :active="facet.active"
+              :showCount="true"
+              @func="toggleFacet(facet)"
+            />
+          </span>
+        </div>
+      </div>
+      <!-- </div> -->
+    </aside>
+  </div>
+</template>
+<script setup lang="ts">
+import { onMounted, ref, watch, type Ref } from 'vue'
+import FilterTag from '@/_components/FilterTag/FilterTag.vue'
+import { sha1 } from 'object-hash'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import type { AggregationBin } from '@/assets/interfacesExternals'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { insertInSortedArray } from '@/assets/functions'
+
+const preferences = usePreferencesStore()
+const defaultFacetCount = [5, 10, 15, 20]
+
+const isLoading: Ref = defineModel<boolean>('isLoading')
+const facets: Ref = defineModel<AggregationBin[]>('facets')
+
+const authorFacetCount = ref(preferences.authorFacetCount)
+const facetCount = ref(defaultFacetCount)
+const filteredFacets = ref()
+
+onMounted(() => {
+  filteredFacets.value = facets.value
+})
+
+const filterValue = ref(undefined)
+
+const emit = defineEmits(['newSearch'])
+
+// Set user preferences from dropdown options
+const updateFacetCount = (val: number) => {
+  authorFacetCount.value = val
+  preferences.authorFacetCount = authorFacetCount.value
+}
+
+const updateFilter = (val: string) => {
+  filteredFacets.value = facets.value
+    .map((facet: AggregationBin) => (facet.label.includes(val) ? facet : null))
+    .filter((x: AggregationBin) => x)
+}
+
+// Updates filtered facets based on value
+watch(filterValue, (newV) => {
+  if (newV !== '' && newV !== undefined) {
+    updateFilter(newV)
+  } else {
+    filterValue.value = undefined
+    filteredFacets.value = facets.value
+  }
+  console.log(filteredFacets)
+})
+
+// Updates all facets to be filtered/shown
+watch(facets, () => {
+  filteredFacets.value = facets.value
+  if (filterValue.value !== undefined) updateFilter(filterValue.value)
+  console.log(filteredFacets.value, facets.value)
+})
+
+// Update options in dropdown
+watch(authorFacetCount, () => {
+  if (!defaultFacetCount.includes(authorFacetCount.value)) {
+    const index = insertInSortedArray(defaultFacetCount, authorFacetCount.value)
+    facetCount.value = [
+      ...defaultFacetCount.slice(0, index),
+      authorFacetCount.value,
+      ...defaultFacetCount.slice(index)
+    ]
+  }
+  if (filterValue.value !== undefined) updateFilter(filterValue.value)
+  console.log(filteredFacets)
+})
+
+const toggleFacet = (facet: AggregationBin) => {
+  facet.active = facet.active ? false : true
+  emit('newSearch')
+}
+</script>

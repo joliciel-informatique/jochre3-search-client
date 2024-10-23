@@ -67,7 +67,18 @@
   $card-radius: 0.75rem,
   $radius: 0.15rem,
   $control-radius-small: 0.1rem,
-  $input-icon-hover-color: $background-color-2
+  $input-icon-hover-color: $background-color-2,
+
+  // Dropdown
+  // $dropdown-menu-min-width: var(--bulma-dropdown-menu-min-width),
+  // $dropdown-content-background-color: var(--bulma-dropdown-content-background-color),
+  // $dropdown-content-offset: var(--bulma-dropdown-content-offset),
+  // $dropdown-content-padding-bottom: var(--bulma-dropdown-content-padding-bottom),
+  // $dropdown-content-padding-top: var(--bulma-dropdown-content-padding-top),
+  // $dropdown-content-radius: var(--bulma-dropdown-content-radius),
+  // $dropdown-content-shadow: var(--bulma-dropdown-content-shadow),
+  // $dropdown-content-z: var(--bulma-dropdown-content-z),
+  // $dropdown-divider-background-color: var(--bulma-dropdown-divider-background-color)
 );
 
 @forward 'bulma-switch-control';

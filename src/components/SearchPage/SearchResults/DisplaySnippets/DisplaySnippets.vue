@@ -50,7 +50,7 @@ import { storeToRefs } from 'pinia'
 import { sha1 } from 'object-hash'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import type { SearchResult } from '@/assets/interfacesExternals'
-import SingleSnippet from './SingleSnippet/SingleSnippet.vue'
+import SingleSnippet from '../DisplaySnippets/SingleSnippet/SingleSnippet.vue'
 
 const preferences = usePreferencesStore()
 
@@ -62,6 +62,4 @@ const imageModal = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const notification = defineModel('notification')
 const selectedEntry = defineModel<SearchResult>('selectedEntry')
-
-console.log(selectedEntry.value, docRef)
 </script>

@@ -1,5 +1,9 @@
 {
   "Jochre": "יאָוקער",
+  "meta": {
+    "title": "YI__Jochre3 OCR Search Engine",
+    "description": "YI__Search text content of documents OCR'd using Jochre3."
+  },
   "search": {
     "about": "זוך־מאַשין פֿונעם טעקסט־אינהאַלט פֿון די ביכער אין אונדזער דיגיטאַלישער ביבליאָטעק.",
     "index-size": "גרײס פֿון זוכצעטל: {0} ביכער.",
@@ -13,6 +17,10 @@
     "related-word-forms-tooltip": "שטעלט אַ פֿײגעלע אױסצושליסן פֿאַרבונדענע װערטער־פֿאָרמעס, למשל „שרײבן“, „שרײבט“, „געשריבן“",
     "facets": "העכסטע {0} מחברים",
     "what-are-facets": "די מחבר פֿילטערס רעכענען אױס די מחברים מיט די מערסטע ביכער (צאָל אין האַלבע לבנות) װאָס שטימען מיט אײַערע זוך־קריטעריעס. טוט אַ קװעטש אױפֿן פֿילטער צו באַגרענעצן די רעזולטאַטן. ",
+    "filter": "YI__Filter",
+    "facets-authors": "YI__authors",
+    "no-facets": "YI__No facets to show",
+    "relevant-facets": "YI__Your filter returned {0} relevant facets",
     "snippets-per-book": "פֿראַגמענטן פֿון נאָר אײן בוך",
     "display-snippets-per-book": "שליסט איבער ארױסצוּװײַזן פֿראַגמענטן פֿון נאָר אײן בוך, אַנשטאָט אַ המשכדיקער רשימה. מע װעט אױסהיטן אײַער אױסקלײַב אין אײַערע פּרעפֿערענצן.",
     "keyboard": "עפֿנט די ייִדישע קלאַװיאַטור",
