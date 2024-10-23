@@ -16,7 +16,13 @@ Description: presents the search bar
         <p class="control">
           <a id="searchBarLabel" class="button is-static">{{ $t('search.search') }} </a>
         </p>
-        <p class="control container has-icons-right">
+        <p
+          class="control container"
+          :class="{
+            'has-icons-left': !preferences.displayLeftToRight,
+            'has-icons-right': preferences.displayLeftToRight
+          }"
+        >
           <input
             id="query"
             type="text"
