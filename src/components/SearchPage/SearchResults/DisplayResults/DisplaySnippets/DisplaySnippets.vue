@@ -62,6 +62,4 @@ const imageModal = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const notification = defineModel('notification')
 const selectedEntry = defineModel<SearchResult>('selectedEntry')
-
-console.log(selectedEntry.value, docRef)
 </script>

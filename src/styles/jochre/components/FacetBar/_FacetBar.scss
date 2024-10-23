@@ -3,3 +3,32 @@
 #facetBar .columns {
   margin-bottom: 0px;
 }
+
+.facet-bar-title {
+  display: flex;
+  justify-content: center;
+  font-family: $font-family-1;
+  font-size: $font-size-3;
+  text-transform: uppercase;
+  font-weight: $font-weight-2;
+
+  input {
+    border: 0px;
+    text-align: center;
+    justify-content: center;
+    font-family: $font-family-1;
+    font-size: $font-size-3;
+
+    font-weight: $font-weight-2;
+  }
+}
+
+.dropdown-content {
+  position: relative;
+  z-index: 40;
+}
+
+.dropdown-trigger > button {
+  border: 0px;
+  box-shadow: none;
+}
