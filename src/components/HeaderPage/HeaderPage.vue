@@ -54,13 +54,9 @@
               <font-awesome-icon icon="right-from-bracket" v-if="authenticated" />
             </span>
           </button>
-          <button
-            @click="language = language === 'yi' ? 'en' : 'yi'"
-            class="button is-small"
-            :title="authenticated ? $t('header.logout') : $t('header.login')"
-          >
-            <span v-if="language === 'yi'">YI</span>
-            <span v-if="language === 'en'">EN</span>
+          <button @click="toggleLanguage($i18n as VueI18n.VueI18n)" class="button is-small">
+            <span v-if="preferences.language === 'yi'">YI</span>
+            <span v-if="preferences.language === 'en'">EN</span>
           </button>
         </div>
       </div>
@@ -75,12 +71,9 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faGear, faRightToBracket, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import VueI18n from 'vue-i18n'
 
 const preferences = usePreferencesStore()
-
-import { storeToRefs } from 'pinia'
-
-const { language } = storeToRefs(preferences)
 
 library.add(faGear, faRightToBracket, faRightFromBracket)
 
@@ -100,4 +93,9 @@ const headerInfo = (info: {}) => {
 }
 
 const loginOrLogout = () => (authenticated.value ? keycloak?.logout() : keycloak?.login())
+
+const toggleLanguage = (vi18n: VueI18n.VueI18n) => {
+  preferences.language = preferences.language === 'yi' ? 'en' : 'yi'
+  vi18n.locale = preferences.language
+}
 </script>
