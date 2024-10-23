@@ -109,12 +109,11 @@ import { sha1 } from 'object-hash'
 // Import Child components
 import SearchBar from './SearchBar/SearchBar.vue'
 import AdvancedSearch from './SearchBar/AdvancedSearch/AdvancedSearch.vue'
-import ContentsTable from './SearchResults/DisplayResults/ContentsTable/ContentsTable.vue'
-import DisplaySnippets from './SearchResults/DisplayResults/DisplaySnippets/DisplaySnippets.vue'
-// import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
+import ContentsTable from './SearchResults/ContentsTable/ContentsTable.vue'
+import DisplaySnippets from './SearchResults/DisplaySnippets/DisplaySnippets.vue'
 import FooterNavigation from '../FooterPage/FooterNavigation/FooterNavigation.vue'
-import FacetBar from './SearchResults/DisplayResults/FacetBar/FacetBar.vue'
-import IndexSize from './SearchResults/DisplayResults/IndexSize/IndexSize.vue'
+import FacetBar from './SearchResults/FacetBar/FacetBar.vue'
+import IndexSize from './SearchResults/IndexSize/IndexSize.vue'
 
 // Import interfaces
 import { type SearchResult, type AggregationBin } from '@/assets/interfacesExternals'

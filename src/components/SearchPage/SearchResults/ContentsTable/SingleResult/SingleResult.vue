@@ -92,7 +92,7 @@ Description: presents OCR record metadata
 
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import SingleResultItem from './SingleResultItem/SingleResultItem.vue'
+import SingleResultItem from '../../ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faPenToSquare,

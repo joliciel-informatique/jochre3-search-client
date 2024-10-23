@@ -55,7 +55,7 @@ library.add(faCircleChevronDown, faQuestionCircle)
 
 import { storeToRefs } from 'pinia'
 
-import SingleResult from './SingleResult/SingleResult.vue'
+import SingleResult from '../ContentsTable/SingleResult/SingleResult.vue'
 import type { SearchResult } from '@/assets/interfacesExternals'
 
 const preferences = usePreferencesStore()
