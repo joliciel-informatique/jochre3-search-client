@@ -96,7 +96,6 @@ Description: presents the facet bar
           </span>
         </div>
       </div>
-      <!-- </div> -->
     </aside>
   </div>
 </template>
@@ -112,20 +111,15 @@ import { insertInSortedArray } from '@/assets/functions'
 const preferences = usePreferencesStore()
 const defaultFacetCount = [5, 10, 15, 20]
 
-const isLoading: Ref = defineModel<boolean>('isLoading')
 const facets: Ref = defineModel<AggregationBin[]>('facets')
 
 const authorFacetCount = ref(preferences.authorFacetCount)
 const facetCount = ref(defaultFacetCount)
 const filteredFacets = ref()
-
-onMounted(() => {
-  filteredFacets.value = facets.value
-})
-
 const filterValue = ref(undefined)
-
 const emit = defineEmits(['newSearch'])
+
+onMounted(() => (filteredFacets.value = facets.value))
 
 // Set user preferences from dropdown options
 const updateFacetCount = (val: number) => {
@@ -133,6 +127,7 @@ const updateFacetCount = (val: number) => {
   preferences.authorFacetCount = authorFacetCount.value
 }
 
+// Update the facet list based on a filter
 const updateFilter = (val: string) => {
   filteredFacets.value = facets.value
     .map((facet: AggregationBin) => (facet.label.includes(val) ? facet : null))
@@ -147,14 +142,12 @@ watch(filterValue, (newV) => {
     filterValue.value = undefined
     filteredFacets.value = facets.value
   }
-  console.log(filteredFacets)
 })
 
 // Updates all facets to be filtered/shown
 watch(facets, () => {
   filteredFacets.value = facets.value
   if (filterValue.value !== undefined) updateFilter(filterValue.value)
-  console.log(filteredFacets.value, facets.value)
 })
 
 // Update options in dropdown
@@ -168,9 +161,9 @@ watch(authorFacetCount, () => {
     ]
   }
   if (filterValue.value !== undefined) updateFilter(filterValue.value)
-  console.log(filteredFacets)
 })
 
+// Activate a facet
 const toggleFacet = (facet: AggregationBin) => {
   facet.active = facet.active ? false : true
   emit('newSearch')

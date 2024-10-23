@@ -32,32 +32,8 @@
   <div
     class="container is-fluid is-flex-direction-column is-align-items-center has-text-centered p-5"
   >
-    <!-- Loading -->
-    <div v-if="isLoading">
-      <div class="columns">
-        <div class="column is-3"></div>
-        <div class="column" v-if="isLoading">
-          <h1>{{ $t('loading') }}</h1>
-        </div>
-      </div>
-    </div>
-
-    <!-- No results for query -->
-    <div v-else-if="query.length && !searchResults?.length">
-      <div class="columns">
-        <div class="column is-3"></div>
-        <div class="column">
-          <h1>
-            <span class="no-results"> {{ $t('results.none') }}! </span>
-            <div class="is-justify-content-center is-align-items-center no-results-image m-6">
-              <FontAwesomeIcon class="fa-10x" icon="ban" />
-            </div>
-          </h1>
-        </div>
-      </div>
-    </div>
-
-    <div v-if="searchResults?.length">
+    <!-- Not loading with query and results -->
+    <div v-if="query.length && searchResults?.length">
       <div class="columns">
         <div class="column is-3">
           <ContentsTable
@@ -72,7 +48,8 @@
           />
         </div>
         <div class="column mr-6 ml-6" tabindex="-1">
-          <div v-if="searchResults?.length">
+          <!-- Not loading with results -->
+          <div v-if="!isLoading">
             <ul>
               <li v-for="result of searchResults" :key="sha1(result)">
                 <DisplaySnippets
@@ -87,6 +64,11 @@
               </li>
             </ul>
           </div>
+
+          <!-- Loading results -->
+          <div v-else>
+            <h1>{{ $t('loading') }}</h1>
+          </div>
         </div>
         <div class="column is-2">
           <FacetBar
@@ -97,7 +79,25 @@
         </div>
       </div>
     </div>
-    <!-- <IndexSize v-else v-model:is-loading="isLoading" v-model:notification="notification" /> -->
+
+    <!-- Loading with query but no results -->
+    <div v-else-if="isLoading && query && !searchResults?.length">
+      <h1>{{ $t('loading') }}</h1>
+    </div>
+
+    <!-- Not loading with query and no results -->
+    <div v-else-if="query.length && !isLoading && !searchResults?.length">
+      <h1>
+        <span class="no-results"> {{ $t('results.none') }}! </span>
+        <div class="is-justify-content-center is-align-items-center no-results-image m-6">
+          <FontAwesomeIcon class="fa-10x" icon="ban" />
+        </div>
+      </h1>
+    </div>
+
+    <div v-else>
+      <IndexSize v-model:is-loading="isLoading" v-model:notification="notification" />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -105,6 +105,9 @@ import { onMounted, ref, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchData } from '@/assets/fetchMethods'
 import { sha1 } from 'object-hash'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+library.add(faBan)
 
 // Import Child components
 import SearchBar from './SearchBar/SearchBar.vue'
@@ -125,8 +128,9 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 const preferences = usePreferencesStore()
 
 import { storeToRefs } from 'pinia'
+import { faBan } from '@fortawesome/free-solid-svg-icons'
 
-const { resultsPerPage, authorFacetCount } = storeToRefs(preferences)
+const { resultsPerPage, authorFacetCount, snippetsPerResult } = storeToRefs(preferences)
 
 const query = ref('')
 const firstSearchResult = ref<SearchResult>()
@@ -259,6 +263,7 @@ const resetSearchResults = () => {
 watch(excludeFromSearch, () => (authorInclude.value = !excludeFromSearch.value))
 watch(resultsPerPage, () => search())
 watch(authorFacetCount, () => searchFacets())
+watch(snippetsPerResult, () => search())
 
 const searchFacets = async () => {
   const facetParams = new URLSearchParams({ ...Object.fromEntries(params.value) })
@@ -330,7 +335,7 @@ const search = async () => {
   )
   searchParams.append('max', resultsPerPage.value.toString())
   searchParams.append('sort', sortBy.value.trim())
-  searchParams.append('max-snippets', preferences.snippetsPerResult.toString())
+  searchParams.append('max-snippets', snippetsPerResult.value.toString())
   searchParams.append('row-padding', '2')
   searchParams.append('physical-newlines', 'false')
 
@@ -405,6 +410,7 @@ const search = async () => {
       })
     )
     .catch((error) => {
+      console.log(error)
       notification.value = {
         show: true,
         error: true,

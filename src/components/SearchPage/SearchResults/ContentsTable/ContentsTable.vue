@@ -1,21 +1,32 @@
 <template>
   <div class="box table-of-contents" role="navigation" tabindex="1">
-    <aside class="menu p-2 my-3">
+    <aside class="menu">
       <div id="searchResultsList">
-        <p class="menu-label">
+        <p class="menu-label is-size-5 label">
           {{ $t('results.contents-table-header') }}
         </p>
-        <p class="menu-label">
-          <label class="switch is-rounded is-small">
+        <div class="columns is-vcentered m-1">
+          <div class="column is-8 is-size-7">Snippets to display</div>
+          <div class="column is-4 is-size-7">
+            <p class="control">
+              <input type="number" class="input" v-model="snippetsPerResult" />
+            </p>
+          </div>
+        </div>
+        <div class="columns is-vcentered">
+          <div class="column is-8 is-size-7">
+            <span class="control-label"
+              >{{ $t('search.snippets-per-book') }}
+              <span v-tooltip:top="$t('search.display-snippets-per-book')">
+                <FontAwesomeIcon icon="question-circle" /> </span
+            ></span>
+          </div>
+          <div class="column is-4 is-size-7 is-rounded switch">
             <input id="" type="checkbox" v-model="displayPerBook" :checked="displayPerBook" />
             <span class="check" :class="preferences.language === 'yi' ? 'rtl' : ''"></span>
-            <span class="control-label">{{ $t('search.snippets-per-book') }}</span>
-            <span v-tooltip:top="$t('search.display-snippets-per-book')">
-              <FontAwesomeIcon icon="question-circle" />
-            </span>
-          </label>
-        </p>
-        <p class="menu-label">
+          </div>
+        </div>
+        <p class="menu-label label pt-4">
           {{ $t('results.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
         </p>
         <ul class="menu-list">
@@ -60,7 +71,7 @@ import type { SearchResult } from '@/assets/interfacesExternals'
 
 const preferences = usePreferencesStore()
 
-const { displayPerBook } = storeToRefs(preferences)
+const { displayPerBook, snippetsPerResult } = storeToRefs(preferences)
 
 const showing = ref(true)
 
