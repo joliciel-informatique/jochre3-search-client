@@ -51,15 +51,17 @@
           <!-- Not loading with results -->
           <div v-if="!isLoading">
             <ul>
-              <li v-for="result of searchResults" :key="sha1(result)">
+              <li v-for="(result, bookIndex) of searchResults" :key="sha1(result)">
                 <DisplaySnippets
                   v-model:image-modal="imageModal"
                   v-model:notification="notification"
                   v-model:word-modal="wordModal"
                   v-model:selected-entry="firstSearchResult"
+                  v-model:search-results="searchResults"
                   :snippets="result.snippets"
                   :doc-ref="result.docRef"
                   :url="result.metadata.url"
+                  :bookIndex
                 />
               </li>
             </ul>
