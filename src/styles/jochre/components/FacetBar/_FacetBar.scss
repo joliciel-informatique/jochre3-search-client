@@ -26,6 +26,12 @@
 .dropdown-content {
   position: relative;
   z-index: 40;
+  &.left {
+    float: left;
+  }
+  &.right {
+    float: right;
+  }
 }
 
 .dropdown-trigger > button {
