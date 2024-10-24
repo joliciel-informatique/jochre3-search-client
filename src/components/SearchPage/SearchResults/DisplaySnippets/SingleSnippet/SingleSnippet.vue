@@ -10,7 +10,7 @@ Methods: getSelectedWord (local), toggleImageSnippet (local), fetchData (importe
 Description: displays text snippets from the OCR text
 -->
 <template>
-  <div :docRef="docRef" :index="index" class="card snippet m-4">
+  <div :docRef="docRef" :bookIndex :index="index" class="card snippet m-4">
     <header
       class="card-header"
       :class="selectedEntry.docRef === docRef ? 'selected-snippet' : 'snippet'"
@@ -39,7 +39,7 @@ Description: displays text snippets from the OCR text
         v-tooltip:top="$t('results.show-text')"
         @click="openDeepLink(`/text/${docRef}/page/${snippet.page}`)"
         @keyup.enter="openDeepLink(`/text/${docRef}/page/${snippet.page}`)"
-        >
+      >
         <span class="icon">
           <font-awesome-icon icon="file-lines" size="lg" />
         </span>
@@ -144,7 +144,12 @@ const preferences = usePreferencesStore()
 
 library.add(faFileImage, faBookOpen, faFileLines, faAngleDown)
 
-const { index, snippet, docRef } = defineProps(['index', 'snippet', 'docRef'])
+const { index, snippet, docRef, bookIndex } = defineProps([
+  'index',
+  'snippet',
+  'docRef',
+  'bookIndex'
+])
 const imageModal: Ref = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const notification = defineModel('notification')

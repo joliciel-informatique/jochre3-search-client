@@ -1,4 +1,4 @@
-export const isInView = (el: HTMLElement) => {
+export const isInView = (el: Element) => {
   const rect = el.getBoundingClientRect()
   return rect.top >= 0 && rect.bottom <= window.innerHeight
 }
