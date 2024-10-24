@@ -28,7 +28,7 @@ Description: presents the facet bar
               </button>
             </div>
             <div class="dropdown-menu" id="author-facet-dropdown-menu" role="menu">
-              <div class="dropdown-content">
+              <div class="dropdown-content left">
                 <div v-for="val of facetCount" :key="val">
                   <a
                     class="dropdown-item"
