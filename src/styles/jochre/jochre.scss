@@ -9,13 +9,14 @@
 @forward './components/FooterPage/FooterPage';
 
 // _Component Styling
-@forward './components/SearchBar/_SearchBar';
-@forward './components/FacetBar/_FacetBar';
-@forward './components/ToC/_ToC';
+@forward './components/SearchBar/SearchBar';
+@forward './components/FacetBar/FacetBar';
+@forward './components/ToC/ToC';
 @forward './components/FindAuthors/FindAuthors';
 @forward './components/Card/Card';
 @forward './components/DisplaySnippets/DisplaySnippets';
 @forward './components/SingleSnippet/SingleSnippet';
+@forward './components/Switch/Switch';
 
 // Directive Styling
 @forward './components/ToolTip/_ToolTip';
