@@ -23,7 +23,7 @@
           </div>
           <label class="column is-4 is-size-7 is-rounded switch">
             <input type="checkbox" v-model="displayPerBook" :checked="displayPerBook" />
-            <span class="check" :class="preferences.language === 'yi' ? 'rtl' : ''"></span>
+            <span class="check" :class="preferences.language === 'yi' ? 'switch-ltr' : ''"></span>
           </label>
         </div>
         <p class="menu-label label pt-4">
