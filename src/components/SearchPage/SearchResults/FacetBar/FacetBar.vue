@@ -78,7 +78,7 @@ Description: presents the facet bar
       </div>
       <div>
         <div
-          class="container is-flex is-flex-direction-column is-justify-content-start is-flex-wrap-wrap"
+          class="container is-flex is-flex-direction-column is-justify-content-center is-flex-wrap-wrap"
           :class="
             preferences.displayLeftToRight !== preferences.corpusLeftToRight
               ? 'is-align-items-flex-end'
