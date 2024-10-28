@@ -74,7 +74,7 @@
           <div class="column is-4">
             <div class="control is-expanded">
               <label class="switch is-rounded is-small">
-                <input id="" type="checkbox" v-model="displayPerBook" checked />
+                <input type="checkbox" v-model="displayPerBook" />
                 <span class="check"></span>
               </label>
             </div>

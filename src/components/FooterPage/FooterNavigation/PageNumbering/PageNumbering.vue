@@ -25,6 +25,8 @@ Description: calculates and presents page numbers
       >
         {{ $t('pagination.top') }}
       </button>
+    </div>
+    <div v-show="preferences.displayPerBook">
       <button
         @click="page--"
         @keyup.enter="page--"
@@ -35,7 +37,7 @@ Description: calculates and presents page numbers
         {{ $t('pagination.previous') }}
       </button>
     </div>
-    <div>
+    <div v-show="preferences.displayPerBook">
       <ul class="pagination-list">
         <li v-if="page - 1 > 1">
           <a
@@ -94,7 +96,7 @@ Description: calculates and presents page numbers
         </li>
       </ul>
     </div>
-    <div>
+    <div v-show="preferences.displayPerBook">
       <button
         @click="page++"
         @keyup.enter="page++"
@@ -104,6 +106,8 @@ Description: calculates and presents page numbers
       >
         {{ $t('pagination.next') }}
       </button>
+    </div>
+    <div>
       <button
         @click="toBottom"
         @keyup.enter="toBottom"
