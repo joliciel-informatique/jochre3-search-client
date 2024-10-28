@@ -241,6 +241,20 @@ watch(authorFacetCount, () => {
   if (filterValue.value !== undefined) updateFilter(filterValue.value)
 })
 
+// Force update of search if active facets fall out of dropdown
+// Compare oldV of filteredFacets against facets
+watch(filteredFacets, (newV, oldV) => {
+  if (oldV) {
+    const newObj: AggregationBin[] = JSON.parse(JSON.stringify(oldV)) // longer list
+    const oldObj: AggregationBin[] = JSON.parse(JSON.stringify(facets.value)) // shorter list
+    const missingActiveFacets = newObj.filter(
+      (oldFacet) =>
+        !oldObj.some((newFacet) => oldFacet.label === newFacet.label) && oldFacet.active === true
+    )
+    if (missingActiveFacets.length) emit('newSearch')
+  }
+})
+
 // Activate a facet
 const toggleFacet = (facet: AggregationBin) => {
   facet.active = facet.active ? false : true
