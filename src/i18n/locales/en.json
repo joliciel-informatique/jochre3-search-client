@@ -39,10 +39,14 @@
       "date-descending": "year ↓"
     }
   },
+  "toc": {
+    "snippets-to-display": "Snippets to display"
+  },
   "facets": {
     "most-hits": "Most hits",
     "active-facets": "Active facets",
-    "by-name": "By name"
+    "by-name": "By name",
+    "sort-by-label": "Sort facets by"
   },
   "results": {
     "click-image-snippet": "Click to load original image",
@@ -66,6 +70,10 @@
     "show-text": "View transcribed text",
     "word-fix-instructions": "(Double-click on a word to make an OCR correction)",
     "page": "Page {0}"
+  },
+  "snippet": {
+    "open-page": "Open page",
+    "open-transcription": "Open transcription"
   },
   "navigation": {
     "back-tooltip": "This button takes you back in your search history",

@@ -6,7 +6,7 @@
           {{ $t('results.contents-table-header') }}
         </p>
         <div class="columns is-vcentered m-1">
-          <div class="column is-8 is-size-7">Snippets to display</div>
+          <div class="column is-8 is-size-7">{{ $t('toc.snippets-to-display') }}</div>
           <div class="column is-4 is-size-7">
             <p class="control">
               <input type="number" class="input" v-model="snippetsPerResult" />
@@ -22,7 +22,7 @@
             ></span>
           </div>
           <label class="column is-4 is-size-7 is-rounded switch">
-            <input type="checkbox" v-model="displayPerBook" :checked="displayPerBook" />
+            <input type="checkbox" v-model="displayPerBook" />
             <span class="check" :class="preferences.language === 'yi' ? 'switch-ltr' : ''"></span>
           </label>
         </div>

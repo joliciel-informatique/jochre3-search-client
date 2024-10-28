@@ -29,7 +29,7 @@ Description: displays text snippets from the OCR text
         <span class="icon">
           <font-awesome-icon icon="book-open" size="lg" />
         </span>
-        <span class="is-size-7">Open page</span>
+        <span class="is-size-7">{{ $t('snippet.open-page') }}</span>
       </button>
 
       <!-- View transcribed text -->
@@ -43,7 +43,7 @@ Description: displays text snippets from the OCR text
         <span class="icon">
           <font-awesome-icon icon="file-lines" size="lg" />
         </span>
-        <span class="is-size-7">Open transcription</span>
+        <span class="is-size-7">{{ $t('snippet.open-transcription') }}</span>
       </button>
     </header>
     <div class="card-content" :data-index="index" :data-docref="docRef" :data-page="snippet.page">

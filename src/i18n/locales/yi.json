@@ -41,10 +41,14 @@
       "date-descending": "יאָר ↓"
     }
   },
+  "toc": {
+    "snippets-to-display": "YI__Snippets to display"
+  },
   "facets": {
     "most-hits": "YI__Most hits",
     "active-facets": "YI__Active facets",
-    "by-name": "YI__By name"
+    "by-name": "YI__By name",
+    "sort-by-label": "YI__Sort facets by"
   },
   "results": {
     "click-image-snippet": "גיט אַ קװעטש אַרױסצוּװײַזן דעם פֿראַגמענט פֿונעם זײַטל",
@@ -68,6 +72,10 @@
     "show-text": "װײַזן דעם טראַנסקריבירטן טעקסט",
     "word-fix-instructions": "(טוט אַ טאָפּלקװעטש אױף אַ װאָרט כּדי אױסצובעסערן דעם OCR אַנאַליז)",
     "page": "זײַטל {0}"
+  },
+  "snippet": {
+    "open-page": "YI__Open page",
+    "open-transcription": "YI__Open transcription"
   },
   "navigation": {
     "back-tooltip": "דאָס קנעפּל שיקט אײַך צוריק אין אײַער זוך־געשיכטע",
@@ -136,6 +144,8 @@
     "bottom": "YI__Last result"
   },
   "header": {
+    "logo": "/images/jochreLogo.png",
+    "logo-url": "/",
     "title": "",
     "preferences": "פּרעפֿערענצן",
     "login": "ארײַנלאָגירן",
