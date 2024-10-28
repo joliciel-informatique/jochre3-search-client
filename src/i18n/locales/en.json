@@ -21,7 +21,7 @@
     "facets-authors": "authors",
     "no-facets": "No facets to show",
     "relevant-facets": "Your filter returned {0} relevant facets",
-    "snippets-per-book": "Snippets per book",
+    "snippets-per-book": "Show all snippets",
     "display-snippets-per-book": "Toggle this switch to display snippets per book rather than a continuous list. Your setting will be saved in your preferences.",
     "keyboard": "Open Yiddish on-screen keyboard",
     "field-instructions": "*These fields accept Roman or Yiddish characters.",
