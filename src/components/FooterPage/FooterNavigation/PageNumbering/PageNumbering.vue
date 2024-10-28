@@ -18,6 +18,23 @@ Description: calculates and presents page numbers
     v-if="totalHits > 0 && !isBusy && hasSearch"
   >
     <div>
+      <button
+        @click="toTop"
+        @keyup.enter="toTop"
+        class="pagination-previous is-small m-1 has-text-white"
+      >
+        {{ $t('pagination.top') }}
+      </button>
+      <button
+        @click="page--"
+        @keyup.enter="page--"
+        :disabled="page - 1 < 1"
+        class="pagination-previous is-small m-1 has-text-white"
+      >
+        {{ $t('pagination.previous') }}
+      </button>
+    </div>
+    <div>
       <ul class="pagination-list">
         <li v-if="page - 1 > 1">
           <a
@@ -78,27 +95,12 @@ Description: calculates and presents page numbers
     </div>
     <div>
       <button
-        @click="page--"
-        @keyup.enter="page--"
-        :disabled="page - 1 < 1"
-        class="pagination-previous is-small m-1 has-text-white"
-      >
-        {{ $t('pagination.previous') }}
-      </button>
-      <button
         @click="page++"
         @keyup.enter="page++"
         :disabled="page >= lastPage"
         class="pagination-next is-small m-1 has-text-white"
       >
         {{ $t('pagination.next') }}
-      </button>
-      <button
-        @click="toTop"
-        @keyup.enter="toTop"
-        class="pagination-previous is-small m-1 has-text-white"
-      >
-        {{ $t('pagination.top') }}
       </button>
       <button
         @click="toBottom"
