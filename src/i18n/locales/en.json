@@ -43,6 +43,7 @@
     "snippets-to-display": "Snippets to display"
   },
   "facets": {
+    "title": "Facets",
     "most-hits": "Most hits",
     "active-facets": "Active facets",
     "by-name": "By name",

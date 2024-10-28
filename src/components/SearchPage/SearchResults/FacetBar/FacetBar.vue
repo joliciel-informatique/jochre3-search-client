@@ -14,7 +14,7 @@ Description: presents the facet bar
     <aside class="menu">
       <div>
         <p class="menu-label is-size-5 label">
-          Facets
+          {{ $t('facets.title') }}
           <span v-tooltip:top="$t('search.what-are-facets')">
             <FontAwesomeIcon icon="question-circle" />
           </span>
