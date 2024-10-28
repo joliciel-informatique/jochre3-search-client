@@ -10,6 +10,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
   const authorFacetCount = ref(10)
   const corpusLanguage = ref('yi')
   const displayPerBook = ref(true)
+  const updateFacetSortOption = ref('hits')
 
   const displayLeftToRight = computed(() => language.value !== 'yi')
 
@@ -40,6 +41,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
     needsLeftToRight,
     needsRightToLeft,
     corpusLeftToRight,
-    displayPerBook
+    displayPerBook,
+    updateFacetSortOption
   }
 })
