@@ -26,26 +26,4 @@ const enter = <Element,>(el: Element) =>
 const beforeLeave = <Element,>(el: Element) =>
   ((el as HTMLElement).style.height = `${(el as HTMLElement).scrollHeight}px`)
 const leave = <Element,>(el: Element) => ((el as HTMLElement).style.height = '0')
-
-/** autoShow the sticky result card */
-// const isSticky = () => {
-//   const stickyElement = document.querySelector('.card.metadata:not(.not-sticky)')
-//   if (stickyElement?.getAttribute('id') === id) {
-//     showing.value = true
-//     window.removeEventListener('scroll', isSticky)
-//   }
-// }
-
-// onMounted(() => {
-//   const el = document.getElementById(id)
-//   const observer = new IntersectionObserver(
-//     ([e]) => e.target.classList.toggle('not-sticky', e.intersectionRatio < 1),
-//     { threshold: [1] }
-//   )
-
-//   if (el !== null) {
-//     observer.observe(el)
-//     window.addEventListener('scroll', isSticky)
-//   }
-// })
 </script>
