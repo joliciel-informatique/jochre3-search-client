@@ -45,7 +45,8 @@
   "facets": {
     "most-hits": "Most hits",
     "active-facets": "Active facets",
-    "by-name": "By name"
+    "by-name": "By name",
+    "sort-by-label": "Sort facets by"
   },
   "results": {
     "click-image-snippet": "Click to load original image",

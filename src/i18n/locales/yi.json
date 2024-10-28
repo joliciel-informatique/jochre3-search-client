@@ -47,7 +47,8 @@
   "facets": {
     "most-hits": "YI__Most hits",
     "active-facets": "YI__Active facets",
-    "by-name": "YI__By name"
+    "by-name": "YI__By name",
+    "sort-by-label": "YI__Sort facets by"
   },
   "results": {
     "click-image-snippet": "גיט אַ קװעטש אַרױסצוּװײַזן דעם פֿראַגמענט פֿונעם זײַטל",
@@ -143,6 +144,8 @@
     "bottom": "YI__Last result"
   },
   "header": {
+    "logo": "/images/jochreLogo.png",
+    "logo-url": "/",
     "title": "",
     "preferences": "פּרעפֿערענצן",
     "login": "ארײַנלאָגירן",
