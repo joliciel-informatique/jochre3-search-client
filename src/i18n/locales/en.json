@@ -124,12 +124,10 @@
   "forward": "Forward",
   "loading": "Loading...",
   "pagination": {
-    "first": "first page",
-    "next": "next page",
-    "previous": "previous page",
-    "last": "last page",
-    "top": "To top",
-    "bottom": "To bottom"
+    "next": ">>",
+    "previous": "<<",
+    "top": "First result",
+    "bottom": "Last result"
   },
   "header": {
     "logo": "/images/jochreLogo.png",

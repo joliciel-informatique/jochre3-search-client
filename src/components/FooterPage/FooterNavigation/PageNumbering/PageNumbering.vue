@@ -18,6 +18,24 @@ Description: calculates and presents page numbers
     v-if="totalHits > 0 && !isBusy && hasSearch"
   >
     <div>
+      <button
+        @click="toTop"
+        @keyup.enter="toTop"
+        class="pagination-previous is-small m-1 has-text-white"
+      >
+        {{ $t('pagination.top') }}
+      </button>
+      <button
+        @click="page--"
+        @keyup.enter="page--"
+        class="pagination-previous is-small m-1"
+        :class="page - 1 < 1 ? 'has-text-grey-darker' : 'has-text-white'"
+        :disabled="page - 1 < 1"
+      >
+        {{ $t('pagination.previous') }}
+      </button>
+    </div>
+    <div>
       <ul class="pagination-list">
         <li v-if="page - 1 > 1">
           <a
@@ -78,27 +96,13 @@ Description: calculates and presents page numbers
     </div>
     <div>
       <button
-        @click="page--"
-        @keyup.enter="page--"
-        :disabled="page - 1 < 1"
-        class="pagination-previous is-small m-1 has-text-white"
-      >
-        {{ $t('pagination.previous') }}
-      </button>
-      <button
         @click="page++"
         @keyup.enter="page++"
+        class="pagination-next is-small m-1"
+        :class="page >= lastPage ? 'has-text-grey-darker' : 'has-text-white'"
         :disabled="page >= lastPage"
-        class="pagination-next is-small m-1 has-text-white"
       >
         {{ $t('pagination.next') }}
-      </button>
-      <button
-        @click="toTop"
-        @keyup.enter="toTop"
-        class="pagination-previous is-small m-1 has-text-white"
-      >
-        {{ $t('pagination.top') }}
       </button>
       <button
         @click="toBottom"
@@ -108,65 +112,20 @@ Description: calculates and presents page numbers
         {{ $t('pagination.bottom') }}
       </button>
     </div>
-    <div
-      class="navigation-current"
-      :aria-label="`current position: book ${onScreenBook}, snippet ${onScreenSnippet}`"
-      v-tooltip:top="$t('results.result-current-tooltip')"
-    ></div>
   </nav>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUpdated, ref, watch, type Ref } from 'vue'
+import { computed, watch, type Ref } from 'vue'
 import { preferences } from '@/assets/fetchMethods'
 import { isBusy, hasSearch } from '@/assets/appState'
-import { isInView } from '@/assets/functions'
 
 const emit = defineEmits(['newPage'])
 const page: Ref = defineModel('page')
-const totalHits: Ref = defineModel('totalHits')
-
-watch(page, (newVal) => {
-  onScreenBook.value = (newVal - 1) * preferences.resultsPerPage + 1
-  emit('newPage')
-})
-
 const lastPage = computed(() => Math.floor((totalHits.value - 1) / preferences.resultsPerPage) + 1)
-const first = computed(() => (page.value - 1) * preferences.resultsPerPage + 1)
-
-const onScreenBook = ref((page.value - 1) * preferences.resultsPerPage + 1)
-const onScreenSnippet = ref(1)
-const onScreenTotalSnippets = ref(1)
-
+const totalHits: Ref = defineModel('totalHits')
 const toTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 const toBottom = () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
 
-const check = () => {
-  Array.from(document.querySelectorAll('.card.metadata')).every((doc, idx) => {
-    if (isInView(doc as HTMLElement)) {
-      onScreenBook.value = first.value + idx
-
-      const docRef = doc.getAttribute('docRef')
-      const totalSnippets = Array.from(document.querySelectorAll('.card.snippet')).filter(
-        (snippet) => snippet.getAttribute('docRef') === docRef
-      )
-      onScreenTotalSnippets.value = totalSnippets.length
-      Array.from(totalSnippets).every((snippet, idx) => {
-        if (isInView(snippet as HTMLElement)) {
-          onScreenSnippet.value = idx + 1
-          return false
-        }
-        return true
-      })
-      return false
-    }
-    return true
-  })
-  window.removeEventListener('scroll', check)
-  window.addEventListener('scroll', check)
-}
-
-// Keep tabs on what book/snippet is being viewed
-onMounted(() => window.addEventListener('scroll', check))
-onUpdated(() => window.addEventListener('scroll', check))
+watch(page, () => emit('newPage'))
 </script>

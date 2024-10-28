@@ -124,12 +124,10 @@
   "forward": "פֿאָראױס",
   "loading": "אָנלאָדנדיק...",
   "pagination": {
-    "first": "אָנהייב",
-    "next": "ווײַטער",
-    "previous": "פֿריער",
-    "last": "סוף",
-    "top": "אַרױף",
-    "bottom": "אַראָפּ"
+    "next": ">>",
+    "previous": "<<",
+    "top": "YI__First result",
+    "bottom": "YI__Last result"
   },
   "header": {
     "title": "",
