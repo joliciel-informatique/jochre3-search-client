@@ -41,6 +41,11 @@
       "date-descending": "יאָר ↓"
     }
   },
+  "facets": {
+    "most-hits": "YI__Most hits",
+    "active-facets": "YI__Active facets",
+    "by-name": "YI__By name"
+  },
   "results": {
     "click-image-snippet": "גיט אַ קװעטש אַרױסצוּװײַזן דעם פֿראַגמענט פֿונעם זײַטל",
     "tap-image-snippet": "גיט אַ טאַפּ אַרױסצוּװײַזן דעם פֿראַגמענט פֿונעם זײַטל",

@@ -39,6 +39,11 @@
       "date-descending": "year ↓"
     }
   },
+  "facets": {
+    "most-hits": "Most hits",
+    "active-facets": "Active facets",
+    "by-name": "By name"
+  },
   "results": {
     "click-image-snippet": "Click to load original image",
     "tap-image-snippet": "Tap to load original image",

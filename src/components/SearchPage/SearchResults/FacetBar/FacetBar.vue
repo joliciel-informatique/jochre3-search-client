@@ -79,7 +79,7 @@ Description: presents the facet bar
             <div class="dropdown is-hoverable">
               <div class="dropdown-trigger">
                 <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
-                  <span>Most hits</span>
+                  <span>{{ $t('facets.most-hits') }}</span>
                   <span class="icon is-small">
                     <FontAwesomeIcon icon="angle-down" aria-hidden="true" />
                   </span>
@@ -92,21 +92,21 @@ Description: presents the facet bar
                     @click.prevent="updateSortOption('count')"
                     class="dropdown-item"
                     :class="updateFacetSortOption === 'count' ? 'is-active' : ''"
-                    >Most hits</a
+                    >{{ $t('facets.most-hits') }}</a
                   >
                   <a
                     href="#"
                     @click.prevent="updateSortOption('active')"
                     class="dropdown-item"
                     :class="updateFacetSortOption === 'active' ? 'is-active' : ''"
-                    >Active facets</a
+                    >{{ $t('facets.active-facets') }}</a
                   >
                   <a
                     href="#"
                     @click.prevent="updateSortOption('label')"
                     :class="updateFacetSortOption === 'label' ? 'is-active' : ''"
                     class="dropdown-item"
-                    >By name</a
+                    >{{ $t('facets.by-name') }}</a
                   >
                 </div>
               </div>
