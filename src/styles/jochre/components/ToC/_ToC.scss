@@ -6,7 +6,8 @@
   top: 20vh;
   left: 2vw;
   background-color: $background-color-1;
-  inline-size: min-content;
+  inline-size: -webkit-fill-available;
+  inline-size: fit-content;
   .transcribed-text {
     z-index: 9;
   }
