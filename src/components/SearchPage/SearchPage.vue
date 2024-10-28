@@ -123,6 +123,7 @@ import IndexSize from './SearchResults/IndexSize/IndexSize.vue'
 // Import interfaces
 import { type SearchResult, type AggregationBin } from '@/assets/interfacesExternals'
 
+// This is better kept in Pinia or something similar
 import { hasSearch } from '@/assets/appState'
 
 import { usePreferencesStore } from '@/stores/PreferencesStore'
@@ -269,6 +270,7 @@ watch(snippetsPerResult, () => search())
 
 const searchFacets = async () => {
   const facetParams = new URLSearchParams({ ...Object.fromEntries(params.value) })
+  facetParams.delete('authors')
   facetParams.append('field', 'Author')
   if (preferences.authorFacetCount > 0)
     facetParams.append('maxBins', preferences.authorFacetCount.toString())
