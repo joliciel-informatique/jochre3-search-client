@@ -45,6 +45,7 @@
     "snippets-to-display": "YI__Snippets to display"
   },
   "facets": {
+    "title": "YI__Facets",
     "most-hits": "YI__Most hits",
     "active-facets": "YI__Active facets",
     "by-name": "YI__By name",
