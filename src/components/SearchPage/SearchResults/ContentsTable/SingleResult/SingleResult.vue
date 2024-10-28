@@ -59,7 +59,7 @@ Description: presents OCR record metadata
       </template>
 
       <template #content>
-        <div class="card-content">
+        <div class="toc card-content mb-2">
           <div v-for="field in fields" :key="sha1(field)">
             <SingleResultItem
               v-model:metadata-modal="metadataModal"
@@ -68,9 +68,9 @@ Description: presents OCR record metadata
               :value="(result.metadata as any)[field]"
             />
           </div>
-          <div class="has-text-right is-size-7 px-2" aria-label="document reference" tabindex="3">
-            {{ $t('results.document-reference') }}: <strong>{{ result.docRef }}</strong>
-          </div>
+        </div>
+        <div class="has-text-right is-size-7 px-2" aria-label="document reference" tabindex="3">
+          {{ $t('results.document-reference') }}: <strong>{{ result.docRef }}</strong>
         </div>
       </template>
 

@@ -37,3 +37,12 @@
 .card-content.hide {
   height: 0;
 }
+
+.toc.card-content {
+  background-color: $white;
+  padding: 0.2em;
+}
+
+.body .body-inner .toc.card-content {
+  border-radius: 0.5em;
+}

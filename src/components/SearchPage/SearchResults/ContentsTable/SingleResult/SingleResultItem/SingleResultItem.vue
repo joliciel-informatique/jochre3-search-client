@@ -11,7 +11,7 @@ Description: display single metadata item
 -->
 <template>
   <div
-    class="columns p-2 has-text-white"
+    class="columns p-2 has-text-primary"
     :class="{
       'has-text-left': preferences.displayLeftToRight,
       'has-text-right': !preferences.displayLeftToRight
