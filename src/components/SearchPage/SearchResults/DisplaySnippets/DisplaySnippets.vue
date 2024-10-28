@@ -70,7 +70,7 @@ const searchResults = defineModel<SearchResult[]>('searchResults')
 
 // How many snippets for each volume are in view upon scroll only if shown in contiguous list
 const scrolling = () => {
-  if (!displayPerBook.value) {
+  if (displayPerBook.value) {
     const snippetsInView = Array.from(document.querySelectorAll('li div .card.snippet'))
       .map((snippet) => (isInView(snippet) ? snippet : null))
       .filter((x) => x)
