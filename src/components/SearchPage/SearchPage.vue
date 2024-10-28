@@ -133,7 +133,8 @@ const preferences = usePreferencesStore()
 import { storeToRefs } from 'pinia'
 import { faBan } from '@fortawesome/free-solid-svg-icons'
 
-const { resultsPerPage, authorFacetCount, snippetsPerResult } = storeToRefs(preferences)
+const { resultsPerPage, authorFacetCount, snippetsPerResult, updateFacetSortOption } =
+  storeToRefs(preferences)
 
 const query = ref('')
 const firstSearchResult = ref<SearchResult>()
