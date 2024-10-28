@@ -10,7 +10,7 @@ Methods: none
 Description: controls text snippets from the OCR text
 -->
 <template>
-  <div v-if="displayPerBook">
+  <div v-if="!displayPerBook">
     <ul v-show="selectedEntry?.docRef === docRef">
       <li v-for="(snippet, index) in snippets" :key="sha1(snippet)">
         <SingleSnippet
