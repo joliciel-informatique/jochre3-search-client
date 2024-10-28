@@ -78,12 +78,7 @@ Description: presents the facet bar
       </div>
       <div>
         <div
-          class="container is-flex is-flex-direction-column is-justify-content-center is-flex-wrap-wrap"
-          :class="
-            preferences.displayLeftToRight !== preferences.corpusLeftToRight
-              ? 'is-align-items-flex-end'
-              : 'is-align-items-flex-start'
-          "
+          class="container is-flex is-flex-direction-column is-justify-content-center is-flex-wrap-wrap is-align-items-center"
         >
           <span v-for="facet of filteredFacets" v-bind:key="sha1(facet)">
             <FilterTag
