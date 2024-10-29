@@ -58,7 +58,7 @@ Description: the advanced search toolbox
               <p class="control keyboardButton">
                 <button
                   class="button is-clickable is-medium"
-                  @click="toggleKeyboard('title')"
+                  @click="toggleKeyboard('bookTitle')"
                   :alt="$t('search.keyboard')"
                   :title="$t('search.keyboard')"
                 >

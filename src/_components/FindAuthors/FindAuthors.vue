@@ -55,7 +55,7 @@ Description: presents a 'search for authors' text box and retrieves authors ever
           </div>
           <div
             class="dropdown-menu"
-            id="dropdown-menu"
+            :id="`${uniqueId}-dropdown-menu`"
             role="menu"
             v-if="authorDropdownItems.length > 0"
           >
@@ -138,6 +138,18 @@ const searchAuthors = ref<boolean>(true)
 
 watch(authorText, () => findAuthor())
 
+const closeOutside = () => {
+  const dropdown = document.getElementById(`${uniqueId}-dropdown-menu`)
+  const menu = dropdown?.children[0]
+  if (menu) authorDropdownItems.value = []
+  document.removeEventListener('click', closeOutside, true)
+}
+
+const closeOnEscape = (e: KeyboardEvent) => {
+  e.key === 'Escape' ? (authorDropdownItems.value = []) : null
+  document.removeEventListener('keydown', closeOnEscape, true)
+}
+
 const addAuthor = (author: { label: string; count: number }) => {
   if (!multiValue) {
     authorList.value.length = 0
@@ -180,6 +192,8 @@ const findAuthor = () => {
             (author: { label: string; count: number }) => author.label !== exclude.value
           )
         }
+        document.addEventListener('click', closeOutside, true)
+        document.addEventListener('keydown', closeOnEscape, true)
       })
     )
   } else {

@@ -21,16 +21,14 @@ let keyboard: SimpleKeyboard
 
 watch(
   simpleKeyboard,
-  (newSimpleKeyboard) => {
-    const iname = newSimpleKeyboard.attachTo
+  (newV) => {
+    const iname = newV.attachTo
     keyboard.setOptions({ iname })
-
-    // Position keyboard relative to element
-    positionKeyboard()
 
     // Add eventListeners if keyboard opened, else remove eventListeners
     const el = document.getElementById(iname)
-    if (newSimpleKeyboard.show) {
+    if (newV.show) {
+      positionKeyboard() // Position keyboard relative to element
       addEventListeners()
       el?.classList.add('keyboard-is-open')
     } else {
