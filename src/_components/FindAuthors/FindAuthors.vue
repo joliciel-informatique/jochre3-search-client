@@ -26,15 +26,13 @@ Description: presents a 'search for authors' text box and retrieves authors ever
             }"
           >
             <input
-              id="findAuthors"
+              :id="uniqueId"
               class="input"
               type="text"
               lang="yi"
               name="findAuthorInput"
-              :disabled="disabled"
               v-model="authorText"
-              @input="findAuthor"
-              autocomplete="one-time-code"
+              :disabled="disabled"
               :placeholder="$t('search.authorPlaceholder')"
             />
             <div
@@ -72,10 +70,10 @@ Description: presents a 'search for authors' text box and retrieves authors ever
               </a>
             </div>
           </div>
-          <p class="control">
+          <p class="control keyboardButton">
             <button
-              class="button is-clickable is-medium is-info"
-              @click="toggleKeyboard('findAuthors')"
+              class="button is-clickable is-medium"
+              @click="toggleKeyboard(uniqueId)"
               :alt="$t('search.keyboard')"
               :title="$t('search.keyboard')"
             >
@@ -107,7 +105,6 @@ import { fetchData } from '@/assets/fetchMethods'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import FilterTag from '@/_components/FilterTag/FilterTag.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-// import SimpleKeyboard from '../SimpleKeyboard/SimpleKeyboard.vue'
 
 const preferences = usePreferencesStore()
 
@@ -122,6 +119,7 @@ const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 const toggleKeyboard = (attachTo: string) => {
   simpleKeyboard.value.attachTo = attachTo
   simpleKeyboard.value.show = !simpleKeyboard.value.show
+  simpleKeyboard.value.ref = authorText
 }
 
 const disabled: Ref = defineModel('disabled')
@@ -138,6 +136,8 @@ const authorDropdownItems = ref<Array<{ label: string; count: number }>>([])
 const authorText = ref<string>('')
 const searchAuthors = ref<boolean>(true)
 
+watch(authorText, () => findAuthor())
+
 const addAuthor = (author: { label: string; count: number }) => {
   if (!multiValue) {
     authorList.value.length = 0
@@ -145,7 +145,10 @@ const addAuthor = (author: { label: string; count: number }) => {
   authorList.value.push(author)
   authorText.value = ''
   authorDropdownItems.value = []
-  simpleKeyboard.value = { show: false, attachTo: null }
+
+  simpleKeyboard.value.attachTo = null
+  simpleKeyboard.value.ref = null
+  simpleKeyboard.value.show = false
 }
 
 const delAuthor = (value: { label: string }) => {

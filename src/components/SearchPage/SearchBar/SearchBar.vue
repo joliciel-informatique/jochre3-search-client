@@ -64,7 +64,7 @@ Description: presents the search bar
         </p>
         <p class="control keyboardButton">
           <button
-            class="button is-clickable is-info"
+            class="button is-clickable"
             @click="toggleKeyboard('query')"
             :alt="$t('search.keyboard')"
             :title="$t('search.keyboard')"
@@ -74,11 +74,6 @@ Description: presents the search bar
             </span>
           </button>
         </p>
-        <!-- <SimpleKeyboard
-          :attach-to="'query'"
-          v-model:value="query"
-          v-model:open-keyboard="openKeyboard"
-        /> -->
         <p class="control" v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
           <a class="button is-static is-clickable">
             <label for="strictSearchCheckbox" class="mx-2 is-clickable"
@@ -126,7 +121,6 @@ Description: presents the search bar
   </div>
 </template>
 <script setup lang="ts">
-import { computed, watch, type Ref } from 'vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
@@ -138,21 +132,15 @@ import {
   faBookOpen
 } from '@fortawesome/free-solid-svg-icons'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import { type SimpleKeyboardType } from '@/assets/interfacesExternals'
+import type { Ref } from 'vue'
 
 const preferences = usePreferencesStore()
 
 const hasAdvancedSearchCriteria = defineModel('hasAdvancedSearchCriteria')
 
-const advancedSearchIcons = computed(() => ({
-  'is-left': preferences.displayLeftToRight,
-  'is-right': !preferences.displayLeftToRight,
-  'is-clicked': hasAdvancedSearchCriteria.value
-}))
-
 library.add(faMagnifyingGlassPlus, faMagnifyingGlassMinus, faKeyboard, faXmarkCircle)
-const query: Ref = defineModel('query')
-const strict: Ref = defineModel('strict')
+const query = defineModel('query')
+const strict = defineModel('strict')
 const isLoading = defineModel('isLoading')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
 const simpleKeyboard: Ref = defineModel('simpleKeyboard')
@@ -164,6 +152,7 @@ const toggleAdvancedSearchPanel = () => {
 const toggleKeyboard = (attachTo: string) => {
   simpleKeyboard.value.attachTo = attachTo
   simpleKeyboard.value.show = !simpleKeyboard.value.show
+  simpleKeyboard.value.ref = query
 }
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])

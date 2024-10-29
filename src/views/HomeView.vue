@@ -43,11 +43,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, shallowReactive } from 'vue'
 import HeaderPage from '@/components/HeaderPage/HeaderPage.vue'
 import SearchPage from '@/components/SearchPage/SearchPage.vue'
 import FooterPage from '@/components/FooterPage/FooterPage.vue'
-import type { SearchResult, SimpleKeyboardType } from '@/assets/interfacesExternals'
+import type { SearchResult } from '@/assets/interfacesExternals'
 import LargeImage from '@/_components/Modals/LargeImage/LargeImage.vue'
 import FixMetaData from '@/_components/Modals/FixMetaData/FixMetaData.vue'
 import FixWord from '@/_components/Modals/FixWord/FixWord.vue'
@@ -70,11 +70,7 @@ const metadataModal = ref({ field: 'author' })
 const wordModal = ref({})
 const notification = ref({})
 const searchPageRef = ref<InstanceType<typeof SearchPage>>()
-const simpleKeyboard = ref({ show: false, attachTo: '', input: '' })
-
-watch(simpleKeyboard, (newV, oldV) => {
-  console.log(newV, oldV)
-})
+const simpleKeyboard = shallowReactive({ show: false, attachTo: '', ref: null })
 
 // Methods exposed by SearchPage
 const resetSearchResults = () => searchPageRef.value?.resetSearchResults()

@@ -12,7 +12,7 @@
           <img :src="wordImage" :alt="$t('fix-word.image-alt', [wordSuggestion])" />
         </div>
         <div class="p-2 field has-addons">
-          <span class="column field has-addons has-addons-left is-horizontal">
+          <span class="control container has-icons-right">
             <p class="control is-expanded">
               <input
                 id="wordCorrectionInput"
@@ -26,16 +26,15 @@
                 v-model="wordSuggestion"
               />
             </p>
-            <p class="control">
-              <button
-                class="button is-clickable is-medium is-info"
-                :alt="$t('search.keyboard')"
-                :title="$t('search.keyboard')"
-                @click="toggleKeyboard('wordCorrectionInput')"
-              >
-                <font-awesome-icon icon="keyboard" />
-              </button>
-            </p>
+            <span
+              class="icon is-small is-clickable is-right"
+              :alt="$t('search.keyboard')"
+              :title="$t('search.keyboard')"
+              @click="toggleKeyboard('wordCorrectionInput')"
+              aria-label="hidden"
+            >
+              <font-awesome-icon icon="keyboard" />
+            </span>
           </span>
         </div>
         <div class="p-2 has-text-warning">{{ $t('fix-word.instructions') }}</div>
@@ -89,6 +88,7 @@ onBeforeUpdate(async () => {
 const toggleKeyboard = (attachTo: string) => {
   simpleKeyboard.value.attachTo = attachTo
   simpleKeyboard.value.show = !simpleKeyboard.value.show
+  simpleKeyboard.value.ref = wordSuggestion
 }
 
 const loadWordImage = async (params: URLSearchParams) => {

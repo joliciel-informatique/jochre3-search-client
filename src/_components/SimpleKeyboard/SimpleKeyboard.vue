@@ -7,12 +7,12 @@
   ></div>
 </template>
 <script setup lang="ts">
+import { onMounted, watch, type Ref } from 'vue'
+import { type SimpleKeyboardType } from '@/assets/interfacesExternals'
 import Keyboard, { SimpleKeyboard } from 'simple-keyboard'
 import 'simple-keyboard/build/css/index.css'
 import keyboardYiddish from '@/assets/keyboardLayouts/keyboardYiddish'
 import keyboardMobile from '@/assets/keyboardLayouts/keyboardMobile'
-import { onMounted, watch, type Ref } from 'vue'
-import { type SimpleKeyboardType } from '@/assets/interfacesExternals'
 
 const { attachTo } = defineProps(['attachTo']) // The id of the HTML element it's attached to
 const simpleKeyboard: Ref = defineModel<SimpleKeyboardType>('simpleKeyboard')
@@ -41,6 +41,8 @@ watch(
   { deep: true }
 )
 
+const toggleKeyboard = () => (simpleKeyboard.value.show = !simpleKeyboard.value.show)
+
 const switchLayout = (button: string) => {
   const layouts = ['default', 'numbers', 'shift', 'alt', 'chars']
   const targetLayout = button.substring(1, button.length - 1)
@@ -56,6 +58,7 @@ const switchLayout = (button: string) => {
 
 const onKeyPress = (button: string) => {
   const el = document.getElementById(simpleKeyboard.value.attachTo) as HTMLInputElement // input element
+
   if (!switchLayout(button)) {
     let newVal = ''
     if (button === '{bksp}') {
@@ -66,22 +69,17 @@ const onKeyPress = (button: string) => {
     } else {
       newVal = `${el.value}${button}`
     }
-    el.value = newVal
-    simpleKeyboard.value.input = newVal
+    simpleKeyboard.value.ref.value = newVal
   }
-}
-
-const confirmKeyboard = (el: HTMLInputElement, newVal: string) => {
-  el.value = newVal
-  simpleKeyboard.value.input = newVal
-  simpleKeyboard.value.show = false
 }
 
 const positionKeyboard = () => {
   const parent = document.getElementById(simpleKeyboard.value.attachTo)?.getBoundingClientRect()
-  const { top, left, width } = parent as DOMRect
-  const container = document.getElementsByClassName('keyboardClass')[0] as HTMLDivElement
-  container.setAttribute('style', `top:${top + 40}px;left:${left}px;width:${width - 2}px`)
+  if (parent) {
+    const { top, left, width, height } = parent as DOMRect
+    const container = document.getElementsByClassName('keyboardClass')[0] as HTMLDivElement
+    container.setAttribute('style', `top:${top + height}px;left:${left}px;width:${width - 2}px`)
+  }
 }
 
 const addEventListeners = () => {
@@ -95,22 +93,23 @@ const removeEventListeners = () => {
 }
 
 const closeOutside = (e: MouseEvent) => {
-  const keyboardOverlay = document.getElementById(`${attachTo}-keyboardOverlay`)
-  const keyboardInput = document.getElementById(attachTo)
-  const keyboardClass = document.getElementById(`${attachTo}-keyboardClass`)
+  const keyboardClass = document.querySelector('.keyboardClass')
+  const keyboardButton = document.getElementById(simpleKeyboard.value.attachTo)?.parentElement
+    ?.nextElementSibling
   if (
     e.target instanceof Element &&
-    simpleKeyboard.value &&
-    keyboardOverlay?.contains(e.target) &&
-    !keyboardClass?.contains(e.target) &&
-    !keyboardInput?.contains(e.target)
+    !keyboardButton?.contains(e.target) &&
+    !keyboardClass?.contains(e.target)
   ) {
     toggleKeyboard()
+    document.removeEventListener('click', closeOutside, true)
   }
 }
 
-const toggleKeyboard = () => (simpleKeyboard.value.show = !simpleKeyboard.value.show)
-const closeOnEscape = (e: KeyboardEvent) => (e.key === 'Escape' ? toggleKeyboard() : null)
+const closeOnEscape = (e: KeyboardEvent) => {
+  e.key === 'Escape' ? toggleKeyboard() : null
+  document.removeEventListener('keydown', closeOnEscape, true)
+}
 
 onMounted(() => {
   keyboard = new Keyboard('keyboardClass', {

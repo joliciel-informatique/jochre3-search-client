@@ -1,3 +1,5 @@
+import type { ShallowRef } from 'vue'
+
 export interface Snippet {
   text: string
   page: number
@@ -21,7 +23,7 @@ export interface BookPages {
 export interface SimpleKeyboardType {
   show: boolean
   attachTo: string
-  input: string
+  ref: ShallowRef
 }
 
 export interface Preferences {

@@ -107,7 +107,7 @@
 <script setup lang="ts">
 import { onMounted, ref, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { fetchData } from '@/assets/fetchMethods'
+import { fetchData } from '../../assets/fetchMethods'
 import { sha1 } from 'object-hash'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -123,13 +123,12 @@ import FacetBar from './SearchResults/FacetBar/FacetBar.vue'
 import IndexSize from './SearchResults/IndexSize/IndexSize.vue'
 
 // Import interfaces
-import { type SearchResult, type AggregationBin } from '@/assets/interfacesExternals'
-import { type SimpleKeyboardType, type AggregationBin } from '@/assets/interfacesExternals'
+import { type SearchResult, type AggregationBin } from '../../assets/interfacesExternals'
 
 // This is better kept in Pinia or something similar
-import { hasSearch } from '@/assets/appState'
+import { hasSearch } from '../../assets/appState'
 
-import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { usePreferencesStore } from '../../stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
@@ -170,14 +169,6 @@ const route = useRoute()
 const hasAdvancedSearchCriteria = ref(false)
 const showAdvancedSearchPanel = ref(false)
 const facets = ref<Array<AggregationBin>>([])
-
-watch(
-  simpleKeyboard,
-  (newv, oldv) => {
-    console.log('click', newv, oldv)
-  },
-  { deep: true }
-)
 
 onMounted(() => {
   router.isReady().then(() => {
@@ -227,7 +218,6 @@ const newSearch = () => {
 
 const runSearch = () => {
   hasAdvancedSearchCriteria.value = false
-  // simpleKeyboard.value.show = false
   search().then((res) => {
     isLoading.value = res ? true : false
     const searchBar = document.querySelector('.searchBar') as HTMLDivElement
@@ -393,26 +383,6 @@ const search = async () => {
               q?.removeAttribute('disabled')
               return false
             })
-            // facetParams.append('field', 'Author')
-            // facetParams.append('maxBins', preferences.authorFacetCount.toString())
-            //  return fetchData('aggregate', 'get', facetParams)
-            //   .then((response) =>
-            //     response.json().then((result) => {
-            //       const activeFacets = facets.value
-            //         .map((facet) => (facet.active ? facet.label : null))
-            //         .filter((facet) => facet)
-
-            //       facets.value = result.bins.map((facet: { label: string; count: number }) =>
-            //         activeFacets.includes(facet.label)
-            //           ? { ...facet, active: true }
-            //           : { ...facet, active: false }
-            //       )
-
-            // q?.parentElement?.classList.remove('is-loading')
-            // q?.removeAttribute('disabled')
-            // return false
-            // })
-            // )
             .catch((error) => {
               notification.value = {
                 show: true,

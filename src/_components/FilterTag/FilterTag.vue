@@ -14,7 +14,5 @@
 <script setup lang="ts">
 const { label, count, active, showCount } = defineProps(['label', 'count', 'active', 'showCount'])
 const emit = defineEmits(['func'])
-const clicked = () => {
-  emit('func', { label: label, count: count, active: true })
-}
+const clicked = () => emit('func', { label: label, count: count, active: true })
 </script>
