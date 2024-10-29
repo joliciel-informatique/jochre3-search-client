@@ -3,15 +3,15 @@ version: '3.7'
 services:
   jochre3-search-client:
     container_name: jochre3-search-client
-    image: registry.gitlab.com/jochre/jochre3-search-client:0.1.0
+    image: registry.gitlab.com/jochre/jochre3-search-client:0.1.8
     restart: on-failure
     ports:
-      - '5173:8080'
+      - '5173:80'
     volumes:
-      - ./favicon.ico:/app/dist/favicon.ico
-      - ./frontend-config.json:/app/dist/conf/config.json
-      - ./yiddishbookcenter-ocr.jpg:/app/dist/images/yiddishbookcenter-ocr.jpg
-      - ./privacy.html:/app/dist/privacy.html
+      - ./favicon.ico:/usr/share/nginx/html/favicon.ico
+      - ./frontend-config.json:/usr/share/nginx/html/conf/config.json
+      - ./yiddishbookcenter-ocr.jpg:/usr/share/nginx/html/images/yiddishbookcenter-ocr.jpg
+      - ./privacy.html:/usr/share/nginx/html/privacy.html
     networks:
       - vue-network
 networks:

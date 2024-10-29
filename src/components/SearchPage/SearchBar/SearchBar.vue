@@ -14,9 +14,15 @@ Description: presents the search bar
     <div class="container is-max-desktop">
       <div class="pb-0 mb-0 field has-addons">
         <p class="control">
-          <a class="button is-static level-item">{{ $t('search.search') }}</a>
+          <a id="searchBarLabel" class="button is-static">{{ $t('search.search') }} </a>
         </p>
-        <p class="control container has-icons-left has-icons-right">
+        <p
+          class="control container"
+          :class="{
+            'has-icons-left': !preferences.displayLeftToRight,
+            'has-icons-right': preferences.displayLeftToRight
+          }"
+        >
           <input
             id="query"
             type="text"
@@ -33,41 +39,26 @@ Description: presents the search bar
             :placeholder="$t('search.query')"
           />
           <span
-            class="is-small icon is-clickable"
-            :class="advancedSearchIcons"
-            @click="toggleAdvancedSearchPanel()"
-          >
-            <font-awesome-icon
-              :icon="
-                showAdvancedSearchPanel
-                  ? faMagnifyingGlassMinus
-                  : hasAdvancedSearchCriteria
-                    ? faSliders
-                    : faMagnifyingGlassPlus
-              "
-            />
-          </span>
-          <span
+            class="icon is-small is-clickable"
             :class="{
-              icon: true,
-              'is-small': true,
-              'is-clickable': true,
               'is-left': !preferences.displayLeftToRight,
               'is-right': preferences.displayLeftToRight
             }"
+            tabindex="0"
+            aria-label="reset"
             @click="emit('resetSearchResults')"
+            @keyup.enter="emit('resetSearchResults')"
             v-if="!isLoading"
           >
             <font-awesome-icon icon="circle-xmark" />
           </span>
           <span
+            class="icon is-small is-loading"
             :class="{
-              icon: true,
-              'is-small': true,
-              'is-loading': true,
               'is-left': !preferences.displayLeftToRight,
               'is-right': preferences.displayLeftToRight
             }"
+            aria-label="hidden"
             v-else
           ></span>
         </p>
@@ -89,16 +80,45 @@ Description: presents the search bar
           v-model:open-keyboard="openKeyboard"
         /> -->
         <p class="control" v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
-          <a class="button is-info is-clickable">
-            <label for="strictSearchCheckbox" class="mx-2 is-clickable">{{
-              $t('search.related-word-forms')
-            }}</label>
-            <input
-              id="strictSearchCheckbox"
-              type="checkbox"
-              v-model="strict"
-              @change="emit('newSearch')"
+          <a class="button is-static is-clickable">
+            <label for="strictSearchCheckbox" class="mx-2 is-clickable"
+              >{{ $t('search.related-word-forms') }}
+              <span
+                ><input
+                  id="strictSearchCheckbox"
+                  type="checkbox"
+                  aria-label="strict search"
+                  v-model="strict"
+                  @change="emit('newSearch')" /></span
+            ></label>
+          </a>
+        </p>
+      </div>
+      <div class="columns py-3 field">
+        <p class="column is-one-fifth control">
+          <button @click="toggleAdvancedSearchPanel()">
+            <font-awesome-icon
+              :icon="
+                showAdvancedSearchPanel
+                  ? faMagnifyingGlassMinus
+                  : hasAdvancedSearchCriteria
+                    ? faSliders
+                    : faMagnifyingGlassPlus
+              "
             />
+            {{ $t('search.advanced-search') }}
+          </button>
+        </p>
+        <p class="column is-one-fifth control">
+          <a
+            href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
+            target="_blank"
+            class="has-text-white"
+          >
+            <span>
+              <font-awesome-icon :icon="faBookOpen" />
+              {{ $t('search.user-guide') }}
+            </span>
           </a>
         </p>
       </div>
@@ -114,7 +134,8 @@ import {
   faMagnifyingGlassMinus,
   faKeyboard,
   faXmarkCircle,
-  faSliders
+  faSliders,
+  faBookOpen
 } from '@fortawesome/free-solid-svg-icons'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { type SimpleKeyboardType } from '@/assets/interfacesExternals'

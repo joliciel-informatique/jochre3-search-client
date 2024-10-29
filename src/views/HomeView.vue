@@ -3,8 +3,7 @@
   <main
     class="hero is-widescreen"
     :class="{
-      'rtl-align': !preferences.displayLeftToRight,
-      yiddish: !preferences.displayLeftToRight
+      'rtl-align': !preferences.displayLeftToRight
     }"
   >
     <HeaderPage />

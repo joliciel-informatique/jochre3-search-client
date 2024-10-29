@@ -9,7 +9,7 @@
           {{ $t('fix-word.unauthenticated') }}
         </div>
         <div class="p-2 has-text-centered" v-if="wordImage !== ''">
-          <img :src="wordImage" />
+          <img :src="wordImage" :alt="$t('fix-word.image-alt', [wordSuggestion])" />
         </div>
         <div class="p-2 field has-addons">
           <span class="column field has-addons has-addons-left is-horizontal">
@@ -20,8 +20,8 @@
                   input: true,
                   'rtl-align': preferences.needsRightToLeft
                 }"
-                class="input keyboardInput"
                 type="text"
+                name="fixWordSuggestionInput"
                 lang="yi"
                 v-model="wordSuggestion"
               />
@@ -38,8 +38,8 @@
             </p>
           </span>
         </div>
-        <div class="p-2 has-text-info">{{ $t('fix-word.instructions') }}</div>
-        <div class="p-2 has-text-warning">{{ $t('fix-word.warning') }}</div>
+        <div class="p-2 has-text-warning">{{ $t('fix-word.instructions') }}</div>
+        <div class="p-2 has-text-danger">{{ $t('fix-word.warning') }}</div>
       </div>
     </template>
     <template #footer="modalBox">

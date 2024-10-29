@@ -21,14 +21,16 @@ Description: the advanced search toolbox
       @leave="leave"
     >
       <div
-        class="body modal-card m-3 p-3"
+        class="body m-3 p-3"
         v-show="showAdvancedSearchPanel"
         @keydown.esc="showAdvancedSearchPanel = false"
       >
         <div class="body-inner container is-max-desktop">
           <span class="columns is-vcentered mt-1 p-1">
-            <p class="column is-flex is-vcentered is-3">{{ $t('search.author') }}</p>
-            <span class="column is-vcentered">
+            <p class="column is-flex is-vcentered is-2">
+              {{ $t('search.author') }}
+            </p>
+            <span class="column is-vcentered" :aria-label="$t('search.author')">
               <FindAuthors
                 v-model:authorList="authorList"
                 v-model:disabled="disabled"
@@ -42,7 +44,9 @@ Description: the advanced search toolbox
             </span>
           </span>
           <span class="columns is-vcentered mt-1 p-1">
-            <p class="column is-3 is-flex is-vcentered">{{ $t('search.title') }}</p>
+            <p class="column is-2 is-flex is-vcentered" id="searchTitle">
+              {{ $t('search.title') }}
+            </p>
             <span class="column field has-addons has-addons-left is-horizontal">
               <p class="control is-expanded">
                 <input
@@ -68,23 +72,28 @@ Description: the advanced search toolbox
             </span>
           </span>
           <span class="columns is-vcentered mt-1 p-1">
-            <p class="column is-flex is-vcentered is-3">
+            <p class="column is-flex is-vcentered is-2">
               {{ $t('search.document-reference') }}
             </p>
             <span class="column field has-addons has-addons-left is-horizontal">
               <input
                 class="input"
+                name="documentRefsInput"
                 type="text"
+                aria-label="document reference numbers"
                 v-model="docRefs"
                 :placeholder="$t('search.document-reference-placeholder')"
               />
             </span>
           </span>
           <span class="columns is-vcentered mt-1 p-1">
-            <p class="column is-flex is-vcentered is-3">{{ $t('search.date-from') }}</p>
+            <p class="column is-flex is-vcentered is-2" id="searchDateFrom">
+              {{ $t('search.date-from') }}
+            </p>
             <p class="column control is-2 has-text-centered">
               <input
                 id="fromYear"
+                aria-labelledby="searchDateFrom"
                 class="input"
                 type="number"
                 placeholder="1700"
@@ -93,11 +102,14 @@ Description: the advanced search toolbox
                 max="2000"
               />
             </p>
-            <p class="column is-flex is-vcentered is-1">{{ $t('search.date-to') }}</p>
+            <p class="column is-flex is-vcentered is-1 mr-1 ml-1" id="searchToYear">
+              {{ $t('search.date-to') }}
+            </p>
             <p class="column control is-2 has-text-centered">
               <input
                 id="toYear"
                 class="input control"
+                aria-labelledby="searchToYear"
                 type="number"
                 placeholder="2000"
                 v-model="toYear"
@@ -105,16 +117,25 @@ Description: the advanced search toolbox
                 max="2000"
               />
             </p>
-            <p class="column is-flex is-vcentered is-1">
+            <p class="column is-flex is-vcentered is-2 mr-1 ml-1" id="searchSortBy">
               {{ $t('search.sort-by') }}
             </p>
-            <select class="column control select" v-model="sortBy">
+            <select
+              class="column control select"
+              name="sortBySelect"
+              aria-labelledby="searchSortBy"
+              v-model="sortBy"
+            >
               <option value="Score">{{ $t('search.sort.score') }}</option>
-              <option value="DateAscending">{{ $t('search.sort.date-ascending') }}</option>
-              <option value="DateDescending">{{ $t('search.sort.date-descending') }}</option>
+              <option value="DateAscending">
+                {{ $t('search.sort.date-ascending') }}
+              </option>
+              <option value="DateDescending">
+                {{ $t('search.sort.date-descending') }}
+              </option>
             </select>
           </span>
-          <p class="has-text-info">{{ $t('search.field-instructions') }}</p>
+          <p class="has-text-warning">{{ $t('search.field-instructions') }}</p>
           <div class="field has-text-centered p-2">
             <button class="button is-light" @click="emit('resetSearchResults')">
               {{ $t('search.reset') }}

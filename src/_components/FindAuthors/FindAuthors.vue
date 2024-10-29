@@ -30,6 +30,7 @@ Description: presents a 'search for authors' text box and retrieves authors ever
               class="input"
               type="text"
               lang="yi"
+              name="findAuthorInput"
               :disabled="disabled"
               v-model="authorText"
               @input="findAuthor"
@@ -47,8 +48,9 @@ Description: presents a 'search for authors' text box and retrieves authors ever
             >
               <input
                 type="checkbox"
-                :disabled="disabled"
                 class="is-clickable"
+                name="findAuthorCheckbox"
+                :disabled="disabled"
                 @click="excludeAuthors"
               />
             </div>

@@ -1,27 +1,39 @@
 {
   "Jochre": "יאָוקער",
+  "meta": {
+    "title": "YI__Jochre3 OCR Search Engine",
+    "description": "YI__Search text content of documents OCR'd using Jochre3."
+  },
   "search": {
     "about": "זוך־מאַשין פֿונעם טעקסט־אינהאַלט פֿון די ביכער אין אונדזער דיגיטאַלישער ביבליאָטעק.",
     "index-size": "גרײס פֿון זוכצעטל: {0} ביכער.",
     "query": "שרײַבט אַרײַן אַ זוכוואָרט",
     "search": "זוכן",
     "search-button": "זוכן",
+    "advanced-search": "אַװאַנסירטער נאָכזוך",
+    "user-guide": "ניצער־װעגװײַזער",
     "excludeAuthors": "שטעלט אַ פֿײגעלע אױסצושליסן די אױסגעקליבענע מחברים פֿונעם דורכזוך",
     "related-word-forms": "שטרענג",
     "related-word-forms-tooltip": "שטעלט אַ פֿײגעלע אױסצושליסן פֿאַרבונדענע װערטער־פֿאָרמעס, למשל „שרײבן“, „שרײבט“, „געשריבן“",
-    "facets": "מחבר פֿילטערס",
+    "facets": "העכסטע {0} מחברים",
+    "display-number-of-author-facets": "YI__Display number of author facets",
     "what-are-facets": "די מחבר פֿילטערס רעכענען אױס די מחברים מיט די מערסטע ביכער (צאָל אין האַלבע לבנות) װאָס שטימען מיט אײַערע זוך־קריטעריעס. טוט אַ קװעטש אױפֿן פֿילטער צו באַגרענעצן די רעזולטאַטן. ",
+    "filter": "YI__Filter",
+    "facets-authors": "YI__authors",
+    "no-facets": "YI__No facets to show",
+    "relevant-facets": "YI__Your filter returned {0} relevant facets",
+    "snippets-per-book": "YI__Show all snippets",
+    "display-snippets-per-book": "שליסט איבער ארױסצוּװײַזן פֿראַגמענטן פֿון נאָר אײן בוך, אַנשטאָט אַ המשכדיקער רשימה. מע װעט אױסהיטן אײַער אױסקלײַב אין אײַערע פּרעפֿערענצן.",
     "keyboard": "עפֿנט די ייִדישע קלאַװיאַטור",
-    "advanced": "אַװאַנסירטער נאָכזוך",
     "field-instructions": "*די בלאַנקען נעמען אָן לאַטײנישע אָדער ייִדישע אותיות.",
-    "author": "מחבר:",
+    "author": "מחבר",
     "authorPlaceholder": "שרײַבט ארײַן דעם נאָמן פֿונעם מחבר",
     "title": "טיטל",
-    "date-from": "אױסגאַבע פֿון יאָר:",
-    "date-to": "ביז יאָר:",
-    "document-reference": "אידענטיפֿיציר נומער:",
+    "date-from": "אױסגאַבע פֿון יאָר",
+    "date-to": "ביז יאָר",
+    "document-reference": "אידענטיפֿיציר נומער",
     "document-reference-placeholder": "שטרײַבט ארײַן אידענטיפֿיציר נומערס צעטײלט מיט קאָמעס",
-    "sort-by": "סאָרטירן לױטן:",
+    "sort-by": "סאָרטירן לױטן",
     "reset": "אױסמעקן",
     "sort": {
       "score": "חשבון",
@@ -29,9 +41,19 @@
       "date-descending": "יאָר ↓"
     }
   },
+  "toc": {
+    "snippets-to-display": "YI__Snippets to display"
+  },
+  "facets": {
+    "title": "YI__Facets",
+    "most-hits": "YI__Most hits",
+    "active-facets": "YI__Active facets",
+    "by-name": "YI__By name",
+    "sort-by-label": "YI__Sort facets by"
+  },
   "results": {
-    "click-image-snippet": "גיט אַ קװעטש צו װײַזן דעם פֿראַגמענט פֿון זײַטל",
-    "tap-image-snippet": "גיט אַ טאַפּ צו װײַזן דעם פֿראַגמענט פֿון זײַטל",
+    "click-image-snippet": "גיט אַ קװעטש אַרױסצוּװײַזן דעם פֿראַגמענט פֿונעם זײַטל",
+    "tap-image-snippet": "גיט אַ טאַפּ אַרױסצוּװײַזן דעם פֿראַגמענט פֿונעם זײַטל",
     "alternate-title": "טיטל אין טראַנסקריפציע",
     "volume": "באַנד",
     "author": "מחבר",
@@ -39,7 +61,8 @@
     "publisher": "פֿאַרלאַג",
     "publication-year": "יאָר",
     "document-reference": "אידענטיפֿיציר נומער: {0}",
-    "contents-table-header": "תּוכן",
+    "contents-table-header": "זוך־רעזולטאַטן",
+    "contents-table-subheader": "ביכער {1}-{2} פֿון {0} סך־הכּל",
     "result-count": "{0} ביכער סך־הכּל",
     "result-current-tooltip": "איצט קוקט איר אָן אָט דאָס בוך און פֿראַגמענט",
     "result-current-book-and-snippet": "בוך {0}/{1} ({2}/{3}) פֿון {4} ביכער סך־הכּל",
@@ -49,11 +72,15 @@
     "show-original-page": "זען אינעם בוך (זײַטל {0})",
     "show-text": "װײַזן דעם טראַנסקריבירטן טעקסט",
     "word-fix-instructions": "(טוט אַ טאָפּלקװעטש אױף אַ װאָרט כּדי אױסצובעסערן דעם OCR אַנאַליז)",
-    "page": "זײַט {0}"
+    "page": "זײַטל {0}"
+  },
+  "snippet": {
+    "open-page": "YI__Open page",
+    "open-transcription": "YI__Open transcription"
   },
   "navigation": {
-    "back-tooltip": "דאָס קנעפּל שיקט איר צוריק אין אײַער זוך־געשיכטע",
-    "forward-tooltip": "דאָס קנעפּל שיקט איר פֿאָראױס אין אײַער זוך־געשיכטע",
+    "back-tooltip": "דאָס קנעפּל שיקט אײַך צוריק אין אײַער זוך־געשיכטע",
+    "forward-tooltip": "דאָס קנעפּל שיקט אײַך פֿאָראױס אין אײַער זוך־געשיכטע",
     "clear-tooltip": "דאָס קנעפּל מעקט אָפּ אײַער זוך־געשיכטע",
     "jump-to": "שפּרינגט צו זײַט"
   },
@@ -61,16 +88,24 @@
     "title": "דעם באַניצערס פּרעפֿערענצן",
     "language": "פּרעזענטיר־שפּראַך",
     "results-per-page": "וויפֿל רעזולטאַטן אויף איין זײַטל",
-    "snippets-per-result": "וויפֿל פֿראַגמענטן פֿון אײן בוך"
+    "snippets-per-result": "וויפֿל פֿראַגמענטן פֿון אײן בוך",
+    "author-facet-count": "װיפֿל מחבר פֿילטערס צו באַװײַזן",
+    "display-snippets-per-book": "פֿראַגמענטן פֿון נאָר אײן בוך מיט אַ מאָל?"
   },
   "fix-word": {
     "title": "פֿאַרבעסערט אַ וואָרט",
+    "image-alt": "אַ בילד װאָס דאַרף ארײַננעמען דאָס װאָרט {0}",
     "instructions": "שרײַבט איבער דאָס אױבנדיקע בילד אינעם אונטנדיקן בלאַנק פּונקט װי עס זעט אױס, מיט פּונקטואַציע, ניקוד, אאַז“װ",
     "warning": "פֿאַרבעסערט ניט אַ װאָרט װאָס איז נאָר טײלװײַז זעיִק אױבן",
     "unauthenticated": "בכֿדי אױסצובעסערן אַ װאָרט, דאַרף מען ארײַנלאָגירן."
   },
+  "large-image": {
+    "title": "זײַטל {0} פֿון {1}",
+    "image-alt": "אַ בילד פֿונעם טעקסט אין {0}"
+  },
   "fix-metadata": {
     "title": "פֿאַרבעסערט אַן אַטריבוט פֿאַר \"{0}\"",
+    "edit-button-tooltip": "אױסבעסערן דעם אַטריבוט",
     "instructions": {
       "normal": "שרײַבט ארײַן אײַער פֿירלײג אונטן.",
       "authorsNote": "צעטל",
@@ -94,7 +129,7 @@
   },
   "transcribed-text": {
     "table-of-contents": "תּוכן",
-    "page": "זײַט {0}",
+    "page": "זײַטל {0}",
     "logical-page": "({0})"
   },
   "cancel": "אַנולירן",
@@ -104,14 +139,14 @@
   "forward": "פֿאָראױס",
   "loading": "אָנלאָדנדיק...",
   "pagination": {
-    "first": "אָנהייב",
-    "next": "ווײַטער",
-    "previous": "פֿריער",
-    "last": "סוף",
-    "top": "אַרױף",
-    "bottom": "אַראָפּ"
+    "next": ">>",
+    "previous": "<<",
+    "top": "YI__First result",
+    "bottom": "YI__Last result"
   },
   "header": {
+    "logo": "/images/jochreLogo.png",
+    "logo-url": "/",
     "title": "",
     "preferences": "פּרעפֿערענצן",
     "login": "ארײַנלאָגירן",

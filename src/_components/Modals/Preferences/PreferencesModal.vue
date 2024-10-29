@@ -7,12 +7,12 @@
       <div class="p-3">
         <div class="columns is-vcentered">
           <div class="column is-5">
-            <label class="label">{{ $t('preferences.language') }}</label>
+            <span class="label">{{ $t('preferences.language') }}</span>
           </div>
           <div class="column is-4">
             <div class="control is-expanded">
               <span class="select is-fullwidth">
-                <select v-model="setToLanguage">
+                <select name="setToLanguageSelect" v-model="setToLanguage">
                   <option value="yi">ייִדיש</option>
                   <option value="en">English</option>
                 </select>
@@ -22,21 +22,61 @@
         </div>
         <div class="columns is-vcentered">
           <div class="column is-5">
-            <label class="label">{{ $t('preferences.results-per-page') }}</label>
+            <span class="label">{{ $t('preferences.results-per-page') }}</span>
           </div>
           <div class="column is-4">
             <div class="control">
-              <input class="input" type="number" v-model="resultsPerPage" />
+              <input
+                class="input"
+                type="number"
+                name="resultsPerPageInput"
+                v-model="resultsPerPage"
+                @onchange="preferences.resultsPerPage = resultsPerPage"
+              />
             </div>
           </div>
         </div>
         <div class="columns is-vcentered">
           <div class="column is-5">
-            <label class="label">{{ $t('preferences.snippets-per-result') }}</label>
+            <span class="label">{{ $t('preferences.snippets-per-result') }}</span>
           </div>
           <div class="column is-4">
             <div class="control is-expanded">
-              <input class="input" type="number" v-model="snippetsPerResult" />
+              <input
+                class="input"
+                type="number"
+                name="snippetsPerResultInput"
+                v-model="snippetsPerResult"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="columns is-vcentered">
+          <div class="column is-5">
+            <span class="label">{{ $t('preferences.author-facet-count') }}</span>
+          </div>
+          <div class="column is-4">
+            <div class="control is-expanded">
+              <input
+                class="input"
+                type="number"
+                name="authorFacetCountInput"
+                v-model="authorFacetCount"
+                @onchange="preferences.authorFacetCount = authorFacetCount"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="columns is-vcentered">
+          <div class="column is-5">
+            <span class="label">{{ $t('preferences.display-snippets-per-book') }}</span>
+          </div>
+          <div class="column is-4">
+            <div class="control is-expanded">
+              <label class="switch is-rounded is-small">
+                <input type="checkbox" v-model="displayPerBook" />
+                <span class="check"></span>
+              </label>
             </div>
           </div>
         </div>
@@ -52,8 +92,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { fetchData } from '@/assets/fetchMethods'
 import { storeToRefs } from 'pinia'
+import { fetchData } from '@/assets/fetchMethods'
 import { useCookies } from '@vueuse/integrations/useCookies'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
@@ -64,25 +104,32 @@ const notification = defineModel('notification')
 const preferences = usePreferencesStore()
 const keycloak = useKeycloakStore().keycloak
 const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
-const cookies = useCookies(['locale', 'resultsPerPage', 'snippetsPerResult'])
+const cookies = useCookies(['locale', 'resultsPerPage', 'snippetsPerResult', 'authorFacetCount'])
 const setToLanguage = ref(preferences.language)
 
-const { resultsPerPage, snippetsPerResult } = storeToRefs(preferences)
+const resultsPerPage = ref(preferences.resultsPerPage)
+const authorFacetCount = ref(preferences.authorFacetCount)
+const { snippetsPerResult, displayPerBook } = storeToRefs(preferences)
 
 const save = (vi18n: VueI18n.VueI18n) => {
+  preferences.language = setToLanguage.value
+  vi18n.locale = setToLanguage.value
+
+  preferences.resultsPerPage = resultsPerPage.value
+  preferences.snippetsPerResult = snippetsPerResult.value
+  preferences.authorFacetCount = authorFacetCount.value
+
   if (authenticated.value) {
     const params = JSON.stringify({
       language: setToLanguage.value,
       resultsPerPage: preferences.resultsPerPage,
-      snippetsPerResult: preferences.snippetsPerResult
+      snippetsPerResult: preferences.snippetsPerResult,
+      authorFacetCount: preferences.authorFacetCount
     })
 
     fetchData('preferences/user', 'post', params)
       .then((res) => {
         if (res.status === 200) {
-          preferences.language = setToLanguage.value
-          vi18n.locale = setToLanguage.value
-
           notification.value = {
             show: true,
             error: false,
@@ -107,11 +154,10 @@ const save = (vi18n: VueI18n.VueI18n) => {
         }
       })
   } else {
-    preferences.language = setToLanguage.value
-    vi18n.locale = setToLanguage.value
-    cookies.set('locale', setToLanguage)
-    cookies.set('resultsPerPage', resultsPerPage)
-    cookies.set('snippetsPerResult', snippetsPerResult)
+    cookies.set('locale', setToLanguage.value)
+    cookies.set('resultsPerPage', resultsPerPage.value)
+    cookies.set('snippetsPerResult', snippetsPerResult.value)
+    cookies.set('authorFacetCount', authorFacetCount.value)
 
     notification.value = {
       show: true,
