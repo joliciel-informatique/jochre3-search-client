@@ -7,7 +7,7 @@
   ></div>
 </template>
 <script setup lang="ts">
-import { onMounted, watch, type Ref } from 'vue'
+import { onMounted, onUpdated, watch, type Ref } from 'vue'
 import { type SimpleKeyboardType } from '@/assets/interfacesExternals'
 import Keyboard, { SimpleKeyboard } from 'simple-keyboard'
 import 'simple-keyboard/build/css/index.css'
@@ -30,6 +30,7 @@ watch(
     if (newV.show) {
       positionKeyboard() // Position keyboard relative to element
       addEventListeners()
+      document.getElementById(newV.attachTo)?.focus()
       el?.classList.add('keyboard-is-open')
     } else {
       removeEventListeners()
@@ -38,6 +39,15 @@ watch(
   },
   { deep: true }
 )
+
+const positionKeyboard = () => {
+  const parent = document.getElementById(simpleKeyboard.value.attachTo)?.getBoundingClientRect()
+  if (parent) {
+    const { top, left, width, height } = parent as DOMRect
+    const container = document.getElementsByClassName('keyboardClass')[0] as HTMLDivElement
+    container.setAttribute('style', `top:${top + height}px;left:${left}px;width:${width - 2}px`)
+  }
+}
 
 const toggleKeyboard = () => (simpleKeyboard.value.show = !simpleKeyboard.value.show)
 
@@ -71,14 +81,7 @@ const onKeyPress = (button: string) => {
   }
 }
 
-const positionKeyboard = () => {
-  const parent = document.getElementById(simpleKeyboard.value.attachTo)?.getBoundingClientRect()
-  if (parent) {
-    const { top, left, width, height } = parent as DOMRect
-    const container = document.getElementsByClassName('keyboardClass')[0] as HTMLDivElement
-    container.setAttribute('style', `top:${top + height}px;left:${left}px;width:${width - 2}px`)
-  }
-}
+const onKeyReleased = () => document.getElementById(simpleKeyboard.value.attachTo)?.focus()
 
 const addEventListeners = () => {
   document.addEventListener('click', closeOutside, true)
@@ -114,9 +117,14 @@ onMounted(() => {
     layoutName: 'default',
     inputName: attachTo,
     onKeyPress: onKeyPress,
+    onKeyReleased: onKeyReleased,
     ...keyboardYiddish,
     rtl: true,
     autoUseTouchEvents: true
   })
+})
+
+onUpdated(() => {
+  document.getElementById(simpleKeyboard.value.attachTo)?.focus()
 })
 </script>
