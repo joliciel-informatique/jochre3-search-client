@@ -12,146 +12,166 @@ Description: presents the facet bar
 <template>
   <div class="box table-of-contents" role="navigation" tabindex="1">
     <aside class="menu">
-      <div>
-        <p class="menu-label is-size-5 label">
-          {{ $t('facets.title') }}
-          <span v-tooltip:top="$t('search.what-are-facets')">
-            <FontAwesomeIcon icon="question-circle" />
-          </span>
-        </p>
-        <div class="columns is-vcentered m-1">
-          <div class="column is-8 is-size-7">
-            <span
-              class=""
-              :class="preferences.displayLeftToRight ? 'has-text-left' : 'has-text-right'"
-            >
-              <p>{{ $t('search.display-number-of-author-facets') }}</p>
-            </span>
-          </div>
-          <div class="column is-4 is-size-7">
-            <div class="dropdown is-hoverable">
-              <div class="dropdown-trigger">
-                <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
-                  <span>{{ authorFacetCount > 0 ? authorFacetCount : 'all' }}</span>
-                  <span class="icon is-small">
-                    <FontAwesomeIcon icon="angle-down" aria-hidden="true" />
-                  </span>
-                </button>
-              </div>
-              <div class="dropdown-menu" id="author-facet-dropdown-menu" role="menu">
-                <div class="dropdown-content left">
-                  <div v-for="val of facetCount" :key="val">
-                    <a
-                      class="dropdown-item"
-                      :class="val === authorFacetCount ? 'is-active' : ''"
-                      href="#"
-                      @click.prevent="updateFacetCount(val)"
-                      >{{ val }}</a
-                    >
-                  </div>
-                  <hr class="dropdown-divider" />
-                  <a href="#" @click.prevent="updateFacetCount(0)" class="dropdown-item">All</a>
-                  <hr class="dropdown-divider" />
-                  <div class="dropdown-item">
-                    <input
-                      type="number"
-                      min="1"
-                      max="100"
-                      v-model="authorFacetCount"
-                      @input="preferences.authorFacetCount = authorFacetCount"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="columns is-vcentered m-1">
-          <div class="column is-8 is-size-7">
-            <span
-              class=""
-              :class="preferences.displayLeftToRight ? 'has-text-left' : 'has-text-right'"
-            >
-              {{ $t('facets.sort-by-label') }}</span
-            >
-          </div>
-          <div class="column is-4 is-size-7">
-            <div class="dropdown is-hoverable">
-              <div class="dropdown-trigger">
-                <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
-                  <span v-if="(preferences.language = 'en')">
-                    <span>{{ $t('facets.most-hits') }}</span>
-                    <span class="icon is-small">
-                      <FontAwesomeIcon icon="angle-down" aria-hidden="true" />
-                    </span>
-                  </span>
-                  <span v-else>
-                    <span class="icon is-small">
-                      <FontAwesomeIcon icon="angle-down" aria-hidden="true" />
-                    </span>
-                    <span>{{ $t('facets.most-hits') }}</span>
-                  </span>
-                </button>
-              </div>
-              <div class="dropdown-menu" id="author-facet-dropdown-menu" role="menu">
-                <div class="dropdown-content left">
-                  <a
-                    href="#"
-                    @click.prevent="updateSortOption('count')"
-                    class="dropdown-item"
-                    :class="updateFacetSortOption === 'count' ? 'is-active' : ''"
-                    >{{ $t('facets.most-hits') }}</a
-                  >
-                  <a
-                    href="#"
-                    @click.prevent="updateSortOption('active')"
-                    class="dropdown-item"
-                    :class="updateFacetSortOption === 'active' ? 'is-active' : ''"
-                    >{{ $t('facets.active-facets') }}</a
-                  >
-                  <a
-                    href="#"
-                    @click.prevent="updateSortOption('label')"
-                    :class="updateFacetSortOption === 'label' ? 'is-active' : ''"
-                    class="dropdown-item"
-                    >{{ $t('facets.by-name') }}</a
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <span>
-            <p class="pb-3">
-              <input
-                class="input mb-2"
-                v-model="filterValue"
-                type="text"
-                :placeholder="$t('search.filter')"
-              />
-              <span class="menu-label p-2" v-if="filterValue !== undefined">
-                {{ $t('search.relevant-facets', [filteredFacets?.length]) }}
+      <AccordionCard :showing="showing">
+        <template #header>
+          <div>
+            <p class="menu-label is-size-5 label">
+              {{ $t('facets.title') }}
+              <span v-tooltip:top="$t('search.what-are-facets')">
+                <FontAwesomeIcon icon="question-circle" />
               </span>
             </p>
-          </span>
-        </div>
-      </div>
-      <div>
-        <div
-          class="container is-flex is-flex-direction-column is-justify-content-center is-flex-wrap-wrap is-align-items-center"
-        >
-          <span v-for="facet of filteredFacets" v-bind:key="sha1(facet)">
-            <FilterTag
-              :label="facet.label"
-              :count="facet.count"
-              :active="facet.active"
-              :showCount="true"
-              @func="toggleFacet(facet)"
-            />
-          </span>
-        </div>
-      </div>
+          </div>
+        </template>
+        <template #content>
+          <div>
+            <div class="columns is-vcentered m-1">
+              <div class="column is-8 is-size-7">
+                <span
+                  class=""
+                  :class="preferences.displayLeftToRight ? 'has-text-left' : 'has-text-right'"
+                >
+                  <p>{{ $t('search.display-number-of-author-facets') }}</p>
+                </span>
+              </div>
+              <div class="column is-4 is-size-7">
+                <div class="dropdown is-hoverable">
+                  <div class="dropdown-trigger">
+                    <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
+                      <span>{{ authorFacetCount > 0 ? authorFacetCount : 'all' }}</span>
+                      <span class="icon is-small">
+                        <FontAwesomeIcon icon="angle-down" aria-hidden="true" />
+                      </span>
+                    </button>
+                  </div>
+                  <div class="dropdown-menu" id="author-facet-dropdown-menu" role="menu">
+                    <div class="dropdown-content left">
+                      <div v-for="val of facetCount" :key="val">
+                        <a
+                          class="dropdown-item"
+                          :class="val === authorFacetCount ? 'is-active' : ''"
+                          href="#"
+                          @click.prevent="updateFacetCount(val)"
+                          >{{ val }}</a
+                        >
+                      </div>
+                      <hr class="dropdown-divider" />
+                      <a href="#" @click.prevent="updateFacetCount(0)" class="dropdown-item">All</a>
+                      <hr class="dropdown-divider" />
+                      <div class="dropdown-item">
+                        <input
+                          type="number"
+                          min="1"
+                          max="100"
+                          v-model="authorFacetCount"
+                          @input="preferences.authorFacetCount = authorFacetCount"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="columns is-vcentered m-1">
+              <div class="column is-8 is-size-7">
+                <span
+                  class=""
+                  :class="preferences.displayLeftToRight ? 'has-text-left' : 'has-text-right'"
+                >
+                  {{ $t('facets.sort-by-label') }}</span
+                >
+              </div>
+              <div class="column is-4 is-size-7">
+                <div class="dropdown is-hoverable">
+                  <div class="dropdown-trigger">
+                    <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
+                      <span v-if="(preferences.language = 'en')">
+                        <span>{{ $t('facets.most-hits') }}</span>
+                        <span class="icon is-small">
+                          <FontAwesomeIcon icon="angle-down" aria-hidden="true" />
+                        </span>
+                      </span>
+                      <span v-else>
+                        <span class="icon is-small">
+                          <FontAwesomeIcon icon="angle-down" aria-hidden="true" />
+                        </span>
+                        <span>{{ $t('facets.most-hits') }}</span>
+                      </span>
+                    </button>
+                  </div>
+                  <div class="dropdown-menu" id="author-facet-dropdown-menu" role="menu">
+                    <div class="dropdown-content left">
+                      <a
+                        href="#"
+                        @click.prevent="updateSortOption('count')"
+                        class="dropdown-item"
+                        :class="updateFacetSortOption === 'count' ? 'is-active' : ''"
+                        >{{ $t('facets.most-hits') }}</a
+                      >
+                      <a
+                        href="#"
+                        @click.prevent="updateSortOption('active')"
+                        class="dropdown-item"
+                        :class="updateFacetSortOption === 'active' ? 'is-active' : ''"
+                        >{{ $t('facets.active-facets') }}</a
+                      >
+                      <a
+                        href="#"
+                        @click.prevent="updateSortOption('label')"
+                        :class="updateFacetSortOption === 'label' ? 'is-active' : ''"
+                        class="dropdown-item"
+                        >{{ $t('facets.by-name') }}</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <span>
+                <p class="pb-3">
+                  <input
+                    class="input mb-2"
+                    v-model="filterValue"
+                    type="text"
+                    :placeholder="$t('search.filter')"
+                  />
+                  <span class="menu-label p-2" v-if="filterValue !== undefined">
+                    {{ $t('search.relevant-facets', [filteredFacets?.length]) }}
+                  </span>
+                </p>
+              </span>
+            </div>
+          </div>
+          <div>
+            <div
+              class="container is-flex is-flex-direction-column is-justify-content-center is-flex-wrap-wrap is-align-items-center"
+            >
+              <span v-for="facet of filteredFacets" v-bind:key="sha1(facet)">
+                <FilterTag
+                  :label="facet.label"
+                  :count="facet.count"
+                  :active="facet.active"
+                  :showCount="true"
+                  @func="toggleFacet(facet)"
+                />
+              </span>
+            </div>
+          </div>
+        </template>
+
+        <template #footer>
+          <div class="columns">
+            <span
+              class="column footer-icon pb-2 is-small has-text-centered is-clickable"
+              :class="{ rotate: !showing }"
+              @click="toggle()"
+            >
+              <font-awesome-icon icon="circle-chevron-up" size="lg" />
+            </span>
+          </div>
+        </template>
+      </AccordionCard>
     </aside>
   </div>
 </template>
@@ -163,9 +183,14 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import type { AggregationBin } from '@/assets/interfacesExternals'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { insertInSortedArray } from '@/assets/functions'
+import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
 
 const preferences = usePreferencesStore()
 const defaultFacetCount = [5, 10, 15, 20]
+
+const toggle = () => (showing.value = !showing.value)
+
+const showing = ref(false)
 
 const facets: Ref = defineModel<AggregationBin[]>('facets')
 
