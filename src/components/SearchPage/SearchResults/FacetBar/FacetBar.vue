@@ -143,20 +143,18 @@ Description: presents the facet bar
               </span>
             </div>
           </div>
-          <div>
-            <div
-              class="container is-flex is-flex-direction-column is-justify-content-center is-flex-wrap-wrap is-align-items-center"
-            >
-              <span v-for="facet of filteredFacets" v-bind:key="sha1(facet)">
-                <FilterTag
-                  :label="facet.label"
-                  :count="facet.count"
-                  :active="facet.active"
-                  :showCount="true"
-                  @func="toggleFacet(facet)"
-                />
-              </span>
-            </div>
+          <div
+            class="container facet-list is-flex is-flex-direction is-justify-content-center is-flex-wrap-wrap is-align-items-center"
+          >
+            <span v-for="facet of filteredFacets" v-bind:key="sha1(facet)">
+              <FilterTag
+                :label="facet.label"
+                :count="facet.count"
+                :active="facet.active"
+                :showCount="true"
+                @func="toggleFacet(facet)"
+              />
+            </span>
           </div>
         </template>
 
