@@ -114,6 +114,10 @@ div.kc-logo-text span {
   color: white;
   overflow: visible;
   white-space: nowrap;
+  background-size: auto 80%;
+  background-position-x: 42%;
+  background-image: url('./images/jochreLogo.png');
+  background-repeat: no-repeat;
 }
 
 #kc-header-wrapper {
@@ -578,6 +582,11 @@ ul#kc-totp-supported-apps {
   max-width: 500px;
   border-top: 4px solid;
   border-color: var(--pf-global--primary-color--100);
+  background-image: url('./images/yiddishbookcenter-ocr.jpg');
+  background-repeat: no-repeat;
+  background-size: 60%;
+  background-position: center;
+  background-blend-mode: normal;
 }
 
 /*phone*/
