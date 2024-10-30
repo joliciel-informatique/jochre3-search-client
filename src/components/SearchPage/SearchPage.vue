@@ -216,14 +216,6 @@ const runSearch = () => {
   hasAdvancedSearchCriteria.value = false
   search().then((res) => {
     isLoading.value = res ? true : false
-    const searchBar = document.querySelector('.searchBar') as HTMLDivElement
-    if (searchBar !== null && searchResults.value?.length) {
-      window.onscroll = () => {
-        window.scrollY < searchBar.offsetTop
-          ? searchBar.classList.add('stickySearchBarDocked')
-          : searchBar.classList.remove('stickySearchBarUndocked')
-      }
-    }
   })
 }
 
