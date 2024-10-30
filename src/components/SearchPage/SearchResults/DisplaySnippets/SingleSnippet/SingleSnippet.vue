@@ -10,13 +10,16 @@ Methods: getSelectedWord (local), toggleImageSnippet (local), fetchData (importe
 Description: displays text snippets from the OCR text
 -->
 <template>
-  <div :docRef="docRef" :index="index" class="card snippet m-2">
-    <header class="card-header snippet">
-      <p class="card-header-title has-text-info">{{ $t('results.page', [snippet.page]) }}</p>
+  <div :docRef="docRef" :bookIndex :index="index" class="card snippet m-4">
+    <header
+      class="card-header"
+      :class="selectedEntry.docRef === docRef ? 'selected-snippet' : 'snippet'"
+    >
+      <p class="card-header-title">{{ $t('results.page', [snippet.page]) }}</p>
 
       <!-- Open page in book -->
       <button
-        class="card-header-icon is-large has-text-info p-1 m-1"
+        class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column"
         aria-label="view book"
         v-tooltip:top="$t('results.show-original-page', [snippet.page])"
         v-if="snippet.deepLink"
@@ -26,11 +29,12 @@ Description: displays text snippets from the OCR text
         <span class="icon">
           <font-awesome-icon icon="book-open" size="lg" />
         </span>
+        <span class="is-size-7">{{ $t('snippet.open-page') }}</span>
       </button>
 
       <!-- View transcribed text -->
       <button
-        class="card-header-icon is-large has-text-info p-1 m-1"
+        class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column"
         aria-label="view transcription"
         v-tooltip:top="$t('results.show-text')"
         @click="openDeepLink(`/text/${docRef}/page/${snippet.page}`)"
@@ -39,6 +43,7 @@ Description: displays text snippets from the OCR text
         <span class="icon">
           <font-awesome-icon icon="file-lines" size="lg" />
         </span>
+        <span class="is-size-7">{{ $t('snippet.open-transcription') }}</span>
       </button>
     </header>
     <div class="card-content" :data-index="index" :data-docref="docRef" :data-page="snippet.page">
@@ -139,10 +144,17 @@ const preferences = usePreferencesStore()
 
 library.add(faFileImage, faBookOpen, faFileLines, faAngleDown)
 
-const { index, snippet, docRef } = defineProps(['index', 'snippet', 'docRef'])
+const { index, snippet, docRef, bookIndex } = defineProps([
+  'index',
+  'snippet',
+  'docRef',
+  'bookIndex'
+])
 const imageModal: Ref = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const notification = defineModel('notification')
+const selectedEntry: Ref = defineModel('selectedEntry')
+
 const image = ref('')
 const imageIsLoading = ref(false)
 

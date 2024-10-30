@@ -19,7 +19,7 @@
         {{ headerInfo($tm('header')) }}
         <div class="title has-text-white py-4">{{ $t('header.title') }}</div>
         <div
-          class="beta-flyout"
+          class="header-beta-flyout"
           :class="{
             'is-pulled-right': preferences.displayLeftToRight,
             'is-pulled-left': !preferences.displayLeftToRight
@@ -42,8 +42,8 @@
           >
             <span class="icon is-small">
               <font-awesome-icon icon="gear" />
-            </span></button
-          >&nbsp;
+            </span>
+          </button>
           <button
             @click="loginOrLogout"
             class="button is-small"
@@ -53,6 +53,10 @@
               <font-awesome-icon icon="right-to-bracket" v-if="!authenticated" />
               <font-awesome-icon icon="right-from-bracket" v-if="authenticated" />
             </span>
+          </button>
+          <button @click="toggleLanguage($i18n as VueI18n.VueI18n)" class="button is-small">
+            <span v-if="preferences.language === 'yi'">YI</span>
+            <span v-if="preferences.language === 'en'">EN</span>
           </button>
         </div>
       </div>
@@ -67,6 +71,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faGear, faRightToBracket, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import VueI18n from 'vue-i18n'
 
 const preferences = usePreferencesStore()
 
@@ -88,4 +93,9 @@ const headerInfo = (info: {}) => {
 }
 
 const loginOrLogout = () => (authenticated.value ? keycloak?.logout() : keycloak?.login())
+
+const toggleLanguage = (vi18n: VueI18n.VueI18n) => {
+  preferences.language = preferences.language === 'yi' ? 'en' : 'yi'
+  vi18n.locale = preferences.language
+}
 </script>

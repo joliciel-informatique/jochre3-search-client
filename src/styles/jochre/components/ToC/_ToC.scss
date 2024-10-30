@@ -1,0 +1,16 @@
+@use '../../../custom/Custom' as *;
+
+.table-of-contents {
+  display: block;
+  position: sticky;
+  top: 20vh;
+  left: 2vw;
+  background-color: $background-color-1;
+  .transcribed-text {
+    z-index: 9;
+  }
+
+  #searchResultsList {
+    height: 100%;
+  }
+}

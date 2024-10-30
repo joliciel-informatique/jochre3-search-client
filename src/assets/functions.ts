@@ -1,4 +1,4 @@
-export const isInView = (el: HTMLElement) => {
+export const isInView = (el: Element) => {
   const rect = el.getBoundingClientRect()
   return rect.top >= 0 && rect.bottom <= window.innerHeight
 }
@@ -10,4 +10,16 @@ export const isSticking = (el: HTMLElement) => {
   )
 
   observer.observe(el)
+}
+
+export const insertInSortedArray = (array: any[], value: number) => {
+  let low = 0,
+    high = array.length
+
+  while (low < high) {
+    let mid = (low + high) >>> 1
+    if (array[mid] < value) low = mid + 1
+    else high = mid
+  }
+  return low
 }

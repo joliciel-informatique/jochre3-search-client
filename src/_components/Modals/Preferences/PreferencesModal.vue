@@ -31,6 +31,7 @@
                 type="number"
                 name="resultsPerPageInput"
                 v-model="resultsPerPage"
+                @onchange="preferences.resultsPerPage = resultsPerPage"
               />
             </div>
           </div>
@@ -61,7 +62,21 @@
                 type="number"
                 name="authorFacetCountInput"
                 v-model="authorFacetCount"
+                @onchange="preferences.authorFacetCount = authorFacetCount"
               />
+            </div>
+          </div>
+        </div>
+        <div class="columns is-vcentered">
+          <div class="column is-5">
+            <span class="label">{{ $t('preferences.display-snippets-per-book') }}</span>
+          </div>
+          <div class="column is-4">
+            <div class="control is-expanded">
+              <label class="switch is-rounded is-small">
+                <input type="checkbox" v-model="displayPerBook" />
+                <span class="check"></span>
+              </label>
             </div>
           </div>
         </div>
@@ -77,6 +92,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import { fetchData } from '@/assets/fetchMethods'
 import { useCookies } from '@vueuse/integrations/useCookies'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
@@ -92,8 +108,8 @@ const cookies = useCookies(['locale', 'resultsPerPage', 'snippetsPerResult', 'au
 const setToLanguage = ref(preferences.language)
 
 const resultsPerPage = ref(preferences.resultsPerPage)
-const snippetsPerResult = ref(preferences.snippetsPerResult)
 const authorFacetCount = ref(preferences.authorFacetCount)
+const { snippetsPerResult, displayPerBook } = storeToRefs(preferences)
 
 const save = (vi18n: VueI18n.VueI18n) => {
   preferences.language = setToLanguage.value

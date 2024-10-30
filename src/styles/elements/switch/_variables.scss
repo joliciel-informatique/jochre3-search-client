@@ -1,0 +1,15 @@
+// @use 'bulma/sass/utilities/all';
+@use '../../custom/Custom' as *;
+$speed-slow: 150ms;
+
+$switch-is-ltr: -100%;
+
+$switch-width-number: 2.75;
+$switch-width: $switch-width-number * 1em;
+$switch-padding: 0.2em;
+$switch-outlined-padding: 0.1em;
+$switch-active-background-color: $foreground-color-1;
+
+/* Box-shadow */
+$switch-has-shadows: 0;
+$switch-knob-has-shadows: 0;
