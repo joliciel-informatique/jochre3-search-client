@@ -10,3 +10,28 @@
 .header-footer-content {
   flex: 0 1 auto;
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .logo {
+    position: fixed;
+    max-width: 10vw;
+    max-height: 20vh;
+    z-index: 40;
+    animation-name: logo-watcher;
+    animation-timing-function: linear;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    animation-timeline: scroll();
+    transform-origin: top left;
+  }
+
+  @keyframes logo-watcher {
+    10% {
+      scale: 0.75 0.75;
+    }
+
+    to {
+      scale: 0.75 0.75;
+    }
+  }
+}
