@@ -18,13 +18,7 @@
       v-model:notification="notification"
     />
   </main>
-  <FooterPage
-    v-model:total-hits="totalHits"
-    v-model:page="page"
-    @newPage="newPage"
-    @resetSearchResults="resetSearchResults"
-    :search-results="searchResults"
-  />
+  <FooterPage v-model:total-hits="totalHits" v-model:page="page" :search-results="searchResults" />
   <Preferences v-model:notification="notification" />
   <LargeImage v-model:image-modal="imageModal" />
   <FixWord v-model:word-modal="wordModal" v-model:notification="notification" />
@@ -58,9 +52,4 @@ const imageModal = ref({})
 const metadataModal = ref({ field: 'author' })
 const wordModal = ref({})
 const notification = ref({})
-const searchPageRef = ref<InstanceType<typeof SearchPage>>()
-
-// Methods exposed by SearchPage
-const resetSearchResults = () => searchPageRef.value?.resetSearchResults()
-const newPage = () => searchPageRef.value?.newPage()
 </script>
