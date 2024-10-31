@@ -102,7 +102,6 @@ Description: presents a 'search for authors' text box and retrieves authors ever
 import { ref, watch, type Ref } from 'vue'
 import { sha1 } from 'object-hash'
 import { fetchData } from '@/assets/fetchMethods'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import FilterTag from '@/_components/FilterTag/FilterTag.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 

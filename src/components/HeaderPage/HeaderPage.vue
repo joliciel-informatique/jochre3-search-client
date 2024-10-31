@@ -5,17 +5,15 @@
   >
     <div class="grid">
       <div class="cell p-2">
-        <div class="is-pulled-left">
-          <a :href="$t('header.logo-url')">
-            <img
-              style="width: 100px; border: none"
-              :src="$t('header.logo')"
-              :alt="$t('header.title')"
-              :title="$t('header.title')"
-          /></a>
-        </div>
+        <a :href="$t('header.logo-url')">
+          <img
+            class="logo"
+            :src="$t('header.logo')"
+            :alt="$t('header.title')"
+            :title="$t('header.title')"
+        /></a>
       </div>
-      <div class="cell is-col-span-2 p-2">
+      <div class="cell p-2 is-col-span-2">
         {{ headerInfo($tm('header')) }}
         <div class="title has-text-white py-4">{{ $t('header.title') }}</div>
         <div
@@ -67,19 +65,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faGear, faRightToBracket, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import VueI18n from 'vue-i18n'
 
 const preferences = usePreferencesStore()
 
-library.add(faGear, faRightToBracket, faRightFromBracket)
-
 const keycloak = useKeycloakStore().keycloak
 const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
 const headerLinks = ref()
+const smaller = defineModel('shrinkLogo')
 
 const headerInfo = (info: {}) => {
   const infoObj = JSON.parse(JSON.stringify(info)) // Proxy to normal JSON object

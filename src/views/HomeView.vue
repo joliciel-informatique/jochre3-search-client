@@ -19,13 +19,7 @@
       v-model:simple-keyboard="simpleKeyboard"
     />
   </main>
-  <FooterPage
-    v-model:total-hits="totalHits"
-    v-model:page="page"
-    @newPage="newPage"
-    @resetSearchResults="resetSearchResults"
-    :search-results="searchResults"
-  />
+  <FooterPage v-model:total-hits="totalHits" v-model:page="page" :search-results="searchResults" />
   <Preferences v-model:notification="notification" />
   <LargeImage v-model:image-modal="imageModal" />
   <FixWord

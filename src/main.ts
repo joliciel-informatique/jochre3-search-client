@@ -23,6 +23,12 @@ import { fetchData, setURL, setToken } from './assets/fetchMethods'
 
 import './styles/main.scss'
 import CookieConsentVue from './plugins/CookieConsentVue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+// Adding FontAwesomeIcon as global component
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+library.add(fas) // Adding all FAS icons
 
 const messages = {
   en: en,
@@ -49,6 +55,7 @@ app.use<Vue3TouchEventsOptions>(Vue3TouchEvents, {})
 app.use(CookieConsentVue, cookieConsentConfig)
 
 app.component('SearchPage', SearchPage)
+app.component('font-awesome-icon', FontAwesomeIcon)
 
 console.log('Starting up')
 

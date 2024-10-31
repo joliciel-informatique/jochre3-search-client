@@ -95,10 +95,10 @@ Description: presents the search bar
             <font-awesome-icon
               :icon="
                 showAdvancedSearchPanel
-                  ? faMagnifyingGlassMinus
+                  ? 'magnifying-glass-minus'
                   : hasAdvancedSearchCriteria
-                    ? faSliders
-                    : faMagnifyingGlassPlus
+                    ? 'sliders'
+                    : 'magnifying-glass-plus'
               "
             />
             {{ $t('search.advanced-search') }}
@@ -111,7 +111,7 @@ Description: presents the search bar
             class="has-text-white"
           >
             <span>
-              <font-awesome-icon :icon="faBookOpen" />
+              <font-awesome-icon icon="book-open" />
               {{ $t('search.user-guide') }}
             </span>
           </a>
@@ -121,16 +121,7 @@ Description: presents the search bar
   </div>
 </template>
 <script setup lang="ts">
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import {
-  faMagnifyingGlassPlus,
-  faMagnifyingGlassMinus,
-  faKeyboard,
-  faXmarkCircle,
-  faSliders,
-  faBookOpen
-} from '@fortawesome/free-solid-svg-icons'
+import { computed, type Ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import type { Ref } from 'vue'
 
@@ -138,9 +129,8 @@ const preferences = usePreferencesStore()
 
 const hasAdvancedSearchCriteria = defineModel('hasAdvancedSearchCriteria')
 
-library.add(faMagnifyingGlassPlus, faMagnifyingGlassMinus, faKeyboard, faXmarkCircle)
-const query = defineModel('query')
-const strict = defineModel('strict')
+const query: Ref = defineModel('query')
+const strict: Ref = defineModel('strict')
 const isLoading = defineModel('isLoading')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
 const simpleKeyboard: Ref = defineModel('simpleKeyboard')

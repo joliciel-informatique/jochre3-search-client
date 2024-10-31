@@ -1,24 +1,11 @@
 @use '../../../custom/Custom' as *;
 
-// $sticky-bar-undocked-height: 10vh;
-
-.stickySearchBarDocked {
+.searchBar {
+  background-color: $background-color-1;
   position: sticky;
   top: 0;
-  // height: $sticky-bar-docked-height;
   max-height: max-content;
   z-index: 39;
-}
-
-.stickySearchBarUndocked {
-  margin-top: 10px;
-  // height: $sticky-bar-undocked-height;
-  max-height: max-content;
-}
-
-.advancedSearch .body {
-  height: auto;
-  width: 100%;
 }
 
 #query {
@@ -42,23 +29,9 @@
   height: 100%;
   line-height: unset;
   font-size: unset;
-
-  // svg {
-  //   path {
-  //     color: $background-color-1;
-  //   }
-  // }
-
-  // &:hover {
-  //   svg {
-  //     path {
-  //       transition: 300ms ease-in-out;
-  //       color: $foreground-color-1;
-  //     }
-  //   }
-  // }
 }
 
-.searchBar {
-  background-color: $background-color-1;
+.advancedSearch .body {
+  height: auto;
+  width: 100%;
 }

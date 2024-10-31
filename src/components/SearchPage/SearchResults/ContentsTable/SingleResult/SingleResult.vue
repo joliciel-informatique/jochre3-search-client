@@ -10,7 +10,7 @@ Methods: fixMetaData (imported)
 Description: presents OCR record metadata
 -->
 <template>
-  <div :docRef="result.docRef" :id="result.docRef" class="metadata my-3">
+  <div :docRef="result.docRef" :id="result.docRef" class="metadata mt-2">
     <AccordionCard
       :id="result.docRef"
       :showing="result.docRef === selectedEntry?.docRef && showing"
@@ -75,40 +75,29 @@ Description: presents OCR record metadata
       </template>
 
       <template #footer>
-        <!-- <div class="columns is-centered">
+        <div class="columns">
           <span
-            class="column icon is-small has-text-left is-clickable"
+            class="column footer-icon pt-2 is-small has-text-centered is-clickable"
             :class="{ rotate: !showing }"
             @click="toggle()"
             v-show="selectedEntry?.docRef === result.docRef"
           >
-            <font-awesome-icon icon="circle-chevron-down" size="lg" />
+            <font-awesome-icon icon="circle-chevron-up" size="lg" />
           </span>
-        </div> -->
+        </div>
       </template>
     </AccordionCard>
   </div>
 </template>
 
 <script setup lang="ts">
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import SingleResultItem from '../../ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import {
-  faPenToSquare,
-  faQuestionCircle,
-  faBookOpen,
-  faCircleChevronDown,
-  faCircleChevronUp
-} from '@fortawesome/free-solid-svg-icons'
 import { sha1 } from 'object-hash'
-import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
-import { usePreferencesStore } from '@/stores/PreferencesStore'
-import type { SearchResult } from '@/assets/interfacesExternals'
+import AccordionCard from '../../../../../_components/AccordionCard/AccordionCard.vue'
+import { usePreferencesStore } from '../../../../../stores/PreferencesStore'
+import type { SearchResult } from '../../../../../assets/interfacesExternals'
 
 const { result, index, pageNumberOffset } = defineProps(['result', 'index', 'pageNumberOffset'])
-
-library.add(faPenToSquare, faQuestionCircle, faBookOpen, faCircleChevronDown, faCircleChevronUp)
 
 const preferences = usePreferencesStore()
 const fields = ['titleEnglish', 'author', 'authorEnglish', 'publicationYear', 'publisher']
