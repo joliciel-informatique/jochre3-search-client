@@ -128,21 +128,11 @@ Description: displays text snippets from the OCR text
 </template>
 
 <script setup lang="ts">
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import {
-  faFileImage,
-  faBookOpen,
-  faFileLines,
-  faAngleDown
-} from '@fortawesome/free-solid-svg-icons'
 import { fetchData } from '@/assets/fetchMethods'
 import { ref, type Ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
-
-library.add(faFileImage, faBookOpen, faFileLines, faAngleDown)
 
 const { index, snippet, docRef, bookIndex } = defineProps([
   'index',

@@ -21,7 +21,7 @@
             @click="() => (notification.show = !notification.show)"
           >
             <span>
-              <FontAwesomeIcon icon="circle-xmark" class="has-text-white" />
+              <font-awesome-icon icon="circle-xmark" class="has-text-white" />
             </span>
           </button>
         </header>
@@ -35,7 +35,6 @@
   </Transition>
 </template>
 <script setup lang="ts">
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { watch, type Ref } from 'vue'
 const notification: Ref = defineModel('notification')
 

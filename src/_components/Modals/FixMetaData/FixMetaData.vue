@@ -98,7 +98,6 @@ import { ref, computed, type Ref } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
 import FindAuthors from '@/_components/FindAuthors/FindAuthors.vue'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 const preferences = usePreferencesStore()
 
