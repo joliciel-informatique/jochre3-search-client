@@ -70,7 +70,7 @@ Description: presents the search bar
             :title="$t('search.keyboard')"
           >
             <span>
-              <font-awesome-icon :icon="faKeyboard" />
+              <font-awesome-icon icon="keyboard" />
             </span>
           </button>
         </p>
@@ -121,9 +121,8 @@ Description: presents the search bar
   </div>
 </template>
 <script setup lang="ts">
-import { computed, type Ref } from 'vue'
-import { usePreferencesStore } from '@/stores/PreferencesStore'
 import type { Ref } from 'vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
