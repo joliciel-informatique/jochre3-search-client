@@ -154,7 +154,6 @@ Description: the advanced search toolbox
 </template>
 <script setup lang="ts">
 import FindAuthors from '@/_components/FindAuthors/FindAuthors.vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { computed, type Ref } from 'vue'
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])

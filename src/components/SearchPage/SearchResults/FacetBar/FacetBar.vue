@@ -18,7 +18,7 @@ Description: presents the facet bar
             <p class="menu-label is-size-5 label">
               {{ $t('facets.title') }}
               <span v-tooltip:top="$t('search.what-are-facets')">
-                <FontAwesomeIcon icon="question-circle" />
+                <font-awesome-icon icon="question-circle" />
               </span>
             </p>
           </div>
@@ -40,7 +40,7 @@ Description: presents the facet bar
                     <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
                       <span>{{ authorFacetCount > 0 ? authorFacetCount : 'all' }}</span>
                       <span class="icon is-small">
-                        <FontAwesomeIcon icon="angle-down" aria-hidden="true" />
+                        <font-awesome-icon icon="angle-down" aria-hidden="true" />
                       </span>
                     </button>
                   </div>
@@ -88,12 +88,12 @@ Description: presents the facet bar
                       <span v-if="(preferences.language = 'en')">
                         <span>{{ $t('facets.most-hits') }}</span>
                         <span class="icon is-small">
-                          <FontAwesomeIcon icon="angle-down" aria-hidden="true" />
+                          <font-awesome-icon icon="angle-down" aria-hidden="true" />
                         </span>
                       </span>
                       <span v-else>
                         <span class="icon is-small">
-                          <FontAwesomeIcon icon="angle-down" aria-hidden="true" />
+                          <font-awesome-icon icon="angle-down" aria-hidden="true" />
                         </span>
                         <span>{{ $t('facets.most-hits') }}</span>
                       </span>
@@ -177,7 +177,6 @@ Description: presents the facet bar
 import { onMounted, ref, watch, type Ref } from 'vue'
 import FilterTag from '@/_components/FilterTag/FilterTag.vue'
 import { sha1 } from 'object-hash'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import type { AggregationBin } from '@/assets/interfacesExternals'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { insertInSortedArray } from '@/assets/functions'

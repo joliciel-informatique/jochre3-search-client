@@ -92,7 +92,7 @@
       <h1>
         <span class="no-results"> {{ $t('results.none') }}! </span>
         <div class="is-justify-content-center is-align-items-center no-results-image m-6">
-          <FontAwesomeIcon class="fa-10x" icon="ban" />
+          <font-awesome-icon class="fa-10x" icon="ban" />
         </div>
       </h1>
     </div>
@@ -107,9 +107,6 @@ import { onMounted, ref, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchData } from '@/assets/fetchMethods'
 import { sha1 } from 'object-hash'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { library } from '@fortawesome/fontawesome-svg-core'
-library.add(faBan)
 
 // Import Child components
 import SearchBar from './SearchBar/SearchBar.vue'

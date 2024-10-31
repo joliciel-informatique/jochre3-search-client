@@ -91,24 +91,13 @@ Description: presents OCR record metadata
 </template>
 
 <script setup lang="ts">
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import SingleResultItem from '../../ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import {
-  faPenToSquare,
-  faQuestionCircle,
-  faBookOpen,
-  faCircleChevronDown,
-  faCircleChevronUp
-} from '@fortawesome/free-solid-svg-icons'
 import { sha1 } from 'object-hash'
 import AccordionCard from '../../../../../_components/AccordionCard/AccordionCard.vue'
 import { usePreferencesStore } from '../../../../../stores/PreferencesStore'
 import type { SearchResult } from '../../../../../assets/interfacesExternals'
 
 const { result, index, pageNumberOffset } = defineProps(['result', 'index', 'pageNumberOffset'])
-
-library.add(faPenToSquare, faQuestionCircle, faBookOpen, faCircleChevronDown, faCircleChevronUp)
 
 const preferences = usePreferencesStore()
 const fields = ['titleEnglish', 'author', 'authorEnglish', 'publicationYear', 'publisher']

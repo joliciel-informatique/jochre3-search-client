@@ -18,7 +18,7 @@
             <span class="control-label"
               >{{ $t('search.snippets-per-book') }}
               <span v-tooltip:top="$t('search.display-snippets-per-book')">
-                <FontAwesomeIcon icon="question-circle" /> </span
+                <font-awesome-icon icon="question-circle" /> </span
             ></span>
           </div>
           <label class="column is-4 is-size-7 is-rounded switch">
@@ -59,10 +59,6 @@
 <script setup lang="ts">
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { computed, onMounted, ref, type Ref } from 'vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faCircleChevronDown, faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
-import { library } from '@fortawesome/fontawesome-svg-core'
-library.add(faCircleChevronDown, faQuestionCircle)
 
 import { storeToRefs } from 'pinia'
 

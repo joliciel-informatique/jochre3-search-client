@@ -58,7 +58,6 @@
 <script setup lang="ts">
 import { onBeforeUpdate, ref, type Ref } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 

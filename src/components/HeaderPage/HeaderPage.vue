@@ -65,15 +65,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faGear, faRightToBracket, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import VueI18n from 'vue-i18n'
 
 const preferences = usePreferencesStore()
-
-library.add(faGear, faRightToBracket, faRightFromBracket)
 
 const keycloak = useKeycloakStore().keycloak
 const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
