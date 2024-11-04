@@ -8,6 +8,7 @@
       v-model:query="query"
       v-model:strict="strict"
       v-model:is-loading="isLoading"
+      v-model:simpleKeyboard="simpleKeyboard"
     />
     <AdvancedSearch
       @newSearch="newSearch"
@@ -21,6 +22,7 @@
       v-model:sort-by="sortBy"
       v-model:facets="facets"
       v-model:exclude-from-search="excludeFromSearch"
+      v-model:simpleKeyboard="simpleKeyboard"
     />
     <FooterNavigation
       @newPage="newPage()"
@@ -105,7 +107,7 @@
 <script setup lang="ts">
 import { onMounted, ref, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { fetchData } from '@/assets/fetchMethods'
+import { fetchData } from '../../assets/fetchMethods'
 import { sha1 } from 'object-hash'
 
 // Import Child components
@@ -118,12 +120,12 @@ import FacetBar from './SearchResults/FacetBar/FacetBar.vue'
 import IndexSize from './SearchResults/IndexSize/IndexSize.vue'
 
 // Import interfaces
-import { type SearchResult, type AggregationBin } from '@/assets/interfacesExternals'
+import { type SearchResult, type AggregationBin } from '../../assets/interfacesExternals'
 
 // This is better kept in Pinia or something similar
-import { hasSearch } from '@/assets/appState'
+import { hasSearch } from '../../assets/appState'
 
-import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { usePreferencesStore } from '../../stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
@@ -154,6 +156,8 @@ const fromYear = ref()
 const toYear = ref()
 const docRefs = ref('')
 const sortBy = ref('Score')
+
+const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 
 // Startup variables: may move to App.vue or HomeView.vue
 const router = useRouter()
@@ -248,6 +252,8 @@ const resetSearchResults = () => {
   authorList.value = []
   hasAdvancedSearchCriteria.value = false
   showAdvancedSearchPanel.value = false
+
+  simpleKeyboard.value.show = false
 
   window.history.replaceState({}, document.title, '/')
 }
@@ -366,26 +372,6 @@ const search = async () => {
               q?.removeAttribute('disabled')
               return false
             })
-            // facetParams.append('field', 'Author')
-            // facetParams.append('maxBins', preferences.authorFacetCount.toString())
-            //  return fetchData('aggregate', 'get', facetParams)
-            //   .then((response) =>
-            //     response.json().then((result) => {
-            //       const activeFacets = facets.value
-            //         .map((facet) => (facet.active ? facet.label : null))
-            //         .filter((facet) => facet)
-
-            //       facets.value = result.bins.map((facet: { label: string; count: number }) =>
-            //         activeFacets.includes(facet.label)
-            //           ? { ...facet, active: true }
-            //           : { ...facet, active: false }
-            //       )
-
-            // q?.parentElement?.classList.remove('is-loading')
-            // q?.removeAttribute('disabled')
-            // return false
-            // })
-            // )
             .catch((error) => {
               notification.value = {
                 show: true,

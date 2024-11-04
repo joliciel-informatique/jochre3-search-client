@@ -26,15 +26,13 @@ Description: presents a 'search for authors' text box and retrieves authors ever
             }"
           >
             <input
-              class="input keyboardInput"
+              :id="uniqueId"
+              class="input"
               type="text"
               lang="yi"
               name="findAuthorInput"
-              :disabled="disabled"
-              :vki-id="uniqueId"
               v-model="authorText"
-              @input="findAuthor"
-              autocomplete="one-time-code"
+              :disabled="disabled"
               :placeholder="$t('search.authorPlaceholder')"
             />
             <div
@@ -57,7 +55,7 @@ Description: presents a 'search for authors' text box and retrieves authors ever
           </div>
           <div
             class="dropdown-menu"
-            id="dropdown-menu"
+            :id="`${uniqueId}-dropdown-menu`"
             role="menu"
             v-if="authorDropdownItems.length > 0"
           >
@@ -72,11 +70,10 @@ Description: presents a 'search for authors' text box and retrieves authors ever
               </a>
             </div>
           </div>
-          <p class="control">
+          <p class="control keyboardButton">
             <button
-              class="button is-clickable is-info keyboardInputButton"
-              aria-label="open onscreen Yiddish keyboard"
-              :vki-id="uniqueId"
+              class="button is-clickable is-medium"
+              @click="toggleKeyboard(uniqueId)"
               :alt="$t('search.keyboard')"
               :title="$t('search.keyboard')"
             >
@@ -102,7 +99,7 @@ Description: presents a 'search for authors' text box and retrieves authors ever
   </div>
 </template>
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
+import { ref, watch, type Ref } from 'vue'
 import { sha1 } from 'object-hash'
 import { fetchData } from '@/assets/fetchMethods'
 import FilterTag from '@/_components/FilterTag/FilterTag.vue'
@@ -115,6 +112,14 @@ const { multiValue, uniqueId, showExcludeCheckbox } = defineProps([
   'uniqueId',
   'showExcludeCheckbox'
 ])
+
+const simpleKeyboard: Ref = defineModel('simpleKeyboard')
+
+const toggleKeyboard = (attachTo: string) => {
+  simpleKeyboard.value.attachTo = attachTo
+  simpleKeyboard.value.show = !simpleKeyboard.value.show
+  simpleKeyboard.value.ref = authorText
+}
 
 const disabled: Ref = defineModel('disabled')
 const includeAuthor: Ref = defineModel('includeAuthor', { default: true })
@@ -130,6 +135,20 @@ const authorDropdownItems = ref<Array<{ label: string; count: number }>>([])
 const authorText = ref<string>('')
 const searchAuthors = ref<boolean>(true)
 
+watch(authorText, () => findAuthor())
+
+const closeOutside = () => {
+  const dropdown = document.getElementById(`${uniqueId}-dropdown-menu`)
+  const menu = dropdown?.children[0]
+  if (menu) authorDropdownItems.value = []
+  document.removeEventListener('click', closeOutside, true)
+}
+
+const closeOnEscape = (e: KeyboardEvent) => {
+  e.key === 'Escape' ? (authorDropdownItems.value = []) : null
+  document.removeEventListener('keydown', closeOnEscape, true)
+}
+
 const addAuthor = (author: { label: string; count: number }) => {
   if (!multiValue) {
     authorList.value.length = 0
@@ -137,6 +156,10 @@ const addAuthor = (author: { label: string; count: number }) => {
   authorList.value.push(author)
   authorText.value = ''
   authorDropdownItems.value = []
+
+  simpleKeyboard.value.attachTo = null
+  simpleKeyboard.value.ref = null
+  simpleKeyboard.value.show = false
 }
 
 const delAuthor = (value: { label: string }) => {
@@ -163,12 +186,13 @@ const findAuthor = () => {
               .map((author: { label: string }) => author.label)
               .includes(author.label)
         )
-        // console.log(exclude.value)
         if (exclude.value) {
           authorDropdownItems.value = authorDropdownItems.value.filter(
             (author: { label: string; count: number }) => author.label !== exclude.value
           )
         }
+        document.addEventListener('click', closeOutside, true)
+        document.addEventListener('keydown', closeOnEscape, true)
       })
     )
   } else {

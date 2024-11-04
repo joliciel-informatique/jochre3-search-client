@@ -26,9 +26,7 @@ Description: presents the search bar
           <input
             id="query"
             type="text"
-            aria-labelledby="searchBarLabel"
-            class="input is-normal is-rounded keyboardInput"
-            vki-id="1"
+            class="input is-normal is-rounded"
             lang="yi"
             v-model="query"
             @keyup.enter="emit('newSearch')"
@@ -64,15 +62,16 @@ Description: presents the search bar
             v-else
           ></span>
         </p>
-        <p class="control">
+        <p class="control keyboardButton">
           <button
-            class="button keyboardInputButton"
-            aria-label="open onscreen Yiddish keyboard"
-            vki-id="1"
+            class="button is-clickable"
+            @click="toggleKeyboard('query')"
             :alt="$t('search.keyboard')"
             :title="$t('search.keyboard')"
           >
-            <font-awesome-icon icon="keyboard" />
+            <span>
+              <font-awesome-icon icon="keyboard" />
+            </span>
           </button>
         </p>
         <p class="control" v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
@@ -122,26 +121,28 @@ Description: presents the search bar
   </div>
 </template>
 <script setup lang="ts">
-import { computed, type Ref } from 'vue'
+import type { Ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
 const hasAdvancedSearchCriteria = defineModel('hasAdvancedSearchCriteria')
 
-const advancedSearchIcons = computed(() => ({
-  'is-left': preferences.displayLeftToRight,
-  'is-right': !preferences.displayLeftToRight,
-  'is-clicked': hasAdvancedSearchCriteria.value
-}))
-
 const query: Ref = defineModel('query')
 const strict: Ref = defineModel('strict')
 const isLoading = defineModel('isLoading')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
+const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 
-const toggleAdvancedSearchPanel = () =>
-  (showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value)
+const toggleAdvancedSearchPanel = () => {
+  showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value
+}
+
+const toggleKeyboard = (attachTo: string) => {
+  simpleKeyboard.value.attachTo = attachTo
+  simpleKeyboard.value.show = !simpleKeyboard.value.show
+  simpleKeyboard.value.ref = query
+}
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 </script>

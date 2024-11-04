@@ -17,7 +17,9 @@
 @forward './components/DisplaySnippets/DisplaySnippets';
 @forward './components/SingleSnippet/SingleSnippet';
 @forward './components/Switch/Switch';
-@forward './components//FilterTag/FilterTag';
+@forward './components/FilterTag/FilterTag';
+@forward './components/SimpleKeyboard/SimpleKeyboard';
+@forward './components/Dropdown/Dropdown';
 
 // Directive Styling
 @forward './components/ToolTip/_ToolTip';
@@ -47,7 +49,9 @@
   $hr-background-color: $background-color-3,
 
   // Modal Component
-  $modal-z: 100,
+  $modal-z: 40,
+
+  $dropdown-content-z: 42,
 
   // Card Component
   $card-background-color: $white,
