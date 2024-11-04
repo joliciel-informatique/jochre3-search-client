@@ -12,15 +12,15 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .logo {
+  .logo img {
     // position: fixed;
-    // width: 7vw;
-    // max-width: 9vw;
+    // width: 3vw;
+    max-width: 10vw;
     // max-height: 20vh;
-    top: 1vh;
-    left: 1vw;
+    // top: 1vh;
+    // left: 1vw;
     z-index: 40;
-    transform-origin: top left;
+    // transform-origin: top left;
     // animation-name: logo-watcher;
     // animation-duration: 0.5s;
     // animation-timing-function: linear;

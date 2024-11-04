@@ -1,160 +1,81 @@
 <template>
   <div>
-    <nav class="navbar" id="navbar" role="navigation">
-      <HeaderPage class="is-hidden-touch" />
-      <!-- <div > -->
-      <!-- <div
-          class=""
-        > -->
-      <div class="navbar-brand">
-        <!-- <div > -->
-        <a class="navbar-item logo" :href="$t('header.logo-url')">
-          <img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')"
-        /></a>
-        <!-- </div> -->
-        <!-- </div> -->
-        <div class="navbar-item py-0">
-          <!-- <div class="navbar-menu container is-block-touch"> -->
-          <!-- <div class="navbar-start container"> -->
-          <!-- <div class="navbar-item py-0 container"> -->
-          <SearchBar
+    <div class="columns is-desktop">
+      <nav class="column navbar" id="navbar" role="navigation">
+        <HeaderPage class="is-hidden-touch" />
+        <div class="navbar-brand is-flex is-flex-direction-row is-flex-wrap-nowrap">
+          <a
+            class="navbar-item is-flex is-flex-grow-0 is-flex-shrink-1 is-hidden-desktop"
+            :href="$t('header.logo-url')"
+          >
+            <img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')"
+          /></a>
+          <div class="navbar-item is-flex is-flex-grow-1 is-flex-shrink-3">
+            <SearchBar
+              @newSearch="newSearch"
+              @resetSearchResults="resetSearchResults"
+              v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+              v-model:has-advanced-search-criteria="hasAdvancedSearchCriteria"
+              v-model:query="query"
+              v-model:strict="strict"
+              v-model:is-loading="isLoading"
+              v-model:simpleKeyboard="simpleKeyboard"
+            />
+          </div>
+          <div class="navbar-item is-align-self-flex-start user-options is-hidden-touch">
+            <UserOptions />
+          </div>
+          <div
+            class="navbar-burger is-flex is-flex-shrink-2 mr-5 has-text-white is-hidden-desktop"
+            :class="navBarMenu ? 'is-active' : ''"
+            role="button"
+            aria-label="menu"
+            aria-expanded="false"
+            @click="navBarMenu = !navBarMenu"
+          >
+            <div class="">
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </div>
+          </div>
+        </div>
+
+        <aside v-show="navBarMenu" class="navbar-mobile">
+          <div class="menu is-pulled-right panel has-background-primary">
+            <UserOptions />
+          </div>
+        </aside>
+
+        <div>
+          <AdvancedSearch
             @newSearch="newSearch"
             @resetSearchResults="resetSearchResults"
             v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-            v-model:has-advanced-search-criteria="hasAdvancedSearchCriteria"
-            v-model:query="query"
-            v-model:strict="strict"
-            v-model:is-loading="isLoading"
+            v-model:author-list="authorList"
+            v-model:title="title"
+            v-model:to-year="toYear"
+            v-model:from-year="fromYear"
+            v-model:doc-refs="docRefs"
+            v-model:sort-by="sortBy"
+            v-model:facets="facets"
+            v-model:exclude-from-search="excludeFromSearch"
             v-model:simpleKeyboard="simpleKeyboard"
           />
         </div>
-        <!-- </div> -->
-        <!-- </div> -->
-        <!-- </div> -->
-        <div class="navbar-item is-align-self-flex-start user-options is-hidden-touch">
-          <UserOptions />
-        </div>
-        <!-- </div> -->
-
-        <!-- <div class=""> -->
-        <div
-          class="navbar-burger"
-          :class="navBarMenu ? 'is-active' : ''"
-          role="button"
-          aria-label="menu"
-          aria-expanded="false"
-          @click="navBarMenu = !navBarMenu"
-          data-target="navbarBasicExample"
-        >
-          <!-- <div class="panel-heading is-flex is-flex-direction-row"> -->
-          <!-- <div v-show="navBarMenu">Options</div> -->
-          <div class="">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
+        <div class="columns is-desktop">
+          <div class="column is-hidden-touch">
+            <FooterNavigation
+              @newPage="newPage()"
+              @resetSearchResults="resetSearchResults()"
+              v-model:totalHits="totalHits"
+              v-model:page="page"
+            />
           </div>
         </div>
-      </div>
-
-      <aside v-show="navBarMenu" class="navbar-mobile">
-        <div class="menu is-pulled-right panel">
-          <!-- <div class="menu-label panel-heading">Options</div> -->
-          <div class="panel-block">
-            <!-- <ul class="menu-list panel-block"> -->
-            <!-- <UserOptions class="panel-block" /> -->
-            <a href="#" class="panel-block">Search</a>
-            <div
-              class="is-flex is-flex-direction-row is-justify-content-space-between is-hidden-touch"
-            >
-              <a
-                class="navbar-item has-text-white"
-                href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
-                target="_blank"
-              >
-                <span>
-                  <font-awesome-icon icon="book-open" />
-                  {{ $t('search.user-guide') }}
-                </span>
-              </a>
-              <a
-                class="navbar-item has-text-white is-flex-desktop"
-                @click.prevent="showAdvancedSearchPanel = !showAdvancedSearchPanel"
-              >
-                <font-awesome-icon
-                  :icon="
-                    showAdvancedSearchPanel
-                      ? 'magnifying-glass-minus'
-                      : hasAdvancedSearchCriteria
-                        ? 'sliders'
-                        : 'magnifying-glass-plus'
-                  "
-                />
-                {{ $t('search.advanced-search') }}
-              </a>
-            </div>
-            <!-- <li>
-                  <a href="#">Search</a>
-                </li>
-                <li>
-                  <a href="#">Advanced Search</a>
-                </li>
-                <li>
-                  <a href="#">User Guide</a>
-                </li>
-                <li>
-                  <a href="#">Facets</a>
-                </li>
-              </ul> -->
-          </div>
-        </div>
-        <!-- <div class="panel-heading"></div>
-            <div class="panel-tabs"></div>
-            <div class="panel-block"></div>
-            <div class="navbar-start">
-              <a class="navbar-item">Search</a>
-              <a class="navbar-item">Advanced Search</a>
-              <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link"> More </a>
-                <div class="navbar-dropdown">
-                  <a class="navbar-item"> About </a>
-                  <a class="navbar-item is-selected"> Jobs </a>
-                  <a class="navbar-item"> Contact </a>
-                  <hr class="navbar-divider" />
-                  <a class="navbar-item"> Report an issue </a>
-                </div>
-              </div>
-            </div> -->
-        <!-- </div> -->
-      </aside>
-      <!-- </div> -->
-      <div>
-        <AdvancedSearch
-          @newSearch="newSearch"
-          @resetSearchResults="resetSearchResults"
-          v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-          v-model:author-list="authorList"
-          v-model:title="title"
-          v-model:to-year="toYear"
-          v-model:from-year="fromYear"
-          v-model:doc-refs="docRefs"
-          v-model:sort-by="sortBy"
-          v-model:facets="facets"
-          v-model:exclude-from-search="excludeFromSearch"
-          v-model:simpleKeyboard="simpleKeyboard"
-        />
-      </div>
-      <div>
-        <FooterNavigation
-          @newPage="newPage()"
-          @resetSearchResults="resetSearchResults()"
-          v-model:totalHits="totalHits"
-          v-model:page="page"
-        />
-      </div>
-      <!-- </div> -->
-      <!-- </div> -->
-    </nav>
+      </nav>
+    </div>
   </div>
   <div
     id="searchResults"

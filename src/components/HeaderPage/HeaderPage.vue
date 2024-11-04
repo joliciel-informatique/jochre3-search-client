@@ -1,31 +1,33 @@
 <template>
   <div
     id="header"
-    class="container hero-body is-fluid has-background-primary has-text-white m-0 p-0 header-footer-content"
+    class="columns container hero-body is-fluid has-background-primary has-text-white m-0 p-0 header-footer-content"
     aria-role="banner"
   >
-    <div class="grid">
-      <div class="cell p-2"></div>
-      <div class="cell p-2 is-col-span-2">
-        {{ headerInfo($tm('header')) }}
-        <div class="title has-text-white py-4">{{ $t('header.title') }}</div>
-        <div
-          class="header-beta-flyout"
-          :class="{
-            'is-pulled-right': preferences.displayLeftToRight,
-            'is-pulled-left': !preferences.displayLeftToRight
-          }"
-        >
-          {{ $t('header.beta') }}
-        </div>
-        <div class="link" v-for="link in headerLinks" :key="link">
-          <a class="link-subtle" :href="link.link" :target="link.target">
-            {{ link.title }}
-          </a>
-        </div>
-      </div>
-      <div class="cell p-2"></div>
+    <div class="column p-2">
+      <a class="logo" :href="$t('header.logo-url')"
+        ><img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')"
+      /></a>
     </div>
+    <div class="column p-2 is-col-span-2">
+      {{ headerInfo($tm('header')) }}
+      <div class="title has-text-white py-4">{{ $t('header.title') }}</div>
+      <div
+        class="header-beta-flyout"
+        :class="{
+          'is-pulled-right': preferences.displayLeftToRight,
+          'is-pulled-left': !preferences.displayLeftToRight
+        }"
+      >
+        {{ $t('header.beta') }}
+      </div>
+      <div class="link" v-for="link in headerLinks" :key="link">
+        <a class="link-subtle" :href="link.link" :target="link.target">
+          {{ link.title }}
+        </a>
+      </div>
+    </div>
+    <div class="column p-2"></div>
   </div>
 </template>
 

@@ -14,7 +14,7 @@
         class="navbar-item"
         :title="$t('header.preferences')"
       >
-        Preferences
+        <span class="">Preferences</span>
         <font-awesome-icon icon="gear" class="is-pulled-right" size="lg" />
       </a>
 
@@ -25,14 +25,50 @@
     </div>
   </div>
   <div v-if="authenticated" class="is-hidden-desktop">
-    <a @click.prevent="preferences.show = true" :title="$t('header.preferences')">
-      Preferences
-      <font-awesome-icon icon="gear" class="is-pulled-right" size="lg" />
+    <div class="panel-heading">Options</div>
+    <a
+      class="panel-block has-text-white"
+      href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
+      target="_blank"
+    >
+      <font-awesome-icon class="panel-icon has-text-white" icon="book-open" />
+      <span>
+        {{ $t('search.user-guide') }}
+      </span>
     </a>
-    <a @click.prevent="signout()" :title="$t('header.logout')"
-      >{{ $t('header.logout')
-      }}<font-awesome-icon icon="right-from-bracket" class="is-pulled-right" size="lg"
-    /></a>
+    <a
+      class="panel-block has-text-white"
+      @click.prevent="showAdvancedSearchPanel = !showAdvancedSearchPanel"
+    >
+      <font-awesome-icon
+        class="panel-icon has-text-white"
+        :icon="
+          showAdvancedSearchPanel
+            ? 'magnifying-glass-minus'
+            : hasAdvancedSearchCriteria
+              ? 'sliders'
+              : 'magnifying-glass-plus'
+        "
+      />
+      <span>
+        {{ $t('search.advanced-search') }}
+      </span>
+    </a>
+    <a
+      class="panel-block has-text-white"
+      @click.prevent="preferences.show = true"
+      :title="$t('header.preferences')"
+      target="_blank"
+    >
+      <font-awesome-icon class="panel-icon has-text-white" icon="gear" size="lg" />
+      <span> Preferences </span>
+    </a>
+    <a class="panel-block has-text-white" @click.prevent="signout()" :title="$t('header.logout')">
+      <font-awesome-icon class="panel-icon has-text-white" icon="right-from-bracket" size="lg" />
+      <span>
+        {{ $t('header.logout') }}
+      </span>
+    </a>
   </div>
   <div v-else>
     <div class="navbar-item">
