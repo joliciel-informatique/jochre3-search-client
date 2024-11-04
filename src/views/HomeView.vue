@@ -1,12 +1,12 @@
 <template>
   <PreferencesSetup />
   <main
-    class="hero is-widescreen"
+    class="is-widescreen"
     :class="{
       'rtl-align': !preferences.displayLeftToRight
     }"
   >
-    <HeaderPage />
+    <!-- <HeaderPage /> -->
     <SearchPage
       ref="searchPageRef"
       v-model:search-results="searchResults"

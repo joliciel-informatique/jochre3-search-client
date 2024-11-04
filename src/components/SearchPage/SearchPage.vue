@@ -1,37 +1,163 @@
 <template>
-  <div class="searchBar p-1">
-    <SearchBar
-      @newSearch="newSearch"
-      @resetSearchResults="resetSearchResults"
-      v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-      v-model:has-advanced-search-criteria="hasAdvancedSearchCriteria"
-      v-model:query="query"
-      v-model:strict="strict"
-      v-model:is-loading="isLoading"
-      v-model:simpleKeyboard="simpleKeyboard"
-    />
-    <AdvancedSearch
-      @newSearch="newSearch"
-      @resetSearchResults="resetSearchResults"
-      v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-      v-model:author-list="authorList"
-      v-model:title="title"
-      v-model:to-year="toYear"
-      v-model:from-year="fromYear"
-      v-model:doc-refs="docRefs"
-      v-model:sort-by="sortBy"
-      v-model:facets="facets"
-      v-model:exclude-from-search="excludeFromSearch"
-      v-model:simpleKeyboard="simpleKeyboard"
-    />
-    <FooterNavigation
-      @newPage="newPage()"
-      @resetSearchResults="resetSearchResults()"
-      v-model:totalHits="totalHits"
-      v-model:page="page"
-    />
+  <div>
+    <nav class="navbar" id="navbar" role="navigation">
+      <HeaderPage class="is-hidden-touch" />
+      <!-- <div > -->
+      <!-- <div
+          class=""
+        > -->
+      <div class="navbar-brand">
+        <!-- <div > -->
+        <a class="navbar-item logo" :href="$t('header.logo-url')">
+          <img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')"
+        /></a>
+        <!-- </div> -->
+        <!-- </div> -->
+        <div class="navbar-item py-0">
+          <!-- <div class="navbar-menu container is-block-touch"> -->
+          <!-- <div class="navbar-start container"> -->
+          <!-- <div class="navbar-item py-0 container"> -->
+          <SearchBar
+            @newSearch="newSearch"
+            @resetSearchResults="resetSearchResults"
+            v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+            v-model:has-advanced-search-criteria="hasAdvancedSearchCriteria"
+            v-model:query="query"
+            v-model:strict="strict"
+            v-model:is-loading="isLoading"
+            v-model:simpleKeyboard="simpleKeyboard"
+          />
+        </div>
+        <!-- </div> -->
+        <!-- </div> -->
+        <!-- </div> -->
+        <div class="navbar-item is-align-self-flex-start user-options is-hidden-touch">
+          <UserOptions />
+        </div>
+        <!-- </div> -->
+
+        <!-- <div class=""> -->
+        <div
+          class="navbar-burger"
+          :class="navBarMenu ? 'is-active' : ''"
+          role="button"
+          aria-label="menu"
+          aria-expanded="false"
+          @click="navBarMenu = !navBarMenu"
+          data-target="navbarBasicExample"
+        >
+          <!-- <div class="panel-heading is-flex is-flex-direction-row"> -->
+          <!-- <div v-show="navBarMenu">Options</div> -->
+          <div class="">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+
+      <aside v-show="navBarMenu" class="navbar-mobile">
+        <div class="menu is-pulled-right panel">
+          <!-- <div class="menu-label panel-heading">Options</div> -->
+          <div class="panel-block">
+            <!-- <ul class="menu-list panel-block"> -->
+            <!-- <UserOptions class="panel-block" /> -->
+            <a href="#" class="panel-block">Search</a>
+            <div
+              class="is-flex is-flex-direction-row is-justify-content-space-between is-hidden-touch"
+            >
+              <a
+                class="navbar-item has-text-white"
+                href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
+                target="_blank"
+              >
+                <span>
+                  <font-awesome-icon icon="book-open" />
+                  {{ $t('search.user-guide') }}
+                </span>
+              </a>
+              <a
+                class="navbar-item has-text-white is-flex-desktop"
+                @click.prevent="showAdvancedSearchPanel = !showAdvancedSearchPanel"
+              >
+                <font-awesome-icon
+                  :icon="
+                    showAdvancedSearchPanel
+                      ? 'magnifying-glass-minus'
+                      : hasAdvancedSearchCriteria
+                        ? 'sliders'
+                        : 'magnifying-glass-plus'
+                  "
+                />
+                {{ $t('search.advanced-search') }}
+              </a>
+            </div>
+            <!-- <li>
+                  <a href="#">Search</a>
+                </li>
+                <li>
+                  <a href="#">Advanced Search</a>
+                </li>
+                <li>
+                  <a href="#">User Guide</a>
+                </li>
+                <li>
+                  <a href="#">Facets</a>
+                </li>
+              </ul> -->
+          </div>
+        </div>
+        <!-- <div class="panel-heading"></div>
+            <div class="panel-tabs"></div>
+            <div class="panel-block"></div>
+            <div class="navbar-start">
+              <a class="navbar-item">Search</a>
+              <a class="navbar-item">Advanced Search</a>
+              <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link"> More </a>
+                <div class="navbar-dropdown">
+                  <a class="navbar-item"> About </a>
+                  <a class="navbar-item is-selected"> Jobs </a>
+                  <a class="navbar-item"> Contact </a>
+                  <hr class="navbar-divider" />
+                  <a class="navbar-item"> Report an issue </a>
+                </div>
+              </div>
+            </div> -->
+        <!-- </div> -->
+      </aside>
+      <!-- </div> -->
+      <div>
+        <AdvancedSearch
+          @newSearch="newSearch"
+          @resetSearchResults="resetSearchResults"
+          v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+          v-model:author-list="authorList"
+          v-model:title="title"
+          v-model:to-year="toYear"
+          v-model:from-year="fromYear"
+          v-model:doc-refs="docRefs"
+          v-model:sort-by="sortBy"
+          v-model:facets="facets"
+          v-model:exclude-from-search="excludeFromSearch"
+          v-model:simpleKeyboard="simpleKeyboard"
+        />
+      </div>
+      <div>
+        <FooterNavigation
+          @newPage="newPage()"
+          @resetSearchResults="resetSearchResults()"
+          v-model:totalHits="totalHits"
+          v-model:page="page"
+        />
+      </div>
+      <!-- </div> -->
+      <!-- </div> -->
+    </nav>
   </div>
   <div
+    id="searchResults"
     class="container is-fluid is-flex-direction-column is-align-items-center has-text-centered p-5"
   >
     <!-- Not loading with query and results -->
@@ -74,7 +200,7 @@
             <h1>{{ $t('loading') }}</h1>
           </div>
         </div>
-        <div class="column is-2">
+        <div class="column is-2 is-hidden-touch">
           <FacetBar
             @newSearch="newSearch"
             @resetSearchResults="resetSearchResults"
@@ -109,6 +235,7 @@ import { onMounted, ref, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchData } from '../../assets/fetchMethods'
 import { sha1 } from 'object-hash'
+import UserOptions from './UserOptions/UserOptions.vue'
 
 // Import Child components
 import SearchBar from './SearchBar/SearchBar.vue'
@@ -118,6 +245,7 @@ import DisplaySnippets from './SearchResults/DisplaySnippets/DisplaySnippets.vue
 import FooterNavigation from '../FooterPage/FooterNavigation/FooterNavigation.vue'
 import FacetBar from './SearchResults/FacetBar/FacetBar.vue'
 import IndexSize from './SearchResults/IndexSize/IndexSize.vue'
+import HeaderPage from '../HeaderPage/HeaderPage.vue'
 
 // Import interfaces
 import { type SearchResult, type AggregationBin } from '../../assets/interfacesExternals'
@@ -130,7 +258,6 @@ import { usePreferencesStore } from '../../stores/PreferencesStore'
 const preferences = usePreferencesStore()
 
 import { storeToRefs } from 'pinia'
-import { faBan } from '@fortawesome/free-solid-svg-icons'
 
 const { resultsPerPage, authorFacetCount, snippetsPerResult } = storeToRefs(preferences)
 
@@ -143,6 +270,9 @@ const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
 const notification: Ref = defineModel('notification')
+
+const searchBarIsDocked = ref(false)
+const navBarMenu = ref(false)
 
 const authorInclude = ref(true)
 const excludeFromSearch = ref(false)
@@ -167,7 +297,22 @@ const hasAdvancedSearchCriteria = ref(false)
 const showAdvancedSearchPanel = ref(false)
 const facets = ref<Array<AggregationBin>>([])
 
+watch(searchBarIsDocked, (newV) => {
+  const navbar = document.getElementById('navbar')
+  const results = document.getElementById('searchResults')
+  newV ? navbar?.classList.add('is-fixed-top') : navbar?.classList.remove('is-fixed-top')
+  if (results) results.style.top = newV ? `${navbar?.getBoundingClientRect().height}px` : '0px'
+})
+
 onMounted(() => {
+  window.addEventListener('scroll', () => {
+    const header = document.getElementById('header')
+    const navbar = document.getElementById('navbar')
+    if (navbar && header) {
+      const headerBottom = header.getBoundingClientRect().bottom
+      searchBarIsDocked.value = headerBottom <= 0 ? true : false
+    }
+  })
   router.isReady().then(() => {
     if (route.query['query']) query.value = (route.query['query'] as string).trim()
     if (route.query['strict']) strict.value = route.query['strict'] === 'true'

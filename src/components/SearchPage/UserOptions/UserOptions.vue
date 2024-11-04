@@ -1,29 +1,52 @@
 <template>
-  <div class="">
-    <button
-      @click="preferences.show = true"
-      class="button is-small"
-      :title="$t('header.preferences')"
-    >
-      <span class="icon is-small">
-        <font-awesome-icon icon="gear" />
-      </span>
-    </button>
-    <button
-      @click="loginOrLogout"
-      class="button is-small"
-      :title="authenticated ? $t('header.logout') : $t('header.login')"
-    >
-      <span class="icon is-small">
-        <font-awesome-icon icon="right-to-bracket" v-if="!authenticated" />
-        <font-awesome-icon icon="right-from-bracket" v-if="authenticated" />
-      </span>
-    </button>
-    <button @click="toggleLanguage($i18n as VueI18n.VueI18n)" class="button is-small">
+  <div
+    v-if="authenticated"
+    class="navbar-item has-dropdown is-hoverable user-options is-hidden-touch"
+  >
+    <a class="navbar-link">
+      <p class="has-text-left has-text-white">
+        <font-awesome-icon icon="user" class="" size="lg" />
+      </p>
+    </a>
+    <div class="navbar-dropdown is-right">
+      <a
+        @click.prevent="preferences.show = true"
+        class="navbar-item"
+        :title="$t('header.preferences')"
+      >
+        Preferences
+        <font-awesome-icon icon="gear" class="is-pulled-right" size="lg" />
+      </a>
+
+      <a class="navbar-item" @click.prevent="signout()" :title="$t('header.logout')"
+        >{{ $t('header.logout')
+        }}<font-awesome-icon icon="right-from-bracket" class="is-pulled-right" size="lg"
+      /></a>
+    </div>
+  </div>
+  <div v-if="authenticated" class="is-hidden-desktop">
+    <a @click.prevent="preferences.show = true" :title="$t('header.preferences')">
+      Preferences
+      <font-awesome-icon icon="gear" class="is-pulled-right" size="lg" />
+    </a>
+    <a @click.prevent="signout()" :title="$t('header.logout')"
+      >{{ $t('header.logout')
+      }}<font-awesome-icon icon="right-from-bracket" class="is-pulled-right" size="lg"
+    /></a>
+  </div>
+  <div v-else>
+    <div class="navbar-item">
+      <a class="navbar-link">
+        <font-awesome-icon icon="user" size="lg" :title="$t('header.login')"></font-awesome-icon>"/>
+      </a>
+    </div>
+  </div>
+  <!-- <div class="navbar-item button is-hidden-desktop">
+    <a @click.prevent="toggleLanguage($i18n as VueI18n.VueI18n)">
       <span v-if="preferences.language === 'yi'">YI</span>
       <span v-if="preferences.language === 'en'">EN</span>
-    </button>
-  </div>
+    </a>
+  </div> -->
 </template>
 <script setup lang="ts">
 import VueI18n from 'vue-i18n'
@@ -33,7 +56,8 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 const keycloak = useKeycloakStore().keycloak
 const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
 const preferences = usePreferencesStore()
-const loginOrLogout = () => (authenticated.value ? keycloak?.logout() : keycloak?.login())
+const signout = () => keycloak?.logout()
+const signin = () => keycloak?.login()
 
 const toggleLanguage = (vi18n: VueI18n.VueI18n) => {
   preferences.language = preferences.language === 'yi' ? 'en' : 'yi'
