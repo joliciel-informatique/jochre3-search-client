@@ -31,7 +31,7 @@
             role="button"
             aria-label="menu"
             aria-expanded="false"
-            @click="navBarMenu = !navBarMenu"
+            @click="(navBarMenu = !navBarMenu) && (showAdvancedSearchPanel = !navBarMenu)"
           >
             <div class="">
               <span aria-hidden="true"></span>
@@ -42,28 +42,20 @@
           </div>
         </div>
 
-        <aside v-show="navBarMenu" class="navbar-mobile">
-          <div class="menu is-pulled-right panel has-background-primary">
-            <UserOptions />
-          </div>
-        </aside>
+        <AdvancedSearch
+          @newSearch="newSearch"
+          @resetSearchResults="resetSearchResults"
+          v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+          v-model:author-list="authorList"
+          v-model:title="title"
+          v-model:to-year="toYear"
+          v-model:from-year="fromYear"
+          v-model:doc-refs="docRefs"
+          v-model:facets="facets"
+          v-model:exclude-from-search="excludeFromSearch"
+          v-model:simpleKeyboard="simpleKeyboard"
+        />
 
-        <div>
-          <AdvancedSearch
-            @newSearch="newSearch"
-            @resetSearchResults="resetSearchResults"
-            v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-            v-model:author-list="authorList"
-            v-model:title="title"
-            v-model:to-year="toYear"
-            v-model:from-year="fromYear"
-            v-model:doc-refs="docRefs"
-            v-model:sort-by="sortBy"
-            v-model:facets="facets"
-            v-model:exclude-from-search="excludeFromSearch"
-            v-model:simpleKeyboard="simpleKeyboard"
-          />
-        </div>
         <div class="columns is-desktop">
           <div class="column is-hidden-touch">
             <FooterNavigation
@@ -74,6 +66,15 @@
             />
           </div>
         </div>
+
+        <aside v-show="navBarMenu" class="navbar-mobile">
+          <div class="menu is-pulled-right panel has-background-primary">
+            <UserOptions
+              v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+              v-model:nav-bar-menu="navBarMenu"
+            />
+          </div>
+        </aside>
       </nav>
     </div>
   </div>
@@ -94,6 +95,7 @@
             v-model:word-modal="wordModal"
             v-model:selected-entry="firstSearchResult"
             v-model:total-hits="totalHits"
+            v-model:sort-by="sortBy"
           />
         </div>
         <div class="column mr-6 ml-6" tabindex="-1">
@@ -150,6 +152,7 @@
       <IndexSize v-model:is-loading="isLoading" v-model:notification="notification" />
     </div>
   </div>
+  <FooterPage v-model:total-hits="totalHits" v-model:page="page" :search-results="searchResults" />
 </template>
 <script setup lang="ts">
 import { onMounted, ref, defineExpose, type Ref, watch } from 'vue'
@@ -167,6 +170,7 @@ import FooterNavigation from '../FooterPage/FooterNavigation/FooterNavigation.vu
 import FacetBar from './SearchResults/FacetBar/FacetBar.vue'
 import IndexSize from './SearchResults/IndexSize/IndexSize.vue'
 import HeaderPage from '../HeaderPage/HeaderPage.vue'
+import FooterPage from '../FooterPage/FooterPage.vue'
 
 // Import interfaces
 import { type SearchResult, type AggregationBin } from '../../assets/interfacesExternals'
@@ -180,7 +184,7 @@ const preferences = usePreferencesStore()
 
 import { storeToRefs } from 'pinia'
 
-const { resultsPerPage, authorFacetCount, snippetsPerResult } = storeToRefs(preferences)
+const { resultsPerPage, authorFacetCount, snippetsPerResult, sortBy } = storeToRefs(preferences)
 
 const query = ref('')
 const firstSearchResult = ref<SearchResult>()
@@ -206,7 +210,6 @@ const title = ref('')
 const fromYear = ref()
 const toYear = ref()
 const docRefs = ref('')
-const sortBy = ref('Score')
 
 const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 
@@ -328,6 +331,7 @@ watch(excludeFromSearch, () => (authorInclude.value = !excludeFromSearch.value))
 watch(resultsPerPage, () => search())
 watch(authorFacetCount, () => searchFacets())
 watch(snippetsPerResult, () => search())
+watch(sortBy, () => search())
 
 const searchFacets = async () => {
   const facetParams = new URLSearchParams({ ...Object.fromEntries(params.value) })

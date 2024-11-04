@@ -26,6 +26,29 @@
             <span class="check" :class="preferences.language === 'yi' ? 'switch-ltr' : ''"></span>
           </label>
         </div>
+        <div class="columns is-vcentered">
+          <div class="column is-8 is-size-7">
+            <span class="control-label">
+              {{ $t('search.sort-by') }}
+            </span>
+          </div>
+          <div class="column is-4 is-size-7">
+            <select
+              class="column control select has-text-centered"
+              name="sortBySelect"
+              aria-labelledby="searchSortBy"
+              v-model="sortBy"
+            >
+              <option value="Score">{{ $t('search.sort.score') }}</option>
+              <option value="DateAscending">
+                {{ $t('search.sort.date-ascending') }}
+              </option>
+              <option value="DateDescending">
+                {{ $t('search.sort.date-descending') }}
+              </option>
+            </select>
+          </div>
+        </div>
         <p class="menu-label label pt-4">
           {{ $t('results.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
         </p>
@@ -79,6 +102,7 @@ const metadataModal: Ref = defineModel('metadataModal')
 const notification: Ref = defineModel('notification')
 const selectedEntry = defineModel<SearchResult>('selectedEntry')
 const totalHits: Ref = defineModel('totalHits')
+const sortBy = defineModel('sortBy')
 
 const pageNumberOffset = computed(() => (page.value - 1) * preferences.resultsPerPage + 1) // Same line as in SearchInfo: firstResult
 

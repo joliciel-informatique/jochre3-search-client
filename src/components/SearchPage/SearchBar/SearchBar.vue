@@ -133,10 +133,6 @@ const isLoading = defineModel('isLoading')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
 const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 
-const toggleAdvancedSearchPanel = () => {
-  showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value
-}
-
 const toggleKeyboard = (attachTo: string) => {
   simpleKeyboard.value.attachTo = attachTo
   simpleKeyboard.value.show = !simpleKeyboard.value.show

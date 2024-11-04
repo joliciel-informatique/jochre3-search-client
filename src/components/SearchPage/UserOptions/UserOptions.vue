@@ -38,7 +38,9 @@
     </a>
     <a
       class="panel-block has-text-white"
-      @click.prevent="showAdvancedSearchPanel = !showAdvancedSearchPanel"
+      @click.prevent="
+        (showAdvancedSearchPanel = !showAdvancedSearchPanel) && (navBarMenu = !navBarMenu)
+      "
     >
       <font-awesome-icon
         class="panel-icon has-text-white"
@@ -92,7 +94,12 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 const keycloak = useKeycloakStore().keycloak
 const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
 const preferences = usePreferencesStore()
+const hasAdvancedSearchCriteria = ref(false)
+const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
+const navBarMenu = defineModel('navBarMenu')
+
 const signout = () => keycloak?.logout()
+
 const signin = () => keycloak?.login()
 
 const toggleLanguage = (vi18n: VueI18n.VueI18n) => {
