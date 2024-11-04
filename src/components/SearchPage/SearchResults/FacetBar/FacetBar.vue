@@ -87,17 +87,9 @@ Description: presents the facet bar
                 <div class="dropdown is-hoverable">
                   <div class="dropdown-trigger">
                     <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
-                      <span v-if="preferences.language === 'en'">
-                        <span>{{ $t('facets.most-hits') }}</span>
-                        <span class="icon is-small">
-                          <font-awesome-icon icon="angle-down" aria-hidden="true" />
-                        </span>
-                      </span>
-                      <span v-else>
-                        <span class="icon is-small">
-                          <font-awesome-icon icon="angle-down" aria-hidden="true" />
-                        </span>
-                        <span>{{ $t('facets.most-hits') }}</span>
+                      <span>{{ $t('facets.most-hits') }}</span>
+                      <span class="icon is-small">
+                        <font-awesome-icon icon="angle-down" aria-hidden="true" />
                       </span>
                     </button>
                   </div>
