@@ -1,9 +1,5 @@
 {
   "Jochre": "יאָוקער",
-  "meta": {
-    "title": "YI__Jochre3 OCR Search Engine",
-    "description": "YI__Search text content of documents OCR'd using Jochre3."
-  },
   "search": {
     "about": "זוך־מאַשין פֿונעם טעקסט־אינהאַלט פֿון די ביכער אין אונדזער דיגיטאַלישער ביבליאָטעק.",
     "index-size": "גרײס פֿון זוכצעטל: {0} ביכער.",
@@ -16,13 +12,13 @@
     "related-word-forms": "שטרענג",
     "related-word-forms-tooltip": "שטעלט אַ פֿײגעלע אױסצושליסן פֿאַרבונדענע װערטער־פֿאָרמעס, למשל „שרײבן“, „שרײבט“, „געשריבן“",
     "facets": "העכסטע {0} מחברים",
-    "display-number-of-author-facets": "YI__Display number of author facets",
+    "display-number-of-author-facets": "װיפֿל מחבר פֿילטערס",
     "what-are-facets": "די מחבר פֿילטערס רעכענען אױס די מחברים מיט די מערסטע ביכער (צאָל אין האַלבע לבנות) װאָס שטימען מיט אײַערע זוך־קריטעריעס. טוט אַ קװעטש אױפֿן פֿילטער צו באַגרענעצן די רעזולטאַטן. ",
-    "filter": "YI__Filter",
-    "facets-authors": "YI__authors",
-    "no-facets": "YI__No facets to show",
-    "relevant-facets": "YI__Your filter returned {0} relevant facets",
-    "snippets-per-book": "YI__Show all snippets",
+    "filter": "פֿילטער",
+    "facets-authors": "מחברים",
+    "no-facets": "קײן מחבר געפֿונען",
+    "relevant-facets": "{0} שײכדיקע מחברים געפֿונען",
+    "snippets-per-book": "װײַזן ארױס פֿראַגמענטן פֿון אַלע ביכער",
     "display-snippets-per-book": "שליסט איבער ארױסצוּװײַזן פֿראַגמענטן פֿון נאָר אײן בוך, אַנשטאָט אַ המשכדיקער רשימה. מע װעט אױסהיטן אײַער אױסקלײַב אין אײַערע פּרעפֿערענצן.",
     "keyboard": "עפֿנט די ייִדישע קלאַװיאַטור",
     "field-instructions": "*די בלאַנקען נעמען אָן לאַטײנישע אָדער ייִדישע אותיות.",
@@ -42,14 +38,15 @@
     }
   },
   "toc": {
-    "snippets-to-display": "YI__Snippets to display"
+    "snippets-to-display": "װיפֿל פֿראַגמענטן אַרױסצוװײַזן"
   },
   "facets": {
-    "title": "YI__Facets",
-    "most-hits": "YI__Most hits",
-    "active-facets": "YI__Active facets",
-    "by-name": "YI__By name",
-    "sort-by-label": "YI__Sort facets by"
+    "title": "מחבר פֿילטערס",
+    "most-hits": "צאָל פֿון רעזולטאַטן",
+    "active-facets": "אַקטיװע פֿילטערס",
+    "by-name": "נאָמען",
+    "sort-by-label": "סאָרטירן די פֿילטערס לױט",
+    "facet-count-all": "אַלע"
   },
   "results": {
     "click-image-snippet": "גיט אַ קװעטש אַרױסצוּװײַזן דעם פֿראַגמענט פֿונעם זײַטל",
@@ -75,8 +72,8 @@
     "page": "זײַטל {0}"
   },
   "snippet": {
-    "open-page": "YI__Open page",
-    "open-transcription": "YI__Open transcription"
+    "open-page": "זען אינעם בוך",
+    "open-transcription": "טראַנסקריבירטן טעקסט"
   },
   "navigation": {
     "back-tooltip": "דאָס קנעפּל שיקט אײַך צוריק אין אײַער זוך־געשיכטע",
@@ -141,8 +138,8 @@
   "pagination": {
     "next": ">>",
     "previous": "<<",
-    "top": "YI__First result",
-    "bottom": "YI__Last result"
+    "top": "ערשטער פֿראַגמענט",
+    "bottom": "לעצטער פֿראַגמענט"
   },
   "header": {
     "logo": "/images/jochreLogo.png",

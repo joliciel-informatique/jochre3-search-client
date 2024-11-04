@@ -56,7 +56,9 @@ Description: presents the facet bar
                         >
                       </div>
                       <hr class="dropdown-divider" />
-                      <a href="#" @click.prevent="updateFacetCount(0)" class="dropdown-item">All</a>
+                      <a href="#" @click.prevent="updateFacetCount(0)" class="dropdown-item">{{
+                        $t('facets.facet-count-all')
+                      }}</a>
                       <hr class="dropdown-divider" />
                       <div class="dropdown-item">
                         <input
@@ -85,7 +87,7 @@ Description: presents the facet bar
                 <div class="dropdown is-hoverable">
                   <div class="dropdown-trigger">
                     <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
-                      <span v-if="(preferences.language = 'en')">
+                      <span v-if="preferences.language === 'en'">
                         <span>{{ $t('facets.most-hits') }}</span>
                         <span class="icon is-small">
                           <font-awesome-icon icon="angle-down" aria-hidden="true" />
