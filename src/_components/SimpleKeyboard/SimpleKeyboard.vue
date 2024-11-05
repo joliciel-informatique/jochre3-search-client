@@ -76,8 +76,6 @@ const onKeyPress = (button: string) => {
       simpleKeyboard.value.show = false
     } else if (button === '{space}') {
       newVal = `${el.value} `
-    } else if (button === '{tab}') {
-      console.log('tab')
     } else {
       newVal = `${el.value}${button}`
     }
