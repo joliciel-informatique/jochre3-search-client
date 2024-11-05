@@ -26,3 +26,40 @@
     height: 100%;
   }
 }
+
+.toc-mobile {
+  position: fixed;
+  z-index: 40;
+  top: 9vh;
+  width: 0vw;
+
+  &.toc-mobile-left {
+    left: 0;
+  }
+
+  &.toc-mobile-right {
+    right: 0;
+  }
+
+  .toc-drawer {
+    position: fixed;
+    right: 0;
+    height: 91vh;
+
+    .menu-list {
+      max-height: 48vh;
+      overflow-y: scroll;
+    }
+  }
+
+  .toc-button {
+    position: fixed;
+    bottom: 0.5vh;
+    &.toc-mobile-left {
+      left: 0;
+    }
+    &.toc-mobile-right {
+      right: 0;
+    }
+  }
+}
