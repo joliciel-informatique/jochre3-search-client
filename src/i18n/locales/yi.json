@@ -41,11 +41,11 @@
     "snippets-to-display": "װיפֿל פֿראַגמענטן אַרױסצוװײַזן"
   },
   "facets": {
-    "title": "מחבר פֿילטערס",
+    "title": "YI__Filter by name",
     "most-hits": "צאָל פֿון רעזולטאַטן",
-    "active-facets": "אַקטיװע פֿילטערס",
+    "active-facets": "YI__Selected names",
     "by-name": "נאָמען",
-    "sort-by-label": "סאָרטירן די פֿילטערס לױט",
+    "sort-by-label": "YI__Sort by",
     "facet-count-all": "אַלע"
   },
   "results": {

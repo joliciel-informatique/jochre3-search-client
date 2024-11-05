@@ -15,11 +15,11 @@
     "excludeAuthors": "Checking this box will exclude selected authors from the query",
     "related-word-forms": "Strict",
     "related-word-forms-tooltip": "Checking this box will exclude related word forms (of the same stem/lemma) in search results (e.g. 'eat, 'eaten', 'ate')",
-    "display-number-of-author-facets": "Display number of author facets",
+    "display-number-of-author-facets": "Number of names to display",
     "what-are-facets": "These are the authors with the most books matching your search criteria. Click an author name to filter/narrow your search results.",
     "filter": "Filter",
-    "no-facets": "No facets to show",
-    "relevant-facets": "Your filter returned {0} relevant facets",
+    "no-facets": "No names to show",
+    "relevant-facets": "Your filter returned {0} relevant names",
     "snippets-per-book": "Show all snippets",
     "display-snippets-per-book": "Toggle this switch to display snippets per book rather than a continuous list. Your setting will be saved in your preferences.",
     "keyboard": "Open Yiddish on-screen keyboard",
@@ -43,11 +43,11 @@
     "snippets-to-display": "Snippets to display"
   },
   "facets": {
-    "title": "Facets",
+    "title": "Filter by name",
     "most-hits": "Most hits",
-    "active-facets": "Active facets",
+    "active-facets": "Selected names",
     "by-name": "By name",
-    "sort-by-label": "Sort facets by",
+    "sort-by-label": "Sort by",
     "facet-count-all": "All"
   },
   "results": {
@@ -88,7 +88,7 @@
     "language": "Interface language",
     "results-per-page": "Results per page",
     "snippets-per-result": "Snippets per book",
-    "author-facet-count": "How many author name filters to show",
+    "author-facet-count": "Number of author names to display",
     "display-snippets-per-book": "Show snippets per book?"
   },
   "fix-word": {

@@ -17,9 +17,6 @@ Description: presents the facet bar
           <div>
             <p class="menu-label is-size-5 label">
               {{ $t('facets.title') }}
-              <span v-tooltip:top="$t('search.what-are-facets')">
-                <font-awesome-icon icon="question-circle" />
-              </span>
             </p>
           </div>
         </template>
@@ -102,13 +99,13 @@ Description: presents the facet bar
                         :class="updateFacetSortOption === 'count' ? 'is-active' : ''"
                         >{{ $t('facets.most-hits') }}</a
                       >
-                      <a
+                      <!-- <a
                         href="#"
                         @click.prevent="updateSortOption('active')"
                         class="dropdown-item"
                         :class="updateFacetSortOption === 'active' ? 'is-active' : ''"
                         >{{ $t('facets.active-facets') }}</a
-                      >
+                      > -->
                       <a
                         href="#"
                         @click.prevent="updateSortOption('label')"
@@ -181,7 +178,7 @@ const defaultFacetCount = [5, 10, 15, 20]
 
 const toggle = () => (showing.value = !showing.value)
 
-const showing = ref(false)
+const showing = ref(true)
 
 const facets: Ref = defineModel<AggregationBin[]>('facets')
 
@@ -221,10 +218,6 @@ watch(updateFacetSortOption, (newV) => {
   if (newV === 'label')
     filteredFacets.value = filteredFacets.value.sort((a: AggregationBin, b: AggregationBin) =>
       collator.compare(a.label, b.label)
-    )
-  if (newV === 'active')
-    filteredFacets.value = filteredFacets.value.sort((a: AggregationBin, b: AggregationBin) =>
-      a.active === b.active ? 0 : a.active ? -1 : 1
     )
 })
 
@@ -267,13 +260,17 @@ watch(filteredFacets, (newV, oldV) => {
       (oldFacet) =>
         !oldObj.some((newFacet) => oldFacet.label === newFacet.label) && oldFacet.active === true
     )
+
     if (missingActiveFacets.length) emit('newSearch')
   }
 })
 
 // Activate a facet
 const toggleFacet = (facet: AggregationBin) => {
-  facet.active = facet.active ? false : true
+  facet.active = !facet.active
+  filteredFacets.value.sort((a: AggregationBin, b: AggregationBin) =>
+    a.active === b.active ? 0 : a.active ? -1 : 1
+  )
   emit('newSearch')
 }
 </script>
