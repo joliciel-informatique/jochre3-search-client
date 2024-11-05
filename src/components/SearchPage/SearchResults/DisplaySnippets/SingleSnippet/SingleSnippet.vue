@@ -64,7 +64,7 @@ Description: displays text snippets from the OCR text
           v-touch:longtap="openWordModal"
         ></div>
         <div
-          class="column button is-flex is-align-items-center"
+          class="load-original-image-button column button is-flex is-align-items-center is-size-7"
           :class="imageIsLoading ? 'is-loading' : ''"
           tabindex="3"
           :alt="$t('results.click-image-snippet')"
