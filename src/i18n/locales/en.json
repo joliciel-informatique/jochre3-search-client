@@ -15,10 +15,9 @@
     "excludeAuthors": "Checking this box will exclude selected authors from the query",
     "related-word-forms": "Strict",
     "related-word-forms-tooltip": "Checking this box will exclude related word forms (of the same stem/lemma) in search results (e.g. 'eat, 'eaten', 'ate')",
-    "display-number-of-author-facets": "Number of names to display",
+    "display-number-of-author-facets": "Authors to display",
     "what-are-facets": "These are the authors with the most books matching your search criteria. Click an author name to filter/narrow your search results.",
     "filter": "Filter",
-    "no-facets": "No names to show",
     "relevant-facets": "Your filter returned {0} relevant names",
     "snippets-per-book": "Show all snippets",
     "display-snippets-per-book": "Toggle this switch to display snippets per book rather than a continuous list. Your setting will be saved in your preferences.",
@@ -43,10 +42,10 @@
     "snippets-to-display": "Snippets to display"
   },
   "facets": {
-    "title": "Filter by name",
+    "title": "Filter by author",
     "most-hits": "Most hits",
-    "active-facets": "Selected names",
-    "by-name": "By name",
+    "active-facets": "Selected authors",
+    "by-name": "Name",
     "sort-by-label": "Sort by",
     "facet-count-all": "All"
   },

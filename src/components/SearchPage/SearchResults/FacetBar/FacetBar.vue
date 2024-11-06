@@ -23,13 +23,11 @@ Description: presents the facet bar
         <template #content>
           <div>
             <div class="columns is-vcentered m-1">
-              <div class="column is-8 is-size-7">
-                <span
-                  class=""
-                  :class="preferences.displayLeftToRight ? 'has-text-left' : 'has-text-right'"
-                >
-                  <p>{{ $t('search.display-number-of-author-facets') }}</p>
-                </span>
+              <div
+                class="column is-8 is-size-7"
+                :class="preferences.displayLeftToRight ? 'has-text-right' : 'has-text-left'"
+              >
+                {{ $t('search.display-number-of-author-facets') }}
               </div>
               <div class="column is-4 is-size-7">
                 <div
@@ -38,7 +36,9 @@ Description: presents the facet bar
                 >
                   <div class="dropdown-trigger">
                     <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
-                      <span>{{ authorFacetCount > 0 ? authorFacetCount : 'all' }}</span>
+                      <span>{{
+                        authorFacetCount > 0 ? authorFacetCount : $t('facets.facet-count-all')
+                      }}</span>
                       <span class="icon is-small">
                         <font-awesome-icon icon="angle-down" aria-hidden="true" />
                       </span>
@@ -75,13 +75,11 @@ Description: presents the facet bar
               </div>
             </div>
             <div class="columns is-vcentered m-1">
-              <div class="column is-8 is-size-7">
-                <span
-                  class=""
-                  :class="preferences.displayLeftToRight ? 'has-text-left' : 'has-text-right'"
-                >
-                  {{ $t('facets.sort-by-label') }}</span
-                >
+              <div
+                class="column is-8 is-size-7"
+                :class="preferences.displayLeftToRight ? 'has-text-right' : 'has-text-left'"
+              >
+                {{ $t('facets.sort-by-label') }}
               </div>
               <div class="column is-4 is-size-7">
                 <div
