@@ -39,7 +39,7 @@
     }
   },
   "toc": {
-    "snippets-to-display": "Snippets to display"
+    "snippets-to-display": "Snippets per book"
   },
   "facets": {
     "title": "Filter by author",
