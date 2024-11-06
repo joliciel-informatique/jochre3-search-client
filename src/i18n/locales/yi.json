@@ -41,11 +41,11 @@
     "snippets-to-display": "װיפֿל פֿראַגמענטן אַרױסצוװײַזן"
   },
   "facets": {
-    "title": "YI__Filter by name",
-    "most-hits": "צאָל פֿון רעזולטאַטן",
-    "active-facets": "YI__Selected names",
+    "title": "פֿילטרירן לױטן מחבר",
+    "most-hits": "צאָל",
+    "active-facets": "אױסגעקליבענע מחברים",
     "by-name": "נאָמען",
-    "sort-by-label": "YI__Sort by",
+    "sort-by-label": "סאָרטירן לױט",
     "facet-count-all": "אַלע"
   },
   "results": {

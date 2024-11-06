@@ -32,7 +32,10 @@ Description: presents the facet bar
                 </span>
               </div>
               <div class="column is-4 is-size-7">
-                <div class="dropdown is-hoverable">
+                <div
+                  class="dropdown is-hoverable"
+                  :class="preferences.displayLeftToRight ? 'is-left' : 'is-right'"
+                >
                   <div class="dropdown-trigger">
                     <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
                       <span>{{ authorFacetCount > 0 ? authorFacetCount : 'all' }}</span>
@@ -42,7 +45,7 @@ Description: presents the facet bar
                     </button>
                   </div>
                   <div class="dropdown-menu" id="author-facet-dropdown-menu" role="menu">
-                    <div class="dropdown-content left">
+                    <div class="dropdown-content">
                       <div v-for="val of facetCount" :key="val">
                         <a
                           class="dropdown-item"
@@ -81,7 +84,10 @@ Description: presents the facet bar
                 >
               </div>
               <div class="column is-4 is-size-7">
-                <div class="dropdown is-hoverable">
+                <div
+                  class="dropdown is-hoverable"
+                  :class="preferences.displayLeftToRight ? 'is-left' : 'is-right'"
+                >
                   <div class="dropdown-trigger">
                     <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
                       <span>{{ $t('facets.most-hits') }}</span>
@@ -91,7 +97,7 @@ Description: presents the facet bar
                     </button>
                   </div>
                   <div class="dropdown-menu" id="author-facet-dropdown-menu" role="menu">
-                    <div class="dropdown-content left">
+                    <div class="dropdown-content">
                       <a
                         href="#"
                         @click.prevent="updateSortOption('count')"
