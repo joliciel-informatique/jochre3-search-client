@@ -170,4 +170,9 @@ $menu-nested-list-margin: 1em;
   right: 0;
   // top: 50px;
   z-index: 999999999999999999999999999999999999999999999;
+  .menu {
+    .is-hidden-desktop .panel-block {
+      background-color: $background-color-2;
+    }
+  }
 }

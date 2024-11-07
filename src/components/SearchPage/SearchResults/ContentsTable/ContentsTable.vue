@@ -171,10 +171,8 @@
             <a
               class="button has-background-info has-text-white"
               @click.prevent="openDrawer = !openDrawer"
-              ><font-awesome-icon icon="list" size="lg" /><span class="m-1 ml-2 pt-1"
-                >Search results</span
-              ></a
-            >
+              ><font-awesome-icon icon="list" size="lg" class="m-2"
+            /></a>
           </div>
         </div>
       </div>
@@ -205,9 +203,9 @@
             <a
               class="button has-background-info has-text-white"
               @click.prevent="openMetadataDrawer = !openMetadataDrawer"
-              ><font-awesome-icon icon="pencil-square" size="lg" /><span class="m-1 ml-2 pt-1"
-                >Metadata</span
-              ></a
+              ><font-awesome-icon icon="pencil-square" size="lg" /><span class="m-1 ml-2 pt-1">{{
+                selectedEntry.value.metadata.title
+              }}</span></a
             >
           </div>
         </div>

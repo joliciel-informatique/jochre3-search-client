@@ -25,7 +25,6 @@
     </div>
   </div>
   <div v-if="authenticated" class="is-hidden-desktop">
-    <div class="panel-heading">Options</div>
     <a
       class="panel-block has-text-white"
       href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
