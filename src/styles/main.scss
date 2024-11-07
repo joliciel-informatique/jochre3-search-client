@@ -173,6 +173,10 @@ $menu-nested-list-margin: 1em;
   .menu {
     .is-hidden-desktop .panel-block {
       background-color: $background-color-2;
+      &:first-child {
+        border-start-start-radius: var(--bulma-panel-radius);
+        border-start-start-radius: var(--bulma-panel-radius);
+      }
     }
   }
 }
