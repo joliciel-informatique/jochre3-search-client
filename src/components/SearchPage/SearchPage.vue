@@ -35,7 +35,7 @@
     class="container is-fluid is-flex-direction-column is-align-items-center has-text-centered p-5"
   >
     <!-- Not loading with query and results -->
-    <div v-if="query.length && searchResults?.length">
+    <div v-if="(query.length || hasAdvancedSearchCriteria) && searchResults?.length">
       <div class="columns">
         <div class="column is-3">
           <ContentsTable
@@ -85,12 +85,18 @@
     </div>
 
     <!-- Loading with query but no results -->
-    <div v-else-if="isLoading && query && !searchResults?.length">
+    <div
+      v-else-if="isLoading && (query.length || hasAdvancedSearchCriteria) && !searchResults?.length"
+    >
       <h1>{{ $t('loading') }}</h1>
     </div>
 
     <!-- Not loading with query and no results -->
-    <div v-else-if="query.length && !isLoading && !searchResults?.length">
+    <div
+      v-else-if="
+        (query.length || hasAdvancedSearchCriteria) && !isLoading && !searchResults?.length
+      "
+    >
       <h1>
         <span class="no-results"> {{ $t('results.none') }}! </span>
         <div class="is-justify-content-center is-align-items-center no-results-image m-6">
@@ -265,7 +271,6 @@ watch(snippetsPerResult, () => search())
 
 const searchFacets = async () => {
   const facetParams = new URLSearchParams({ ...Object.fromEntries(params.value) })
-  facetParams.delete('authors')
   facetParams.append('field', 'Author')
   if (preferences.authorFacetCount > 0)
     facetParams.append('maxBins', preferences.authorFacetCount.toString())
