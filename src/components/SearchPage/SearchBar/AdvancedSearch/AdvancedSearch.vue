@@ -12,7 +12,7 @@ Methods: None
 Description: the advanced search toolbox
 -->
 <template>
-  <div class="advancedSearch is-flex is-justify-content-center">
+  <div id="advancedSearchPanel" class="advancedSearch is-flex is-justify-content-center">
     <Transition
       name="advancedSearch"
       @before-enter="beforeEnter"
@@ -151,19 +151,13 @@ const disabled = computed(
   () => facets.value.filter((facet: { active: string }) => (facet.active ? facet : null)).length
 )
 
-watch(showAdvancedSearchPanel, (newV) => {
-  console.log(newV)
-})
-
 const toggleKeyboard = (attachTo: string) => {
   simpleKeyboard.value.attachTo = attachTo
   simpleKeyboard.value.show = !simpleKeyboard.value.show
   simpleKeyboard.value.ref = title
 }
 
-const runSearch = () => {
-  emit('newSearch')
-}
+const runSearch = () => emit('newSearch')
 
 const beforeEnter = <Element,>(el: Element) => ((el as HTMLElement).style.height = '0')
 const enter = <Element,>(el: Element) => ((el as HTMLElement).style.height = '100%')

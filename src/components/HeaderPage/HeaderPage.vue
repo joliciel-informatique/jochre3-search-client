@@ -1,10 +1,10 @@
 <template>
   <div
     id="header"
-    class="columns container hero-body is-fluid has-background-primary has-text-white m-0 p-0 header-footer-content"
+    class="columns is-mobile has-background-primary has-text-white m-0 p-0 header-footer-content"
     aria-role="banner"
   >
-    <div class="column p-2">
+    <div class="column is-2 p-2">
       <a class="logo" :href="$t('header.logo-url')"
         ><img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')"
       /></a>
@@ -27,7 +27,7 @@
         </a>
       </div>
     </div>
-    <div class="column p-2"></div>
+    <div class="column is-2 p-2"></div>
   </div>
 </template>
 

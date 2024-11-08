@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="columns is-desktop">
-      <nav class="column navbar" id="navbar" role="navigation">
-        <HeaderPage class="is-hidden-touch" />
+    <div class="is-flex is-flex-direction-column">
+      <HeaderPage />
+      <nav class="is-flex is-flex-direction-column navbar" id="navbar" role="navigation">
         <div class="navbar-brand is-flex is-flex-direction-row is-flex-wrap-nowrap">
           <a
-            class="navbar-item is-flex is-flex-grow-0 is-flex-shrink-1 is-hidden-desktop"
+            class="navbar-item is-flex is-flex-grow-0 is-flex-shrink-1 is-hidden-touch is-hidden-desktop"
             :href="$t('header.logo-url')"
           >
             <img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')"
@@ -42,6 +42,19 @@
           </div>
         </div>
 
+        <ContentsTable
+          v-model:search-results="searchResults"
+          v-model:page="page"
+          v-model:image-modal="imageModal"
+          v-model:metadata-modal="metadataModal"
+          v-model:notification="notification"
+          v-model:word-modal="wordModal"
+          v-model:selected-entry="firstSearchResult"
+          v-model:total-hits="totalHits"
+          v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
+          v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
+        />
+
         <AdvancedSearch
           @newSearch="newSearch"
           @resetSearchResults="resetSearchResults"
@@ -56,90 +69,55 @@
           v-model:simpleKeyboard="simpleKeyboard"
         />
 
-        <div class="columns is-desktop">
-          <div class="column is-hidden-touch">
-            <FooterNavigation
-              @newPage="newPage()"
-              @resetSearchResults="resetSearchResults()"
-              v-model:totalHits="totalHits"
-              v-model:page="page"
-            />
-          </div>
+        <div class="is-hidden-touch">
+          <FooterNavigation
+            @newPage="newPage()"
+            @resetSearchResults="resetSearchResults()"
+            v-model:totalHits="totalHits"
+            v-model:page="page"
+          />
         </div>
 
-        <aside v-show="navBarMenu" class="navbar-mobile">
+        <div v-show="navBarMenu" class="navbar-mobile">
           <div class="menu is-pulled-right panel has-background-primary">
             <UserOptions
               v-model:show-advanced-search-panel="showAdvancedSearchPanel"
               v-model:nav-bar-menu="navBarMenu"
             />
           </div>
-        </aside>
+        </div>
       </nav>
     </div>
   </div>
   <div
-    id="searchResults"
-    class="container is-fluid is-flex-direction-column is-align-items-center has-text-centered p-5"
+    class="container columns is-flex-direction-column is-align-items-center has-text-centered p-4"
   >
-    <!-- Not loading with query and results -->
-    <div v-if="query.length && searchResults?.length">
+    <!-- Not loading, has query and results -->
+    <div v-if="query.length && searchResults?.length" class="column">
       <div class="columns">
-        <div class="column is-3">
-          <ContentsTable
-            v-model:search-results="searchResults"
-            v-model:page="page"
-            v-model:image-modal="imageModal"
-            v-model:metadata-modal="metadataModal"
-            v-model:notification="notification"
-            v-model:word-modal="wordModal"
-            v-model:selected-entry="firstSearchResult"
-            v-model:total-hits="totalHits"
-            v-model:sort-by="sortBy"
-          />
-        </div>
-        <div class="column mr-6 ml-6" tabindex="-1">
-          <!-- Not loading with results -->
-          <div v-if="!isLoading">
-            <ul>
-              <li v-for="(result, bookIndex) of searchResults" :key="sha1(result)">
-                <DisplaySnippets
-                  v-model:image-modal="imageModal"
-                  v-model:notification="notification"
-                  v-model:word-modal="wordModal"
-                  v-model:selected-entry="firstSearchResult"
-                  v-model:search-results="searchResults"
-                  :snippets="result.snippets"
-                  :doc-ref="result.docRef"
-                  :url="result.metadata.url"
-                  :bookIndex
-                />
-              </li>
-            </ul>
-          </div>
-
-          <!-- Loading results -->
-          <div v-else>
-            <h1>{{ $t('loading') }}</h1>
-          </div>
-        </div>
-        <div class="column is-2 is-hidden-touch">
-          <FacetBar
-            @newSearch="newSearch"
-            @resetSearchResults="resetSearchResults"
-            v-model:facets="facets"
-          />
-        </div>
+        <DisplaySnippets
+          v-model:image-modal="imageModal"
+          v-model:notification="notification"
+          v-model:word-modal="wordModal"
+          v-model:selected-entry="firstSearchResult"
+          v-model:search-results="searchResults"
+          v-model:is-loading="isLoading"
+        />
+        <FacetBar
+          @newSearch="newSearch"
+          @resetSearchResults="resetSearchResults"
+          v-model:facets="facets"
+        />
       </div>
     </div>
 
-    <!-- Loading with query but no results -->
-    <div v-else-if="isLoading && query && !searchResults?.length">
+    <!-- Loading with query, but no results -->
+    <div v-else-if="isLoading && query && !searchResults?.length" class="column">
       <h1>{{ $t('loading') }}</h1>
     </div>
 
-    <!-- Not loading with query and no results -->
-    <div v-else-if="query.length && !isLoading && !searchResults?.length">
+    <!-- Not loading, with query, but no results -->
+    <div v-else-if="query.length && !isLoading && !searchResults?.length" class="column">
       <h1>
         <span class="no-results"> {{ $t('results.none') }}! </span>
         <div class="is-justify-content-center is-align-items-center no-results-image m-6">
@@ -148,18 +126,17 @@
       </h1>
     </div>
 
-    <div v-else>
+    <!-- Not loading, no query, no results -->
+    <div v-else class="column p-5">
       <IndexSize v-model:is-loading="isLoading" v-model:notification="notification" />
     </div>
   </div>
-  <FooterPage v-model:total-hits="totalHits" v-model:page="page" :search-results="searchResults" />
 </template>
 <script setup lang="ts">
 import { onMounted, ref, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchData } from '../../assets/fetchMethods'
-import { sha1 } from 'object-hash'
-import UserOptions from './UserOptions/UserOptions.vue'
+// import { sha1 } from 'object-hash'
 
 // Import Child components
 import SearchBar from './SearchBar/SearchBar.vue'
@@ -170,7 +147,7 @@ import FooterNavigation from '../FooterPage/FooterNavigation/FooterNavigation.vu
 import FacetBar from './SearchResults/FacetBar/FacetBar.vue'
 import IndexSize from './SearchResults/IndexSize/IndexSize.vue'
 import HeaderPage from '../HeaderPage/HeaderPage.vue'
-import FooterPage from '../FooterPage/FooterPage.vue'
+import UserOptions from './UserOptions/UserOptions.vue'
 
 // Import interfaces
 import { type SearchResult, type AggregationBin } from '../../assets/interfacesExternals'
@@ -183,7 +160,6 @@ import { usePreferencesStore } from '../../stores/PreferencesStore'
 const preferences = usePreferencesStore()
 
 import { storeToRefs } from 'pinia'
-
 const { resultsPerPage, authorFacetCount, snippetsPerResult, sortBy } = storeToRefs(preferences)
 
 const query = ref('')
@@ -196,7 +172,7 @@ const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
 const notification: Ref = defineModel('notification')
 
-const searchBarIsDocked = ref(false)
+// const searchBarIsDocked = ref(false)
 const navBarMenu = ref(false)
 
 const authorInclude = ref(true)
@@ -219,24 +195,54 @@ const route = useRoute()
 
 const hasAdvancedSearchCriteria = ref(false)
 const showAdvancedSearchPanel = ref(false)
+const openMobileSearchResultsToc = ref(false)
+const openMobileMetadataPanel = ref(false)
+
 const facets = ref<Array<AggregationBin>>([])
 
-watch(searchBarIsDocked, (newV) => {
-  const navbar = document.getElementById('navbar')
-  const results = document.getElementById('searchResults')
-  newV ? navbar?.classList.add('is-fixed-top') : navbar?.classList.remove('is-fixed-top')
-  if (results) results.style.top = newV ? `${navbar?.getBoundingClientRect().height}px` : '0px'
-})
-
 onMounted(() => {
-  window.addEventListener('scroll', () => {
-    const header = document.getElementById('header')
-    const navbar = document.getElementById('navbar')
-    if (navbar && header) {
-      const headerBottom = header.getBoundingClientRect().bottom
-      searchBarIsDocked.value = headerBottom <= 0 ? true : false
+  window.addEventListener('click', (e: MouseEvent | TouchEvent) => {
+    if (navBarMenu.value) {
+      const navbarMobile = document.getElementById('navbar-mobile')
+      const navbarMobileBtn = document.getElementsByClassName('navbar-burger')[0]
+      if (
+        e.target instanceof Element &&
+        !navbarMobile?.contains(e.target) &&
+        !navbarMobileBtn?.contains(e.target)
+      )
+        navBarMenu.value = false
+    }
+
+    if (showAdvancedSearchPanel.value) {
+      const advancedSearchPanel = document.getElementById('advancedSearchPanel')
+      if (e.target instanceof Element && !advancedSearchPanel?.contains(e.target)) {
+        if (showAdvancedSearchPanel.value) showAdvancedSearchPanel.value = false
+      }
     }
   })
+
+  // const closeOnEscape = (e: KeyboardEvent) => {
+  //   e.key === 'Escape' ? toggleKeyboard() : null
+  //   document.removeEventListener('keydown', closeOnEscape, true)
+  // }
+  // })
+  // const navbar = document.getElementById('navbar')
+  // const contentsColumn = document.getElementById('contentsColumn')
+  // const snippetsColumn = document.getElementById('snippetsColumn')
+  // if (navbar && contentsColumn && snippetsColumn) {
+  // const navbarRect = navbar.getBoundingClientRect()
+  // const contentsColumnRect = contentsColumn.getBoundingClientRect()
+  // console.log(contentsColumn.getBoundingClientRect())
+  // snippetsColumn.setAttribute('style', `top:${navbarRect.height + contentsColumnRect.height}px`)
+  // searchResults.setAttribute('style', )
+  // }
+  // window.addEventListener('scroll', () => {
+  // const navbar = document.getElementById('navbar')
+  // if (navbar) {
+  //   navbar.classList.add('is-fixed-top')
+  // }
+  // })
+
   router.isReady().then(() => {
     if (route.query['query']) query.value = (route.query['query'] as string).trim()
     if (route.query['strict']) strict.value = route.query['strict'] === 'true'
@@ -261,26 +267,20 @@ onMounted(() => {
 
     stylesheet.href = '/css/keyboard.css'
 
-    const plugin = document.createElement('script')
-    plugin.type = 'module'
+    // const plugin = document.createElement('script')
+    // plugin.type = 'module'
 
-    document.head.appendChild(plugin)
+    // document.head.appendChild(plugin)
 
-    plugin.src = '/js/keyboard.js'
-    plugin.async = true
+    // plugin.src = '/js/keyboard.js'
+    // plugin.async = true
 
     newSearch()
   })
 })
 
-const newPage = () => {
-  runSearch()
-}
-
-const newSearch = () => {
-  page.value = 1
-  runSearch()
-}
+const newPage = () => runSearch()
+const newSearch = () => (page.value = 1) && runSearch()
 
 const runSearch = () => {
   hasAdvancedSearchCriteria.value = false
@@ -327,11 +327,44 @@ const resetSearchResults = () => {
   window.history.replaceState({}, document.title, '/')
 }
 
+watch(searchResults, (newV) => {
+  const header = document.getElementById('header')
+  const navbar = document.getElementById('navbar')
+  if (newV?.length) {
+    header?.setAttribute('style', 'display:none')
+    navbar?.classList.add('is-fixed-top')
+  } else {
+    header?.setAttribute('style', 'display:flex')
+    navbar?.classList.remove('is-fixed-top')
+  }
+})
+
 watch(excludeFromSearch, () => (authorInclude.value = !excludeFromSearch.value))
 watch(resultsPerPage, () => search())
 watch(authorFacetCount, () => searchFacets())
 watch(snippetsPerResult, () => search())
-watch(sortBy, () => search())
+
+// Close all other panels on Mobile
+watch(showAdvancedSearchPanel, (newV) => {
+  if (newV) {
+    openMobileSearchResultsToc.value = false
+    openMobileMetadataPanel.value = false
+    // PreferencesModal.value.show = false
+  }
+})
+
+watch(openMobileSearchResultsToc, (newV) => {
+  if (newV) {
+    showAdvancedSearchPanel.value = false
+    openMobileMetadataPanel.value = false
+  }
+})
+watch(openMobileMetadataPanel, (newV) => {
+  if (newV) {
+    showAdvancedSearchPanel.value = false
+    openMobileSearchResultsToc.value = false
+  }
+})
 
 const searchFacets = async () => {
   const facetParams = new URLSearchParams({ ...Object.fromEntries(params.value) })
@@ -432,9 +465,11 @@ const search = async () => {
       response.json().then(({ results, totalCount }) => {
         hasSearch.value = true
         isLoading.value = false
-        searchResults.value = results
-        firstSearchResult.value = results[0]
-        totalHits.value = totalCount
+        if (results && results.length) {
+          searchResults.value = results
+          firstSearchResult.value = results[0]
+          totalHits.value = totalCount
+        }
         if (!hasActiveFacets) {
           searchFacets()
             .then((results) => {

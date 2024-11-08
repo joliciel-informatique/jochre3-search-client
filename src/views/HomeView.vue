@@ -1,5 +1,6 @@
 <template>
   <PreferencesSetup />
+  <!-- <HeaderPage /> -->
   <main
     class="is-widescreen"
     :class="{
@@ -17,6 +18,7 @@
       v-model:simple-keyboard="simpleKeyboard"
     />
   </main>
+  <FooterPage v-model:total-hits="totalHits" />
   <Preferences v-model:notification="notification" />
   <LargeImage v-model:image-modal="imageModal" />
   <FixWord
@@ -35,9 +37,9 @@
 
 <script setup lang="ts">
 import { ref, shallowReactive } from 'vue'
-// import HeaderPage from '@/components/HeaderPage/HeaderPage.vue'
+import HeaderPage from '@/components/HeaderPage/HeaderPage.vue'
 import SearchPage from '@/components/SearchPage/SearchPage.vue'
-// import FooterPage from '@/components/FooterPage/FooterPage.vue'
+import FooterPage from '@/components/FooterPage/FooterPage.vue'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import LargeImage from '@/_components/Modals/LargeImage/LargeImage.vue'
 import FixMetaData from '@/_components/Modals/FixMetaData/FixMetaData.vue'

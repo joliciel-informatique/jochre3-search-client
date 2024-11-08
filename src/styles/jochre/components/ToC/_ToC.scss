@@ -1,16 +1,27 @@
 @use '../../../custom/Custom' as *;
 
+.contentsColumn {
+  height: 4vh;
+}
+
 .table-of-contents {
   display: block;
-  position: sticky;
-  top: 24vh;
-  height: 77vh;
-  left: 2vw;
+  position: fixed;
+  top: 23vh;
+  height: 73vh;
   background-color: $background-color-1;
+
+  &.search-results {
+    width: 24vw;
+  }
+
+  &.facets {
+    width: 17vw;
+  }
 
   .menu-list {
     overflow-y: scroll;
-    max-height: 57vh;
+    max-height: 46vh;
   }
 
   .facet-list {
@@ -22,16 +33,23 @@
     z-index: 9;
   }
 
-  #searchResultsList {
-    height: 100%;
+  &.left {
+    left: 2vw;
   }
+
+  &.right {
+    right: 2vw;
+  }
+
+  // .searchResultsList {
+  // height: 100%;
+  // }
 }
 
 .toc-mobile {
-  position: fixed;
-  z-index: 40;
-  top: 9vh;
-  width: 0vw;
+  height: 7vh;
+  background-color: $white;
+  width: 101%;
 
   &.toc-mobile-left {
     left: 0;
@@ -43,23 +61,42 @@
 
   .toc-drawer {
     position: fixed;
-    right: 0;
-    height: 91vh;
+    top: 15vh;
+    right: 1vw;
+    left: 1vw;
+    height: 83vh;
+    width: 98vw;
 
     .menu-list {
-      max-height: 48vh;
+      max-height: 71vh;
       overflow-y: scroll;
+      border: 1px solid $foreground-color-2;
+      border-radius: 0.5em;
+
+      a:not(.is-active) {
+        background-color: unset;
+      }
     }
   }
 
   .toc-button {
     position: fixed;
-    top: 8vh;
+    top: 7vh;
+    background-color: white;
     &.toc-mobile-left {
       left: 0;
     }
     &.toc-mobile-right {
       right: 0;
+    }
+    .button {
+      &.toc-index-btn {
+        width: 8vw;
+      }
+
+      &.toc-metadata-btn {
+        width: 88vw;
+      }
     }
   }
 }
