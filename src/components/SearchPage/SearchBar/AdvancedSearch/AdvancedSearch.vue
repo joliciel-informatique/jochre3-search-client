@@ -12,7 +12,7 @@ Methods: None
 Description: the advanced search toolbox
 -->
 <template>
-  <div id="advancedSearchPanel" class="advancedSearch is-flex is-justify-content-center">
+  <div class="advancedSearch is-flex is-justify-content-center">
     <Transition
       name="advancedSearch"
       @before-enter="beforeEnter"
@@ -20,7 +20,7 @@ Description: the advanced search toolbox
       @before-leave="beforeLeave"
       @leave="leave"
     >
-      <div class="body m-3 p-3" v-show="showAdvancedSearchPanel">
+      <div id="advancedSearchPanel" class="body m-3 p-3" v-show="showAdvancedSearchPanel">
         <div class="body-inner container is-max-desktop">
           <FindAuthors
             v-model:authorList="authorList"

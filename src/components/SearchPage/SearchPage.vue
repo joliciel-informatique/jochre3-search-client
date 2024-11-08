@@ -27,13 +27,13 @@
           </div>
           <div
             class="navbar-burger is-flex is-flex-shrink-2 mr-5 has-text-white is-hidden-desktop"
-            :class="navBarMenu ? 'is-active' : ''"
+            :class="openNavBarMobileMenu ? 'is-active' : ''"
             role="button"
             aria-label="menu"
             aria-expanded="false"
-            @click="(navBarMenu = !navBarMenu) && (showAdvancedSearchPanel = !navBarMenu)"
+            @click="openNavBarMobileMenu = !openNavBarMobileMenu"
           >
-            <div class="">
+            <div>
               <span aria-hidden="true"></span>
               <span aria-hidden="true"></span>
               <span aria-hidden="true"></span>
@@ -78,11 +78,11 @@
           />
         </div>
 
-        <div v-show="navBarMenu" class="navbar-mobile">
+        <div v-show="openNavBarMobileMenu" id="navbar-mobile" class="navbar-mobile">
           <div class="menu is-pulled-right panel has-background-primary">
             <UserOptions
               v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-              v-model:nav-bar-menu="navBarMenu"
+              v-model:open-nav-bar-mobile-menu="openNavBarMobileMenu"
             />
           </div>
         </div>
@@ -173,7 +173,6 @@ const metadataModal: Ref = defineModel('metadataModal')
 const notification: Ref = defineModel('notification')
 
 // const searchBarIsDocked = ref(false)
-const navBarMenu = ref(false)
 
 const authorInclude = ref(true)
 const excludeFromSearch = ref(false)
@@ -197,12 +196,13 @@ const hasAdvancedSearchCriteria = ref(false)
 const showAdvancedSearchPanel = ref(false)
 const openMobileSearchResultsToc = ref(false)
 const openMobileMetadataPanel = ref(false)
+const openNavBarMobileMenu = ref(false)
 
 const facets = ref<Array<AggregationBin>>([])
 
 onMounted(() => {
   window.addEventListener('click', (e: MouseEvent | TouchEvent) => {
-    if (navBarMenu.value) {
+    if (openNavBarMobileMenu.value) {
       const navbarMobile = document.getElementById('navbar-mobile')
       const navbarMobileBtn = document.getElementsByClassName('navbar-burger')[0]
       if (
@@ -210,13 +210,20 @@ onMounted(() => {
         !navbarMobile?.contains(e.target) &&
         !navbarMobileBtn?.contains(e.target)
       )
-        navBarMenu.value = false
+        openNavBarMobileMenu.value = false
     }
+  })
 
+  window.addEventListener('click', (e: MouseEvent | TouchEvent) => {
+    const navbarMobile = document.getElementById('navbar-mobile')
     if (showAdvancedSearchPanel.value) {
       const advancedSearchPanel = document.getElementById('advancedSearchPanel')
-      if (e.target instanceof Element && !advancedSearchPanel?.contains(e.target)) {
-        if (showAdvancedSearchPanel.value) showAdvancedSearchPanel.value = false
+      if (
+        e.target instanceof Element &&
+        !navbarMobile?.contains(e.target) &&
+        !advancedSearchPanel?.contains(e.target)
+      ) {
+        showAdvancedSearchPanel.value = false
       }
     }
   })
@@ -349,7 +356,7 @@ watch(showAdvancedSearchPanel, (newV) => {
   if (newV) {
     openMobileSearchResultsToc.value = false
     openMobileMetadataPanel.value = false
-    // PreferencesModal.value.show = false
+    openNavBarMobileMenu.value = false
   }
 })
 
@@ -357,12 +364,21 @@ watch(openMobileSearchResultsToc, (newV) => {
   if (newV) {
     showAdvancedSearchPanel.value = false
     openMobileMetadataPanel.value = false
+    openNavBarMobileMenu.value = false
   }
 })
 watch(openMobileMetadataPanel, (newV) => {
   if (newV) {
     showAdvancedSearchPanel.value = false
     openMobileSearchResultsToc.value = false
+    openNavBarMobileMenu.value = false
+  }
+})
+watch(openNavBarMobileMenu, (newV) => {
+  if (newV) {
+    showAdvancedSearchPanel.value = false
+    openMobileSearchResultsToc.value = false
+    openMobileMetadataPanel.value = false
   }
 })
 
@@ -418,9 +434,7 @@ const search = async () => {
 
   showAdvancedSearchPanel.value = false
 
-  if (!hasSearch.value) {
-    return
-  }
+  if (!hasSearch.value) return
 
   const searchParams = new URLSearchParams(defineSearchParams())
 
@@ -494,7 +508,6 @@ const search = async () => {
       })
     )
     .catch((error) => {
-      console.log(error)
       notification.value = {
         show: true,
         error: true,
