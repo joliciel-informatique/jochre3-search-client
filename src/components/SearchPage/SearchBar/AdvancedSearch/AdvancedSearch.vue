@@ -20,21 +20,18 @@ Description: the advanced search toolbox
       @before-leave="beforeLeave"
       @leave="leave"
     >
-      <div
-        class="body m-3 p-3"
-        v-show="showAdvancedSearchPanel"
-        @keydown.esc="showAdvancedSearchPanel = false"
-      >
+      <div class="body m-3 p-3" v-show="showAdvancedSearchPanel">
         <div class="body-inner container is-max-desktop">
           <span class="columns is-vcentered mt-1 p-1">
-            <p class="column is-flex is-vcentered is-2">
+            <p class="column is-flex has-text-white is-2">
               {{ $t('search.author') }}
             </p>
-            <span class="column is-vcentered" :aria-label="$t('search.author')">
+            <span class="column" :aria-label="$t('search.author')">
               <FindAuthors
                 v-model:authorList="authorList"
                 v-model:disabled="disabled"
                 v-model:exclude-from-search="excludeFromSearch"
+                v-model:simple-keyboard="simpleKeyboard"
                 :label="$t('search.author')"
                 :multi-value="true"
                 :show-exclude-checkbox="true"
@@ -43,16 +40,14 @@ Description: the advanced search toolbox
             </span>
           </span>
           <span class="columns is-vcentered mt-1 p-1">
-            <p class="column is-2 is-flex is-vcentered" id="searchTitle">
+            <p class="column is-2 is-flex has-text-white" id="searchTitle">
               {{ $t('search.title') }}
             </p>
             <span class="column field has-addons has-addons-left is-horizontal">
               <p class="control is-expanded">
                 <input
-                  id="title"
-                  class="input keyboardInput"
-                  aria-labelledby="searchTitle"
-                  vki-id="2"
+                  id="bookTitle"
+                  class="input"
                   type="text"
                   lang="yi"
                   :placeholder="$t('search.title')"
@@ -60,11 +55,10 @@ Description: the advanced search toolbox
                   @keyup.enter="emit('newSearch')"
                 />
               </p>
-              <p class="control">
+              <p class="control keyboardButton">
                 <button
-                  class="button is-clickable is-info keyboardInputButton"
-                  aria-label="open onscreen Yiddish keyboard"
-                  vki-id="2"
+                  class="button is-clickable is-medium"
+                  @click="toggleKeyboard('bookTitle')"
                   :alt="$t('search.keyboard')"
                   :title="$t('search.keyboard')"
                 >
@@ -74,7 +68,7 @@ Description: the advanced search toolbox
             </span>
           </span>
           <span class="columns is-vcentered mt-1 p-1">
-            <p class="column is-flex is-vcentered is-2">
+            <p class="column is-flex has-text-white is-2">
               {{ $t('search.document-reference') }}
             </p>
             <span class="column field has-addons has-addons-left is-horizontal">
@@ -89,7 +83,7 @@ Description: the advanced search toolbox
             </span>
           </span>
           <span class="columns is-vcentered mt-1 p-1">
-            <p class="column is-flex is-vcentered is-2" id="searchDateFrom">
+            <p class="column is-flex is-2 has-text-white" id="searchDateFrom">
               {{ $t('search.date-from') }}
             </p>
             <p class="column control is-2 has-text-centered">
@@ -104,7 +98,7 @@ Description: the advanced search toolbox
                 max="2000"
               />
             </p>
-            <p class="column is-flex is-vcentered is-1 mr-1 ml-1" id="searchToYear">
+            <p class="column has-text-centered has-text-white is-1 mr-1 ml-1" id="searchToYear">
               {{ $t('search.date-to') }}
             </p>
             <p class="column control is-2 has-text-centered">
@@ -119,11 +113,11 @@ Description: the advanced search toolbox
                 max="2000"
               />
             </p>
-            <p class="column is-flex is-vcentered is-2 mr-1 ml-1" id="searchSortBy">
+            <p class="column has-text-right has-text-white is-2 mr-1 ml-1" id="searchSortBy">
               {{ $t('search.sort-by') }}
             </p>
             <select
-              class="column control select"
+              class="column control select has-text-centered"
               name="sortBySelect"
               aria-labelledby="searchSortBy"
               v-model="sortBy"
@@ -154,7 +148,6 @@ Description: the advanced search toolbox
 </template>
 <script setup lang="ts">
 import FindAuthors from '@/_components/FindAuthors/FindAuthors.vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { computed, type Ref } from 'vue'
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
@@ -168,9 +161,16 @@ const docRefs = defineModel('docRefs')
 const sortBy = defineModel('sortBy')
 const facets: Ref = defineModel('facets')
 const excludeFromSearch = defineModel('excludeFromSearch')
+const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 const disabled = computed(
   () => facets.value.filter((facet: { active: string }) => (facet.active ? facet : null)).length
 )
+
+const toggleKeyboard = (attachTo: string) => {
+  simpleKeyboard.value.attachTo = attachTo
+  simpleKeyboard.value.show = !simpleKeyboard.value.show
+  simpleKeyboard.value.ref = title
+}
 
 const runSearch = () => {
   emit('newSearch')

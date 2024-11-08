@@ -12,31 +12,29 @@
           <img :src="wordImage" :alt="$t('fix-word.image-alt', [wordSuggestion])" />
         </div>
         <div class="p-2 field has-addons">
-          <span class="column field has-addons has-addons-left is-horizontal">
+          <span class="control container has-icons-right">
             <p class="control is-expanded">
               <input
-                class="input keyboardInput"
+                id="wordCorrectionInput"
                 :class="{
+                  input: true,
                   'rtl-align': preferences.needsRightToLeft
                 }"
                 type="text"
                 name="fixWordSuggestionInput"
                 lang="yi"
                 v-model="wordSuggestion"
-                vki-id="fixWord"
               />
             </p>
-            <p class="control">
-              <button
-                class="button is-clickable is-info keyboardInputButton"
-                aria-label="open onscreen Yiddish keyboard"
-                vki-id="fixWord"
-                :alt="$t('search.keyboard')"
-                :title="$t('search.keyboard')"
-              >
-                <font-awesome-icon icon="keyboard" />
-              </button>
-            </p>
+            <span
+              class="icon is-small is-clickable is-right"
+              :alt="$t('search.keyboard')"
+              :title="$t('search.keyboard')"
+              @click="toggleKeyboard('wordCorrectionInput')"
+              aria-label="hidden"
+            >
+              <font-awesome-icon icon="keyboard" />
+            </span>
           </span>
         </div>
         <div class="p-2 has-text-warning">{{ $t('fix-word.instructions') }}</div>
@@ -58,7 +56,6 @@
 <script setup lang="ts">
 import { onBeforeUpdate, ref, type Ref } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
@@ -66,6 +63,7 @@ const preferences = usePreferencesStore()
 
 const wordModal: Ref = defineModel('wordModal')
 const notification: Ref = defineModel('notification')
+const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 const wordImage = ref('')
 const wordLoading = ref(false)
 const wordSuggestion = ref('')
@@ -85,6 +83,12 @@ onBeforeUpdate(async () => {
     wordLoading.value = false
   }
 })
+
+const toggleKeyboard = (attachTo: string) => {
+  simpleKeyboard.value.attachTo = attachTo
+  simpleKeyboard.value.show = !simpleKeyboard.value.show
+  simpleKeyboard.value.ref = wordSuggestion
+}
 
 const loadWordImage = async (params: URLSearchParams) => {
   const response = await fetchData('word-image', 'get', params, 'image/png', 'arraybuffer')

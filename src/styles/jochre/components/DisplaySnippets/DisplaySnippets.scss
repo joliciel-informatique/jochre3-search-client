@@ -1,0 +1,63 @@
+@use '../../../custom/Custom' as *;
+
+.card.metadata {
+  top: 0;
+  position: sticky;
+  z-index: 5;
+}
+
+.card.snippet {
+  z-index: 1;
+}
+
+.card-header {
+  &.selected-snippet {
+    background-color: $background-color-2;
+
+    .card-header-title {
+      color: $white;
+    }
+  }
+
+  &.snippet {
+    background-color: $white;
+    .card-header-title {
+      color: $background-color-5;
+    }
+
+    > .card-header-icon > span {
+      color: $background-color-5;
+    }
+  }
+}
+
+.image-snippet {
+  width: 100%;
+}
+
+.snippet span {
+  line-height: 1em;
+}
+
+.snippet.rtl {
+  border-left: 0;
+  border-right: 3px #ccc solid;
+  padding: 0 10px 0 0;
+}
+
+.highlight {
+  padding: 0.02rem;
+  color: $hl-text-color;
+  background-color: $hl-color;
+  border-radius: $hl-box-radius;
+  padding: $hl-box-padding;
+  box-shadow: $hl-box-shadow rgba($hl-box-shadow-color, $hl-box-shadow-color-alpha);
+  font-weight: bold;
+  border: none;
+  cursor: pointer !important;
+}
+
+.highlight > span:hover {
+  color: $hl-text-hover-color;
+  transition: all 200ms ease-in-out;
+}

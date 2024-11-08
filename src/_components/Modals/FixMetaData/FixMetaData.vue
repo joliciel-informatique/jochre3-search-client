@@ -13,44 +13,43 @@
       <div v-if="!authenticated" class="is-italic has-text-weight-bold has-text-danger">
         {{ $t('fix-metadata.unauthenticated') }}
       </div>
-      <div class="p-2 has-text-warning">{{ $t('fix-metadata.instructions.normal') }}</div>
+      <div class="p-2">{{ $t('fix-metadata.instructions.normal') }}</div>
       <div class="pb-0 mb-0 field has-addons">
-        <p class="control">
-          <a class="button is-static level-item">{{
-            $t(`fix-metadata.field-type.${metadataModal.field}`)
-          }}</a>
-        </p>
-        <p class="control container">
-          <input
-            class="input is-normal is-rounded keyboardInput"
-            aria-label="open onscreen Yiddish keyboard"
-            type="text"
-            name="fixMetadataInput"
+        <span
+          class="control container"
+          :class="metadataModal.field !== 'publicationYear' ? 'has-icons-right' : ''"
+        >
+          <p class="control container is-expanded">
+            <input
+              :id="metadataModal.field"
+              :type="metadataModal.field === 'publicationYear' ? 'number' : 'text'"
+              class="input"
+              :class="{
+                'ltr-align': fieldLeftToRight && preferences.needsLeftToRight,
+                english: fieldLeftToRight && preferences.needsLeftToRight,
+                'rtl-align': !fieldLeftToRight && preferences.needsRightToLeft
+              }"
+              :alt="$t('search.keyboard')"
+              :title="$t('search.keyboard')"
+              name="fixWordSuggestionInput"
+              lang="yi"
+              v-model="metadataModal.value"
+              :disabled="authorList.length > 0"
+            />
+          </p>
+          <span
+            v-if="metadataModal.field !== 'publicationYear'"
+            class="icon is-small is-clickable is-right"
             :alt="$t('search.keyboard')"
             :title="$t('search.keyboard')"
-            :vki-id="`${metadataModal.docRef}-${metadataModal.field}`"
-            :class="{
-              'ltr-align': fieldLeftToRight && preferences.needsLeftToRight,
-              english: fieldLeftToRight && preferences.needsLeftToRight,
-              'rtl-align': !fieldLeftToRight && preferences.needsRightToLeft
-            }"
-            v-model="metadataModal.value"
-            :disabled="authorList.length > 0"
-            lang="yi"
-          />
-        </p>
-        <p class="control">
-          <button
-            class="button is-clickable is-info keyboardInputButton"
-            aria-label="open onscreen Yiddish keyboard"
-            :alt="$t('search.keyboard')"
-            :title="$t('search.keyboard')"
-            :vki-id="`${metadataModal.docRef}-${metadataModal.field}`"
+            @click="toggleKeyboard(metadataModal.field)"
+            aria-label="hidden"
           >
             <font-awesome-icon icon="keyboard" />
-          </button>
-        </p>
+          </span>
+        </span>
       </div>
+
       <div v-show="showFindAuthorDropdown">
         <div class="columns mt-3">
           <div
@@ -59,24 +58,25 @@
           >
             {{ $t('fix-metadata.instructions.authorsNote') }}
           </div>
-          <div
-            class="column is-flex is-flex-direction-column p-2 has-text-warning has-text-weight-medium"
-          >
-            {{ $t('fix-metadata.instructions.authors') }}
+          <div class="column is-flex is-flex-direction-column">
+            <div class="p-2 has-text-warning has-text-weight-medium">
+              {{ $t('fix-metadata.instructions.authors') }}
+            </div>
+            <div class="p-2 has-text-warning has-text-weight-medium">
+              {{ $t('fix-metadata.instructions.authorsInstruction') }}
+            </div>
           </div>
-        </div>
-        <div class="p-2 has-text-warning">
-          {{ $t('fix-metadata.instructions.authorsInstruction') }}
         </div>
         <div class="pb-0 mb-0 field has-addon">
           <FindAuthors
             v-model:authorList="authorList"
             v-model:exclude="metadataModal.value"
-            :multi-value="false"
-            :show-exclude-checkbox="false"
+            v-model:simple-keyboard="simpleKeyboard"
             v-model:include-author="includeAuthor"
             v-model:include-author-in-transcription="includeAuthorInTranscription"
-            unique-id="fix-metadata-find-authors"
+            :multi-value="false"
+            :show-exclude-checkbox="false"
+            :unique-id="`fix-metadata-find-authors-${metadataModal.value}`"
           />
         </div>
       </div>
@@ -98,9 +98,10 @@ import { ref, computed, type Ref } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
 import FindAuthors from '@/_components/FindAuthors/FindAuthors.vue'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 const preferences = usePreferencesStore()
+
+const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 
 const metadataModal: Ref = defineModel('metadataModal')
 const notification = defineModel('notification')
@@ -111,6 +112,12 @@ const includeAuthorInTranscription = computed(() => metadataModal.value.field ==
 const fieldLeftToRight = computed(() =>
   ['authorEnglish', 'titleEnglish', 'publisher'].includes(metadataModal.value.field)
 )
+
+const toggleKeyboard = (attachTo: string) => {
+  simpleKeyboard.value.attachTo = attachTo
+  simpleKeyboard.value.show = !simpleKeyboard.value.show
+  simpleKeyboard.value.ref = metadataModal.value
+}
 
 const save = (closeFunc: Function) => {
   const authorListValue = authorList.value[0]?.label

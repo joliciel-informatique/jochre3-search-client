@@ -1,0 +1,36 @@
+@use '../../../custom/Custom' as *;
+
+.header-beta-flyout {
+  bottom: -1rem;
+  right: 0;
+  font-size: 1rem;
+  color: $foreground-color-1;
+}
+
+.header-footer-content {
+  flex: 0 1 auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .logo {
+    position: fixed;
+    width: 8vw;
+    height: 8vw;
+    max-width: 10vw;
+    max-height: 20vh;
+    z-index: 40;
+    transform-origin: top left;
+    animation-name: logo-watcher;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-direction: normal;
+    animation-fill-mode: forwards;
+    animation-timeline: view();
+  }
+
+  @keyframes logo-watcher {
+    1% {
+      transform: scale(1.7, 1.7);
+    }
+  }
+}

@@ -1,0 +1,16 @@
+@use '../../../custom/Custom' as *;
+
+.text-snippet {
+  line-height: 1.4em;
+}
+
+@media screen and (max-width: 375px) {
+  .load-original-image-button {
+    span {
+      overflow-x: hidden;
+      overflow-x: clip;
+      text-overflow: ellipsis;
+      max-width: 100px;
+    }
+  }
+}

@@ -8,6 +8,7 @@
       v-model:query="query"
       v-model:strict="strict"
       v-model:is-loading="isLoading"
+      v-model:simpleKeyboard="simpleKeyboard"
     />
     <AdvancedSearch
       @newSearch="newSearch"
@@ -21,47 +22,126 @@
       v-model:sort-by="sortBy"
       v-model:facets="facets"
       v-model:exclude-from-search="excludeFromSearch"
+      v-model:simpleKeyboard="simpleKeyboard"
+    />
+    <FooterNavigation
+      @newPage="newPage()"
+      @resetSearchResults="resetSearchResults()"
+      v-model:totalHits="totalHits"
+      v-model:page="page"
     />
   </div>
   <div
     class="container is-fluid is-flex-direction-column is-align-items-center has-text-centered p-5"
   >
-    <DisplayResults
-      v-model:is-loading="isLoading"
-      v-model:image-modal="imageModal"
-      v-model:word-modal="wordModal"
-      v-model:metadata-modal="metadataModal"
-      v-model:notification="notification"
-      v-model:query="query"
-      v-model:search-results="searchResults"
-      v-model:page="page"
-      v-model:total-hits="totalHits"
-      v-model:facets="facets"
-      @newSearch="newSearch"
-      @resetSearchResults="resetSearchResults"
-    />
+    <!-- Not loading with query and results -->
+    <div v-if="(query.length || hasAdvancedSearchCriteria) && searchResults?.length">
+      <div class="columns">
+        <div class="column is-3">
+          <ContentsTable
+            v-model:search-results="searchResults"
+            v-model:page="page"
+            v-model:image-modal="imageModal"
+            v-model:metadata-modal="metadataModal"
+            v-model:notification="notification"
+            v-model:word-modal="wordModal"
+            v-model:selected-entry="firstSearchResult"
+            v-model:total-hits="totalHits"
+          />
+        </div>
+        <div class="column mr-6 ml-6" tabindex="-1">
+          <!-- Not loading with results -->
+          <div v-if="!isLoading">
+            <ul>
+              <li v-for="(result, bookIndex) of searchResults" :key="sha1(result)">
+                <DisplaySnippets
+                  v-model:image-modal="imageModal"
+                  v-model:notification="notification"
+                  v-model:word-modal="wordModal"
+                  v-model:selected-entry="firstSearchResult"
+                  v-model:search-results="searchResults"
+                  :snippets="result.snippets"
+                  :doc-ref="result.docRef"
+                  :url="result.metadata.url"
+                  :bookIndex
+                />
+              </li>
+            </ul>
+          </div>
+
+          <!-- Loading results -->
+          <div v-else>
+            <h1>{{ $t('loading') }}</h1>
+          </div>
+        </div>
+        <div class="column is-2">
+          <FacetBar
+            @newSearch="newSearch"
+            @resetSearchResults="resetSearchResults"
+            v-model:facets="facets"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading with query but no results -->
+    <div
+      v-else-if="isLoading && (query.length || hasAdvancedSearchCriteria) && !searchResults?.length"
+    >
+      <h1>{{ $t('loading') }}</h1>
+    </div>
+
+    <!-- Not loading with query and no results -->
+    <div
+      v-else-if="
+        (query.length || hasAdvancedSearchCriteria) && !isLoading && !searchResults?.length
+      "
+    >
+      <h1>
+        <span class="no-results"> {{ $t('results.none') }}! </span>
+        <div class="is-justify-content-center is-align-items-center no-results-image m-6">
+          <font-awesome-icon class="fa-10x" icon="ban" />
+        </div>
+      </h1>
+    </div>
+
+    <div v-else>
+      <IndexSize v-model:is-loading="isLoading" v-model:notification="notification" />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
 import { onMounted, ref, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { fetchData } from '@/assets/fetchMethods'
+import { fetchData } from '../../assets/fetchMethods'
+import { sha1 } from 'object-hash'
 
 // Import Child components
 import SearchBar from './SearchBar/SearchBar.vue'
 import AdvancedSearch from './SearchBar/AdvancedSearch/AdvancedSearch.vue'
-import DisplayResults from './SearchResults/DisplayResults/DisplayResults.vue'
+import ContentsTable from './SearchResults/ContentsTable/ContentsTable.vue'
+import DisplaySnippets from './SearchResults/DisplaySnippets/DisplaySnippets.vue'
+import FooterNavigation from '../FooterPage/FooterNavigation/FooterNavigation.vue'
+import FacetBar from './SearchResults/FacetBar/FacetBar.vue'
+import IndexSize from './SearchResults/IndexSize/IndexSize.vue'
 
 // Import interfaces
-import { type SearchResult, type AggregationBin } from '@/assets/interfacesExternals'
+import { type SearchResult, type AggregationBin } from '../../assets/interfacesExternals'
 
-import { hasSearch } from '@/assets/appState'
+// This is better kept in Pinia or something similar
+import { hasSearch } from '../../assets/appState'
 
-import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { usePreferencesStore } from '../../stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
+import { storeToRefs } from 'pinia'
+import { faBan } from '@fortawesome/free-solid-svg-icons'
+
+const { resultsPerPage, authorFacetCount, snippetsPerResult } = storeToRefs(preferences)
+
 const query = ref('')
+const firstSearchResult = ref<SearchResult>()
 const searchResults = defineModel<Array<SearchResult>>('searchResults')
 const totalHits: Ref = defineModel('totalHits')
 const page: Ref = defineModel('page')
@@ -82,6 +162,8 @@ const fromYear = ref()
 const toYear = ref()
 const docRefs = ref('')
 const sortBy = ref('Score')
+
+const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 
 // Startup variables: may move to App.vue or HomeView.vue
 const router = useRouter()
@@ -141,20 +223,6 @@ const runSearch = () => {
   hasAdvancedSearchCriteria.value = false
   search().then((res) => {
     isLoading.value = res ? true : false
-    const searchBar = document.querySelector('.searchBar') as HTMLDivElement
-    if (searchBar !== null && searchResults.value?.length) {
-      window.onscroll = () => {
-        window.scrollY < searchBar.offsetTop
-          ? searchBar.classList.add('stickySearchBarDocked')
-          : searchBar.classList.remove('stickySearchBarUndocked')
-        const newSearchResults = document.querySelectorAll(
-          '.card.metadata'
-        ) as NodeListOf<HTMLDivElement>
-        newSearchResults.forEach((result) => (result.style.top = `${searchBar?.offsetHeight}px`))
-        const toc = document.getElementsByClassName('table-of-contents')
-        toc[0].setAttribute('style', `top:${searchBar?.offsetHeight + 10}px`)
-      }
-    }
   })
 }
 
@@ -169,6 +237,8 @@ const defineSearchParams = () => {
     fromYear.value != null && fromYear.value > 0 ? { 'from-year': fromYear.value.toString() } : null
   )
 }
+
+const params = ref(defineSearchParams())
 
 const resetSearchResults = () => {
   query.value = ''
@@ -189,12 +259,35 @@ const resetSearchResults = () => {
   hasAdvancedSearchCriteria.value = false
   showAdvancedSearchPanel.value = false
 
+  simpleKeyboard.value.show = false
+
   window.history.replaceState({}, document.title, '/')
 }
 
-watch(excludeFromSearch, () => {
-  authorInclude.value = !excludeFromSearch.value
-})
+watch(excludeFromSearch, () => (authorInclude.value = !excludeFromSearch.value))
+watch(resultsPerPage, () => search())
+watch(authorFacetCount, () => searchFacets())
+watch(snippetsPerResult, () => search())
+
+const searchFacets = async () => {
+  const facetParams = new URLSearchParams({ ...Object.fromEntries(params.value) })
+  facetParams.append('field', 'Author')
+  if (preferences.authorFacetCount > 0)
+    facetParams.append('maxBins', preferences.authorFacetCount.toString())
+  return fetchData('aggregate', 'get', facetParams).then((response) =>
+    response.json().then((result) => {
+      const activeFacets = facets.value
+        .map((facet) => (facet.active ? facet.label : null))
+        .filter((facet) => facet)
+
+      facets.value = result.bins.map((facet: { label: string; count: number }) =>
+        activeFacets.includes(facet.label)
+          ? { ...facet, active: true }
+          : { ...facet, active: false }
+      )
+    })
+  )
+}
 
 const search = async () => {
   isLoading.value = true
@@ -231,27 +324,27 @@ const search = async () => {
     return
   }
 
-  const params = new URLSearchParams(defineSearchParams())
+  const searchParams = new URLSearchParams(defineSearchParams())
 
-  authorsToSearch.forEach((author) => params.append('authors', author))
-  if (addAuthorInclude) params.append('author-include', authorInclude.value.toString())
+  authorsToSearch.forEach((author) => searchParams.append('authors', author))
+  if (addAuthorInclude) searchParams.append('author-include', authorInclude.value.toString())
   if (docRefs.value)
-    docRefs.value.split(/\W+/).forEach((docRef) => params.append('doc-refs', docRef))
+    docRefs.value.split(/\W+/).forEach((docRef) => searchParams.append('doc-refs', docRef))
 
-  const facetParams = new URLSearchParams({ ...Object.fromEntries(params) })
+  // const facetParams = new URLSearchParams({ ...Object.fromEntries(params) })
 
-  params.append(
+  searchParams.append(
     'first',
-    page.value ? ((page.value - 1) * preferences.resultsPerPage).toString() : '10'
+    page.value ? ((page.value - 1) * resultsPerPage.value).toString() : '10'
   )
-  params.append('max', preferences.resultsPerPage.toString())
-  params.append('sort', sortBy.value.trim())
-  params.append('max-snippets', preferences.snippetsPerResult.toString())
-  params.append('row-padding', '2')
-  params.append('physical-newlines', 'false')
+  searchParams.append('max', resultsPerPage.value.toString())
+  searchParams.append('sort', sortBy.value.trim())
+  searchParams.append('max-snippets', snippetsPerResult.value.toString())
+  searchParams.append('row-padding', '2')
+  searchParams.append('physical-newlines', 'false')
 
   if (!hasActiveFacets) {
-    const urlParams = new URLSearchParams({ ...Object.fromEntries(params) })
+    const urlParams = new URLSearchParams({ ...Object.fromEntries(searchParams) })
     urlParams.delete('authors')
     urlParams.delete('author-include')
     authorList.value.forEach((author) => urlParams.append('authors', author.label))
@@ -267,34 +360,23 @@ const search = async () => {
     : q?.parentElement?.classList.remove('is-loading')
   isLoading.value ? q?.setAttribute('disabled', 'disabled') : q?.removeAttribute('disabled')
 
-  return fetchData('search', 'get', params)
+  params.value = searchParams
+
+  return fetchData('search', 'get', searchParams)
     .then((response) =>
       response.json().then(({ results, totalCount }) => {
         hasSearch.value = true
         isLoading.value = false
         searchResults.value = results
+        firstSearchResult.value = results[0]
         totalHits.value = totalCount
         if (!hasActiveFacets) {
-          facetParams.append('field', 'Author')
-          facetParams.append('maxBins', preferences.authorFacetCount.toString())
-          return fetchData('aggregate', 'get', facetParams)
-            .then((response) =>
-              response.json().then((result) => {
-                const activeFacets = facets.value
-                  .map((facet) => (facet.active ? facet.label : null))
-                  .filter((facet) => facet)
-
-                facets.value = result.bins.map((facet: { label: string; count: number }) =>
-                  activeFacets.includes(facet.label)
-                    ? { ...facet, active: true }
-                    : { ...facet, active: false }
-                )
-
-                q?.parentElement?.classList.remove('is-loading')
-                q?.removeAttribute('disabled')
-                return false
-              })
-            )
+          searchFacets()
+            .then((results) => {
+              q?.parentElement?.classList.remove('is-loading')
+              q?.removeAttribute('disabled')
+              return false
+            })
             .catch((error) => {
               notification.value = {
                 show: true,
@@ -312,6 +394,7 @@ const search = async () => {
       })
     )
     .catch((error) => {
+      console.log(error)
       notification.value = {
         show: true,
         error: true,

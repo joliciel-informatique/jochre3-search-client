@@ -1,0 +1,28 @@
+@use '../../../custom/Custom' as *;
+
+.table-of-contents {
+  display: block;
+  position: sticky;
+  top: 20vh;
+  height: 77vh;
+  left: 2vw;
+  background-color: $background-color-1;
+
+  .menu-list {
+    overflow-y: scroll;
+    max-height: 57vh;
+  }
+
+  .facet-list {
+    overflow-y: scroll;
+    max-height: 57vh;
+  }
+
+  .transcribed-text {
+    z-index: 9;
+  }
+
+  #searchResultsList {
+    height: 100%;
+  }
+}

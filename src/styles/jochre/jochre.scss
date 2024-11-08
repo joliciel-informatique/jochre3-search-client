@@ -1,0 +1,90 @@
+// Loading custom style
+@use '../custom/Custom' as *;
+
+// Transitions
+@forward './transitions/_transitions';
+
+// Component Styling
+@forward './components/HeaderPage/HeaderPage';
+@forward './components/FooterPage/FooterPage';
+
+// _Component Styling
+@forward './components/SearchBar/SearchBar';
+@forward './components/FacetBar/FacetBar';
+@forward './components/ToC/ToC';
+@forward './components/FindAuthors/FindAuthors';
+@forward './components/Card/Card';
+@forward './components/DisplaySnippets/DisplaySnippets';
+@forward './components/SingleSnippet/SingleSnippet';
+@forward './components/Switch/Switch';
+@forward './components/FilterTag/FilterTag';
+@forward './components/SimpleKeyboard/SimpleKeyboard';
+@forward './components/Dropdown/Dropdown';
+
+// Directive Styling
+@forward './components/ToolTip/_ToolTip';
+
+// Bulma
+@forward 'bulma/sass' with (
+  // Default theme values
+  $primary: $background-color-1,
+  $info: $background-color-2,
+  $link: $background-color-2,
+  $family-primary: $font-family-1,
+
+  $body-font-size: $font-size-3,
+  $title-size: $font-size-title,
+
+  $small-font-size: $font-size-2,
+
+  $size-small: $font-size-1,
+  $size-normal: $font-size-3,
+  $size-medium: $font-size-3,
+  $control-size: $font-size-3,
+
+  $body-line-height: unset,
+  // $size-normal: $size-normal,
+  // $font-size: 0,
+  $hr-margin: 0,
+  $hr-background-color: $background-color-3,
+
+  // Modal Component
+  $modal-z: 40,
+
+  $dropdown-content-z: 42,
+
+  // Card Component
+  $card-background-color: $white,
+  $card-header-background-color: $background-color-2,
+  $card-header-color: $white,
+  $card-content-background-color: $white,
+  $card-footer-background-color: $background-color-2,
+
+  // Footer Component
+  $column-gap: 0.1rem,
+  $label-spacing: 0.75rem,
+  $block-spacing: 0.5rem,
+
+  // Footer styling
+  $footer-padding: 0,
+  $footer-background-color: $background-color-1,
+
+  $radius-rounded: 0.15rem,
+  $card-radius: 0.75rem,
+  $radius: 0.15rem,
+  $control-radius-small: 0.1rem,
+  $input-icon-hover-color: $background-color-2,
+
+  // Dropdown
+  // $dropdown-menu-min-width: var(--bulma-dropdown-menu-min-width),
+  // $dropdown-content-background-color: var(--bulma-dropdown-content-background-color),
+  // $dropdown-content-offset: var(--bulma-dropdown-content-offset),
+  // $dropdown-content-padding-bottom: var(--bulma-dropdown-content-padding-bottom),
+  // $dropdown-content-padding-top: var(--bulma-dropdown-content-padding-top),
+  // $dropdown-content-radius: var(--bulma-dropdown-content-radius),
+  // $dropdown-content-shadow: var(--bulma-dropdown-content-shadow),
+  // $dropdown-content-z: var(--bulma-dropdown-content-z),
+  // $dropdown-divider-background-color: var(--bulma-dropdown-divider-background-color)
+);
+
+@forward 'bulma-switch-control';

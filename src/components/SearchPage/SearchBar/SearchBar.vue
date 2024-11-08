@@ -14,17 +14,19 @@ Description: presents the search bar
     <div class="container is-max-desktop">
       <div class="pb-0 mb-0 field has-addons">
         <p class="control">
-          <span>
-            <a id="searchBarLabel" class="button is-static is-info">{{ $t('search.search') }}</a>
-          </span>
+          <a id="searchBarLabel" class="button is-static">{{ $t('search.search') }} </a>
         </p>
-        <p class="control container has-icons-left has-icons-right">
+        <p
+          class="control container"
+          :class="{
+            'has-icons-left': !preferences.displayLeftToRight,
+            'has-icons-right': preferences.displayLeftToRight
+          }"
+        >
           <input
             id="query"
             type="text"
-            aria-labelledby="searchBarLabel"
-            class="input is-normal is-rounded keyboardInput"
-            vki-id="1"
+            class="input is-normal is-rounded"
             lang="yi"
             v-model="query"
             @keyup.enter="emit('newSearch')"
@@ -36,24 +38,6 @@ Description: presents the search bar
             "
             :placeholder="$t('search.query')"
           />
-          <span
-            class="is-small icon is-clickable"
-            aria-label="advanced search"
-            :class="advancedSearchIcons"
-            tabindex="0"
-            @click="toggleAdvancedSearchPanel()"
-            @keyup.enter="toggleAdvancedSearchPanel()"
-          >
-            <font-awesome-icon
-              :icon="
-                showAdvancedSearchPanel
-                  ? faMagnifyingGlassMinus
-                  : hasAdvancedSearchCriteria
-                    ? faSliders
-                    : faMagnifyingGlassPlus
-              "
-            />
-          </span>
           <span
             class="icon is-small is-clickable"
             :class="{
@@ -78,15 +62,16 @@ Description: presents the search bar
             v-else
           ></span>
         </p>
-        <p class="control">
+        <p class="control keyboardButton">
           <button
-            class="button keyboardInputButton"
-            aria-label="open onscreen Yiddish keyboard"
-            vki-id="1"
+            class="button is-clickable"
+            @click="toggleKeyboard('query')"
             :alt="$t('search.keyboard')"
             :title="$t('search.keyboard')"
           >
-            <font-awesome-icon icon="keyboard" />
+            <span>
+              <font-awesome-icon icon="keyboard" />
+            </span>
           </button>
         </p>
         <p class="control" v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
@@ -104,40 +89,59 @@ Description: presents the search bar
           </a>
         </p>
       </div>
+      <div class="columns py-3 field">
+        <p class="column is-one-fifth control">
+          <button @click="toggleAdvancedSearchPanel()">
+            <font-awesome-icon
+              :icon="
+                showAdvancedSearchPanel
+                  ? 'magnifying-glass-minus'
+                  : hasAdvancedSearchCriteria
+                    ? 'sliders'
+                    : 'magnifying-glass-plus'
+              "
+            />
+            {{ $t('search.advanced-search') }}
+          </button>
+        </p>
+        <p class="column is-one-fifth control">
+          <a
+            href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
+            target="_blank"
+            class="has-text-white"
+          >
+            <span>
+              <font-awesome-icon icon="book-open" />
+              {{ $t('search.user-guide') }}
+            </span>
+          </a>
+        </p>
+      </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { computed, type Ref } from 'vue'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import {
-  faMagnifyingGlassPlus,
-  faMagnifyingGlassMinus,
-  faKeyboard,
-  faXmarkCircle,
-  faSliders
-} from '@fortawesome/free-solid-svg-icons'
+import type { Ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
 const hasAdvancedSearchCriteria = defineModel('hasAdvancedSearchCriteria')
 
-const advancedSearchIcons = computed(() => ({
-  'is-left': preferences.displayLeftToRight,
-  'is-right': !preferences.displayLeftToRight,
-  'is-clicked': hasAdvancedSearchCriteria.value
-}))
-
-library.add(faMagnifyingGlassPlus, faMagnifyingGlassMinus, faKeyboard, faXmarkCircle)
 const query: Ref = defineModel('query')
 const strict: Ref = defineModel('strict')
 const isLoading = defineModel('isLoading')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
+const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 
 const toggleAdvancedSearchPanel = () => {
   showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value
+}
+
+const toggleKeyboard = (attachTo: string) => {
+  simpleKeyboard.value.attachTo = attachTo
+  simpleKeyboard.value.show = !simpleKeyboard.value.show
+  simpleKeyboard.value.ref = query
 }
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
