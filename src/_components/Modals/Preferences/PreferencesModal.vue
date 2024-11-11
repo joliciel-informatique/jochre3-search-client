@@ -5,56 +5,57 @@
     </template>
     <template #body>
       <div class="p-3">
-        <div class="columns is-vcentered">
-          <div class="column is-5">
-            <span class="label">{{ $t('preferences.results-per-page') }}</span>
-          </div>
-          <div class="column is-4">
-            <div class="control">
-              <input
-                class="input"
-                type="number"
-                name="resultsPerPageInput"
-                v-model="resultsPerPage"
-                @onchange="preferences.resultsPerPage = resultsPerPage"
-              />
+        <div class="columns is-vcentered py-3">
+          <div class="column">
+            <h1 class="label">{{ $t('preferences.results-heading') }}</h1>
+            <div class="is-flex is-flex-direction-column m-2">
+              <div class="columns is-vcentered is-10 pb-2">
+                <span class="column is-4 px-2">{{ $t('preferences.results-per-page') }}</span>
+                <div class="column is-4 control">
+                  <input
+                    class="input"
+                    type="number"
+                    name="resultsPerPageInput"
+                    v-model="resultsPerPage"
+                    @onchange="preferences.resultsPerPage = resultsPerPage"
+                  />
+                </div>
+              </div>
+              <div class="columns is-vcentered pb-2">
+                <span class="column is-4 px-2">{{ $t('preferences.results-sort-by') }}</span>
+                <div class="column is-4 control">
+                  <select
+                    class="input select has-text-centered"
+                    name="sortBySelect"
+                    aria-labelledby="searchSortBy"
+                    v-model="sortBy"
+                  >
+                    <option class="label" value="Score">{{ $t('search.sort.score') }}</option>
+                    <option class="label" value="DateAscending">
+                      {{ $t('search.sort.date-ascending') }}
+                    </option>
+                    <option class="label" value="DateDescending">
+                      {{ $t('search.sort.date-descending') }}
+                    </option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="columns is-vcentered">
-          <div class="column is-5">
-            <span class="label">{{ $t('preferences.display-snippets-per-book') }}</span>
-          </div>
-          <div class="column is-4">
-            <div class="control is-expanded">
-              <label class="switch is-rounded is-small">
-                <input type="checkbox" v-model="displayPerBook" />
-                <span class="check"></span>
-              </label>
+        <div class="columns is-vcentered py-3">
+          <div class="column">
+            <h1 class="label">{{ $t('preferences.snippets-heading') }}</h1>
+            <div class="is-flex is-flex-direction-row m-2">
+              <span class="px-2">{{ $t('preferences.snippets-per-book') }}</span>
+              <div class="control is-expanded">
+                <label class="switch is-rounded is-small">
+                  <input type="checkbox" v-model="displayPerBook" />
+                  <span class="check"></span>
+                </label>
+              </div>
+              <span class="px-2">{{ $t('preferences.snippets-as-list') }}</span>
             </div>
-          </div>
-        </div>
-        <div class="columns is-vcentered">
-          <div class="column is-8 is-size-7">
-            <span class="control-label">
-              {{ $t('search.sort-by') }}
-            </span>
-          </div>
-          <div class="column is-4 is-size-7">
-            <select
-              class="column control select has-text-centered"
-              name="sortBySelect"
-              aria-labelledby="searchSortBy"
-              v-model="sortBy"
-            >
-              <option value="Score">{{ $t('search.sort.score') }}</option>
-              <option value="DateAscending">
-                {{ $t('search.sort.date-ascending') }}
-              </option>
-              <option value="DateDescending">
-                {{ $t('search.sort.date-descending') }}
-              </option>
-            </select>
           </div>
         </div>
       </div>
