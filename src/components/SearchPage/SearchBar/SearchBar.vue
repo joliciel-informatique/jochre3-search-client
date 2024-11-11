@@ -102,6 +102,7 @@ Description: presents the search bar
         </span>
       </a>
       <a
+        id="advancedSearchBtn"
         class="navbar-item has-text-white is-flex-desktop"
         @click.prevent="showAdvancedSearchPanel = true"
       >

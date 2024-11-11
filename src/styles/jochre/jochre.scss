@@ -20,12 +20,15 @@
 @forward './components/FilterTag/FilterTag';
 @forward './components/SimpleKeyboard/SimpleKeyboard';
 @forward './components/Dropdown/Dropdown';
+@forward './components/PageNumbering/PageNumbering';
 
 // Directive Styling
 @forward './components/ToolTip/_ToolTip';
 
 // Bulma
 @forward 'bulma/sass' with (
+  $tablet: 768px,
+
   // Default theme values
   $primary: $background-color-1,
   $info: $background-color-2,
@@ -44,6 +47,8 @@
 
   $body-line-height: unset,
 
+  $navbar-item-color: $white,
+  // $navbar-item-background-l-delta: unset,
   $navbar-background-color: $background-color-1,
   $navbar-box-shadow-size: var(--bulma-navbar-box-shadow-size),
   $navbar-box-shadow-color: var(--bulma-navbar-box-shadow-color),
@@ -78,6 +83,8 @@
   $hr-margin: 0,
   $hr-background-color: $background-color-3,
 
+  $block-spacing: unset,
+
   // Modal Component
   $modal-z: 40,
 
@@ -93,8 +100,7 @@
   // Footer Component
   $column-gap: 0.1rem,
   $label-spacing: 0.75rem,
-  $block-spacing: 0.5rem,
-
+  // $block-spacing: 0.5rem,
   // Footer styling
   $footer-padding: 0,
   $footer-background-color: $background-color-1,
@@ -120,3 +126,11 @@
 @forward 'bulma-switch-control';
 
 @forward './components//UserOptions/UserOptions';
+
+.navbar {
+  // --bulma-navbar-item-hover-background-l-delta: -50%;
+}
+
+.pagination {
+  --bulma-pagination-margin: 0;
+}

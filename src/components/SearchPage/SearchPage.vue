@@ -41,20 +41,6 @@
             </div>
           </div>
         </div>
-
-        <ContentsTable
-          v-model:search-results="searchResults"
-          v-model:page="page"
-          v-model:image-modal="imageModal"
-          v-model:metadata-modal="metadataModal"
-          v-model:notification="notification"
-          v-model:word-modal="wordModal"
-          v-model:selected-entry="firstSearchResult"
-          v-model:total-hits="totalHits"
-          v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
-          v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
-        />
-
         <AdvancedSearch
           @newSearch="newSearch"
           @resetSearchResults="resetSearchResults"
@@ -68,17 +54,34 @@
           v-model:exclude-from-search="excludeFromSearch"
           v-model:simpleKeyboard="simpleKeyboard"
         />
-
         <div class="is-hidden-touch">
-          <FooterNavigation
+          <PageNumbering
             @newPage="newPage()"
             @resetSearchResults="resetSearchResults()"
             v-model:totalHits="totalHits"
             v-model:page="page"
           />
         </div>
-
-        <div v-show="openNavBarMobileMenu" id="navbar-mobile" class="navbar-mobile">
+        <div class="is-hidden-desktop">
+          <ContentsTable
+            v-model:search-results="searchResults"
+            v-model:page="page"
+            v-model:image-modal="imageModal"
+            v-model:metadata-modal="metadataModal"
+            v-model:notification="notification"
+            v-model:word-modal="wordModal"
+            v-model:selected-entry="firstSearchResult"
+            v-model:total-hits="totalHits"
+            v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
+            v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
+            v-model:open-mobile-facets="openMobileFacets"
+            v-model:facets="facets"
+            @new-page="newPage"
+            @reset-search-results="resetSearchResults"
+            @new-search="newSearch"
+          />
+        </div>
+        <div v-show="openNavBarMobileMenu" class="navbar-mobile" id="navbar-mobile">
           <div class="menu is-pulled-right panel has-background-primary">
             <UserOptions
               v-model:show-advanced-search-panel="showAdvancedSearchPanel"
@@ -86,7 +89,27 @@
             />
           </div>
         </div>
+        <!-- </div> -->
       </nav>
+      <div class="is-hidden-touch">
+        <ContentsTable
+          v-model:search-results="searchResults"
+          v-model:page="page"
+          v-model:image-modal="imageModal"
+          v-model:metadata-modal="metadataModal"
+          v-model:notification="notification"
+          v-model:word-modal="wordModal"
+          v-model:selected-entry="firstSearchResult"
+          v-model:total-hits="totalHits"
+          v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
+          v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
+          v-model:open-mobile-facets="openMobileFacets"
+          v-model:facets="facets"
+          @new-page="newPage"
+          @reset-search-results="resetSearchResults"
+          @new-search="newSearch"
+        />
+      </div>
     </div>
   </div>
   <div
@@ -103,11 +126,14 @@
           v-model:search-results="searchResults"
           v-model:is-loading="isLoading"
         />
-        <FacetBar
-          @newSearch="newSearch"
-          @resetSearchResults="resetSearchResults"
-          v-model:facets="facets"
-        />
+        <div class="is-hidden-touch">
+          <FacetBar
+            @newSearch="newSearch"
+            @resetSearchResults="resetSearchResults"
+            v-model:facets="facets"
+            v-model:open-mobile-facets="openMobileFacets"
+          />
+        </div>
       </div>
     </div>
 
@@ -143,7 +169,7 @@ import SearchBar from './SearchBar/SearchBar.vue'
 import AdvancedSearch from './SearchBar/AdvancedSearch/AdvancedSearch.vue'
 import ContentsTable from './SearchResults/ContentsTable/ContentsTable.vue'
 import DisplaySnippets from './SearchResults/DisplaySnippets/DisplaySnippets.vue'
-import FooterNavigation from '../FooterPage/FooterNavigation/FooterNavigation.vue'
+import PageNumbering from './SearchBar/Navigation/PageNumbering/PageNumbering.vue'
 import FacetBar from './SearchResults/FacetBar/FacetBar.vue'
 import IndexSize from './SearchResults/IndexSize/IndexSize.vue'
 import HeaderPage from '../HeaderPage/HeaderPage.vue'
@@ -159,6 +185,8 @@ import { usePreferencesStore } from '../../stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
+const { show } = storeToRefs(preferences)
+
 import { storeToRefs } from 'pinia'
 const { resultsPerPage, authorFacetCount, snippetsPerResult, sortBy } = storeToRefs(preferences)
 
@@ -171,6 +199,8 @@ const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
 const notification: Ref = defineModel('notification')
+
+// const preferences = usePreferencesStore()
 
 // const searchBarIsDocked = ref(false)
 
@@ -196,6 +226,7 @@ const hasAdvancedSearchCriteria = ref(false)
 const showAdvancedSearchPanel = ref(false)
 const openMobileSearchResultsToc = ref(false)
 const openMobileMetadataPanel = ref(false)
+const openMobileFacets = ref(false)
 const openNavBarMobileMenu = ref(false)
 
 const facets = ref<Array<AggregationBin>>([])
@@ -215,12 +246,14 @@ onMounted(() => {
   })
 
   window.addEventListener('click', (e: MouseEvent | TouchEvent) => {
-    const navbarMobile = document.getElementById('navbar-mobile')
+    const navbarMobileMenu = document.getElementById('navbar-mobile')
+    const navbarAdvancedSearchBtn = document.getElementById('advancedSearchBtn')
     if (showAdvancedSearchPanel.value) {
       const advancedSearchPanel = document.getElementById('advancedSearchPanel')
       if (
         e.target instanceof Element &&
-        !navbarMobile?.contains(e.target) &&
+        !navbarAdvancedSearchBtn?.contains(e.target) &&
+        !navbarMobileMenu?.contains(e.target) &&
         !advancedSearchPanel?.contains(e.target)
       ) {
         showAdvancedSearchPanel.value = false
@@ -356,7 +389,9 @@ watch(showAdvancedSearchPanel, (newV) => {
   if (newV) {
     openMobileSearchResultsToc.value = false
     openMobileMetadataPanel.value = false
+    openMobileFacets.value = false
     openNavBarMobileMenu.value = false
+    preferences.show = false
   }
 })
 
@@ -364,14 +399,18 @@ watch(openMobileSearchResultsToc, (newV) => {
   if (newV) {
     showAdvancedSearchPanel.value = false
     openMobileMetadataPanel.value = false
+    openMobileFacets.value = false
     openNavBarMobileMenu.value = false
+    preferences.show = false
   }
 })
 watch(openMobileMetadataPanel, (newV) => {
   if (newV) {
     showAdvancedSearchPanel.value = false
     openMobileSearchResultsToc.value = false
+    openMobileFacets.value = false
     openNavBarMobileMenu.value = false
+    preferences.show = false
   }
 })
 watch(openNavBarMobileMenu, (newV) => {
@@ -379,6 +418,28 @@ watch(openNavBarMobileMenu, (newV) => {
     showAdvancedSearchPanel.value = false
     openMobileSearchResultsToc.value = false
     openMobileMetadataPanel.value = false
+    openMobileFacets.value = false
+    preferences.show = false
+  }
+})
+
+watch(show, (newV) => {
+  if (newV) {
+    showAdvancedSearchPanel.value = false
+    openMobileSearchResultsToc.value = false
+    openMobileMetadataPanel.value = false
+    openMobileFacets.value = false
+    openNavBarMobileMenu.value = false
+  }
+})
+
+watch(openMobileFacets, (newV) => {
+  if (newV) {
+    showAdvancedSearchPanel.value = false
+    openMobileSearchResultsToc.value = false
+    openMobileMetadataPanel.value = false
+    openNavBarMobileMenu.value = false
+    preferences.show = false
   }
 })
 

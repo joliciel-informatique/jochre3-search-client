@@ -49,7 +49,6 @@
 .toc-mobile {
   height: 7vh;
   background-color: $white;
-  width: 101%;
 
   &.toc-mobile-left {
     left: 0;
@@ -65,7 +64,7 @@
     right: 1vw;
     left: 1vw;
     height: 83vh;
-    width: 98vw;
+    border: 1px solid $foreground-color-2;
 
     .menu-list {
       max-height: 71vh;
@@ -79,24 +78,38 @@
     }
   }
 
-  .toc-button {
-    position: fixed;
-    top: 7vh;
-    background-color: white;
-    &.toc-mobile-left {
-      left: 0;
-    }
-    &.toc-mobile-right {
-      right: 0;
-    }
-    .button {
-      &.toc-index-btn {
-        width: 8vw;
-      }
+  // .toc-button {
+  //   position: fixed;
+  //   top: 7vh;
+  //   background-color: white;
 
-      &.toc-metadata-btn {
-        width: 88vw;
+  //   &.toc-mobile-left {
+  //     left: 0;
+  //   }
+
+  //   &.toc-mobile-right {
+  //     right: 0;
+  //   }
+  //   &.toc-mobile-middle {
+  //   }
+
+  .button {
+    &.toc-index-btn {
+      width: 8vw;
+    }
+
+    &.toc-metadata-btn {
+      width: 42vw;
+      max-width: 42vw;
+      overflow: hidden;
+
+      span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        // display: block;
       }
     }
   }
 }
+// }

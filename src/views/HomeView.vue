@@ -1,6 +1,5 @@
 <template>
   <PreferencesSetup />
-  <!-- <HeaderPage /> -->
   <main
     class="is-widescreen"
     :class="{
