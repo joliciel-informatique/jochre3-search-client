@@ -1,14 +1,12 @@
 <template>
   <PreferencesSetup />
   <main
-    class="hero is-widescreen"
+    class="is-widescreen"
     :class="{
       'rtl-align': !preferences.displayLeftToRight
     }"
   >
-    <HeaderPage />
     <SearchPage
-      ref="searchPageRef"
       v-model:search-results="searchResults"
       v-model:total-hits="totalHits"
       v-model:page="page"
@@ -19,7 +17,7 @@
       v-model:simple-keyboard="simpleKeyboard"
     />
   </main>
-  <FooterPage v-model:total-hits="totalHits" v-model:page="page" :search-results="searchResults" />
+  <FooterPage v-model:total-hits="totalHits" />
   <Preferences v-model:notification="notification" />
   <LargeImage v-model:image-modal="imageModal" />
   <FixWord
@@ -63,10 +61,10 @@ const imageModal = ref({})
 const metadataModal = ref({ field: 'author' })
 const wordModal = ref({})
 const notification = ref({})
-const searchPageRef = ref<InstanceType<typeof SearchPage>>()
+// const searchPageRef = ref<InstanceType<typeof SearchPage>>()
 const simpleKeyboard = shallowReactive({ show: false, attachTo: '', ref: null })
 
 // Methods exposed by SearchPage
-const resetSearchResults = () => searchPageRef.value?.resetSearchResults()
-const newPage = () => searchPageRef.value?.newPage()
+// const resetSearchResults = () => searchPageRef.value?.resetSearchResults()
+// const newPage = () => searchPageRef.value?.newPage()
 </script>

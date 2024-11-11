@@ -14,79 +14,86 @@ NOTE:
 Description: presents a 'search for authors' text box and retrieves authors every key press.
 -->
 <template>
-  <div>
-    <div class="columns" v-show="searchAuthors">
-      <span class="column field has-addons has-addons-left is-horizontal">
-        <div class="control dropdown is-active is-expanded">
+  <span class="columns is-mobile is-vcentered mt-1 p-1">
+    <p class="column is-2 is-flex is-desktop is-flex-grow-1 has-text-white">
+      {{ $t('search.author') }}
+    </p>
+    <span
+      class="column is-flex-grow-2 field has-addons has-addons-left is-horizontal"
+      :aria-label="$t('search.author')"
+    >
+      <span
+        class="control is-expanded dropdown is-active field has-addons has-addons-left is-horizontal"
+        v-show="searchAuthors"
+      >
+        <span
+          class="control is-expanded dropdown-trigger"
+          :class="{
+            'has-icons-left': showExcludeCheckbox && preferences.displayLeftToRight,
+            'has-icons-right': showExcludeCheckbox && !preferences.displayLeftToRight
+          }"
+        >
+          <input
+            :id="uniqueId"
+            class="input"
+            type="text"
+            lang="yi"
+            name="findAuthorInput"
+            v-model="authorText"
+            :disabled="disabled"
+            :placeholder="$t('search.authorPlaceholder')"
+          />
           <div
-            class="control dropdown-trigger is-expanded"
+            v-if="showExcludeCheckbox"
+            class="control icon is-small"
             :class="{
-              'has-icons-left': showExcludeCheckbox && preferences.displayLeftToRight,
-              'has-icons-right': showExcludeCheckbox && !preferences.displayLeftToRight
+              'is-left': preferences.displayLeftToRight,
+              'is-right': !preferences.displayLeftToRight
             }"
+            v-tooltip:bottom.tooltip="$t('search.excludeAuthors')"
           >
             <input
-              :id="uniqueId"
-              class="input"
-              type="text"
-              lang="yi"
-              name="findAuthorInput"
-              v-model="authorText"
+              type="checkbox"
+              class="is-clickable"
+              name="findAuthorCheckbox"
               :disabled="disabled"
-              :placeholder="$t('search.authorPlaceholder')"
+              @click="excludeAuthors"
             />
-            <div
-              v-if="showExcludeCheckbox"
-              class="control icon is-small"
-              :class="{
-                'is-left': preferences.displayLeftToRight,
-                'is-right': !preferences.displayLeftToRight
-              }"
-              v-tooltip:bottom.tooltip="$t('search.excludeAuthors')"
-            >
-              <input
-                type="checkbox"
-                class="is-clickable"
-                name="findAuthorCheckbox"
-                :disabled="disabled"
-                @click="excludeAuthors"
-              />
-            </div>
           </div>
-          <div
-            class="dropdown-menu"
-            :id="`${uniqueId}-dropdown-menu`"
-            role="menu"
-            v-if="authorDropdownItems.length > 0"
+        </span>
+        <span
+          class="dropdown-menu"
+          :ipd="`${uniqueId}-dropdown-menu`"
+          role="menu"
+          v-if="authorDropdownItems.length > 0"
+        >
+          <div class="dropdown-content">
+            <a
+              v-for="author of authorDropdownItems"
+              :key="sha1(author)"
+              class="dropdown-item"
+              @click="addAuthor(author)"
+            >
+              {{ author.label }}
+            </a>
+          </div>
+        </span>
+        <p class="control keyboardButton">
+          <button
+            class="button is-clickable is-medium"
+            @click="toggleKeyboard(uniqueId)"
+            :alt="$t('search.keyboard')"
+            :title="$t('search.keyboard')"
           >
-            <div class="dropdown-content">
-              <a
-                v-for="author of authorDropdownItems"
-                :key="sha1(author)"
-                class="dropdown-item"
-                @click="addAuthor(author)"
-              >
-                {{ author.label }}
-              </a>
-            </div>
-          </div>
-          <p class="control keyboardButton">
-            <button
-              class="button is-clickable is-medium"
-              @click="toggleKeyboard(uniqueId)"
-              :alt="$t('search.keyboard')"
-              :title="$t('search.keyboard')"
-            >
-              <font-awesome-icon icon="keyboard" />
-            </button>
-          </p>
-        </div>
+            <font-awesome-icon icon="keyboard" />
+          </button>
+        </p>
       </span>
-    </div>
-    <div
-      v-if="authorList.length"
-      class="column flex is-flex is-flex-direction-row is-flex-wrap-wrap"
-    >
+    </span>
+  </span>
+  <span class="columns is-mobile is-vcentered mt-1 p-1" v-if="authorList.length">
+    <p class="column is-2 is-flex is-desktop is-flex-grow-1 has-text-white"></p>
+    <span class="column is-flex is-flex-grow-2 is-flex-wrap-nowrap is-justify-content-flex-start">
       <div v-for="author of authorList" :key="sha1(author)">
         <FilterTag
           :label="author.label"
@@ -95,8 +102,8 @@ Description: presents a 'search for authors' text box and retrieves authors ever
           @func="delAuthor"
         />
       </div>
-    </div>
-  </div>
+    </span>
+  </span>
 </template>
 <script setup lang="ts">
 import { ref, watch, type Ref } from 'vue'
