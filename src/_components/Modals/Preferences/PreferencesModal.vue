@@ -7,21 +7,6 @@
       <div class="p-3">
         <div class="columns is-vcentered">
           <div class="column is-5">
-            <span class="label">{{ $t('preferences.language') }}</span>
-          </div>
-          <div class="column is-4">
-            <div class="control is-expanded">
-              <span class="select is-fullwidth">
-                <select name="setToLanguageSelect" v-model="setToLanguage">
-                  <option value="yi">ייִדיש</option>
-                  <option value="en">English</option>
-                </select>
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="columns is-vcentered">
-          <div class="column is-5">
             <span class="label">{{ $t('preferences.results-per-page') }}</span>
           </div>
           <div class="column is-4">
@@ -32,37 +17,6 @@
                 name="resultsPerPageInput"
                 v-model="resultsPerPage"
                 @onchange="preferences.resultsPerPage = resultsPerPage"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="columns is-vcentered">
-          <div class="column is-5">
-            <span class="label">{{ $t('preferences.snippets-per-result') }}</span>
-          </div>
-          <div class="column is-4">
-            <div class="control is-expanded">
-              <input
-                class="input"
-                type="number"
-                name="snippetsPerResultInput"
-                v-model="snippetsPerResult"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="columns is-vcentered">
-          <div class="column is-5">
-            <span class="label">{{ $t('preferences.author-facet-count') }}</span>
-          </div>
-          <div class="column is-4">
-            <div class="control is-expanded">
-              <input
-                class="input"
-                type="number"
-                name="authorFacetCountInput"
-                v-model="authorFacetCount"
-                @onchange="preferences.authorFacetCount = authorFacetCount"
               />
             </div>
           </div>

@@ -382,7 +382,7 @@ watch(searchResults, (newV) => {
 watch(excludeFromSearch, () => (authorInclude.value = !excludeFromSearch.value))
 watch(resultsPerPage, () => search())
 watch(authorFacetCount, () => searchFacets())
-watch(snippetsPerResult, () => search())
+// watch(snippetsPerResult, () => search())
 
 // Close all other panels on Mobile
 watch(showAdvancedSearchPanel, (newV) => {
@@ -511,7 +511,7 @@ const search = async () => {
   )
   searchParams.append('max', resultsPerPage.value.toString())
   searchParams.append('sort', sortBy.value.trim())
-  searchParams.append('max-snippets', snippetsPerResult.value.toString())
+  searchParams.append('max-snippets', '100')
   searchParams.append('row-padding', '2')
   searchParams.append('physical-newlines', 'false')
 

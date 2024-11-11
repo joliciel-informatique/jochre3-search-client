@@ -9,14 +9,6 @@
     <p class="menu-label is-size-5 label">
       {{ $t('results.contents-table-header') }}
     </p>
-    <div class="columns is-vcentered m-1">
-      <div class="column is-8 is-size-7">{{ $t('toc.snippets-to-display') }}</div>
-      <div class="column is-4 is-size-7">
-        <p class="control">
-          <input type="number" class="input" v-model="snippetsPerResult" />
-        </p>
-      </div>
-    </div>
     <div class="columns is-vcentered">
       <div class="column is-8 is-size-7">
         <span class="control-label">
