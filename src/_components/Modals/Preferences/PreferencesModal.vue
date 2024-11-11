@@ -7,21 +7,6 @@
       <div class="p-3">
         <div class="columns is-vcentered">
           <div class="column is-5">
-            <span class="label">{{ $t('preferences.language') }}</span>
-          </div>
-          <div class="column is-4">
-            <div class="control is-expanded">
-              <span class="select is-fullwidth">
-                <select name="setToLanguageSelect" v-model="setToLanguage">
-                  <option value="yi">ייִדיש</option>
-                  <option value="en">English</option>
-                </select>
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="columns is-vcentered">
-          <div class="column is-5">
             <span class="label">{{ $t('preferences.results-per-page') }}</span>
           </div>
           <div class="column is-4">
