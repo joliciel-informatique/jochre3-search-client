@@ -38,21 +38,6 @@
         </div>
         <div class="columns is-vcentered">
           <div class="column is-5">
-            <span class="label">{{ $t('preferences.snippets-per-result') }}</span>
-          </div>
-          <div class="column is-4">
-            <div class="control is-expanded">
-              <input
-                class="input"
-                type="number"
-                name="snippetsPerResultInput"
-                v-model="snippetsPerResult"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="columns is-vcentered">
-          <div class="column is-5">
             <span class="label">{{ $t('preferences.author-facet-count') }}</span>
           </div>
           <div class="column is-4">
