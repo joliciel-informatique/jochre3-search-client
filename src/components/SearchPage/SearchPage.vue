@@ -513,7 +513,7 @@ const search = async () => {
   )
   searchParams.append('max', resultsPerPage.value.toString())
   searchParams.append('sort', sortBy.value.trim())
-  searchParams.append('max-snippets', '100')
+  searchParams.append('max-snippets', '10')
   searchParams.append('row-padding', '2')
   searchParams.append('physical-newlines', 'false')
 
