@@ -1,18 +1,24 @@
 @use '../../../custom/Custom' as *;
 
-.snippets-on-desktop {
-  position: absolute;
-  top: 21vh;
-  left: 14vw;
-  width: 49vw;
+.snippets-on {
+  position: relative;
+  // top: 14vh;
+
+  &.mobile {
+    left: 0vw;
+    width: 100%;
+  }
+
+  &.desktop {
+    // top: 21vh;
+    // left: 3vw;
+    width: 49vw;
+  }
 }
 
-.snippets-on-mobile {
-  // .snippetsColumn {
-  position: absolute;
-  top: 14vh;
-  left: 0vw;
-  // }
+#snippetsColumn {
+  position: relative;
+  left: 3vw;
 }
 
 .card.metadata {

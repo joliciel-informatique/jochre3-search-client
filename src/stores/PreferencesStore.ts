@@ -17,6 +17,18 @@ export const usePreferencesStore = defineStore('preferences', () => {
   const displayPerBook = ref(false)
   const facetSortBy = ref('hits')
 
+  const isTablet = ref(false)
+  const isMobile = ref(false)
+  const isDesktop = ref(false)
+  const isPortrait = ref(false)
+
+  // Bulma breakpoints are (https://bulma.io/documentation/start/responsiveness/):
+  // - mobile: up to 768px
+  // - tablet: from 769px
+  // - desktop: from 1024px
+  // - widescreen: from 1216px
+  // - fullhd: from 1408px
+
   const displayLeftToRight = computed(() => language.value !== 'yi')
 
   const corpusLeftToRight = computed(() => corpusLanguage.value !== 'yi')
@@ -41,6 +53,44 @@ export const usePreferencesStore = defineStore('preferences', () => {
     'displayPerBook',
     'facetSortBy'
   ])
+
+  screen.orientation.addEventListener('change', (event: Event) => {
+    if (event && event.target) {
+      const angle = (event.target as ScreenOrientation).angle
+      const type = (event.target as ScreenOrientation).type
+      isPortrait.value = angle === 0 && type.includes('portrait') ? true : false
+    }
+  })
+
+  window
+    .matchMedia('(min-width: 1024px) and (max-width: 1216px)')
+    .addEventListener('change', (event: Event) => {
+      isDesktop.value = event && (event as MediaQueryListEvent).matches ? true : false
+      if (isDesktop.value) {
+        isTablet.value = false
+        isMobile.value = false
+      }
+    })
+
+  window
+    .matchMedia('(min-width: 769px) and (max-width: 1023px)')
+    .addEventListener('change', (event: Event) => {
+      isTablet.value = event && (event as MediaQueryListEvent).matches ? true : false
+      if (isTablet.value) {
+        isMobile.value = false
+        isDesktop.value = false
+      }
+    })
+
+  window
+    .matchMedia('(min-width: 60px) and (max-width: 768px)')
+    .addEventListener('change', (event: Event) => {
+      isMobile.value = event && (event as MediaQueryListEvent).matches ? true : false
+      if (isMobile.value) {
+        isTablet.value = false
+        isDesktop.value = false
+      }
+    })
 
   function save() {
     const authenticated = keycloak?.authenticated ?? false
@@ -155,12 +205,15 @@ export const usePreferencesStore = defineStore('preferences', () => {
     show,
     storePreferencesInCookie,
     language,
+    isPortrait,
     resultsPerPage,
     authorFacetCount,
     corpusLanguage,
     displayLeftToRight,
     needsLeftToRight,
     needsRightToLeft,
+    isMobile,
+    isTablet,
     corpusLeftToRight,
     displayPerBook,
     facetSortBy: facetSortBy,

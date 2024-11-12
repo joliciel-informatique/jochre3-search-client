@@ -129,8 +129,18 @@
 
 @forward './components//UserOptions/UserOptions';
 
-.navbar {
-  // --bulma-navbar-item-hover-background-l-delta: -50%;
+// .navbar {
+//   &.is-fixed-top {
+//     position: sticky;
+//     top: 0px;
+//   }
+//   // --bulma-navbar-item-hover-background-l-delta: -50%;
+// }
+
+#topbar {
+  top: 0px;
+  position: sticky;
+  z-index: 100;
 }
 
 .pagination {

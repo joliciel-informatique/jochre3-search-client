@@ -47,7 +47,7 @@
 }
 
 .toc-mobile {
-  height: 7vh;
+  // height: 7vh;
   background-color: $white;
 
   &.toc-mobile-left {
@@ -96,12 +96,16 @@
   .button {
     &.toc-index-btn {
       width: 8vw;
+      height: var(--bulma-control-height);
+      width: var(--bulma-control-height);
     }
 
     &.toc-metadata-btn {
       width: 42vw;
       max-width: 42vw;
       overflow: hidden;
+      height: var(--bulma-control-height);
+      min-width: var(--bulma-control-height);
 
       span {
         overflow: hidden;

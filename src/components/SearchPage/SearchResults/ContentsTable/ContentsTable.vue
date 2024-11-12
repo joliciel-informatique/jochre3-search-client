@@ -40,7 +40,7 @@
   <!-- ToC Search Results on mobile -->
   <div
     v-if="searchResults?.length"
-    class="is-hidden-desktop toc-mobile is-flex is-flex-wrap-nowrap is-flex-tablet is-flex-direction-row is-justify-content-space-between p-2"
+    class="is-hidden-desktop toc-mobile has-text-centered-touch is-flex-tablet is-align-items-center is-flex-wrap-nowrap is-flex-direction-row is-justify-content-space-between p-2"
     id="mobile-navigation"
     role="navigation"
     tabindex="1"
@@ -66,12 +66,7 @@
         </span>
       </span>
     </a>
-    <PageNumbering
-      @newPage="emit('newPage')"
-      @resetSearchResults="emit('resetSearchResults')"
-      v-model:totalHits="totalHits"
-      v-model:page="page"
-    />
+    <PageNumbering @newPage="emit('newPage')" v-model:totalHits="totalHits" v-model:page="page" />
     <aside class="toc-drawer menu box p-2" v-show="openMobileMetadataPanel">
       <SingleResult
         v-model:image-modal="imageModal"
@@ -113,7 +108,6 @@
     <aside class="toc-drawer menu box p-2" v-show="openMobileFacets">
       <FacetBar
         @newSearch="emit('newSearch')"
-        @resetSearchResults="emit('resetSearchResults')"
         v-model:facets="facets"
         v-model:open-mobile-facets="openMobileFacets"
       />
@@ -128,7 +122,6 @@ import SingleResult from '../ContentsTable/SingleResult/SingleResult.vue'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import PageNumbering from '../../SearchBar/Navigation/PageNumbering/PageNumbering.vue'
 import FacetBar from '../FacetBar/FacetBar.vue'
-import { mobileCheck } from '@/assets/functions'
 
 const preferences = usePreferencesStore()
 
@@ -149,8 +142,6 @@ const openMobileSearchResultsToc = defineModel('openMobileSearchResultsToc')
 const openMobileMetadataPanel = defineModel('openMobileMetadataPanel')
 const openMobileFacets = defineModel('openMobileFacets')
 
-const openDrawerSettings = ref(false)
-
 const pageNumberOffset = computed(() => (page.value - 1) * preferences.resultsPerPage + 1) // Same line as in SearchInfo: firstResult
 
 const firstResult = computed(() => (page.value - 1) * preferences.resultsPerPage + 1)
@@ -163,12 +154,12 @@ const selectEntry = (entry: SearchResult, index: number) => {
   selectedEntry.value = entry
   selectedEntryIndex.value = index
   const navBarHeight = document.getElementById('navbar')?.getBoundingClientRect().height
-  const hrTop = mobileCheck()
-    ? document.getElementById(`mobile-hr-${index}`)?.getBoundingClientRect().top
-    : document.getElementById(`desktop-hr-${index}`)?.getBoundingClientRect().top
-  if (hrTop && navBarHeight) {
-    window.scrollBy({ top: hrTop - navBarHeight, behavior: 'smooth' })
-  }
+  const top = document.getElementById(`hr-${index}`)?.getBoundingClientRect().top
+  if (navBarHeight && top)
+    window.scrollBy({
+      top: top - navBarHeight,
+      behavior: 'smooth'
+    })
 }
 
 onMounted(() => {

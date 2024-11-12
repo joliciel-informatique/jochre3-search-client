@@ -1,13 +1,10 @@
 <template>
-  <div>
+  <div id="topbar">
     <div class="is-flex is-flex-direction-column">
       <HeaderPage />
       <nav class="is-flex is-flex-direction-column navbar" id="navbar" role="navigation">
         <div class="navbar-brand is-flex is-flex-direction-row is-flex-wrap-nowrap">
-          <a
-            class="navbar-item is-flex is-flex-grow-0 is-flex-shrink-1 is-hidden-touch is-hidden-desktop"
-            :href="$t('header.logo-url')"
-          >
+          <a class="navbar-item is-flex is-hidden-desktop" :href="$t('header.logo-url')">
             <img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')"
           /></a>
           <div class="navbar-item is-flex is-flex-grow-1 is-flex-shrink-3">
@@ -56,12 +53,7 @@
           v-model:simpleKeyboard="simpleKeyboard"
         />
         <div class="is-hidden-touch">
-          <PageNumbering
-            @newPage="newPage()"
-            @resetSearchResults="resetSearchResults()"
-            v-model:totalHits="totalHits"
-            v-model:page="page"
-          />
+          <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" v-model:page="page" />
         </div>
         <div class="is-hidden-desktop">
           <ContentsTable
@@ -113,6 +105,7 @@
     </div>
   </div>
   <div
+    id="resultsContainer"
     class="container columns is-flex-direction-column is-align-items-center has-text-centered p-4"
   >
     <!-- Not loading, has query and results -->
@@ -129,7 +122,6 @@
         <div class="is-hidden-touch">
           <FacetBar
             @newSearch="newSearch"
-            @resetSearchResults="resetSearchResults"
             v-model:facets="facets"
             v-model:open-mobile-facets="openMobileFacets"
           />
@@ -184,9 +176,10 @@ import { usePreferencesStore } from '../../stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
-const { show } = storeToRefs(preferences)
+const { show, isTablet, isMobile } = storeToRefs(preferences)
 
 import { storeToRefs } from 'pinia'
+
 const { resultsPerPage, authorFacetCount } = storeToRefs(preferences)
 
 const query = ref('')
@@ -227,6 +220,21 @@ const openNavBarMobileMenu = ref(false)
 
 const facets = ref<Array<AggregationBin>>([])
 
+// const positionSnippets = () => {
+//   const navBarHeight = document.getElementById('navbar')?.getBoundingClientRect().height
+//   const snippetDiv = document.getElementById('snippetsColumn')
+//   console.log(snippetDiv)
+//   if (navBarHeight && snippetDiv) {
+//     snippetDiv.setAttribute('style', `top:${navBarHeight}px;display:absolute`)
+//   }
+// }
+
+watch([isTablet, isMobile], ([newTabletV], [newMobileV]) => {
+  if (newTabletV || newMobileV) {
+    // positionSnippets()
+  }
+})
+
 onMounted(() => {
   window.addEventListener('click', (e: MouseEvent | TouchEvent) => {
     if (openNavBarMobileMenu.value) {
@@ -256,6 +264,16 @@ onMounted(() => {
       }
     }
   })
+
+  if (window.innerWidth < 1024 && window.innerWidth > 768) {
+    isTablet.value = true
+    isMobile.value = false
+  }
+
+  if (window.innerWidth <= 768) {
+    isTablet.value = false
+    isMobile.value = true
+  }
 
   // const closeOnEscape = (e: KeyboardEvent) => {
   //   e.key === 'Escape' ? toggleKeyboard() : null
@@ -322,6 +340,7 @@ const runSearch = () => {
   hasAdvancedSearchCriteria.value = false
   search().then((res) => {
     isLoading.value = res ? true : false
+    // positionSnippets()
   })
 }
 
@@ -368,17 +387,16 @@ watch(searchResults, (newV) => {
   const navbar = document.getElementById('navbar')
   if (newV?.length) {
     header?.setAttribute('style', 'display:none')
-    navbar?.classList.add('is-fixed-top')
+    //     // navbar?.classList.add('is-fixed-top')
   } else {
     header?.setAttribute('style', 'display:flex')
-    navbar?.classList.remove('is-fixed-top')
+    //     // navbar?.classList.remove('is-fixed-top')
   }
 })
 
 watch(excludeFromSearch, () => (authorInclude.value = !excludeFromSearch.value))
 watch(resultsPerPage, () => search())
 watch(authorFacetCount, () => searchFacets())
-// watch(snippetsPerResult, () => search())
 
 // Close all other panels on Mobile
 watch(showAdvancedSearchPanel, (newV) => {

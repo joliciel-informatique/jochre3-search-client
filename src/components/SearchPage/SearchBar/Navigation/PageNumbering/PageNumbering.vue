@@ -132,7 +132,7 @@ Description: calculates and presents page numbers
     </nav>
   </div>
   <nav
-    class="pagination is-hidden-desktop mobile-navigation is-justify-content-right"
+    class="pagination is-hidden-desktop mobile-navigation is-align-self-center"
     role="navigation"
     aria-label="pagination"
     tabindex="2"
@@ -264,8 +264,5 @@ watch(atTop, (newV) =>
     : window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
 )
 
-watch(page, (newV) => {
-  console.log(newV, lastPage)
-  emit('newPage')
-})
+watch(page, () => emit('newPage'))
 </script>

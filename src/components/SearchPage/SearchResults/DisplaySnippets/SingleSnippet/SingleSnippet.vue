@@ -47,7 +47,7 @@ Description: displays text snippets from the OCR text
       </button>
     </header>
     <div class="card-content" :data-docref="docRef" :data-page="snippet.page">
-      <div class="columns">
+      <div class="columns is-mobile">
         <div
           v-if="preferences.displayLeftToRight === preferences.corpusLeftToRight"
           :class="{
