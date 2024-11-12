@@ -90,7 +90,6 @@
             />
           </div>
         </div>
-        <!-- </div> -->
       </nav>
       <div class="is-hidden-touch">
         <ContentsTable
@@ -163,7 +162,6 @@
 import { onMounted, ref, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchData } from '../../assets/fetchMethods'
-// import { sha1 } from 'object-hash'
 
 // Import Child components
 import SearchBar from './SearchBar/SearchBar.vue'
@@ -189,7 +187,7 @@ const preferences = usePreferencesStore()
 const { show } = storeToRefs(preferences)
 
 import { storeToRefs } from 'pinia'
-const { resultsPerPage, authorFacetCount, snippetsPerResult } = storeToRefs(preferences)
+const { resultsPerPage, authorFacetCount } = storeToRefs(preferences)
 
 const query = ref('')
 const firstSearchResult = ref<SearchResult>()
@@ -200,10 +198,6 @@ const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
 const notification: Ref = defineModel('notification')
-
-// const preferences = usePreferencesStore()
-
-// const searchBarIsDocked = ref(false)
 
 const authorInclude = ref(true)
 const excludeFromSearch = ref(false)
@@ -513,7 +507,7 @@ const search = async () => {
   )
   searchParams.append('max', resultsPerPage.value.toString())
   searchParams.append('sort', sortBy.value.trim())
-  searchParams.append('max-snippets', '100')
+  searchParams.append('max-snippets', '10')
   searchParams.append('row-padding', '2')
   searchParams.append('physical-newlines', 'false')
 
