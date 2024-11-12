@@ -3,8 +3,6 @@ import App from './App.vue'
 import router from './router'
 import { createPinia, type Pinia } from 'pinia'
 import { createI18n, type I18n } from 'vue-i18n'
-import axios from 'axios'
-import { AxiosError } from 'axios'
 import Keycloak, { type KeycloakConfig, type KeycloakInitOptions } from 'keycloak-js'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
@@ -129,56 +127,20 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
             })
         }, 6000)
 
-        // After login, load the user preferences from the database
-        interface UserPreferences {
-          language: string
-          resultsPerPage: number
-          snippetsPerResult: number
-          authorFacetCount?: number
-        }
+        setToken(keycloak.token)
 
-        // return fetchData('preferences/user', 'get')
-        // .then((response) => response.json()
-        // .then(({ data }) => {
-        //   preferencesStore.language = (data.language) ? data.language : null
-        //   preferencesStore.resultsPerPage = (data.resultsPerPage) ? data.resultsPerPage : null
-        //   preferencesStore.snippetsPerResult = (data.snippetsPerResult) ? data.snippetsPerResult : null
-        //   return createI18n({
-        //     legacy: false,
-        //     locale: preferencesStore.language,
-        //     fallbackLocale: 'en',
-        //     messages: customizedMessages
-        //   })
-        // }))
-        // .catch((error) => {
-        //   const msg = new Error(`Failed to get user preferences: ${error.message}`)
-        // })
-
-        const i18n = axios
-          .get<UserPreferences>(`${apiUrl}/preferences/user`, {
-            headers: {
-              accept: 'application/json',
-              Authorization: `Bearer ${keycloak?.token}`
-            }
+        const i18n = preferences
+          .load()
+          .then((language) => {
+            const i18n = createI18n({
+              legacy: false,
+              locale: language,
+              fallbackLocale: 'en',
+              messages: customizedMessages
+            })
+            return i18n
           })
-          .then((response) => {
-            const language = response.data.language
-            if (language) {
-              preferences.language = language
-            }
-            const resultsPerPage = response.data.resultsPerPage
-            if (resultsPerPage) {
-              preferences.resultsPerPage = resultsPerPage
-            }
-            const snippetsPerResult = response.data.snippetsPerResult
-            if (snippetsPerResult) {
-              preferences.snippetsPerResult = snippetsPerResult
-            }
-            const authorFacetCount = response.data.authorFacetCount
-            if (authorFacetCount) {
-              preferences.authorFacetCount = authorFacetCount
-            }
-
+          .catch((error) => {
             const i18n = createI18n({
               legacy: false,
               locale: preferences.language,
@@ -186,26 +148,6 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
               messages: customizedMessages
             })
             return i18n
-          })
-          .catch((reason: AxiosError) => {
-            if (reason.response?.status === 404) {
-              console.log('No preferences for user')
-              const i18n = createI18n({
-                legacy: false,
-                locale: preferences.language,
-                fallbackLocale: 'en',
-                messages: customizedMessages
-              })
-              return i18n
-            } else {
-              const i18n = createI18n({
-                legacy: false,
-                locale: 'en',
-                fallbackLocale: 'en',
-                messages: customizedMessages
-              })
-              return i18n
-            }
           })
         return i18n
       }
