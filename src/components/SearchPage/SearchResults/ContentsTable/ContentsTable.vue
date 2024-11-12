@@ -91,41 +91,8 @@
           class="menu-label is-size-5 label p-2 is-flex is-flex-direction-row is-justify-content-space-between"
         >
           {{ $t('results.contents-table-header') }}
-          <font-awesome-icon icon="gear" @click="openDrawerSettings = !openDrawerSettings" />
+          <font-awesome-icon icon="gear" @click="preferences.show = true" />
         </p>
-        <div v-if="openDrawerSettings">
-          <div class="columns is-vcentered m-1">
-            <div class="column is-8 is-size-7">{{ $t('toc.snippets-to-display') }}</div>
-            <div class="column is-4 is-size-7">
-              <p class="control">
-                <input type="number" class="input" v-model="snippetsPerResult" />
-              </p>
-            </div>
-          </div>
-          <div class="columns is-vcentered">
-            <div class="column is-8 is-size-7">
-              <span class="control-label">
-                {{ $t('search.sort-by') }}
-              </span>
-            </div>
-            <div class="column is-4 is-size-7">
-              <select
-                class="column control select has-text-centered"
-                name="sortBySelect"
-                aria-labelledby="searchSortBy"
-                v-model="sortBy"
-              >
-                <option value="Score">{{ $t('search.sort.score') }}</option>
-                <option value="DateAscending">
-                  {{ $t('search.sort.date-ascending') }}
-                </option>
-                <option value="DateDescending">
-                  {{ $t('search.sort.date-descending') }}
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
       </div>
       <p class="menu-label label pt-4">
         {{ $t('results.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
@@ -157,8 +124,6 @@
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { computed, onMounted, ref, type Ref } from 'vue'
 
-import { storeToRefs } from 'pinia'
-
 import SingleResult from '../ContentsTable/SingleResult/SingleResult.vue'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import PageNumbering from '../../SearchBar/Navigation/PageNumbering/PageNumbering.vue'
@@ -166,8 +131,6 @@ import FacetBar from '../FacetBar/FacetBar.vue'
 import { mobileCheck } from '@/assets/functions'
 
 const preferences = usePreferencesStore()
-
-const { snippetsPerResult } = storeToRefs(preferences)
 
 const showing = ref(true)
 
@@ -180,15 +143,12 @@ const notification: Ref = defineModel('notification')
 const selectedEntry = defineModel<SearchResult>('selectedEntry')
 const selectedEntryIndex = ref(0)
 const totalHits: Ref = defineModel('totalHits')
-const sortBy = defineModel('sortBy')
 const facets: Ref = defineModel('facets')
 
 const openMobileSearchResultsToc = defineModel('openMobileSearchResultsToc')
 const openMobileMetadataPanel = defineModel('openMobileMetadataPanel')
 const openMobileFacets = defineModel('openMobileFacets')
 
-// const openDrawer = ref(false)
-// const openMetadataDrawer = ref(false)
 const openDrawerSettings = ref(false)
 
 const pageNumberOffset = computed(() => (page.value - 1) * preferences.resultsPerPage + 1) // Same line as in SearchInfo: firstResult
@@ -217,9 +177,4 @@ onMounted(() => {
 })
 
 const emit = defineEmits(['newPage', 'resetSearchResults', 'newSearch'])
-
-const beforeEnter = <Element,>(el: Element) => ((el as HTMLElement).style.width = '0')
-const enter = <Element,>(el: Element) => ((el as HTMLElement).style.width = `98vw`)
-const beforeLeave = <Element,>(el: Element) => ((el as HTMLElement).style.width = `98vw`)
-const leave = <Element,>(el: Element) => ((el as HTMLElement).style.width = '0')
 </script>
