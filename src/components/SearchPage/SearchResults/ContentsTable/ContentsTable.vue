@@ -163,6 +163,7 @@ import SingleResult from '../ContentsTable/SingleResult/SingleResult.vue'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import PageNumbering from '../../SearchBar/Navigation/PageNumbering/PageNumbering.vue'
 import FacetBar from '../FacetBar/FacetBar.vue'
+import { mobileCheck } from '@/assets/functions'
 
 const preferences = usePreferencesStore()
 
@@ -198,8 +199,17 @@ const lastResult = computed(() => {
   return totalHits.value < last ? totalHits.value : last
 })
 
-const selectEntry = (entry: SearchResult, index: number) =>
-  (selectedEntry.value = entry) && (selectedEntryIndex.value = index)
+const selectEntry = (entry: SearchResult, index: number) => {
+  selectedEntry.value = entry
+  selectedEntryIndex.value = index
+  const navBarHeight = document.getElementById('navbar')?.getBoundingClientRect().height
+  const hrTop = mobileCheck()
+    ? document.getElementById(`mobile-hr-${index}`)?.getBoundingClientRect().top
+    : document.getElementById(`desktop-hr-${index}`)?.getBoundingClientRect().top
+  if (hrTop && navBarHeight) {
+    window.scrollBy({ top: hrTop - navBarHeight, behavior: 'smooth' })
+  }
+}
 
 onMounted(() => {
   const results = searchResults.value

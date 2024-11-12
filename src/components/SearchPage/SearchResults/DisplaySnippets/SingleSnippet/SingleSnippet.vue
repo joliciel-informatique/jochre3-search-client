@@ -10,7 +10,7 @@ Methods: getSelectedWord (local), toggleImageSnippet (local), fetchData (importe
 Description: displays text snippets from the OCR text
 -->
 <template>
-  <div :docRef="docRef" :bookIndex :index="index" class="card snippet m-4">
+  <li :docRef="docRef" class="card snippet m-4" :bookIndex :snippetIndex>
     <header
       class="card-header"
       :class="selectedEntry.docRef === docRef ? 'selected-snippet' : 'snippet'"
@@ -46,7 +46,7 @@ Description: displays text snippets from the OCR text
         <span class="is-size-7">{{ $t('snippet.open-transcription') }}</span>
       </button>
     </header>
-    <div class="card-content" :data-index="index" :data-docref="docRef" :data-page="snippet.page">
+    <div class="card-content" :data-docref="docRef" :data-page="snippet.page">
       <div class="columns">
         <div
           v-if="preferences.displayLeftToRight === preferences.corpusLeftToRight"
@@ -124,7 +124,7 @@ Description: displays text snippets from the OCR text
         ></div>
       </div>
     </div>
-  </div>
+  </li>
 </template>
 
 <script setup lang="ts">
@@ -134,11 +134,11 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
-const { index, snippet, docRef, bookIndex } = defineProps([
-  'index',
+const { snippet, docRef, bookIndex, snippetIndex } = defineProps([
   'snippet',
   'docRef',
-  'bookIndex'
+  'bookIndex',
+  'snippetIndex'
 ])
 const imageModal: Ref = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
