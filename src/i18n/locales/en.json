@@ -20,7 +20,7 @@
     "filter": "Filter",
     "relevant-facets": "Your filter returned {0} relevant names",
     "snippets-per-book": "Show snippets continuously",
-    "display-snippets-per-book": "Display all snippets per book or all snippets in this list of search results.",
+    "display-snippets-per-book": "Display the snippets per book or all the snippets in this list of search results.",
     "keyboard": "Open Yiddish on-screen keyboard",
     "field-instructions": "*These fields accept Roman or Yiddish characters.",
     "author": "Author",
@@ -84,11 +84,12 @@
   },
   "preferences": {
     "title": "Update preferences",
-    "language": "Interface language",
+    "results-heading": "Result display",
     "results-per-page": "Results per page",
-    "snippets-per-result": "Snippets per book",
-    "author-facet-count": "Number of author names to display",
-    "display-snippets-per-book": "Show snippets per book?"
+    "results-sort-by": "Sort by",
+    "snippets-heading": "Snippet display",
+    "snippets-per-book": "One book at a time",
+    "snippets-as-list": "As continuous list"
   },
   "fix-word": {
     "title": "Fix a word",

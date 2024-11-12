@@ -82,11 +82,12 @@
   },
   "preferences": {
     "title": "דעם באַניצערס פּרעפֿערענצן",
-    "language": "פּרעזענטיר־שפּראַך",
+    "results-heading": "YI__Result display",
     "results-per-page": "וויפֿל רעזולטאַטן אויף איין זײַטל",
-    "snippets-per-result": "וויפֿל פֿראַגמענטן פּער בוך",
-    "author-facet-count": "װיפֿל מחבר פֿילטערס צו באַװײַזן",
-    "display-snippets-per-book": "פֿראַגמענטן פֿון נאָר אײן בוך מיט אַ מאָל?"
+    "results-sort-by": "YI__Sort by",
+    "snippets-title": "YI__Snippet display",
+    "snippets-per-book": "YI__One book at a time",
+    "snippets-as-list": "YI__As continuous list"
   },
   "fix-word": {
     "title": "פֿאַרבעסערט אַ וואָרט",

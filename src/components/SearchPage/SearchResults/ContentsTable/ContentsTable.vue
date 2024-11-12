@@ -9,42 +9,6 @@
     <p class="menu-label is-size-5 label">
       {{ $t('results.contents-table-header') }}
     </p>
-    <div class="columns is-vcentered">
-      <div class="column is-8 is-size-7">
-        <span class="control-label"
-          >{{ $t('search.snippets-per-book') }}
-          <span v-tooltip:top="$t('search.display-snippets-per-book')">
-            <font-awesome-icon icon="question-circle" /> </span
-        ></span>
-      </div>
-      <label class="column is-4 is-size-7 is-rounded switch">
-        <input type="checkbox" v-model="displayPerBook" />
-        <span class="check" :class="preferences.language === 'yi' ? 'switch-ltr' : ''"></span>
-      </label>
-    </div>
-    <div class="columns is-vcentered">
-      <div class="column is-8 is-size-7">
-        <span class="control-label">
-          {{ $t('search.sort-by') }}
-        </span>
-      </div>
-      <div class="column is-4 is-size-7">
-        <select
-          class="column control select has-text-centered"
-          name="sortBySelect"
-          aria-labelledby="searchSortBy"
-          v-model="sortBy"
-        >
-          <option value="Score">{{ $t('search.sort.score') }}</option>
-          <option value="DateAscending">
-            {{ $t('search.sort.date-ascending') }}
-          </option>
-          <option value="DateDescending">
-            {{ $t('search.sort.date-descending') }}
-          </option>
-        </select>
-      </div>
-    </div>
     <p class="menu-label label pt-4">
       {{ $t('results.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
     </p>
@@ -140,19 +104,6 @@
           </div>
           <div class="columns is-vcentered">
             <div class="column is-8 is-size-7">
-              <span class="control-label"
-                >{{ $t('search.snippets-per-book') }}
-                <span v-tooltip:top="$t('search.display-snippets-per-book')">
-                  <font-awesome-icon icon="question-circle" /> </span
-              ></span>
-            </div>
-            <label class="column is-4 is-size-7 is-rounded switch">
-              <input type="checkbox" v-model="displayPerBook" />
-              <span class="check" :class="preferences.language === 'yi' ? 'switch-ltr' : ''"></span>
-            </label>
-          </div>
-          <div class="columns is-vcentered">
-            <div class="column is-8 is-size-7">
               <span class="control-label">
                 {{ $t('search.sort-by') }}
               </span>
@@ -215,7 +166,7 @@ import FacetBar from '../FacetBar/FacetBar.vue'
 
 const preferences = usePreferencesStore()
 
-const { displayPerBook, snippetsPerResult } = storeToRefs(preferences)
+const { snippetsPerResult } = storeToRefs(preferences)
 
 const showing = ref(true)
 
