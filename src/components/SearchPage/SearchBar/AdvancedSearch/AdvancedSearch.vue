@@ -116,6 +116,23 @@ Description: the advanced search toolbox
                 max="2000"
               />
             </p>
+            <p class="column has-text-right has-text-white is-2 mr-1 ml-1" id="searchSortBy">
+              {{ $t('search.sort-by') }}
+            </p>
+            <select
+              class="column control select has-text-centered"
+              name="sortBySelect"
+              aria-labelledby="searchSortBy"
+              v-model="sortBy"
+            >
+              <option value="Score">{{ $t('search.sort.score') }}</option>
+              <option value="DateAscending">
+                {{ $t('search.sort.date-ascending') }}
+              </option>
+              <option value="DateDescending">
+                {{ $t('search.sort.date-descending') }}
+              </option>
+            </select>
           </span>
           <p class="has-text-warning">{{ $t('search.field-instructions') }}</p>
           <div class="field has-text-centered p-2">
@@ -144,6 +161,7 @@ const title = defineModel('title')
 const fromYear = defineModel('fromYear')
 const toYear = defineModel('toYear')
 const docRefs = defineModel('docRefs')
+const sortBy = defineModel('sortBy')
 const facets: Ref = defineModel('facets')
 const excludeFromSearch = defineModel('excludeFromSearch')
 const simpleKeyboard: Ref = defineModel('simpleKeyboard')

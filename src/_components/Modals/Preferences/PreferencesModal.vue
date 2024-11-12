@@ -21,25 +21,6 @@
                   />
                 </div>
               </div>
-              <div class="columns is-vcentered pb-2">
-                <span class="column is-4 px-2">{{ $t('preferences.results-sort-by') }}</span>
-                <div class="column is-4 control">
-                  <select
-                    class="input select has-text-centered"
-                    name="sortBySelect"
-                    aria-labelledby="searchSortBy"
-                    v-model="sortBy"
-                  >
-                    <option class="label" value="Score">{{ $t('search.sort.score') }}</option>
-                    <option class="label" value="DateAscending">
-                      {{ $t('search.sort.date-ascending') }}
-                    </option>
-                    <option class="label" value="DateDescending">
-                      {{ $t('search.sort.date-descending') }}
-                    </option>
-                  </select>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -87,7 +68,7 @@ const setToLanguage = ref(preferences.language)
 
 const resultsPerPage = ref(preferences.resultsPerPage)
 const authorFacetCount = ref(preferences.authorFacetCount)
-const { snippetsPerResult, displayPerBook, sortBy } = storeToRefs(preferences)
+const { snippetsPerResult, displayPerBook } = storeToRefs(preferences)
 
 const save = (vi18n: VueI18n.VueI18n) => {
   preferences.language = setToLanguage.value
