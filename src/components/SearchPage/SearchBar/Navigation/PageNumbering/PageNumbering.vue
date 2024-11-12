@@ -23,15 +23,17 @@ Description: calculates and presents page numbers
     >
       <div>
         <button
-          @click="atTop = !atTop"
-          @keyup.enter="atTop = !atTop"
+          v-tooltip:bottom="`Scroll to first result`"
+          @click="atTop = true"
+          @keyup.enter="atTop = true"
           class="pagination-previous is-small m-1 has-text-white"
         >
           {{ $t('pagination.top') }}
         </button>
       </div>
-      <div v-show="!preferences.displayPerBook">
+      <div>
         <button
+          v-tooltip:bottom="`Previous page (${page - 1})`"
           @click="page--"
           @keyup.enter="page--"
           class="pagination-previous is-small m-1"
@@ -41,13 +43,14 @@ Description: calculates and presents page numbers
           {{ $t('pagination.previous') }}
         </button>
       </div>
-      <div v-show="!preferences.displayPerBook">
+      <div>
         <ul class="pagination-list">
           <li v-if="page - 1 > 1">
             <a
+              v-tooltip:bottom="`Page 1`"
               @click="page = 1"
               @keyup.enter="page = 1"
-              class="pagination-link is-small m-1"
+              class="pagination-link is-small m-1 has-text-white"
               aria-label="go to page 1"
               tabindex="2"
               >1</a
@@ -58,31 +61,34 @@ Description: calculates and presents page numbers
           </li>
           <li v-if="page > 1">
             <a
+              v-tooltip:bottom="`Page ${page - 1}`"
               class="pagination-link is-small m-1 has-text-white"
               tabindex="2"
               @click="page--"
               @keyup.enter="page--"
               :aria-label="`go to page ${page - 1}`"
-              >{{ page - 1 }}</a
+              ><div class="pagination-number-ellipsis">{{ page - 1 }}</div></a
             >
           </li>
           <li>
             <a
+              v-tooltip:bottom="`Page ${page}`"
               class="pagination-link is-current is-small m-1 has-text-white"
               :aria-label="`go to page ${page}`"
               aria-current="page"
               tabindex="2"
-              >{{ page }}</a
+              ><div class="pagination-number-ellipsis">{{ page }}</div></a
             >
           </li>
           <li v-if="page < lastPage">
             <a
+              v-tooltip:bottom="`Page ${page + 1}`"
               @click="page++"
               @keyup.enter="page++"
               class="pagination-link is-small m-1 has-text-white"
               :aria-label="`go to page ${page + 1}`"
               tabindex="2"
-              >{{ page + 1 }}</a
+              ><div class="pagination-number-ellipsis">{{ page + 1 }}</div></a
             >
           </li>
           <li v-if="page + 1 < lastPage - 1">
@@ -90,18 +96,20 @@ Description: calculates and presents page numbers
           </li>
           <li v-if="page + 1 < lastPage">
             <a
+              v-tooltip:bottom="`Page ${lastPage}`"
               @click="page = lastPage"
               @keyup.enter="page = lastPage"
               class="pagination-link is-small m-1 has-text-white"
               :aria-label="`go to lastpage ${lastPage}`"
               tabindex="2"
-              >{{ lastPage }}</a
+              ><div class="pagination-number-ellipsis">{{ lastPage }}</div></a
             >
           </li>
         </ul>
       </div>
-      <div v-show="!preferences.displayPerBook">
+      <div>
         <button
+          v-tooltip:bottom="`Next page (${page + 1})`"
           @click="page++"
           @keyup.enter="page++"
           class="pagination-next is-small m-1"
@@ -113,8 +121,9 @@ Description: calculates and presents page numbers
       </div>
       <div>
         <button
-          @click="atTop = !atTop"
-          @keyup.enter="atTop = !atTop"
+          v-tooltip:bottom="`Scroll to last result`"
+          @click="atTop = false"
+          @keyup.enter="atTop = false"
           class="pagination-previous is-small m-1 has-text-white"
         >
           {{ $t('pagination.bottom') }}
@@ -215,7 +224,7 @@ Description: calculates and presents page numbers
           :aria-label="`go to next page`"
           tabindex="2"
           :disabled="page + 3 > lastPage ? true : null"
-          >{{ page + 3 }}</a
+          ><div class="pagination-number-ellipsis">{{ page + 3 }}</div></a
         >
       </li>
       <li v-if="(page + 1 <= lastPage && page <= lastPage) || (lastPage < 5 && page === lastPage)">
@@ -226,7 +235,7 @@ Description: calculates and presents page numbers
           :aria-label="`go to lastpage ${lastPage}`"
           tabindex="2"
           :disabled="lastPage < 5 ? true : null"
-          >{{ lastPage <= 5 ? 5 : lastPage }}</a
+          ><div class="pagination-number-ellipsis">{{ lastPage <= 5 ? 5 : lastPage }}</div></a
         >
       </li>
       <li class="ml-auto">

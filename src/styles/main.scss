@@ -151,6 +151,16 @@ $menu-nested-list-margin: 1em;
   border-color: $background-color-3;
 }
 
+.pagination-link {
+  max-width: 2.5em;
+}
+
+.pagination-number-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .no-results {
   z-index: 0;
 }
