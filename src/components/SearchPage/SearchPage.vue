@@ -50,6 +50,7 @@
           v-model:to-year="toYear"
           v-model:from-year="fromYear"
           v-model:doc-refs="docRefs"
+          v-model:sort-by="sortBy"
           v-model:facets="facets"
           v-model:exclude-from-search="excludeFromSearch"
           v-model:simpleKeyboard="simpleKeyboard"
@@ -188,7 +189,7 @@ const preferences = usePreferencesStore()
 const { show } = storeToRefs(preferences)
 
 import { storeToRefs } from 'pinia'
-const { resultsPerPage, authorFacetCount, snippetsPerResult, sortBy } = storeToRefs(preferences)
+const { resultsPerPage, authorFacetCount, snippetsPerResult } = storeToRefs(preferences)
 
 const query = ref('')
 const firstSearchResult = ref<SearchResult>()
@@ -215,6 +216,7 @@ const title = ref('')
 const fromYear = ref()
 const toYear = ref()
 const docRefs = ref('')
+const sortBy = ref('Score')
 
 const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 
