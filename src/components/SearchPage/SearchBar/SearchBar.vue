@@ -10,8 +10,8 @@ Methods: None
 Description: presents the search bar
 -->
 <template>
-  <div id="searchBar" class="block has-text-white has-text-weight-semibold p-1">
-    <div class="container is-max-desktop">
+  <div id="searchBar" class="container is-max-desktop has-text-white has-text-weight-semibold p-1">
+    <div class="">
       <div class="pb-0 mb-0 field has-addons">
         <p class="control">
           <a id="searchBarLabel" class="button is-static">{{ $t('search.search') }} </a>
@@ -77,7 +77,7 @@ Description: presents the search bar
         <p class="control" v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
           <a class="button is-static is-clickable">
             <label for="strictSearchCheckbox" class="mx-2 is-clickable"
-              >{{ $t('search.related-word-forms') }}
+              ><span class="is-hidden-touch">{{ $t('search.related-word-forms') }}</span>
               <span
                 ><input
                   id="strictSearchCheckbox"
@@ -89,39 +89,39 @@ Description: presents the search bar
           </a>
         </p>
       </div>
-      <div class="columns py-3 field">
-        <p class="column is-one-fifth control">
-          <button @click="toggleAdvancedSearchPanel()">
-            <font-awesome-icon
-              :icon="
-                showAdvancedSearchPanel
-                  ? 'magnifying-glass-minus'
-                  : hasAdvancedSearchCriteria
-                    ? 'sliders'
-                    : 'magnifying-glass-plus'
-              "
-            />
-            {{ $t('search.advanced-search') }}
-          </button>
-        </p>
-        <p class="column is-one-fifth control">
-          <a
-            href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
-            target="_blank"
-            class="has-text-white"
-          >
-            <span>
-              <font-awesome-icon icon="book-open" />
-              {{ $t('search.user-guide') }}
-            </span>
-          </a>
-        </p>
-      </div>
+    </div>
+    <div class="is-flex is-flex-direction-row is-justify-content-space-between is-hidden-touch">
+      <a
+        class="navbar-item has-text-white"
+        href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
+        target="_blank"
+      >
+        <span>
+          <font-awesome-icon icon="book-open" />
+          {{ $t('search.user-guide') }}
+        </span>
+      </a>
+      <a
+        id="advancedSearchBtn"
+        class="navbar-item has-text-white is-flex-desktop"
+        @click.prevent="showAdvancedSearchPanel = true"
+      >
+        <font-awesome-icon
+          :icon="
+            showAdvancedSearchPanel
+              ? 'magnifying-glass-minus'
+              : hasAdvancedSearchCriteria
+                ? 'sliders'
+                : 'magnifying-glass-plus'
+          "
+        />
+        {{ $t('search.advanced-search') }}
+      </a>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import type { Ref } from 'vue'
+import { type Ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
@@ -133,10 +133,6 @@ const strict: Ref = defineModel('strict')
 const isLoading = defineModel('isLoading')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
 const simpleKeyboard: Ref = defineModel('simpleKeyboard')
-
-const toggleAdvancedSearchPanel = () => {
-  showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value
-}
 
 const toggleKeyboard = (attachTo: string) => {
   simpleKeyboard.value.attachTo = attachTo

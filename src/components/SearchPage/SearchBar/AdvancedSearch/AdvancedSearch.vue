@@ -20,30 +20,28 @@ Description: the advanced search toolbox
       @before-leave="beforeLeave"
       @leave="leave"
     >
-      <div class="body m-3 p-3" v-show="showAdvancedSearchPanel">
+      <div id="advancedSearchPanel" class="body m-3 p-3" v-show="showAdvancedSearchPanel">
         <div class="body-inner container is-max-desktop">
-          <span class="columns is-vcentered mt-1 p-1">
-            <p class="column is-flex has-text-white is-2">
-              {{ $t('search.author') }}
-            </p>
-            <span class="column" :aria-label="$t('search.author')">
-              <FindAuthors
-                v-model:authorList="authorList"
-                v-model:disabled="disabled"
-                v-model:exclude-from-search="excludeFromSearch"
-                v-model:simple-keyboard="simpleKeyboard"
-                :label="$t('search.author')"
-                :multi-value="true"
-                :show-exclude-checkbox="true"
-                unique-id="advanced-search-find-authors"
-              />
-            </span>
-          </span>
-          <span class="columns is-vcentered mt-1 p-1">
-            <p class="column is-2 is-flex has-text-white" id="searchTitle">
+          <FindAuthors
+            v-model:authorList="authorList"
+            v-model:disabled="disabled"
+            v-model:exclude-from-search="excludeFromSearch"
+            v-model:simple-keyboard="simpleKeyboard"
+            :label="$t('search.author')"
+            :multi-value="true"
+            :show-exclude-checkbox="true"
+            unique-id="advanced-search-find-authors"
+          />
+          <span class="columns is-mobile is-vcentered mt-1 p-1">
+            <p
+              class="column is-2 is-flex is-desktop is-flex-grow-1 has-text-white"
+              id="searchTitle"
+            >
               {{ $t('search.title') }}
             </p>
-            <span class="column field has-addons has-addons-left is-horizontal">
+            <span
+              class="column is-flex is-desktop is-flex-grow-2 field has-addons has-addons-left is-horizontal"
+            >
               <p class="control is-expanded">
                 <input
                   id="bookTitle"
@@ -67,11 +65,13 @@ Description: the advanced search toolbox
               </p>
             </span>
           </span>
-          <span class="columns is-vcentered mt-1 p-1">
-            <p class="column is-flex has-text-white is-2">
+          <span class="columns is-mobile is-vcentered mt-1 p-1">
+            <p class="column is-2 is-flex is-desktop is-flex-grow-1 has-text-white">
               {{ $t('search.document-reference') }}
             </p>
-            <span class="column field has-addons has-addons-left is-horizontal">
+            <span
+              class="column is-flex is-desktop is-flex-grow-2 field has-addons has-addons-left is-horizontal"
+            >
               <input
                 class="input"
                 name="documentRefsInput"
@@ -82,8 +82,11 @@ Description: the advanced search toolbox
               />
             </span>
           </span>
-          <span class="columns is-vcentered mt-1 p-1">
-            <p class="column is-flex is-2 has-text-white" id="searchDateFrom">
+          <span class="columns is-mobile is-vcentered mt-1 p-1">
+            <p
+              class="column is-2 is-flex is-desktop is-flex-grow-1 has-text-white"
+              id="searchDateFrom"
+            >
               {{ $t('search.date-from') }}
             </p>
             <p class="column control is-2 has-text-centered">
@@ -113,23 +116,6 @@ Description: the advanced search toolbox
                 max="2000"
               />
             </p>
-            <p class="column has-text-right has-text-white is-2 mr-1 ml-1" id="searchSortBy">
-              {{ $t('search.sort-by') }}
-            </p>
-            <select
-              class="column control select has-text-centered"
-              name="sortBySelect"
-              aria-labelledby="searchSortBy"
-              v-model="sortBy"
-            >
-              <option value="Score">{{ $t('search.sort.score') }}</option>
-              <option value="DateAscending">
-                {{ $t('search.sort.date-ascending') }}
-              </option>
-              <option value="DateDescending">
-                {{ $t('search.sort.date-descending') }}
-              </option>
-            </select>
           </span>
           <p class="has-text-warning">{{ $t('search.field-instructions') }}</p>
           <div class="field has-text-centered p-2">
@@ -148,7 +134,7 @@ Description: the advanced search toolbox
 </template>
 <script setup lang="ts">
 import FindAuthors from '@/_components/FindAuthors/FindAuthors.vue'
-import { computed, type Ref } from 'vue'
+import { computed, watch, type Ref } from 'vue'
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 
@@ -158,7 +144,6 @@ const title = defineModel('title')
 const fromYear = defineModel('fromYear')
 const toYear = defineModel('toYear')
 const docRefs = defineModel('docRefs')
-const sortBy = defineModel('sortBy')
 const facets: Ref = defineModel('facets')
 const excludeFromSearch = defineModel('excludeFromSearch')
 const simpleKeyboard: Ref = defineModel('simpleKeyboard')
@@ -172,9 +157,7 @@ const toggleKeyboard = (attachTo: string) => {
   simpleKeyboard.value.ref = title
 }
 
-const runSearch = () => {
-  emit('newSearch')
-}
+const runSearch = () => emit('newSearch')
 
 const beforeEnter = <Element,>(el: Element) => ((el as HTMLElement).style.height = '0')
 const enter = <Element,>(el: Element) => ((el as HTMLElement).style.height = '100%')

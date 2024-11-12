@@ -20,12 +20,15 @@
 @forward './components/FilterTag/FilterTag';
 @forward './components/SimpleKeyboard/SimpleKeyboard';
 @forward './components/Dropdown/Dropdown';
+@forward './components/PageNumbering/PageNumbering';
 
 // Directive Styling
 @forward './components/ToolTip/_ToolTip';
 
 // Bulma
 @forward 'bulma/sass' with (
+  $tablet: 768px,
+
   // Default theme values
   $primary: $background-color-1,
   $info: $background-color-2,
@@ -43,10 +46,44 @@
   $control-size: $font-size-3,
 
   $body-line-height: unset,
-  // $size-normal: $size-normal,
-  // $font-size: 0,
+
+  $navbar-item-color: $white,
+  // $navbar-item-background-l-delta: unset,
+  $navbar-background-color: $background-color-1,
+  $navbar-box-shadow-size: var(--bulma-navbar-box-shadow-size),
+  $navbar-box-shadow-color: var(--bulma-navbar-box-shadow-color),
+  $navbar-height: var(--bulma-navbar-height),
+  $navbar-padding-vertical: var(--bulma-navbar-padding-vertical),
+  $navbar-padding-horizontal: var(--bulma-navbar-padding-horizontal),
+  $navbar-z: 2147483648,
+  $navbar-fixed-z: 2147483648,
+  $navbar-item-img-max-height: 5vh,
+  $navbar-burger-color: $background-color-2,
+  $navbar-tab-hover-background-color: $background-color-2,
+  $navbar-tab-hover-border-bottom-color: $background-color-2,
+  $navbar-tab-active-color: $background-color-2,
+  $navbar-tab-active-background-color: $background-color-2,
+  $navbar-tab-active-border-bottom-color: var(--bulma-navbar-tab-active-border-bottom-color),
+  $navbar-tab-active-border-bottom-style: var(--bulma-navbar-tab-active-border-bottom-style),
+  $navbar-tab-active-border-bottom-width: var(--bulma-navbar-tab-active-border-bottom-width),
+  $navbar-dropdown-background-color: $background-color-2,
+  $navbar-dropdown-border-l: var(--bulma-navbar-dropdown-border-l),
+  $navbar-dropdown-border-color: var(--bulma-navbar-dropdown-border-color),
+  $navbar-dropdown-border-style: var(--bulma-navbar-dropdown-border-style),
+  $navbar-dropdown-border-width: var(--bulma-navbar-dropdown-border-width),
+  $navbar-dropdown-offset: var(--bulma-navbar-dropdown-offset),
+  $navbar-dropdown-arrow: $white,
+  $navbar-dropdown-radius: 3px,
+  $navbar-dropdown-z: 2147483648,
+  $navbar-dropdown-boxed-radius: var(--bulma-navbar-dropdown-boxed-radius),
+  $navbar-dropdown-boxed-shadow: var(--bulma-navbar-dropdown-boxed-shadow),
+  $navbar-divider-background-l: var(--bulma-navbar-divider-background-l),
+  $navbar-divider-height: var(--bulma-navbar-divider-height),
+  $navbar-bottom-box-shadow-size: var(--bulma-navbar-bottom-box-shadow-size),
   $hr-margin: 0,
   $hr-background-color: $background-color-3,
+
+  $block-spacing: unset,
 
   // Modal Component
   $modal-z: 40,
@@ -63,8 +100,7 @@
   // Footer Component
   $column-gap: 0.1rem,
   $label-spacing: 0.75rem,
-  $block-spacing: 0.5rem,
-
+  // $block-spacing: 0.5rem,
   // Footer styling
   $footer-padding: 0,
   $footer-background-color: $background-color-1,
@@ -88,3 +124,13 @@
 );
 
 @forward 'bulma-switch-control';
+
+@forward './components//UserOptions/UserOptions';
+
+.navbar {
+  // --bulma-navbar-item-hover-background-l-delta: -50%;
+}
+
+.pagination {
+  --bulma-pagination-margin: 0;
+}

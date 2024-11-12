@@ -1,5 +1,20 @@
 @use '../../../custom/Custom' as *;
 
+.snippets-on-desktop {
+  position: absolute;
+  top: 21vh;
+  left: 14vw;
+  width: 49vw;
+}
+
+.snippets-on-mobile {
+  // .snippetsColumn {
+  position: absolute;
+  top: 14vh;
+  left: 0vw;
+  // }
+}
+
 .card.metadata {
   top: 0;
   position: sticky;

@@ -10,14 +10,14 @@ Methods: fixMetaData (imported)
 Description: presents OCR record metadata
 -->
 <template>
-  <div :docRef="result.docRef" :id="result.docRef" class="metadata mt-2">
+  <div v-if="result" :docRef="result.docRef" :id="result.docRef" class="metadata mt-2">
     <AccordionCard
       :id="result.docRef"
       :showing="result.docRef === selectedEntry?.docRef && showing"
     >
       <template #header>
-        <div class="columns">
-          <p class="column columns">
+        <div class="columns is-mobile">
+          <p class="column columns is-mobile">
             <span
               class="column is-1"
               :class="{
@@ -75,7 +75,7 @@ Description: presents OCR record metadata
       </template>
 
       <template #footer>
-        <div class="columns">
+        <div class="columns is-hidden-touch">
           <span
             class="column footer-icon pt-2 is-small has-text-centered is-clickable"
             :class="{ rotate: !showing }"

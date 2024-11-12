@@ -11,13 +11,13 @@ Description: display single metadata item
 -->
 <template>
   <div
-    class="columns p-2 has-text-primary"
+    class="columns is-mobile p-2 has-text-primary"
     :class="{
       'has-text-left': preferences.displayLeftToRight,
       'has-text-right': !preferences.displayLeftToRight
     }"
   >
-    <span class="column is-6"> {{ $t(title) }}</span>
+    <span class="column is-6">{{ $t(title) }}</span>
     <span class="column">{{ value }}</span>
     <span
       class="column is-1 icon menu-list-icon is-clickable"

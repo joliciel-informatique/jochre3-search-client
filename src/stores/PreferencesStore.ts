@@ -11,6 +11,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
   const corpusLanguage = ref('yi')
   const displayPerBook = ref(false)
   const updateFacetSortOption = ref('hits')
+  const sortBy = ref('score')
 
   const displayLeftToRight = computed(() => language.value !== 'yi')
 
@@ -31,6 +32,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
 
   return {
     show,
+    sortBy,
     storePreferencesInCookie,
     language,
     resultsPerPage,
