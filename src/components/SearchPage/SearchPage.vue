@@ -257,28 +257,6 @@ onMounted(() => {
     }
   })
 
-  // const closeOnEscape = (e: KeyboardEvent) => {
-  //   e.key === 'Escape' ? toggleKeyboard() : null
-  //   document.removeEventListener('keydown', closeOnEscape, true)
-  // }
-  // })
-  // const navbar = document.getElementById('navbar')
-  // const contentsColumn = document.getElementById('contentsColumn')
-  // const snippetsColumn = document.getElementById('snippetsColumn')
-  // if (navbar && contentsColumn && snippetsColumn) {
-  // const navbarRect = navbar.getBoundingClientRect()
-  // const contentsColumnRect = contentsColumn.getBoundingClientRect()
-  // console.log(contentsColumn.getBoundingClientRect())
-  // snippetsColumn.setAttribute('style', `top:${navbarRect.height + contentsColumnRect.height}px`)
-  // searchResults.setAttribute('style', )
-  // }
-  // window.addEventListener('scroll', () => {
-  // const navbar = document.getElementById('navbar')
-  // if (navbar) {
-  //   navbar.classList.add('is-fixed-top')
-  // }
-  // })
-
   router.isReady().then(() => {
     if (route.query['query']) query.value = (route.query['query'] as string).trim()
     if (route.query['strict']) strict.value = route.query['strict'] === 'true'
@@ -295,21 +273,6 @@ onMounted(() => {
       authorList.value = (route.query['authors'] as string[]).map((authorName) => {
         return { label: authorName, count: 10, active: false }
       })
-
-    const stylesheet = document.createElement('link')
-    stylesheet.type = 'text/css'
-    stylesheet.rel = 'stylesheet'
-    document.head.appendChild(stylesheet)
-
-    stylesheet.href = '/css/keyboard.css'
-
-    // const plugin = document.createElement('script')
-    // plugin.type = 'module'
-
-    // document.head.appendChild(plugin)
-
-    // plugin.src = '/js/keyboard.js'
-    // plugin.async = true
 
     newSearch()
   })
