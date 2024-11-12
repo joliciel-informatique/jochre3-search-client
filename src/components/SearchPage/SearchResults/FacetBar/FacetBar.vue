@@ -96,7 +96,7 @@ Description: presents the facet bar
                         aria-haspopup="true"
                         aria-controls="dropdown-menu"
                       >
-                        <span v-if="preferences.language === 'en'">
+                        <span v-if="preferences.displayLeftToRight">
                           <span>{{ $t('facets.most-hits') }}</span>
                           <span class="icon is-small">
                             <font-awesome-icon icon="angle-down" aria-hidden="true" />
@@ -116,20 +116,20 @@ Description: presents the facet bar
                           href="#"
                           @click.prevent="updateSortOption('count')"
                           class="dropdown-item"
-                          :class="updateFacetSortOption === 'count' ? 'is-active' : ''"
+                          :class="facetSortBy === 'count' ? 'is-active' : ''"
                           >{{ $t('facets.most-hits') }}</a
                         >
                         <a
                           href="#"
                           @click.prevent="updateSortOption('active')"
                           class="dropdown-item"
-                          :class="updateFacetSortOption === 'active' ? 'is-active' : ''"
+                          :class="facetSortBy === 'active' ? 'is-active' : ''"
                           >{{ $t('facets.active-facets') }}</a
                         >
                         <a
                           href="#"
                           @click.prevent="updateSortOption('label')"
-                          :class="updateFacetSortOption === 'label' ? 'is-active' : ''"
+                          :class="facetSortBy === 'label' ? 'is-active' : ''"
                           class="dropdown-item"
                           >{{ $t('facets.by-name') }}</a
                         >
@@ -256,7 +256,7 @@ Description: presents the facet bar
           <div class="dropdown is-hoverable">
             <div class="dropdown-trigger">
               <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
-                <span v-if="preferences.language === 'en'">
+                <span v-if="preferences.displayLeftToRight">
                   <span>{{ $t('facets.most-hits') }}</span>
                   <span class="icon is-small">
                     <font-awesome-icon icon="angle-down" aria-hidden="true" />
@@ -276,20 +276,20 @@ Description: presents the facet bar
                   href="#"
                   @click.prevent="updateSortOption('count')"
                   class="dropdown-item"
-                  :class="updateFacetSortOption === 'count' ? 'is-active' : ''"
+                  :class="facetSortBy === 'count' ? 'is-active' : ''"
                   >{{ $t('facets.most-hits') }}</a
                 >
                 <a
                   href="#"
                   @click.prevent="updateSortOption('active')"
                   class="dropdown-item"
-                  :class="updateFacetSortOption === 'active' ? 'is-active' : ''"
+                  :class="facetSortBy === 'active' ? 'is-active' : ''"
                   >{{ $t('facets.active-facets') }}</a
                 >
                 <a
                   href="#"
                   @click.prevent="updateSortOption('label')"
-                  :class="updateFacetSortOption === 'label' ? 'is-active' : ''"
+                  :class="facetSortBy === 'label' ? 'is-active' : ''"
                   class="dropdown-item"
                   >{{ $t('facets.by-name') }}</a
                 >
@@ -349,7 +349,7 @@ const facets: Ref = defineModel<AggregationBin[]>('facets')
 const openMobileFacets = defineModel('openMobileFacets')
 
 const authorFacetCount = ref(preferences.authorFacetCount)
-const updateFacetSortOption = ref(preferences.updateFacetSortOption)
+const facetSortBy = ref(preferences.facetSortBy)
 const facetCount = ref(defaultFacetCount)
 const filteredFacets = ref()
 const filterValue = ref(undefined)
@@ -361,11 +361,13 @@ onMounted(() => (filteredFacets.value = facets.value))
 const updateFacetCount = (val: number) => {
   authorFacetCount.value = val
   preferences.authorFacetCount = authorFacetCount.value
+  preferences.save()
 }
 
 const updateSortOption = (val: string) => {
-  updateFacetSortOption.value = val
-  preferences.updateFacetSortOption = updateFacetSortOption.value
+  facetSortBy.value = val
+  preferences.facetSortBy = facetSortBy.value
+  preferences.save()
 }
 
 // Update the facet list based on a filter
@@ -375,7 +377,7 @@ const updateFilter = (val: string) => {
     .filter((x: AggregationBin) => x)
 }
 
-watch(updateFacetSortOption, (newV) => {
+watch(facetSortBy, (newV) => {
   const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
   if (newV === 'count')
     filteredFacets.value = filteredFacets.value.sort(
