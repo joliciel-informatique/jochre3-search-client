@@ -26,7 +26,7 @@ Description: controls text snippets from the OCR text
                   :bookIndex="bookIndex"
                   :snippetIndex="index"
                   :snippet="snippet"
-                  :url="result.url"
+                  :url="result.metadata.url"
                   v-model:image-modal="imageModal"
                   v-model:word-modal="wordModal"
                   v-model:notification="notification"
@@ -46,7 +46,7 @@ Description: controls text snippets from the OCR text
                   v-model:selected-entry="selectedEntry"
                   :snippet="snippet"
                   :docRef="result.docRef"
-                  :url="result.url"
+                  :url="result.metadata.url"
                   :bookIndex="bookIndex"
                   :snippetIndex="index"
                 />
@@ -71,7 +71,7 @@ Description: controls text snippets from the OCR text
                   v-model:selected-entry="selectedEntry"
                   :snippet="snippet"
                   :docRef="result.docRef"
-                  :url="result.url"
+                  :url="result.metadata.url"
                   :bookIndex="bookIndex"
                   :snippetIndex="index"
                 />
@@ -89,7 +89,7 @@ Description: controls text snippets from the OCR text
                   v-model:selected-entry="selectedEntry"
                   :snippet="snippet"
                   :docRef="result.docRef"
-                  :url="result.url"
+                  :url="result.metadata.url"
                   :bookIndex="bookIndex"
                   :snippetIndex="index"
                 />
