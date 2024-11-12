@@ -314,21 +314,6 @@ onMounted(() => {
         return { label: authorName, count: 10, active: false }
       })
 
-    const stylesheet = document.createElement('link')
-    stylesheet.type = 'text/css'
-    stylesheet.rel = 'stylesheet'
-    document.head.appendChild(stylesheet)
-
-    stylesheet.href = '/css/keyboard.css'
-
-    // const plugin = document.createElement('script')
-    // plugin.type = 'module'
-
-    // document.head.appendChild(plugin)
-
-    // plugin.src = '/js/keyboard.js'
-    // plugin.async = true
-
     newSearch()
   })
 })
