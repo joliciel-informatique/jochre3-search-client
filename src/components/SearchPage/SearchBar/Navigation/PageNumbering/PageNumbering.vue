@@ -123,7 +123,7 @@ Description: calculates and presents page numbers
     </nav>
   </div>
   <nav
-    class="pagination is-hidden-desktop mobile-navigation is-justify-content-right"
+    class="pagination is-small is-hidden-desktop mobile-navigation is-justify-content-right"
     role="navigation"
     aria-label="pagination"
     tabindex="2"

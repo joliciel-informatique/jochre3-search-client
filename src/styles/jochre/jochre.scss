@@ -86,7 +86,7 @@
   $block-spacing: unset,
 
   // Modal Component
-  $modal-z: 40,
+  $modal-z: 100,
 
   $dropdown-content-z: 42,
 
@@ -126,6 +126,10 @@
 @forward 'bulma-switch-control';
 
 @forward './components//UserOptions/UserOptions';
+
+// :root {
+//   --cc-z-index: 500;
+// }
 
 .navbar {
   // --bulma-navbar-item-hover-background-l-delta: -50%;
