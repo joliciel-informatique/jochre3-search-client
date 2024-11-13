@@ -54,13 +54,14 @@
 <script setup lang="ts">
 import { watch } from 'vue'
 import { onMounted, ref } from 'vue'
-import { onBeforeRouteUpdate, useRoute } from 'vue-router'
+import { onBeforeRouteUpdate, useRouter, useRoute } from 'vue-router'
 import { fetchData } from '@/assets/fetchMethods'
 import { type BookPages } from '@/assets/interfacesExternals'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
+const router = useRouter()
 const route = useRoute()
 
 const docRef = ref('')
@@ -71,6 +72,8 @@ const bookTitle = ref('')
 const bookPages = ref<Array<BookPages>>([])
 const currentPage = ref()
 const firstPage = ref()
+const query = ref()
+const strict = ref(false)
 
 onMounted(() => {
   docRef.value = route.params.docRef as string
@@ -78,11 +81,26 @@ onMounted(() => {
     ? parseInt(route.params.page as string)
     : 1
   currentPage.value = pageNumber.value
-  updateText()
+
+  router.isReady().then(() => {
+    if (route.query['query']) query.value = (route.query['query'] as string).trim()
+    if (route.query['strict']) strict.value = route.query['strict'] === 'true'
+    updateText()
+  })
 })
 
+const defineSearchParams = () => {
+  return Object.assign(
+    {},
+    query.value?.length ? { query: query.value.trim() } : null,
+    strict.value.toString() !== null ? { strict: strict.value.toString() } : null
+  )
+}
+
 const updateText = () => {
-  const params: URLSearchParams = new URLSearchParams({ 'doc-ref': docRef.value })
+  const params = new URLSearchParams(defineSearchParams())
+  params.append('doc-ref', docRef.value)
+
   fetchData('text-as-html', 'get', params, 'text/html')
     .then((res) => res.text())
     .then((res) => (docText.value = res))

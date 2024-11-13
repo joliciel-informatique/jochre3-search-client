@@ -118,6 +118,8 @@
           v-model:selected-entry="firstSearchResult"
           v-model:search-results="searchResults"
           v-model:is-loading="isLoading"
+          v-model:query="query"
+          v-model:strict="strict"
         />
         <div class="is-hidden-touch">
           <FacetBar
