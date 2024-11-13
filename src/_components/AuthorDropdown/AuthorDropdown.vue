@@ -34,25 +34,25 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, watch, type Ref } from 'vue'
+import { onMounted, ref, watch, type Ref } from 'vue'
 import { fetchData } from '@/assets/fetchMethods'
 import { sha1 } from 'object-hash'
 import FilterTag from '../FilterTag/FilterTag.vue'
 
+const { attachTo } = defineProps(['attachTo'])
 const authorDropdownItems = ref<Array<{ label: string; count: number }>>([])
 const authorText: Ref = defineModel('authorText')
 const authorList: Ref = defineModel('authorList')
 const exclude = ref('')
 
+watch(authorText, () => findAuthor())
+watch(authorList, () => positionList())
+
 const addAuthor = (author: { label: string; count: number }) => {
-  authorList.value.push(author)
+  authorList.value = [author]
   authorText.value = ''
   authorDropdownItems.value = []
 }
-
-const { attachTo } = defineProps(['attachTo'])
-watch(authorText, () => findAuthor())
-watch(authorList, () => positionList())
 
 const positionList = () => {
   const parent = document.getElementById(attachTo)
@@ -121,4 +121,6 @@ const delAuthor = (value: { label: string }) => {
     (author: { label: string; count: number }) => author.label !== value.label
   )
 }
+
+onMounted(() => positionList())
 </script>

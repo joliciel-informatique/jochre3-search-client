@@ -34,22 +34,12 @@ const attachTo = defineModel<string>('attachTo', { default: '' })
 const emit = defineEmits(['onEnter'])
 
 let keyboard: SimpleKeyboard
-// const keyboard = ref()
-
-// import { getCurrentInstance } from 'vue'
-
-// const methodThatForcesUpdate = () => {
-//   const instance = getCurrentInstance()
-//   if (instance && instance.proxy) instance.proxy.$forceUpdate()
-// }
 
 const positionKeyboard = () => {
   const parent = document.getElementById(attachTo.value)?.getBoundingClientRect()
-  // console.log(attachTo.value)
   if (parent) {
     const { top, left, width, height } = parent as DOMRect
     const container = document.getElementById(`${attachTo.value}-keyboard`) as HTMLDivElement
-    // console.log(parent, container)
     container.setAttribute(
       'style',
       `top:${top + height}px;left:${left}px;width:${width - 2}px;position:fixed`
@@ -127,19 +117,8 @@ const closeOnEscape = (e: KeyboardEvent) => {
 
 watch(show, (newV) => {
   if (newV) {
-    // keyboard = new Keyboard(`${attachTo.value}-keyboard-container`, {
-    //   layoutName: 'default',
-    //   inputName: `${attachTo.value}-keyboard`,
-    //   onKeyPress: onKeyPress,
-    //   onKeyReleased: onKeyReleased,
-    //   ...keyboardYiddish,
-    //   rtl: true,
-    //   autoUseTouchEvents: true
-    // })
     addEventListeners()
     positionKeyboard()
-    //   // // if (newV) {
-    //   //   addEventListeners()
   } else {
     removeEventListeners()
   }
@@ -148,7 +127,6 @@ watch(show, (newV) => {
 onMounted(() => {
   keyboard = new Keyboard(`${attachTo.value}-keyboard-container`, {
     layoutName: 'default',
-    // inputName: `${attachTo.value}-keyboard-container`,
     inputName: 'default',
     onKeyPress: onKeyPress,
     onKeyReleased: onKeyReleased,
@@ -158,6 +136,5 @@ onMounted(() => {
   })
   addEventListeners()
   positionKeyboard()
-  // methodThatForcesUpdate()
 })
 </script>
