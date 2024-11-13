@@ -33,6 +33,8 @@ Description: controls text snippets from the OCR text
               :snippetIndex="index"
               :snippet="snippet"
               :url="result.metadata.url"
+              :query="query"
+              :strict="strict"
               v-model:image-modal="imageModal"
               v-model:word-modal="wordModal"
               v-model:notification="notification"
@@ -66,6 +68,8 @@ const wordModal = defineModel('wordModal')
 const notification = defineModel('notification')
 const selectedEntry = defineModel<SearchResult>('selectedEntry')
 const searchResults = defineModel<SearchResult[]>('searchResults')
+const query = defineModel<string>('query')
+const strict = defineModel<boolean>('strict')
 const isLoading = defineModel('isLoading')
 
 // How many snippets for each volume are in view upon scroll only if shown in continuous list

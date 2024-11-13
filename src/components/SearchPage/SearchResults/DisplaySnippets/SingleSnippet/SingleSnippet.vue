@@ -37,8 +37,8 @@ Description: displays text snippets from the OCR text
         class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column"
         aria-label="view transcription"
         v-tooltip:top="$t('results.show-text')"
-        @click="openDeepLink(`/text/${docRef}/page/${snippet.page}`)"
-        @keyup.enter="openDeepLink(`/text/${docRef}/page/${snippet.page}`)"
+        @click="openTranscribedText()"
+        @keyup.enter="openTranscribedText()"
       >
         <span class="icon">
           <font-awesome-icon icon="file-lines" size="lg" />
@@ -134,11 +134,13 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
-const { snippet, docRef, bookIndex, snippetIndex } = defineProps([
+const { snippet, docRef, bookIndex, snippetIndex, query, strict } = defineProps([
   'snippet',
   'docRef',
   'bookIndex',
-  'snippetIndex'
+  'snippetIndex',
+  'query',
+  'strict'
 ])
 const imageModal: Ref = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
@@ -217,6 +219,18 @@ const openImageModal = (title: string) => {
     title: title,
     data: image.value ? image.value : null
   }
+}
+
+const openTranscribedText = () => {
+  const textParams = new URLSearchParams()
+  if (query) {
+    textParams.append('query', query)
+  }
+  if (strict) {
+    textParams.append('strict', strict)
+  }
+  const url = `/text/${docRef}/page/${snippet.page}/?` + textParams.toString()
+  openDeepLink(url)
 }
 
 const openDeepLink = (url: string) => window.open(url, '_blank')
