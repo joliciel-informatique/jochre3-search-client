@@ -16,46 +16,27 @@ Description: presents OCR record metadata
       :showing="result.docRef === selectedEntry?.docRef && showing"
     >
       <template #header>
-        <div class="columns is-mobile">
-          <p class="column columns is-mobile">
-            <span
-              class="column is-1"
-              :class="{
-                'is-pulled-right': preferences.displayLeftToRight,
-                'is-pulled-left': !preferences.displayLeftToRight
-              }"
-              >{{ index + pageNumberOffset }}|</span
-            >
-            <span
-              class="column"
-              :class="{
-                'is-pulled-right': preferences.displayLeftToRight,
-                'is-pulled-left': !preferences.displayLeftToRight
-              }"
-              >{{ result.metadata.title ?? result.docRef }} ({{
-                result.metadata.author ?? $t('results.result-unknown-author')
-              }})</span
-            >
-            <span
-              class="column is-1 icon menu-list-icon is-clickable"
-              :class="{
-                'is-pulled-right': preferences.displayLeftToRight,
-                'is-pulled-left': !preferences.displayLeftToRight
-              }"
-              tabindex="3"
-              @click="openMetadataModal"
-              @keyup.enter="openMetadataModal"
-              v-tooltip="[
-                preferences.displayLeftToRight ? 'left' : 'right',
-                $t('fix-metadata.edit-button-tooltip')
-              ]"
-            >
-              <span class="icon fa-sm">
-                <font-awesome-icon icon="pen-to-square" />
-              </span>
+        <p class="is-flex is-flex-direction-row is-justify-content-space-between">
+          <span class="is-align-self-flex-start">{{ index + pageNumberOffset }}|</span>
+          <span class="is-align-self-flex-start is-flex-grow-1"
+            >{{ result.metadata.title ?? result.docRef }} ({{
+              result.metadata.author ?? $t('results.result-unknown-author')
+            }})</span
+          >
+          <span
+            tabindex="3"
+            @click="openMetadataModal"
+            @keyup.enter="openMetadataModal"
+            v-tooltip="[
+              preferences.displayLeftToRight ? 'left' : 'right',
+              $t('fix-metadata.edit-button-tooltip')
+            ]"
+          >
+            <span class="icon fa-sm">
+              <font-awesome-icon icon="pen-to-square" />
             </span>
-          </p>
-        </div>
+          </span>
+        </p>
       </template>
 
       <template #content>
