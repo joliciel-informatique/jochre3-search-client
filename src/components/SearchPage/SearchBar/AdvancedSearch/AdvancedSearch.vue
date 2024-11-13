@@ -22,21 +22,61 @@ Description: the advanced search toolbox
     >
       <div id="advancedSearchPanel" class="body m-3 p-3" v-show="showAdvancedSearchPanel">
         <div class="body-inner container is-max-desktop">
-          <FindAuthors
-            v-model:authorList="authorList"
-            v-model:disabled="disabled"
-            v-model:exclude-from-search="excludeFromSearch"
-            v-model:simple-keyboard="simpleKeyboard"
-            :label="$t('search.author')"
-            :multi-value="true"
-            :show-exclude-checkbox="true"
-            unique-id="advanced-search-find-authors"
+          <span class="columns is-vcentered mt-1 p-1">
+            <p class="column is-2 is-flex has-text-white">
+              {{ $t('search.author') }}
+            </p>
+            <span class="column dropdown" :aria-label="$t('search.author')">
+              <span class="column field has-addons has-addons-left is-horizontal">
+                <p
+                  class="control is-expanded"
+                  :class="{
+                    'has-icons-left': preferences.displayLeftToRight,
+                    'has-icons-right': !preferences.displayLeftToRight
+                  }"
+                >
+                  <input
+                    id="advanced-search-authors"
+                    type="text"
+                    class="input"
+                    lang="yi"
+                    name="findAuthorInput"
+                    v-model="authorText"
+                    :disabled="disabled"
+                    :placeholder="$t('search.authorPlaceholder')"
+                  />
+                  <span
+                    class="control icon is-small"
+                    :class="{
+                      'is-left': preferences.displayLeftToRight,
+                      'is-right': !preferences.displayLeftToRight
+                    }"
+                    v-tooltip:bottom.tooltip="$t('search.excludeAuthors')"
+                  >
+                    <input
+                      type="checkbox"
+                      class="is-clickable"
+                      name="findAuthorCheckbox"
+                      :disabled="disabled"
+                      @click="excludeAuthors"
+                    />
+                  </span>
+                </p>
+                <simple-keyboard
+                  attach-to="advanced-search-authors"
+                  v-model:reference="authorText"
+                  @onEnter="() => emit('newSearch')"
+                />
+              </span>
+            </span>
+          </span>
+          <author-dropdown
+            attach-to="advanced-search-authors"
+            v-model:author-text="authorText"
+            v-model:author-list="authorList"
           />
-          <span class="columns is-mobile is-vcentered mt-1 p-1">
-            <p
-              class="column is-2 is-flex is-desktop is-flex-grow-1 has-text-white"
-              id="searchTitle"
-            >
+          <span class="columns is-vcentered mt-1 p-1">
+            <p class="column is-2 is-flex has-text-white" id="searchTitle">
               {{ $t('search.title') }}
             </p>
             <span
@@ -53,16 +93,11 @@ Description: the advanced search toolbox
                   @keyup.enter="emit('newSearch')"
                 />
               </p>
-              <p class="control keyboardButton">
-                <button
-                  class="button is-clickable is-medium"
-                  @click="toggleKeyboard('bookTitle')"
-                  :alt="$t('search.keyboard')"
-                  :title="$t('search.keyboard')"
-                >
-                  <font-awesome-icon icon="keyboard" />
-                </button>
-              </p>
+              <simple-keyboard
+                attach-to="bookTitle"
+                v-model:reference="title"
+                @onEnter="() => emit('newSearch')"
+              />
             </span>
           </span>
           <span class="columns is-mobile is-vcentered mt-1 p-1">
@@ -157,6 +192,7 @@ const emit = defineEmits(['newSearch', 'resetSearchResults'])
 
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
 const authorList = defineModel<Array<{ label: string; count: number }>>('authorList')
+const authorText = ref('')
 const title = defineModel('title')
 const fromYear = defineModel('fromYear')
 const toYear = defineModel('toYear')
@@ -164,16 +200,18 @@ const docRefs = defineModel('docRefs')
 const sortBy = defineModel('sortBy')
 const facets: Ref = defineModel('facets')
 const excludeFromSearch = defineModel('excludeFromSearch')
-const simpleKeyboard: Ref = defineModel('simpleKeyboard')
+// const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 const disabled = computed(
   () => facets.value.filter((facet: { active: string }) => (facet.active ? facet : null)).length
 )
 
-const toggleKeyboard = (attachTo: string) => {
-  simpleKeyboard.value.attachTo = attachTo
-  simpleKeyboard.value.show = !simpleKeyboard.value.show
-  simpleKeyboard.value.ref = title
-}
+const excludeAuthors = () => (excludeFromSearch.value = !excludeFromSearch.value)
+
+// const toggleKeyboard = (attachTo: string) => {
+// simpleKeyboard.value.attachTo = attachTo
+// simpleKeyboard.value.show = !simpleKeyboard.value.show
+// simpleKeyboard.value.ref = title
+// }
 
 const runSearch = () => emit('newSearch')
 

@@ -1,55 +1,65 @@
 <template>
-  <div class="keyboardClass" v-show="simpleKeyboard.show"></div>
-  <div
-    class="keyboardOverlay"
-    v-show="simpleKeyboard.show"
-    :id="`${attachTo}-keyboardOverlay`"
-  ></div>
+  <p class="control" :id="`${attachTo}-keyboard-btn`" :key="`${attachTo}-keyboard-btn`">
+    <button
+      class="button is-clickable"
+      @click="toggleKeyboard"
+      :alt="$t('search.keyboard')"
+      :title="$t('search.keyboard')"
+    >
+      <span>
+        <font-awesome-icon icon="keyboard" />
+      </span>
+    </button>
+  </p>
+  <div v-show="show" class="keyboardClass">
+    <div
+      :id="`${attachTo}-keyboard`"
+      class="hg-theme-default hg-layout-default"
+      :class="`${attachTo}-keyboard-container`"
+    ></div>
+  </div>
 </template>
 <script setup lang="ts">
-import { onMounted, onUpdated, watch, type Ref } from 'vue'
-import { type SimpleKeyboardType } from '@/assets/interfacesExternals'
+import { onMounted, ref, watch } from 'vue'
 import Keyboard, { SimpleKeyboard } from 'simple-keyboard'
 import 'simple-keyboard/build/css/index.css'
 import keyboardYiddish from '@/assets/keyboardLayouts/keyboardYiddish'
 import keyboardMobile from '@/assets/keyboardLayouts/keyboardMobile'
 
-const { attachTo } = defineProps(['attachTo']) // The id of the HTML element it's attached to
-const simpleKeyboard: Ref = defineModel<SimpleKeyboardType>('simpleKeyboard')
+// const { attachTo } = defineProps(['attachTo']) // The id of the HTML element it's attachTo to
+const show = ref(false)
+const reference = defineModel('reference')
+const attachTo = defineModel<string>('attachTo', { default: '' })
+
+const emit = defineEmits(['onEnter'])
 
 let keyboard: SimpleKeyboard
+// const keyboard = ref()
 
-watch(
-  simpleKeyboard,
-  (newV) => {
-    const iname = newV.attachTo
-    keyboard.setOptions({ iname })
+// import { getCurrentInstance } from 'vue'
 
-    // Add eventListeners if keyboard opened, else remove eventListeners
-    const el = document.getElementById(iname)
-    if (newV.show) {
-      positionKeyboard() // Position keyboard relative to element
-      addEventListeners()
-      document.getElementById(newV.attachTo)?.focus()
-      el?.classList.add('keyboard-is-open')
-    } else {
-      removeEventListeners()
-      el?.classList.remove('keyboard-is-open')
-    }
-  },
-  { deep: true }
-)
+// const methodThatForcesUpdate = () => {
+//   const instance = getCurrentInstance()
+//   if (instance && instance.proxy) instance.proxy.$forceUpdate()
+// }
 
 const positionKeyboard = () => {
-  const parent = document.getElementById(simpleKeyboard.value.attachTo)?.getBoundingClientRect()
+  const parent = document.getElementById(attachTo.value)?.getBoundingClientRect()
+  console.log(attachTo.value)
   if (parent) {
     const { top, left, width, height } = parent as DOMRect
-    const container = document.getElementsByClassName('keyboardClass')[0] as HTMLDivElement
-    container.setAttribute('style', `top:${top + height}px;left:${left}px;width:${width - 2}px`)
+    const container = document.getElementById(`${attachTo.value}-keyboard`) as HTMLDivElement
+    console.log(parent, container)
+    container.setAttribute(
+      'style',
+      `top:${top + height}px;left:${left}px;width:${width - 2}px;position:fixed`
+    )
   }
 }
 
-const toggleKeyboard = () => (simpleKeyboard.value.show = !simpleKeyboard.value.show)
+const toggleKeyboard = () => {
+  show.value = !show.value
+}
 
 const switchLayout = (button: string) => {
   const layouts = ['default', 'numbers', 'shift', 'alt', 'chars']
@@ -65,7 +75,7 @@ const switchLayout = (button: string) => {
 }
 
 const onKeyPress = (button: string) => {
-  const el = document.getElementById(simpleKeyboard.value.attachTo) as HTMLInputElement // input element
+  const el = document.getElementById(attachTo.value) as HTMLInputElement // input element
 
   if (!switchLayout(button)) {
     let newVal = ''
@@ -73,17 +83,18 @@ const onKeyPress = (button: string) => {
       newVal = el.value.slice(0, -1)
     } else if (button === '{enter}') {
       newVal = el.value
-      simpleKeyboard.value.show = false
+      show.value = !show.value
+      emit('onEnter')
     } else if (button === '{space}') {
       newVal = `${el.value} `
     } else {
       newVal = `${el.value}${button}`
     }
-    simpleKeyboard.value.ref.value = newVal
+    reference.value = newVal
   }
 }
 
-const onKeyReleased = () => document.getElementById(simpleKeyboard.value.attachTo)?.focus()
+const onKeyReleased = () => document.getElementById(attachTo.value)?.focus()
 
 const addEventListeners = () => {
   document.addEventListener('click', closeOutside, true)
@@ -96,37 +107,57 @@ const removeEventListeners = () => {
 }
 
 const closeOutside = (e: MouseEvent) => {
-  const keyboardClass = document.querySelector('.keyboardClass')
-  const keyboardButton = document.getElementById(simpleKeyboard.value.attachTo)?.parentElement
-    ?.nextElementSibling
+  const keyboardElement = document.getElementById(`${attachTo.value}-keyboard`)
+  const keyboardButton = document.getElementById(`${attachTo.value}-keyboard-btn`)
   if (
     e.target instanceof Element &&
     !keyboardButton?.contains(e.target) &&
-    !keyboardClass?.contains(e.target)
+    !keyboardElement?.contains(e.target) &&
+    show.value
   ) {
-    toggleKeyboard()
+    show.value = false
     document.removeEventListener('click', closeOutside, true)
   }
 }
 
 const closeOnEscape = (e: KeyboardEvent) => {
-  e.key === 'Escape' ? toggleKeyboard() : null
+  if (e.key === 'Escape' && show.value) show.value = false
   document.removeEventListener('keydown', closeOnEscape, true)
 }
 
+watch(show, (newV) => {
+  if (newV) {
+    // keyboard = new Keyboard(`${attachTo.value}-keyboard-container`, {
+    //   layoutName: 'default',
+    //   inputName: `${attachTo.value}-keyboard`,
+    //   onKeyPress: onKeyPress,
+    //   onKeyReleased: onKeyReleased,
+    //   ...keyboardYiddish,
+    //   rtl: true,
+    //   autoUseTouchEvents: true
+    // })
+    addEventListeners()
+    positionKeyboard()
+    //   // // if (newV) {
+    //   //   addEventListeners()
+  } else {
+    removeEventListeners()
+  }
+})
+
 onMounted(() => {
-  keyboard = new Keyboard('keyboardClass', {
+  keyboard = new Keyboard(`${attachTo.value}-keyboard-container`, {
     layoutName: 'default',
-    inputName: attachTo,
+    // inputName: `${attachTo.value}-keyboard-container`,
+    inputName: 'default',
     onKeyPress: onKeyPress,
     onKeyReleased: onKeyReleased,
     ...keyboardYiddish,
     rtl: true,
     autoUseTouchEvents: true
   })
-})
-
-onUpdated(() => {
-  document.getElementById(simpleKeyboard.value.attachTo)?.focus()
+  addEventListeners()
+  positionKeyboard()
+  // methodThatForcesUpdate()
 })
 </script>

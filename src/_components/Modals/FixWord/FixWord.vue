@@ -11,32 +11,27 @@
         <div class="p-2 has-text-centered" v-if="wordImage !== ''">
           <img :src="wordImage" :alt="$t('fix-word.image-alt', [wordSuggestion])" />
         </div>
-        <div class="p-2 field has-addons">
-          <span class="control container has-icons-right">
+        <span class="columns pb-0 mb-0 field">
+          <span class="column field has-addons has-addons-left is-horizontal">
             <p class="control is-expanded">
               <input
-                id="wordCorrectionInput"
+                :id="`wordCorrectionInput-${wordSuggestion}`"
+                class="input"
                 :class="{
-                  input: true,
                   'rtl-align': preferences.needsRightToLeft
                 }"
                 type="text"
-                name="fixWordSuggestionInput"
                 lang="yi"
                 v-model="wordSuggestion"
               />
             </p>
-            <span
-              class="icon is-small is-clickable is-right"
-              :alt="$t('search.keyboard')"
-              :title="$t('search.keyboard')"
-              @click="toggleKeyboard('wordCorrectionInput')"
-              aria-label="hidden"
-            >
-              <font-awesome-icon icon="keyboard" />
-            </span>
+            <simple-keyboard
+              :attach-to="`wordCorrectionInput-${wordSuggestion}`"
+              v-model:reference="wordSuggestion"
+              @onEnter="null"
+            />
           </span>
-        </div>
+        </span>
         <div class="p-2 has-text-warning">{{ $t('fix-word.instructions') }}</div>
         <div class="p-2 has-text-danger">{{ $t('fix-word.warning') }}</div>
       </div>
@@ -84,11 +79,11 @@ onBeforeUpdate(async () => {
   }
 })
 
-const toggleKeyboard = (attachTo: string) => {
-  simpleKeyboard.value.attachTo = attachTo
-  simpleKeyboard.value.show = !simpleKeyboard.value.show
-  simpleKeyboard.value.ref = wordSuggestion
-}
+// const toggleKeyboard = (attachTo: string) => {
+//   simpleKeyboard.value.attachTo = attachTo
+//   simpleKeyboard.value.show = !simpleKeyboard.value.show
+//   simpleKeyboard.value.ref = wordSuggestion
+// }
 
 const loadWordImage = async (params: URLSearchParams) => {
   const response = await fetchData('word-image', 'get', params, 'image/png', 'arraybuffer')
