@@ -16,64 +16,59 @@ Description: presents the search bar
         <p class="control">
           <a id="searchBarLabel" class="button is-static">{{ $t('search.search') }} </a>
         </p>
-        <p
-          class="control container"
-          :class="{
-            'has-icons-left': !preferences.displayLeftToRight,
-            'has-icons-right': preferences.displayLeftToRight
-          }"
-        >
-          <input
-            id="query"
-            type="text"
-            class="input is-normal is-rounded"
-            lang="yi"
-            v-model="query"
-            @keyup.enter="emit('newSearch')"
-            @change="
-              ({ target }: Event) => {
-                query = (target as HTMLInputElement).value
-                emit('newSearch')
-              }
-            "
-            :placeholder="$t('search.query')"
-          />
-          <span
-            class="icon is-small is-clickable"
+        <div class="control container">
+          <p
+            class="control container"
             :class="{
-              'is-left': !preferences.displayLeftToRight,
-              'is-right': preferences.displayLeftToRight
+              'has-icons-left': !preferences.displayLeftToRight,
+              'has-icons-right': preferences.displayLeftToRight
             }"
-            tabindex="0"
-            aria-label="reset"
-            @click="emit('resetSearchResults')"
-            @keyup.enter="emit('resetSearchResults')"
-            v-if="!isLoading"
           >
-            <font-awesome-icon icon="circle-xmark" />
-          </span>
-          <span
-            class="icon is-small is-loading"
-            :class="{
-              'is-left': !preferences.displayLeftToRight,
-              'is-right': preferences.displayLeftToRight
-            }"
-            aria-label="hidden"
-            v-else
-          ></span>
-        </p>
-        <p class="control keyboardButton">
-          <button
-            class="button is-clickable"
-            @click="toggleKeyboard('query')"
-            :alt="$t('search.keyboard')"
-            :title="$t('search.keyboard')"
-          >
-            <span>
-              <font-awesome-icon icon="keyboard" />
+            <input
+              id="query"
+              type="text"
+              class="input is-normal is-rounded"
+              lang="yi"
+              v-model="query"
+              @keyup.enter="emit('newSearch')"
+              @change="
+                ({ target }: Event) => {
+                  query = (target as HTMLInputElement).value
+                  emit('newSearch')
+                }
+              "
+              :placeholder="$t('search.query')"
+            />
+            <span
+              class="icon is-small is-clickable"
+              :class="{
+                'is-left': !preferences.displayLeftToRight,
+                'is-right': preferences.displayLeftToRight
+              }"
+              tabindex="0"
+              aria-label="reset"
+              @click="emit('resetSearchResults')"
+              @keyup.enter="emit('resetSearchResults')"
+              v-if="!isLoading"
+            >
+              <font-awesome-icon icon="circle-xmark" />
             </span>
-          </button>
-        </p>
+            <span
+              class="icon is-small is-loading"
+              :class="{
+                'is-left': !preferences.displayLeftToRight,
+                'is-right': preferences.displayLeftToRight
+              }"
+              aria-label="hidden"
+              v-else
+            ></span>
+          </p>
+        </div>
+        <simple-keyboard
+          attach-to="query"
+          v-model:reference="query"
+          @onEnter="() => emit('newSearch')"
+        />
         <p class="control" v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
           <a class="button is-static is-clickable">
             <label for="strictSearchCheckbox" class="mx-2 is-clickable"
@@ -132,13 +127,6 @@ const query: Ref = defineModel('query')
 const strict: Ref = defineModel('strict')
 const isLoading = defineModel('isLoading')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
-const simpleKeyboard: Ref = defineModel('simpleKeyboard')
-
-const toggleKeyboard = (attachTo: string) => {
-  simpleKeyboard.value.attachTo = attachTo
-  simpleKeyboard.value.show = !simpleKeyboard.value.show
-  simpleKeyboard.value.ref = query
-}
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 </script>

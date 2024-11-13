@@ -14,28 +14,18 @@
       v-model:word-modal="wordModal"
       v-model:metadata-modal="metadataModal"
       v-model:notification="notification"
-      v-model:simple-keyboard="simpleKeyboard"
     />
   </main>
   <FooterPage v-model:total-hits="totalHits" />
   <Preferences v-model:notification="notification" />
   <LargeImage v-model:image-modal="imageModal" />
-  <FixWord
-    v-model:word-modal="wordModal"
-    v-model:notification="notification"
-    v-model:simple-keyboard="simpleKeyboard"
-  />
-  <FixMetaData
-    v-model:metadata-modal="metadataModal"
-    v-model:notification="notification"
-    v-model:simple-keyboard="simpleKeyboard"
-  />
+  <FixWord v-model:word-modal="wordModal" v-model:notification="notification" />
+  <FixMetaData v-model:metadata-modal="metadataModal" v-model:notification="notification" />
   <Notification v-model:notification="notification" />
-  <SimpleKeyboard v-model:simple-keyboard="simpleKeyboard" />
 </template>
 
 <script setup lang="ts">
-import { ref, shallowReactive } from 'vue'
+import { ref } from 'vue'
 import HeaderPage from '@/components/HeaderPage/HeaderPage.vue'
 import SearchPage from '@/components/SearchPage/SearchPage.vue'
 import FooterPage from '@/components/FooterPage/FooterPage.vue'
@@ -47,7 +37,6 @@ import Notification from '@/_components/Notifications/AppNotification/AppNotific
 import PreferencesSetup from '@/_components/Modals/Preferences/PreferencesSetup.vue'
 import Preferences from '@/_components/Modals/Preferences/PreferencesModal.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import SimpleKeyboard from '@/_components/SimpleKeyboard/SimpleKeyboard.vue'
 
 const preferences = usePreferencesStore()
 
@@ -61,8 +50,7 @@ const imageModal = ref({})
 const metadataModal = ref({ field: 'author' })
 const wordModal = ref({})
 const notification = ref({})
-// const searchPageRef = ref<InstanceType<typeof SearchPage>>()
-const simpleKeyboard = shallowReactive({ show: false, attachTo: '', ref: null })
+const searchPageRef = ref<InstanceType<typeof SearchPage>>()
 
 // Methods exposed by SearchPage
 // const resetSearchResults = () => searchPageRef.value?.resetSearchResults()

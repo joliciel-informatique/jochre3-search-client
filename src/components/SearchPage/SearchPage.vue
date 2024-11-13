@@ -208,6 +208,7 @@ const docRefs = ref('')
 const sortBy = ref('Score')
 
 const simpleKeyboard: Ref = defineModel('simpleKeyboard')
+// const authorDropdown: Ref = defineModel('authorDropdown')
 
 // Startup variables: may move to App.vue or HomeView.vue
 const router = useRouter()
@@ -364,7 +365,7 @@ const resetSearchResults = () => {
   hasAdvancedSearchCriteria.value = false
   showAdvancedSearchPanel.value = false
 
-  simpleKeyboard.value.show = false
+  // simpleKeyboard.value.show = false
 
   window.history.replaceState({}, document.title, '/')
 }

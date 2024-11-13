@@ -1,15 +1,20 @@
-@import '../../custom/Custom';
+@use '../../../custom/Custom' as *;
+
+.keyboardClass {
+  position: fixed;
+  z-index: 41;
+}
 
 .hg-theme-default {
   font-family: $font-family-1;
   font-size: 0.8rem;
   font-style: normal;
   position: fixed;
-  color: $foreground-color-1;
+  color: $foreground-color-2;
   min-width: 700px;
-  border: 0.1rem dashed gray;
+  border: 0.1rem solid $background-color-1;
   padding: 1em;
-  margin-top: 0.5em;
+  margin-top: 0.25em;
 }
 
 .hg-theme-default .hg-button-enter,
