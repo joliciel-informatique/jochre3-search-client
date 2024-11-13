@@ -16,7 +16,6 @@
               v-model:query="query"
               v-model:strict="strict"
               v-model:is-loading="isLoading"
-              v-model:simpleKeyboard="simpleKeyboard"
             />
           </div>
           <div class="navbar-item is-align-self-flex-start user-options is-hidden-touch">
@@ -50,7 +49,6 @@
           v-model:sort-by="sortBy"
           v-model:facets="facets"
           v-model:exclude-from-search="excludeFromSearch"
-          v-model:simpleKeyboard="simpleKeyboard"
         />
         <div class="is-hidden-touch">
           <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" v-model:page="page" />
@@ -207,9 +205,6 @@ const toYear = ref()
 const docRefs = ref('')
 const sortBy = ref('Score')
 
-const simpleKeyboard: Ref = defineModel('simpleKeyboard')
-// const authorDropdown: Ref = defineModel('authorDropdown')
-
 // Startup variables: may move to App.vue or HomeView.vue
 const router = useRouter()
 const route = useRoute()
@@ -222,21 +217,6 @@ const openMobileFacets = ref(false)
 const openNavBarMobileMenu = ref(false)
 
 const facets = ref<Array<AggregationBin>>([])
-
-// const positionSnippets = () => {
-//   const navBarHeight = document.getElementById('navbar')?.getBoundingClientRect().height
-//   const snippetDiv = document.getElementById('snippetsColumn')
-//   console.log(snippetDiv)
-//   if (navBarHeight && snippetDiv) {
-//     snippetDiv.setAttribute('style', `top:${navBarHeight}px;display:absolute`)
-//   }
-// }
-
-watch([isTablet, isMobile], ([newTabletV], [newMobileV]) => {
-  if (newTabletV || newMobileV) {
-    // positionSnippets()
-  }
-})
 
 onMounted(() => {
   window.addEventListener('click', (e: MouseEvent | TouchEvent) => {
@@ -277,28 +257,6 @@ onMounted(() => {
     isTablet.value = false
     isMobile.value = true
   }
-
-  // const closeOnEscape = (e: KeyboardEvent) => {
-  //   e.key === 'Escape' ? toggleKeyboard() : null
-  //   document.removeEventListener('keydown', closeOnEscape, true)
-  // }
-  // })
-  // const navbar = document.getElementById('navbar')
-  // const contentsColumn = document.getElementById('contentsColumn')
-  // const snippetsColumn = document.getElementById('snippetsColumn')
-  // if (navbar && contentsColumn && snippetsColumn) {
-  // const navbarRect = navbar.getBoundingClientRect()
-  // const contentsColumnRect = contentsColumn.getBoundingClientRect()
-  // console.log(contentsColumn.getBoundingClientRect())
-  // snippetsColumn.setAttribute('style', `top:${navbarRect.height + contentsColumnRect.height}px`)
-  // searchResults.setAttribute('style', )
-  // }
-  // window.addEventListener('scroll', () => {
-  // const navbar = document.getElementById('navbar')
-  // if (navbar) {
-  //   navbar.classList.add('is-fixed-top')
-  // }
-  // })
 
   router.isReady().then(() => {
     if (route.query['query']) query.value = (route.query['query'] as string).trim()
@@ -364,8 +322,6 @@ const resetSearchResults = () => {
   authorList.value = []
   hasAdvancedSearchCriteria.value = false
   showAdvancedSearchPanel.value = false
-
-  // simpleKeyboard.value.show = false
 
   window.history.replaceState({}, document.title, '/')
 }
