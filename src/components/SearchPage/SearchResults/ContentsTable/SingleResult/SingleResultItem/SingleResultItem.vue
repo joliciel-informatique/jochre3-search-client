@@ -10,34 +10,25 @@ Methods: fixMetaData (imported)
 Description: display single metadata item
 -->
 <template>
-  <div
-    class="columns is-mobile p-2 has-text-primary"
-    :class="{
-      'has-text-left': preferences.displayLeftToRight,
-      'has-text-right': !preferences.displayLeftToRight
-    }"
-  >
-    <span class="column is-6">{{ $t(title) }}</span>
-    <span class="column">{{ value }}</span>
+  <div class="is-flex is-flex-direction-column has-text-primary pl-2 pt-2">
     <span
-      class="column is-1 icon menu-list-icon is-clickable"
-      :class="{
-        'is-pulled-right': preferences.displayLeftToRight,
-        'is-pulled-left': !preferences.displayLeftToRight
-      }"
-      v-tooltip="[
-        preferences.displayLeftToRight ? 'left' : 'right',
-        $t('fix-metadata.edit-button-tooltip')
-      ]"
-      aria-labelledby="edit"
-      tabindex="3"
-      @click="openMetadataModal"
-      @keyup.enter="openMetadataModal"
-    >
-      <span class="icon fa-sm">
-        <font-awesome-icon icon="pen-to-square" />
-      </span>
+      class="is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between has-text-weight-bold"
+      >{{ $t(title) }}
+      <span
+        class="is-flex is-align-self-flex-start icon menu-list-icon is-clickable"
+        v-tooltip="[
+          preferences.displayLeftToRight ? 'left' : 'right',
+          $t('fix-metadata.edit-button-tooltip')
+        ]"
+        aria-labelledby="edit"
+        tabindex="3"
+        @click="openMetadataModal"
+        @keyup.enter="openMetadataModal"
+      >
+        <span class="icon fa-sm"> <font-awesome-icon icon="pen-to-square" /> </span
+      ></span>
     </span>
+    <span class="p-2 has-text-primary">{{ value }}</span>
   </div>
 </template>
 
