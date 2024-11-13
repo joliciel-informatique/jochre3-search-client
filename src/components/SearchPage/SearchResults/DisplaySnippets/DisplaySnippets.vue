@@ -10,7 +10,7 @@ Methods: none
 Description: controls text snippets from the OCR text
 -->
 <template>
-  <div id="snippetsColumn" class="column" tabindex="-1">
+  <div class="column" tabindex="-1">
     <!-- Showing results -->
     <div v-if="!isLoading">
       <ul id="snippets">

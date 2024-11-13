@@ -25,10 +25,12 @@ Description: display single metadata item
         @click="openMetadataModal"
         @keyup.enter="openMetadataModal"
       >
-        <span class="icon fa-sm"> <font-awesome-icon icon="pen-to-square" /> </span
+        <span class="icon fa-sm"> <font-awesome-icon icon="pen-to-square" /></span
       ></span>
     </span>
-    <span class="p-2 has-text-primary">{{ value }}</span>
+    <span class="p-2 has-text-primary has-text-left is-align-self-flex-start is-flex-grow-1">{{
+      value
+    }}</span>
   </div>
 </template>
 

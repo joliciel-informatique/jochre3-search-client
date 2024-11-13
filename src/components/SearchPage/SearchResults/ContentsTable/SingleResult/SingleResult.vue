@@ -18,7 +18,7 @@ Description: presents OCR record metadata
       <template #header>
         <p class="pb-2 is-flex is-flex-direction-row is-justify-content-space-between">
           <span class="is-align-self-flex-start">{{ index + pageNumberOffset }}|</span>
-          <span class="is-align-self-flex-start is-flex-grow-1"
+          <span class="is-align-self-flex-start is-flex-grow-1 has-text-left"
             >{{ result.metadata.title ?? result.docRef }} ({{
               result.metadata.author ?? $t('results.result-unknown-author')
             }})</span
