@@ -75,8 +75,12 @@ Description: the advanced search toolbox
             v-model:author-text="authorText"
             v-model:author-list="authorList"
           />
-          <span class="columns is-vcentered mt-1 p-1">
-            <p class="column is-2 is-flex has-text-white" id="searchTitle">
+
+          <span class="columns is-mobile is-vcentered mt-1 p-1">
+            <p
+              class="column is-2 is-flex is-desktop is-flex-grow-1 has-text-white"
+              id="searchTitle"
+            >
               {{ $t('search.title') }}
             </p>
             <span
@@ -185,8 +189,9 @@ Description: the advanced search toolbox
   </div>
 </template>
 <script setup lang="ts">
-import FindAuthors from '@/_components/FindAuthors/FindAuthors.vue'
-import { computed, watch, type Ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+const preferences = usePreferencesStore()
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 
