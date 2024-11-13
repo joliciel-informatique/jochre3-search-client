@@ -2,7 +2,6 @@
 
 .snippets-on {
   position: relative;
-  // top: 14vh;
 
   &.mobile {
     left: 0vw;
@@ -10,15 +9,9 @@
   }
 
   &.desktop {
-    // top: 21vh;
-    // left: 3vw;
+    left: 3.5vw;
     width: 49vw;
   }
-}
-
-#snippetsColumn {
-  position: relative;
-  left: 3.5vw;
 }
 
 .card.metadata {
