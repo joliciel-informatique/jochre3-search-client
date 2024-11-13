@@ -7,8 +7,6 @@
 // Component Styling
 @forward './components/HeaderPage/HeaderPage';
 @forward './components/FooterPage/FooterPage';
-
-// _Component Styling
 @forward './components/SearchBar/SearchBar';
 @forward './components/FacetBar/FacetBar';
 @forward './components/ToC/ToC';
@@ -18,9 +16,11 @@
 @forward './components/SingleSnippet/SingleSnippet';
 @forward './components/Switch/Switch';
 @forward './components/FilterTag/FilterTag';
-@forward './components/SimpleKeyboard/SimpleKeyboard';
-@forward './components/Dropdown/Dropdown';
 @forward './components/PageNumbering/PageNumbering';
+
+// _Component Styling
+@forward './_components/SimpleKeyboard/SimpleKeyboard';
+@forward './_components/Dropdown/Dropdown';
 
 // Directive Styling
 @forward './components/ToolTip/_ToolTip';

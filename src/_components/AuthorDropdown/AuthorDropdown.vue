@@ -42,7 +42,6 @@ import FilterTag from '../FilterTag/FilterTag.vue'
 const authorDropdownItems = ref<Array<{ label: string; count: number }>>([])
 const authorText: Ref = defineModel('authorText')
 const authorList: Ref = defineModel('authorList')
-// const exclude: Ref = defineModel('exclude', { default: '' })
 const exclude = ref('')
 
 const addAuthor = (author: { label: string; count: number }) => {
@@ -58,18 +57,9 @@ watch(authorList, () => positionList())
 const positionList = () => {
   const parent = document.getElementById(attachTo)
   if (parent) {
-    const { top, left, width, height } = parent.getBoundingClientRect()
-
-    console.log(top, left, width, height)
-
-    // if (parent.parentElement) parent.parentElement.classList.add('dropdown')
-
+    const { top, left, height } = parent.getBoundingClientRect()
     const list = document.getElementById(`${attachTo}-author-dropdown-list`) as HTMLDivElement
-    console.log(attachTo, list)
-    list.setAttribute(
-      'style',
-      `top:${top + height}px;left:${left}px;width:${width - 2}px;position:fixed;z-index:100`
-    )
+    list.setAttribute('style', `top:${top + height}px;left:${left}px;position:fixed;z-index:100`)
   }
 }
 

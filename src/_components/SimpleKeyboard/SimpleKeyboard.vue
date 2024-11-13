@@ -11,7 +11,7 @@
       </span>
     </button>
   </p>
-  <div v-show="show" class="keyboardClass">
+  <div v-show="show" class="keyboardClass has-text-primary is-family-primary">
     <div
       :id="`${attachTo}-keyboard`"
       class="hg-theme-default hg-layout-default"
@@ -45,11 +45,11 @@ let keyboard: SimpleKeyboard
 
 const positionKeyboard = () => {
   const parent = document.getElementById(attachTo.value)?.getBoundingClientRect()
-  console.log(attachTo.value)
+  // console.log(attachTo.value)
   if (parent) {
     const { top, left, width, height } = parent as DOMRect
     const container = document.getElementById(`${attachTo.value}-keyboard`) as HTMLDivElement
-    console.log(parent, container)
+    // console.log(parent, container)
     container.setAttribute(
       'style',
       `top:${top + height}px;left:${left}px;width:${width - 2}px;position:fixed`
