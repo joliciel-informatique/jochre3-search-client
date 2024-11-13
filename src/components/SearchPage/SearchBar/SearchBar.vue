@@ -117,7 +117,6 @@ Description: presents the search bar
 </template>
 <script setup lang="ts">
 import { type Ref } from 'vue'
-import { type Ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
@@ -128,10 +127,6 @@ const query: Ref = defineModel('query')
 const strict: Ref = defineModel('strict')
 const isLoading = defineModel('isLoading')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
-
-const toggleAdvancedSearchPanel = () => {
-  showAdvancedSearchPanel.value = !showAdvancedSearchPanel.value
-}
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 </script>
