@@ -16,7 +16,7 @@ Description: presents OCR record metadata
       :showing="result.docRef === selectedEntry?.docRef && showing"
     >
       <template #header>
-        <p class="is-flex is-flex-direction-row is-justify-content-space-between">
+        <p class="pb-2 is-flex is-flex-direction-row is-justify-content-space-between">
           <span class="is-align-self-flex-start">{{ index + pageNumberOffset }}|</span>
           <span class="is-align-self-flex-start is-flex-grow-1"
             >{{ result.metadata.title ?? result.docRef }} ({{
@@ -40,15 +40,15 @@ Description: presents OCR record metadata
       </template>
 
       <template #content>
-        <div class="toc card-content mb-2">
-          <div v-for="field in fields" :key="sha1(field)">
-            <SingleResultItem
-              v-model:metadata-modal="metadataModal"
-              :doc-ref="result.docRef"
-              :field="field"
-              :value="(result.metadata as any)[field]"
-            />
-          </div>
+        <div class="toc card-content mb-2 is-flex is-flex-direction-column">
+          <SingleResultItem
+            v-for="field in fields"
+            :key="sha1(field)"
+            v-model:metadata-modal="metadataModal"
+            :doc-ref="result.docRef"
+            :field="field"
+            :value="(result.metadata as any)[field]"
+          />
         </div>
         <div class="has-text-right is-size-7 px-2" aria-label="document reference" tabindex="3">
           {{ $t('results.document-reference') }}: <strong>{{ result.docRef }}</strong>
