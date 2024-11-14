@@ -161,6 +161,17 @@ $menu-nested-list-margin: 1em;
   text-overflow: ellipsis;
 }
 
+.snippet-header {
+  white-space: nowrap;
+  width: 200px;
+}
+
+.snippet-book-title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .no-results {
   z-index: 0;
 }

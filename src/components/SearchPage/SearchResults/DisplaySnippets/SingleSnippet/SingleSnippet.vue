@@ -15,11 +15,11 @@ Description: displays text snippets from the OCR text
       class="card-header"
       :class="selectedEntry.docRef === docRef ? 'selected-snippet' : 'snippet'"
     >
-      <p class="card-header-title">
-        {{ $t('results.page', [snippet.page]) }}&nbsp;<span
-          class="is-size-7"
+      <p class="card-header-title snippet-header">
+        {{ $t('results.page', [snippet.page]) }}&nbsp;•&nbsp;<span
+          class="is-size-6 snippet-book-title"
           :class="{ 'rtl-align': preferences.needsRightToLeft }"
-          >({{ title }})</span
+          >{{ title }} ({{ author ?? $t('results.result-unknown-author') }})</span
         >
       </p>
       <!-- Open page in book -->
@@ -146,7 +146,8 @@ const { snippet, docRef, bookIndex, snippetIndex, query, strict } = defineProps(
   'snippetIndex',
   'query',
   'strict',
-  'title'
+  'title',
+  'author'
 ])
 const imageModal: Ref = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
