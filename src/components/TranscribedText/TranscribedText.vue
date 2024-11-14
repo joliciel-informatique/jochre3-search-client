@@ -1,10 +1,6 @@
 <template>
   <div class="column is-flex is-vcentered bookTitle m-2">
-    <h1
-      :class="{
-        'rtl-align': !preferences.corpusLeftToRight
-      }"
-    >
+    <h1>
       {{ bookTitle }}
     </h1>
   </div>
@@ -41,14 +37,7 @@
       </aside>
     </div>
     <div class="column is-1"></div>
-    <div
-      v-html="docText"
-      class="column m-3 p-3"
-      :class="{
-        'rtl-align': !preferences.corpusLeftToRight
-      }"
-      role="article"
-    ></div>
+    <div v-html="docText" class="column m-3 p-3" role="article"></div>
   </div>
 </template>
 <script setup lang="ts">

@@ -7,6 +7,24 @@
       <div class="p-3">
         <div class="columns is-vcentered py-3">
           <div class="column">
+            <h1 class="label">{{ $t('preferences.general-heading') }}</h1>
+            <div class="is-flex is-flex-direction-column m-2">
+              <div class="columns is-vcentered is-10 pb-2">
+                <span class="column is-4 px-2">{{ $t('preferences.language') }}</span>
+                <div class="column is-4 control">
+                  <span class="select is-fullwidth">
+                    <select name="setToLanguageSelect" v-model="languageToSet">
+                      <option value="yi">ייִדיש</option>
+                      <option value="en">English</option>
+                    </select>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="columns is-vcentered py-3">
+          <div class="column">
             <h1 class="label">{{ $t('preferences.results-heading') }}</h1>
             <div class="is-flex is-flex-direction-column m-2">
               <div class="columns is-vcentered is-10 pb-2">
@@ -42,7 +60,7 @@
       </div>
     </template>
     <template #footer>
-      <button class="button is-link" @click="save()">
+      <button class="button is-link" @click="save($i18n as VueI18n.VueI18n)">
         {{ $t('save') }}
       </button>
     </template>
@@ -53,13 +71,20 @@
 import { storeToRefs } from 'pinia'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
+import { ref } from 'vue'
+import VueI18n from 'vue-i18n'
 
 const notification = defineModel('notification')
 const preferences = usePreferencesStore()
+const languageToSet = ref<string>(preferences.language)
 
-const { resultsPerPage, displayPerBook } = storeToRefs(preferences)
+const { resultsPerPage, displayPerBook, language } = storeToRefs(preferences)
 
-const save = () => {
+const save = (i18n: VueI18n.VueI18n) => {
+  if (languageToSet.value != language.value) {
+    language.value = languageToSet.value
+    i18n.locale = language.value
+  }
   preferences.save()
   preferences.show = false
 }
