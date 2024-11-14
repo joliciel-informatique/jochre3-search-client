@@ -25,25 +25,6 @@
         </div>
         <div class="columns is-vcentered py-3">
           <div class="column">
-            <h1 class="label">{{ $t('preferences.results-heading') }}</h1>
-            <div class="is-flex is-flex-direction-column m-2">
-              <div class="columns is-vcentered is-10 pb-2">
-                <span class="column is-4 px-2">{{ $t('preferences.results-per-page') }}</span>
-                <div class="column is-4 control">
-                  <input
-                    class="input"
-                    type="number"
-                    name="resultsPerPageInput"
-                    v-model="resultsPerPage"
-                    @onchange="preferences.resultsPerPage = resultsPerPage"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="columns is-vcentered py-3">
-          <div class="column">
             <h1 class="label">{{ $t('preferences.snippets-heading') }}</h1>
             <div class="is-flex is-flex-direction-row m-2">
               <span class="px-2">{{ $t('preferences.snippets-per-book') }}</span>
@@ -78,7 +59,7 @@ const notification = defineModel('notification')
 const preferences = usePreferencesStore()
 const languageToSet = ref<string>(preferences.language)
 
-const { resultsPerPage, displayPerBook, language } = storeToRefs(preferences)
+const { displayPerBook, language } = storeToRefs(preferences)
 
 const save = (i18n: VueI18n.VueI18n) => {
   if (languageToSet.value != language.value) {

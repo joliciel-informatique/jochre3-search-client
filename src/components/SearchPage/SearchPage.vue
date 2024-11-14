@@ -182,7 +182,7 @@ const { show, isTablet, isMobile } = storeToRefs(preferences)
 
 import { storeToRefs } from 'pinia'
 
-const { resultsPerPage, authorFacetCount } = storeToRefs(preferences)
+const { authorFacetCount } = storeToRefs(preferences)
 
 const query = ref('')
 const firstSearchResult = ref<SearchResult>()
@@ -206,6 +206,7 @@ const fromYear = ref()
 const toYear = ref()
 const docRefs = ref('')
 const sortBy = ref('Score')
+const resultsPerPage = ref(10)
 
 const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 // const authorDropdown: Ref = defineModel('authorDropdown')

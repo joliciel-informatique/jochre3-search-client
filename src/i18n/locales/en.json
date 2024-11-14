@@ -85,10 +85,7 @@
   "preferences": {
     "title": "Update preferences",
     "general-heading": "General",
-    "language": "Display language",
-    "results-heading": "Result display",
-    "results-per-page": "Results per page",
-    "results-sort-by": "Sort by",
+    "language": "Interface language",
     "snippets-heading": "Snippet display",
     "snippets-per-book": "One book at a time",
     "snippets-as-list": "As continuous list"
