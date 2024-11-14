@@ -59,10 +59,10 @@
       class="button toc-metadata-btn has-background-info has-text-white"
       @click.prevent="openMobileMetadataPanel = !openMobileMetadataPanel"
     >
-      <span class="m-1 ml-2 pt-1">
+      <span class="m-1 ml-2 pt-1" :class="{ 'rtl-align': preferences.needsRightToLeft }">
         <span>
           {{ selectedEntry?.metadata.title }}
-          ({{ selectedEntry?.metadata.author }})
+          ({{ selectedEntry?.metadata.author ?? $t('results.result-unknown-author') }})
         </span>
       </span>
     </a>
