@@ -15,8 +15,10 @@ Description: displays text snippets from the OCR text
       class="card-header"
       :class="selectedEntry.docRef === docRef ? 'selected-snippet' : 'snippet'"
     >
-      <p class="card-header-title">{{ $t('results.page', [snippet.page]) }}</p>
-
+      <p class="card-header-title">
+        {{ $t('results.page', [snippet.page]) }}
+      </p>
+      <span class="card-header-title is-centered is-hidden-mobile is-size-7">{{ docRef }}</span>
       <!-- Open page in book -->
       <button
         class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column"

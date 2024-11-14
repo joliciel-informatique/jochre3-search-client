@@ -2,7 +2,7 @@
   <div class="column is-flex is-vcentered bookTitle m-2">
     <h1
       :class="{
-        'rtl-align': !preferences.corpusLeftToRight
+        'rtl-align': preferences.needsRightToLeft
       }"
     >
       {{ bookTitle }}
@@ -45,7 +45,7 @@
       v-html="docText"
       class="column m-3 p-3"
       :class="{
-        'rtl-align': !preferences.corpusLeftToRight
+        'rtl-align': preferences.needsRightToLeft
       }"
       role="article"
     ></div>

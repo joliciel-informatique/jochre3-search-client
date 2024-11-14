@@ -82,10 +82,9 @@
   },
   "preferences": {
     "title": "דעם באַניצערס פּרעפֿערענצן",
-    "results-heading": "װי אַרױסצוּװײַזן רעזולטאַטן",
-    "results-per-page": "וויפֿל רעזולטאַטן אויף איין זײַטל",
-    "results-sort-by": "סאָרטירן לױטן",
-    "snippets-title": "װי אַרױסצוּװײַזן פֿראַגמענטן",
+    "general-heading": "כּלל־פּרעפֿערענצן",
+    "language": "צװישנבינד שפּראַך",
+    "snippets-heading": "װי אַרױסצוּװײַזן פֿראַגמענטן",
     "snippets-per-book": "נאָר אײן בוך מיט אַ מאָל",
     "snippets-as-list": "װי אַ המשכדיקע רשימה"
   },
