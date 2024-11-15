@@ -39,6 +39,8 @@ Description: controls text snippets from the OCR text
             :url="result.metadata.url"
             :query="query"
             :strict="strict"
+            :title="result.metadata.title"
+            :author="result.metadata.author"
             v-model:image-modal="imageModal"
             v-model:word-modal="wordModal"
             v-model:notification="notification"
