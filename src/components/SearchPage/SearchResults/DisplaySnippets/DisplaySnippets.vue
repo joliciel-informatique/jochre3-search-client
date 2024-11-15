@@ -19,9 +19,14 @@ Description: controls text snippets from the OCR text
   >
     <ul>
       <li v-for="(result, bookIndex) of searchResults" :key="sha1(result)">
-        <hr :bookindex="bookIndex" :id="`hr-${bookIndex}`" v-if="displayPerBook" />
+        <hr
+          :bookindex="bookIndex"
+          :id="`hr-${bookIndex}`"
+          v-if="displayPerBook"
+          class="is-invisible"
+        />
         <ul
-          class="pb-2 snippets-on"
+          class="pb-2 pt-4 snippets-on"
           :class="
             preferences.isTablet || preferences.isMobile
               ? `mobile is-hidden-desktop`

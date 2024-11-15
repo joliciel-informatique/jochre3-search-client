@@ -92,7 +92,7 @@
     <!-- Contents table on desktop -->
     <div
       v-if="query.length && searchResults?.length"
-      class="is-flex is-flex-direction-row is-justify-content-space-between mt-5"
+      class="is-flex is-flex-direction-row is-justify-content-space-between"
     >
       <div class="is-hidden-touch">
         <ContentsTable
@@ -238,17 +238,6 @@ const openMobileFacets = ref(false)
 const openNavBarMobileMenu = ref(false)
 
 const facets = ref<Array<AggregationBin>>([])
-
-watch([isMobile, isTablet, isPortrait], ([newMobile, newTablet, newPortrait]) => {
-  console.log(newPortrait, newTablet, newMobile)
-  // !newPortrait && (newTablet || newMobile)
-  //   ? document.getElementById('header')?.setAttribute('style', 'display: none')
-  //   : document.getElementById('header')?.setAttribute('style', 'display: flex')
-
-  // !newPortrait && (newTablet || newMobile)
-  //   ? document.getElementById('footer')?.setAttribute('style', 'display: none')
-  //   : document.getElementById('footer')?.setAttribute('style', 'display: block')
-})
 
 onMounted(() => {
   window.addEventListener('click', (e: MouseEvent | TouchEvent) => {
