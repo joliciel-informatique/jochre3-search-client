@@ -154,10 +154,10 @@ const lastResult = computed(() => {
 const selectEntry = (entry: SearchResult, index: number) => {
   selectedEntry.value = entry
   selectedEntryIndex.value = index
-  const navBarHeight = document.getElementById('navbar')?.getBoundingClientRect().height
+  const navBarHeight = document.getElementById('topbar')?.getBoundingClientRect().height
   const top = document.getElementById(`hr-${index}`)?.getBoundingClientRect().top
   if (navBarHeight && top)
-    window.scrollBy({
+    document.getElementById('snippets')?.scrollBy({
       top: top - navBarHeight,
       behavior: 'smooth'
     })
