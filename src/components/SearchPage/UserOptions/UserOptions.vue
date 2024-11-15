@@ -3,27 +3,31 @@
     <!-- User options on desktop -->
     <div
       v-if="authenticated"
-      class="navbar-item has-dropdown is-hoverable user-options is-hidden-touch"
+      class="navbar-item user-options has-dropdown is-hoverable is-hidden-touch"
+      :class="preferences.displayLeftToRight ? 'rtl' : 'ltr'"
     >
-      <a class="navbar-link">
-        <p class="has-text-left has-text-white">
+      <a class="navbar-link" :class="preferences.displayLeftToRight ? 'rtl' : 'ltr'">
+        <p
+          class="has-text-white"
+          :class="preferences.displayLeftToRight ? 'has-text-left' : 'has-text-right'"
+        >
           <font-awesome-icon icon="user" class="" size="lg" />
         </p>
       </a>
-      <div class="navbar-dropdown is-right">
+      <div class="navbar-dropdown" :class="preferences.displayLeftToRight ? 'is-right rtl' : 'ltr'">
         <a
-          @click.prevent="preferences.show = true"
           class="navbar-item"
+          @click.prevent="preferences.show = true"
           :title="$t('header.preferences')"
         >
-          <span class="">Preferences</span>
-          <font-awesome-icon icon="gear" class="is-pulled-right" size="lg" />
+          <font-awesome-icon icon="gear" size="lg" />
+          <span>{{ $t('header.preferences') }}</span>
         </a>
 
-        <a class="navbar-item" @click.prevent="signout()" :title="$t('header.logout')"
-          >{{ $t('header.logout')
-          }}<font-awesome-icon icon="right-from-bracket" class="is-pulled-right" size="lg"
-        /></a>
+        <a class="navbar-item" @click.prevent="signout()" :title="$t('header.logout')">
+          <font-awesome-icon icon="right-from-bracket" size="lg" />
+          <span>{{ $t('header.logout') }} </span>
+        </a>
       </div>
     </div>
 
