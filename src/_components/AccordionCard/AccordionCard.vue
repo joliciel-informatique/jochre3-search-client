@@ -9,7 +9,7 @@
       @leave="leave"
     >
       <div class="body" v-show="showing">
-        <div class="body-inner">
+        <div class="body-inner is-flex is-flex-direction-column">
           <slot name="content"></slot>
         </div>
       </div>

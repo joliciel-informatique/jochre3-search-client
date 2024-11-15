@@ -1,27 +1,22 @@
 <template>
+  <!-- <div class="container"> -->
   <PreferencesSetup />
-  <main
-    class="is-widescreen"
-    :class="{
-      'rtl-align': !preferences.displayLeftToRight
-    }"
-  >
-    <SearchPage
-      v-model:search-results="searchResults"
-      v-model:total-hits="totalHits"
-      v-model:page="page"
-      v-model:image-modal="imageModal"
-      v-model:word-modal="wordModal"
-      v-model:metadata-modal="metadataModal"
-      v-model:notification="notification"
-    />
-  </main>
-  <FooterPage v-model:total-hits="totalHits" />
+  <SearchPage
+    v-model:search-results="searchResults"
+    v-model:total-hits="totalHits"
+    v-model:page="page"
+    v-model:image-modal="imageModal"
+    v-model:word-modal="wordModal"
+    v-model:metadata-modal="metadataModal"
+    v-model:notification="notification"
+  />
+  <!-- </div> -->
   <Preferences v-model:notification="notification" />
   <LargeImage v-model:image-modal="imageModal" />
   <FixWord v-model:word-modal="wordModal" v-model:notification="notification" />
   <FixMetaData v-model:metadata-modal="metadataModal" v-model:notification="notification" />
   <Notification v-model:notification="notification" />
+  <!-- </div> -->
 </template>
 
 <script setup lang="ts">

@@ -30,18 +30,18 @@
     <!-- User options on mobile -->
     <div v-if="authenticated" class="is-hidden-desktop">
       <a
-        class="panel-block has-text-white"
+        class="panel-block"
         href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
         target="_blank"
       >
-        <font-awesome-icon class="panel-icon has-text-white" icon="book-open" />
+        <font-awesome-icon class="panel-icon" icon="book-open" />
         <span>
           {{ $t('search.user-guide') }}
         </span>
       </a>
-      <a class="panel-block has-text-white" @click.prevent="showAdvancedSearchPanel = true">
+      <a class="panel-block" @click.prevent="showAdvancedSearchPanel = true">
         <font-awesome-icon
-          class="panel-icon has-text-white"
+          class="panel-icon"
           :icon="
             showAdvancedSearchPanel
               ? 'magnifying-glass-minus'
@@ -55,16 +55,16 @@
         </span>
       </a>
       <a
-        class="panel-block has-text-white"
+        class="panel-block"
         @click.prevent="preferences.show = true"
         :title="$t('header.preferences')"
         target="_blank"
       >
-        <font-awesome-icon class="panel-icon has-text-white" icon="gear" size="lg" />
+        <font-awesome-icon class="panel-icon" icon="gear" size="lg" />
         <span> Preferences </span>
       </a>
-      <a class="panel-block has-text-white" @click.prevent="signout()" :title="$t('header.logout')">
-        <font-awesome-icon class="panel-icon has-text-white" icon="right-from-bracket" size="lg" />
+      <a class="panel-block" @click.prevent="signout()" :title="$t('header.logout')">
+        <font-awesome-icon class="panel-icon" icon="right-from-bracket" size="lg" />
         <span>
           {{ $t('header.logout') }}
         </span>

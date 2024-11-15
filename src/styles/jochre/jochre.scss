@@ -10,15 +10,16 @@
 @forward './components/SearchBar/SearchBar';
 @forward './components/FacetBar/FacetBar';
 @forward './components/ToC/ToC';
-@forward './components/FindAuthors/FindAuthors';
 @forward './components/Card/Card';
 @forward './components/DisplaySnippets/DisplaySnippets';
 @forward './components/SingleSnippet/SingleSnippet';
 @forward './components/Switch/Switch';
 @forward './components/FilterTag/FilterTag';
 @forward './components/PageNumbering/PageNumbering';
+@forward './components//IndexPage/IndexPage';
 
 // _Component Styling
+@forward './_components/AccordionCard/AccordionCard';
 @forward './_components/SimpleKeyboard/SimpleKeyboard';
 @forward './_components/Dropdown/Dropdown';
 
@@ -35,6 +36,7 @@
   $link: $background-color-2,
   $family-primary: $font-family-1,
 
+  $panel-item-border: 0,
   $body-font-size: $font-size-3,
   $title-size: $font-size-title,
 
@@ -86,7 +88,7 @@
   $block-spacing: unset,
 
   // Modal Component
-  $modal-z: 40,
+  $modal-z: 50,
 
   $dropdown-content-z: 42,
 
@@ -137,10 +139,21 @@
 //   // --bulma-navbar-item-hover-background-l-delta: -50%;
 // }
 
+:root {
+  --c-z-index: 1000;
+}
+
+main {
+  // min-height: 41vh;
+  overflow-y: auto;
+}
+
 #topbar {
   top: 0px;
   position: sticky;
-  z-index: 100;
+  z-index: 43;
+  background-color: $background-color-1;
+  // max-height: 40vh;
 }
 
 .pagination {

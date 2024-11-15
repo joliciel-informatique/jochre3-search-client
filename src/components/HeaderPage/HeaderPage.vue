@@ -5,13 +5,17 @@
     aria-role="banner"
   >
     <div class="column is-2 p-2">
-      <a class="logo" :href="$t('header.logo-url')"
-        ><img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')"
-      /></a>
+      <span class="logo">
+        <img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')" />
+      </span>
     </div>
     <div class="column p-2 is-col-span-2">
       {{ headerInfo($tm('header')) }}
-      <div class="title has-text-white py-4">{{ $t('header.title') }}</div>
+      <div
+        class="is-size-2-desktop has-text-weight-semibold is-family-primary has-text-white is-size-3-tablet is-size-4-mobile py-4"
+      >
+        {{ $t('header.title') }}
+      </div>
       <div
         class="header-beta-flyout"
         :class="{

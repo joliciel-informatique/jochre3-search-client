@@ -35,3 +35,8 @@
   height: auto;
   width: 100%;
 }
+
+span:has(#strictSearchCheckbox) {
+  position: relative;
+  top: 0.1em;
+}
