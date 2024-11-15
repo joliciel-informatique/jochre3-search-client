@@ -88,8 +88,6 @@ const scrolling = () => {
     const snippets =
       preferences.isMobile || preferences.isTablet ? '.snippets-on li' : '.snippets-on li'
 
-    console.log(snippets)
-
     const snippetsInView = Array.from(document.querySelectorAll(snippets))
       .map((snippet) => (isInView(snippet) ? snippet.getAttribute('bookindex') : null))
       .filter((x) => x)
@@ -106,5 +104,5 @@ const scrolling = () => {
   }
 }
 
-onMounted(() => window.addEventListener('scroll', scrolling))
+onMounted(() => document.getElementById('snippets')?.addEventListener('scroll', scrolling))
 </script>
