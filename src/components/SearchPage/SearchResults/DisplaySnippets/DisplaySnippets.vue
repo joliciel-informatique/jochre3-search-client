@@ -10,43 +10,46 @@ Methods: none
 Description: controls text snippets from the OCR text
 -->
 <template>
-  <div class="column" tabindex="-1">
-    <!-- Showing results -->
-    <div v-if="!isLoading">
-      <ul id="snippets">
-        <li v-for="(result, bookIndex) of searchResults" :key="sha1(result)">
-          <hr :bookindex="bookIndex" :id="`hr-${bookIndex}`" v-if="displayPerBook" />
-          <ul
-            class="snippets-on"
-            :class="
-              preferences.isTablet || preferences.isMobile
-                ? `mobile is-hidden-desktop`
-                : `desktop is-hidden-mobile`
-            "
-            v-show="displayPerBook || (!displayPerBook && selectedEntry?.docRef === result.docRef)"
-          >
-            <SingleSnippet
-              v-for="(snippet, index) in result.snippets"
-              :key="sha1(snippet)"
-              :docRef="result.docRef"
-              :bookIndex="bookIndex"
-              :snippetIndex="index"
-              :snippet="snippet"
-              :url="result.metadata.url"
-              :query="query"
-              :strict="strict"
-              v-model:image-modal="imageModal"
-              v-model:word-modal="wordModal"
-              v-model:notification="notification"
-              v-model:selected-entry="selectedEntry"
-            />
-          </ul>
-        </li>
-      </ul>
-    </div>
-    <div v-else>
-      <h1>{{ $t('loading') }}</h1>
-    </div>
+  <div
+    id="snippets"
+    class="bla is-flex is-justify-content-center"
+    :class="preferences.isTablet || preferences.isMobile ? `on-mobile` : `on-desktop`"
+    tabindex="-1"
+    v-if="!isLoading"
+  >
+    <ul>
+      <li v-for="(result, bookIndex) of searchResults" :key="sha1(result)">
+        <hr :bookindex="bookIndex" :id="`hr-${bookIndex}`" v-if="displayPerBook" />
+        <ul
+          class="pb-2 snippets-on"
+          :class="
+            preferences.isTablet || preferences.isMobile
+              ? `mobile is-hidden-desktop`
+              : `desktop is-hidden-mobile`
+          "
+          v-show="displayPerBook || (!displayPerBook && selectedEntry?.docRef === result.docRef)"
+        >
+          <SingleSnippet
+            v-for="(snippet, index) in result.snippets"
+            :key="sha1(snippet)"
+            :docRef="result.docRef"
+            :bookIndex="bookIndex"
+            :snippetIndex="index"
+            :snippet="snippet"
+            :url="result.metadata.url"
+            :query="query"
+            :strict="strict"
+            v-model:image-modal="imageModal"
+            v-model:word-modal="wordModal"
+            v-model:notification="notification"
+            v-model:selected-entry="selectedEntry"
+          />
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div v-else>
+    <h1>{{ $t('loading') }}</h1>
   </div>
 </template>
 

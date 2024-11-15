@@ -2,15 +2,27 @@
 
 .snippets-on {
   position: relative;
+  left: 0.5vw;
+  width: 99%;
+}
 
-  &.mobile {
-    left: 0vw;
-    width: 100%;
+.bla {
+  position: fixed;
+  justify-items: center;
+  overflow-y: scroll;
+  height: 76%;
+  // height: 77vh;
+  // width: 98vw;
+  &.on-desktop {
+    left: 27vw;
+    right: 19vw;
+    width: 52vw;
+    scrollbar-width: thin;
   }
-
-  &.desktop {
-    left: 3.5vw;
-    width: 49vw;
+  &.on-mobile {
+    left: 2vw;
+    right: 2vw;
+    // width: 96vw;
   }
 }
 

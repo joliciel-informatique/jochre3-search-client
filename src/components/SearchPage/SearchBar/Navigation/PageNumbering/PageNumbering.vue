@@ -258,11 +258,14 @@ const atTop = ref(true)
 const totalHits: Ref = defineModel('totalHits')
 const lastPage = computed(() => Math.floor((totalHits.value - 1) / preferences.resultsPerPage) + 1)
 
-watch(atTop, (newV) =>
-  newV
-    ? window.scrollTo({ top: 0, behavior: 'smooth' })
-    : window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
-)
+watch(atTop, (newV) => {
+  const snippetDiv = document.getElementById('snippets')
+  if (snippetDiv) {
+    newV
+      ? snippetDiv.scrollTo({ top: 0, behavior: 'smooth' })
+      : snippetDiv.scrollTo({ top: snippetDiv.scrollHeight, behavior: 'smooth' })
+  }
+})
 
 watch(page, () => emit('newPage'))
 </script>

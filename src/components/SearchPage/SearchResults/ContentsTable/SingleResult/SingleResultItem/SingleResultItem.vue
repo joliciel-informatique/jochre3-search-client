@@ -28,7 +28,7 @@ Description: display single metadata item
         <span class="icon fa-sm"> <font-awesome-icon icon="pen-to-square" /></span
       ></span>
     </span>
-    <span class="p-2 has-text-primary has-text-left is-align-self-flex-start is-flex-grow-1">{{
+    <span class="p-2 has-text-primary has-text-left is-align-self-flex-start is-flex-wrap-wrap">{{
       value
     }}</span>
   </div>

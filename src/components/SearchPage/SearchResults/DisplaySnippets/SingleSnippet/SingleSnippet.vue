@@ -10,7 +10,7 @@ Methods: getSelectedWord (local), toggleImageSnippet (local), fetchData (importe
 Description: displays text snippets from the OCR text
 -->
 <template>
-  <li :docRef="docRef" class="card snippet m-4" :bookIndex :snippetIndex>
+  <li :docRef="docRef" class="card snippet mr-2 mb-4" :bookIndex :snippetIndex>
     <header
       class="card-header"
       :class="selectedEntry.docRef === docRef ? 'selected-snippet' : 'snippet'"
@@ -49,7 +49,7 @@ Description: displays text snippets from the OCR text
       </button>
     </header>
     <div class="card-content" :data-docref="docRef" :data-page="snippet.page">
-      <div class="columns is-mobile">
+      <div class="columns">
         <div
           v-if="preferences.displayLeftToRight === preferences.corpusLeftToRight"
           :class="{
@@ -81,33 +81,32 @@ Description: displays text snippets from the OCR text
               : toggleImageSnippet()
           "
         >
-          <div>
-            <div
-              v-if="!image"
-              class="is-flex is-flex-direction-column is-align-items-center m-2"
-              visibility:hidden
-            >
-              <div class="p-3" :hidden="imageIsLoading">
-                <button class="is-large is-flex is-align-items-center">
-                  <span class="icon" :hidden="imageIsLoading">
-                    <font-awesome-icon icon="file-image" size="2xl" />
-                  </span>
-                </button>
-              </div>
-              <span :hidden="imageIsLoading">{{ $t('results.click-image-snippet') }}</span>
+          <div
+            v-if="!image"
+            class="is-flex is-flex-direction-column is-align-items-center m-2"
+            visibility:hidden
+          >
+            <div class="p-3" :hidden="imageIsLoading">
+              <button class="is-large is-flex is-align-items-center">
+                <span class="icon" :hidden="imageIsLoading">
+                  <font-awesome-icon icon="file-image" size="2xl" />
+                </span>
+              </button>
             </div>
+            <span :hidden="imageIsLoading">{{ $t('results.click-image-snippet') }}</span>
+          </div>
 
-            <!-- Show snippet image -->
-            <div v-else>
-              <img
-                class="image-snippet"
-                :src="image"
-                title="Image"
-                :alt="`Image for page ${snippet.page}`"
-              />
-            </div>
+          <!-- Show snippet image -->
+          <div v-else>
+            <img
+              class="image-snippet"
+              :src="image"
+              title="Image"
+              :alt="`Image for page ${snippet.page}`"
+            />
           </div>
         </div>
+        <br class="is-hidden-desktop" />
         <div
           v-if="preferences.displayLeftToRight !== preferences.corpusLeftToRight"
           :class="{

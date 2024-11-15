@@ -2,7 +2,7 @@
   <!-- ToC Search Results on desktop -->
   <div
     v-if="searchResults?.length"
-    class="box table-of-contents left search-results menu is-hidden-touch"
+    class="box table-of-contents is-flex is-flex-direction-column left search-results menu is-hidden-touch"
     role="navigation"
     tabindex="1"
   >
@@ -12,29 +12,31 @@
     <p class="menu-label label pt-4">
       {{ $t('results.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
     </p>
-    <ul class="menu-list">
-      <li class="px-2" v-for="(result, index) of searchResults" :key="result.docRef">
-        <a
-          @click="selectEntry(result, index)"
-          @keyup.enter="selectEntry(result, index)"
-          tabindex="0"
-          class="grid"
-          :class="selectedEntry?.docRef === result.docRef ? 'is-active' : ''"
-        >
-          <SingleResult
-            v-model:image-modal="imageModal"
-            v-model:word-modal="wordModal"
-            v-model:metadata-modal="metadataModal"
-            v-model:notification="notification"
-            v-model:showing="showing"
-            v-model:selectedEntry="selectedEntry"
-            :result
-            :index
-            :page-number-offset
-          />
-        </a>
-      </li>
-    </ul>
+    <div class="scroll-list">
+      <ul class="menu-list">
+        <li class="px-2" v-for="(result, index) of searchResults" :key="result.docRef">
+          <a
+            @click="selectEntry(result, index)"
+            @keyup.enter="selectEntry(result, index)"
+            tabindex="0"
+            class="grid"
+            :class="selectedEntry?.docRef === result.docRef ? 'is-active' : ''"
+          >
+            <SingleResult
+              v-model:image-modal="imageModal"
+              v-model:word-modal="wordModal"
+              v-model:metadata-modal="metadataModal"
+              v-model:notification="notification"
+              v-model:showing="showing"
+              v-model:selectedEntry="selectedEntry"
+              :result
+              :index
+              :page-number-offset
+            />
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <!-- ToC Search Results on mobile -->
@@ -67,52 +69,51 @@
       </span>
     </a>
     <PageNumbering @newPage="emit('newPage')" v-model:totalHits="totalHits" v-model:page="page" />
-    <aside class="toc-drawer menu box p-2" v-show="openMobileMetadataPanel">
-      <SingleResult
-        v-model:image-modal="imageModal"
-        v-model:word-modal="wordModal"
-        v-model:metadata-modal="metadataModal"
-        v-model:notification="notification"
-        v-model:showing="showing"
-        v-model:selectedEntry="selectedEntry"
-        :result="selectedEntry"
-        :index="selectedEntryIndex"
-        :page-number-offset
-      />
-    </aside>
-    <aside class="toc-drawer menu box p-2" v-show="openMobileSearchResultsToc">
-      <div>
-        <p
-          class="menu-label is-size-5 label p-2 is-flex is-flex-direction-row is-justify-content-space-between"
-        >
-          {{ $t('results.contents-table-header') }}
-          <font-awesome-icon icon="gear" @click="preferences.show = true" />
-        </p>
-      </div>
-      <p class="menu-label label pt-4">
-        {{ $t('results.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
-      </p>
-      <ul class="menu-list p-2">
-        <li v-for="(result, index) of searchResults" :key="result.docRef">
-          <a
-            @click="selectEntry(result, index)"
-            @keyup.enter="selectEntry(result, index)"
-            tabindex="0"
-            class="grid"
-            :class="selectedEntry?.docRef === result.docRef ? 'is-active' : ''"
-            >{{ `${index + pageNumberOffset}| ${result.metadata.title}` }}
-          </a>
-        </li>
-      </ul>
-    </aside>
-    <aside class="toc-drawer menu box p-2" v-show="openMobileFacets">
-      <FacetBar
-        @newSearch="emit('newSearch')"
-        v-model:facets="facets"
-        v-model:open-mobile-facets="openMobileFacets"
-      />
-    </aside>
   </div>
+  <aside class="toc-drawer menu box p-2" v-show="openMobileMetadataPanel">
+    <SingleResult
+      v-model:image-modal="imageModal"
+      v-model:word-modal="wordModal"
+      v-model:metadata-modal="metadataModal"
+      v-model:notification="notification"
+      v-model:showing="showing"
+      v-model:selectedEntry="selectedEntry"
+      :result="selectedEntry"
+      :index="selectedEntryIndex"
+      :page-number-offset
+    />
+  </aside>
+  <aside class="toc-drawer menu box p-2" v-show="openMobileSearchResultsToc">
+    <p
+      class="menu-label is-size-5 label p-2 is-flex is-flex-direction-row is-justify-content-space-between"
+    >
+      {{ $t('results.contents-table-header') }}
+      <font-awesome-icon icon="gear" @click="preferences.show = true" />
+    </p>
+    <p class="menu-label label pt-4">
+      {{ $t('results.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
+    </p>
+    <ul class="menu-list p-2">
+      <li v-for="(result, index) of searchResults" :key="result.docRef">
+        <a
+          @click="selectEntry(result, index)"
+          @keyup.enter="selectEntry(result, index)"
+          tabindex="0"
+          class="grid"
+          :class="selectedEntry?.docRef === result.docRef ? 'is-active' : ''"
+          >{{ `${index + pageNumberOffset}| ${result.metadata.title}` }}
+        </a>
+      </li>
+    </ul>
+  </aside>
+  <aside class="toc-drawer menu box p-2" v-show="openMobileFacets">
+    <FacetBar
+      @newSearch="emit('newSearch')"
+      v-model:facets="facets"
+      v-model:open-mobile-facets="openMobileFacets"
+    />
+  </aside>
+  <!-- </div> -->
 </template>
 <script setup lang="ts">
 import { usePreferencesStore } from '@/stores/PreferencesStore'

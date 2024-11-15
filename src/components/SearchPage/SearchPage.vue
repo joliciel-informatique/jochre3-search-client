@@ -1,86 +1,99 @@
 <template>
-  <div id="topbar">
-    <div class="is-flex is-flex-direction-column">
-      <HeaderPage />
-      <nav class="is-flex is-flex-direction-column navbar" id="navbar" role="navigation">
-        <div class="navbar-brand is-flex is-flex-direction-row is-flex-wrap-nowrap">
-          <a class="navbar-item is-flex is-hidden-desktop" :href="$t('header.logo-url')">
-            <img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')"
-          /></a>
-          <div class="navbar-item is-flex is-flex-grow-1 is-flex-shrink-3">
-            <SearchBar
-              @newSearch="newSearch"
-              @resetSearchResults="resetSearchResults"
-              v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-              v-model:has-advanced-search-criteria="hasAdvancedSearchCriteria"
-              v-model:query="query"
-              v-model:strict="strict"
-              v-model:is-loading="isLoading"
-            />
-          </div>
-          <div class="navbar-item is-align-self-flex-start user-options is-hidden-touch">
-            <UserOptions />
-          </div>
-          <div
-            class="navbar-burger is-flex is-flex-shrink-2 mr-5 has-text-white is-hidden-desktop"
-            :class="openNavBarMobileMenu ? 'is-active' : ''"
-            role="button"
-            aria-label="menu"
-            aria-expanded="false"
-            @click="openNavBarMobileMenu = !openNavBarMobileMenu"
-          >
-            <div>
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
-            </div>
-          </div>
-        </div>
-        <AdvancedSearch
-          @newSearch="newSearch"
-          @resetSearchResults="resetSearchResults"
-          v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-          v-model:author-list="authorList"
-          v-model:title="title"
-          v-model:to-year="toYear"
-          v-model:from-year="fromYear"
-          v-model:doc-refs="docRefs"
-          v-model:sort-by="sortBy"
-          v-model:facets="facets"
-          v-model:exclude-from-search="excludeFromSearch"
-        />
-        <div class="is-hidden-touch">
-          <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" v-model:page="page" />
-        </div>
-        <div class="is-hidden-desktop">
-          <ContentsTable
-            v-model:search-results="searchResults"
-            v-model:page="page"
-            v-model:image-modal="imageModal"
-            v-model:metadata-modal="metadataModal"
-            v-model:notification="notification"
-            v-model:word-modal="wordModal"
-            v-model:selected-entry="firstSearchResult"
-            v-model:total-hits="totalHits"
-            v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
-            v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
-            v-model:open-mobile-facets="openMobileFacets"
-            v-model:facets="facets"
-            @new-page="newPage"
-            @reset-search-results="resetSearchResults"
-            @new-search="newSearch"
+  <header
+    id="topbar"
+    class="is-flex is-flex-direction-column-reverse"
+    :class="{
+      'rtl-align': !preferences.displayLeftToRight
+    }"
+  >
+    <nav class="is-flex is-flex-direction-column navbar" id="navbar" role="navigation">
+      <div class="navbar-brand is-flex is-flex-direction-row is-flex-wrap-nowrap">
+        <div class="navbar-item is-flex is-flex-grow-1 is-flex-shrink-3">
+          <SearchBar
+            @newSearch="newSearch"
+            @resetSearchResults="resetSearchResults"
+            v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+            v-model:has-advanced-search-criteria="hasAdvancedSearchCriteria"
+            v-model:query="query"
+            v-model:strict="strict"
+            v-model:is-loading="isLoading"
           />
         </div>
-        <div v-show="openNavBarMobileMenu" class="navbar-mobile" id="navbar-mobile">
-          <div class="menu is-pulled-right panel has-background-primary">
-            <UserOptions
-              v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-              v-model:open-nav-bar-mobile-menu="openNavBarMobileMenu"
-            />
+        <div class="navbar-item is-align-self-flex-start user-options is-hidden-touch">
+          <UserOptions />
+        </div>
+        <div
+          class="navbar-burger is-flex is-flex-shrink-2 mr-5 has-text-white is-hidden-desktop"
+          :class="openNavBarMobileMenu ? 'is-active' : ''"
+          role="button"
+          aria-label="menu"
+          aria-expanded="false"
+          @click="openNavBarMobileMenu = !openNavBarMobileMenu"
+        >
+          <div>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
           </div>
         </div>
-      </nav>
+      </div>
+      <AdvancedSearch
+        @newSearch="newSearch"
+        @resetSearchResults="resetSearchResults"
+        v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+        v-model:author-list="authorList"
+        v-model:title="title"
+        v-model:to-year="toYear"
+        v-model:from-year="fromYear"
+        v-model:doc-refs="docRefs"
+        v-model:sort-by="sortBy"
+        v-model:facets="facets"
+        v-model:exclude-from-search="excludeFromSearch"
+      />
+      <div class="is-hidden-touch">
+        <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" v-model:page="page" />
+      </div>
+      <div class="is-hidden-desktop">
+        <ContentsTable
+          v-model:search-results="searchResults"
+          v-model:page="page"
+          v-model:image-modal="imageModal"
+          v-model:metadata-modal="metadataModal"
+          v-model:notification="notification"
+          v-model:word-modal="wordModal"
+          v-model:selected-entry="firstSearchResult"
+          v-model:total-hits="totalHits"
+          v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
+          v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
+          v-model:open-mobile-facets="openMobileFacets"
+          v-model:facets="facets"
+          @new-page="newPage"
+          @reset-search-results="resetSearchResults"
+          @new-search="newSearch"
+        />
+      </div>
+      <div v-show="openNavBarMobileMenu" class="navbar-mobile" id="navbar-mobile">
+        <div class="menu is-pulled-right panel">
+          <UserOptions
+            v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+            v-model:open-nav-bar-mobile-menu="openNavBarMobileMenu"
+          />
+        </div>
+      </div>
+    </nav>
+    <HeaderPage />
+  </header>
+  <main
+    :class="{
+      'rtl-align': !preferences.displayLeftToRight
+    }"
+  >
+    <!-- Contents table on desktop -->
+    <div
+      v-if="query.length && searchResults?.length"
+      class="is-flex is-flex-direction-row is-justify-content-space-between mt-5"
+    >
       <div class="is-hidden-touch">
         <ContentsTable
           v-model:search-results="searchResults"
@@ -100,43 +113,36 @@
           @new-search="newSearch"
         />
       </div>
-    </div>
-  </div>
-  <div
-    id="resultsContainer"
-    class="container columns is-flex-direction-column is-align-items-center has-text-centered p-4"
-  >
-    <!-- Not loading, has query and results -->
-    <div v-if="query.length && searchResults?.length" class="column">
-      <div class="columns">
-        <DisplaySnippets
-          v-model:image-modal="imageModal"
-          v-model:notification="notification"
-          v-model:word-modal="wordModal"
-          v-model:selected-entry="firstSearchResult"
-          v-model:search-results="searchResults"
-          v-model:is-loading="isLoading"
-          v-model:query="query"
-          v-model:strict="strict"
+      <!-- Not loading, has query and results -->
+      <DisplaySnippets
+        v-model:image-modal="imageModal"
+        v-model:notification="notification"
+        v-model:word-modal="wordModal"
+        v-model:selected-entry="firstSearchResult"
+        v-model:search-results="searchResults"
+        v-model:is-loading="isLoading"
+        v-model:query="query"
+        v-model:strict="strict"
+      />
+      <div class="is-hidden-touch">
+        <FacetBar
+          @newSearch="newSearch"
+          v-model:facets="facets"
+          v-model:open-mobile-facets="openMobileFacets"
         />
-        <div class="is-hidden-touch">
-          <FacetBar
-            @newSearch="newSearch"
-            v-model:facets="facets"
-            v-model:open-mobile-facets="openMobileFacets"
-          />
-        </div>
       </div>
     </div>
-
-    <!-- Loading with query, but no results -->
-    <div v-else-if="isLoading && query && !searchResults?.length" class="column">
+    <div
+      v-else-if="isLoading && query && !searchResults?.length"
+      class="is-flex is-flex-direction-column has-text-centered pt-5"
+    >
+      <!-- Loading with query, but no results -->
       <h1>{{ $t('loading') }}</h1>
     </div>
 
     <!-- Not loading, with query, but no results -->
-    <div v-else-if="query.length && !isLoading && !searchResults?.length" class="column">
-      <h1>
+    <div v-else-if="query.length && !isLoading && !searchResults?.length">
+      <h1 class="column">
         <span class="no-results"> {{ $t('results.none') }}! </span>
         <div class="is-justify-content-center is-align-items-center no-results-image m-6">
           <font-awesome-icon class="fa-10x" icon="ban" />
@@ -145,10 +151,23 @@
     </div>
 
     <!-- Not loading, no query, no results -->
-    <div v-else class="column p-5">
-      <IndexSize v-model:is-loading="isLoading" v-model:notification="notification" />
-    </div>
-  </div>
+    <IndexSize
+      v-else
+      v-model:is-loading="isLoading"
+      v-model:notification="notification"
+      v-model:total-hits="totalHits"
+    />
+  </main>
+  <footer
+    id="footer"
+    v-show="!searchResults?.length"
+    class="footer has-text-white mt-auto pt-5 p-2"
+    :class="{
+      'rtl-align': !preferences.displayLeftToRight
+    }"
+  >
+    <FooterPage v-model:total-hits="totalHits" />
+  </footer>
 </template>
 <script setup lang="ts">
 import { onMounted, ref, defineExpose, type Ref, watch } from 'vue'
@@ -165,6 +184,7 @@ import FacetBar from './SearchResults/FacetBar/FacetBar.vue'
 import IndexSize from './SearchResults/IndexSize/IndexSize.vue'
 import HeaderPage from '../HeaderPage/HeaderPage.vue'
 import UserOptions from './UserOptions/UserOptions.vue'
+import FooterPage from '../FooterPage/FooterPage.vue'
 
 // Import interfaces
 import { type SearchResult, type AggregationBin } from '../../assets/interfacesExternals'
@@ -176,7 +196,7 @@ import { usePreferencesStore } from '../../stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
-const { show, isTablet, isMobile } = storeToRefs(preferences)
+const { show, isTablet, isMobile, isPortrait } = storeToRefs(preferences)
 
 import { storeToRefs } from 'pinia'
 
@@ -219,6 +239,17 @@ const openNavBarMobileMenu = ref(false)
 
 const facets = ref<Array<AggregationBin>>([])
 
+watch([isMobile, isTablet, isPortrait], ([newMobile, newTablet, newPortrait]) => {
+  console.log(newPortrait, newTablet, newMobile)
+  // !newPortrait && (newTablet || newMobile)
+  //   ? document.getElementById('header')?.setAttribute('style', 'display: none')
+  //   : document.getElementById('header')?.setAttribute('style', 'display: flex')
+
+  // !newPortrait && (newTablet || newMobile)
+  //   ? document.getElementById('footer')?.setAttribute('style', 'display: none')
+  //   : document.getElementById('footer')?.setAttribute('style', 'display: block')
+})
+
 onMounted(() => {
   window.addEventListener('click', (e: MouseEvent | TouchEvent) => {
     if (openNavBarMobileMenu.value) {
@@ -248,16 +279,18 @@ onMounted(() => {
       }
     }
   })
+  // if (window.innerWidth < 1024 && window.innerWidth > 768) {
+  //   isTablet.value = true
+  //   isMobile.value = false
+  // }
 
-  if (window.innerWidth < 1024 && window.innerWidth > 768) {
-    isTablet.value = true
-    isMobile.value = false
-  }
-
-  if (window.innerWidth <= 768) {
-    isTablet.value = false
-    isMobile.value = true
-  }
+  // if (window.innerWidth <= 768) {
+  //   isTablet.value = false
+  //   isMobile.value = true
+  // }
+  // !isPortrait.value && !isMobile.value
+  //   ? document.getElementById('header')?.setAttribute('style', 'display:none')
+  //   : document.getElementById('header')?.setAttribute('style', 'display:flex')
 
   router.isReady().then(() => {
     if (route.query['query']) query.value = (route.query['query'] as string).trim()

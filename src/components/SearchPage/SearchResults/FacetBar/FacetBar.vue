@@ -10,173 +10,173 @@ Methods: None
 Description: presents the facet bar
 -->
 <template>
-  <div class="facetColumn column is-2 is-hidden-touch">
-    <div class="box table-of-contents right facets" role="navigation" tabindex="1">
-      <aside class="menu">
-        <AccordionCard :showing="showing">
-          <template #header>
-            <div>
-              <p class="menu-label is-size-5 label">
-                {{ $t('facets.title') }}
-                <span v-tooltip:top="$t('search.what-are-facets')">
-                  <font-awesome-icon icon="question-circle" />
+  <!-- <div class="facetColumn column is-2 is-hidden-touch"> -->
+  <div
+    class="box table-of-contents is-flex is-flex-direction-column right facets menu is-hidden-touch"
+    role="navigation"
+    tabindex="1"
+  >
+    <AccordionCard :showing="showing">
+      <template #header>
+        <p class="menu-label is-size-5 label">
+          {{ $t('facets.title') }}
+          <span v-tooltip:top="$t('search.what-are-facets')">
+            <font-awesome-icon icon="question-circle" />
+          </span>
+        </p>
+      </template>
+      <template #content>
+        <div class="is-flex is-flex-direction-column">
+          <div class="columns is-vcentered m-1">
+            <div class="column is-8 is-size-7">
+              <span
+                class=""
+                :class="preferences.displayLeftToRight ? 'has-text-left' : 'has-text-right'"
+              >
+                <p>{{ $t('search.display-number-of-author-facets') }}</p>
+              </span>
+            </div>
+            <div class="column is-4 is-size-7">
+              <div class="dropdown is-hoverable">
+                <div class="dropdown-trigger">
+                  <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
+                    <span>{{ authorFacetCount > 0 ? authorFacetCount : 'all' }}</span>
+                    <span class="icon is-small">
+                      <font-awesome-icon icon="angle-down" aria-hidden="true" />
+                    </span>
+                  </button>
+                </div>
+                <div class="dropdown-menu" id="author-facet-dropdown-menu" role="menu">
+                  <div class="dropdown-content left">
+                    <div v-for="val of facetCount" :key="val">
+                      <a
+                        class="dropdown-item"
+                        :class="val === authorFacetCount ? 'is-active' : ''"
+                        href="#"
+                        @click.prevent="updateFacetCount(val)"
+                        >{{ val }}</a
+                      >
+                    </div>
+                    <hr class="dropdown-divider" />
+                    <a href="#" @click.prevent="updateFacetCount(0)" class="dropdown-item">{{
+                      $t('facets.facet-count-all')
+                    }}</a>
+                    <hr class="dropdown-divider" />
+                    <div class="dropdown-item">
+                      <input
+                        type="number"
+                        min="1"
+                        max="100"
+                        v-model="authorFacetCount"
+                        @input="preferences.authorFacetCount = authorFacetCount"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="columns is-vcentered m-1">
+            <div class="column is-8 is-size-7">
+              <span
+                class=""
+                :class="preferences.displayLeftToRight ? 'has-text-left' : 'has-text-right'"
+              >
+                {{ $t('facets.sort-by-label') }}</span
+              >
+            </div>
+            <div class="column is-4 is-size-7">
+              <div class="dropdown is-hoverable">
+                <div class="dropdown-trigger">
+                  <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
+                    <span v-if="preferences.displayLeftToRight">
+                      <span>{{ $t('facets.most-hits') }}</span>
+                      <span class="icon is-small">
+                        <font-awesome-icon icon="angle-down" aria-hidden="true" />
+                      </span>
+                    </span>
+                    <span v-else>
+                      <span class="icon is-small">
+                        <font-awesome-icon icon="angle-down" aria-hidden="true" />
+                      </span>
+                      <span>{{ $t('facets.most-hits') }}</span>
+                    </span>
+                  </button>
+                </div>
+                <div class="dropdown-menu" id="author-facet-dropdown-menu" role="menu">
+                  <div class="dropdown-content left">
+                    <a
+                      href="#"
+                      @click.prevent="updateSortOption('count')"
+                      class="dropdown-item"
+                      :class="facetSortBy === 'count' ? 'is-active' : ''"
+                      >{{ $t('facets.most-hits') }}</a
+                    >
+                    <a
+                      href="#"
+                      @click.prevent="updateSortOption('active')"
+                      class="dropdown-item"
+                      :class="facetSortBy === 'active' ? 'is-active' : ''"
+                      >{{ $t('facets.active-facets') }}</a
+                    >
+                    <a
+                      href="#"
+                      @click.prevent="updateSortOption('label')"
+                      :class="facetSortBy === 'label' ? 'is-active' : ''"
+                      class="dropdown-item"
+                      >{{ $t('facets.by-name') }}</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span>
+              <p class="pb-3">
+                <input
+                  class="input mb-2"
+                  v-model="filterValue"
+                  type="text"
+                  :placeholder="$t('search.filter')"
+                />
+                <span class="menu-label p-2" v-if="filterValue !== undefined">
+                  {{ $t('search.relevant-facets', [filteredFacets?.length]) }}
                 </span>
               </p>
-            </div>
-          </template>
-          <template #content>
-            <div>
-              <div class="columns is-vcentered m-1">
-                <div class="column is-8 is-size-7">
-                  <span
-                    class=""
-                    :class="preferences.displayLeftToRight ? 'has-text-left' : 'has-text-right'"
-                  >
-                    <p>{{ $t('search.display-number-of-author-facets') }}</p>
-                  </span>
-                </div>
-                <div class="column is-4 is-size-7">
-                  <div class="dropdown is-hoverable">
-                    <div class="dropdown-trigger">
-                      <button
-                        class="button py-0"
-                        aria-haspopup="true"
-                        aria-controls="dropdown-menu"
-                      >
-                        <span>{{ authorFacetCount > 0 ? authorFacetCount : 'all' }}</span>
-                        <span class="icon is-small">
-                          <font-awesome-icon icon="angle-down" aria-hidden="true" />
-                        </span>
-                      </button>
-                    </div>
-                    <div class="dropdown-menu" id="author-facet-dropdown-menu" role="menu">
-                      <div class="dropdown-content left">
-                        <div v-for="val of facetCount" :key="val">
-                          <a
-                            class="dropdown-item"
-                            :class="val === authorFacetCount ? 'is-active' : ''"
-                            href="#"
-                            @click.prevent="updateFacetCount(val)"
-                            >{{ val }}</a
-                          >
-                        </div>
-                        <hr class="dropdown-divider" />
-                        <a href="#" @click.prevent="updateFacetCount(0)" class="dropdown-item">{{
-                          $t('facets.facet-count-all')
-                        }}</a>
-                        <hr class="dropdown-divider" />
-                        <div class="dropdown-item">
-                          <input
-                            type="number"
-                            min="1"
-                            max="100"
-                            v-model="authorFacetCount"
-                            @input="preferences.authorFacetCount = authorFacetCount"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="columns is-vcentered m-1">
-                <div class="column is-8 is-size-7">
-                  <span
-                    class=""
-                    :class="preferences.displayLeftToRight ? 'has-text-left' : 'has-text-right'"
-                  >
-                    {{ $t('facets.sort-by-label') }}</span
-                  >
-                </div>
-                <div class="column is-4 is-size-7">
-                  <div class="dropdown is-hoverable">
-                    <div class="dropdown-trigger">
-                      <button
-                        class="button py-0"
-                        aria-haspopup="true"
-                        aria-controls="dropdown-menu"
-                      >
-                        <span>{{ $t('facets.most-hits') }}</span>
-                        <span class="icon is-small">
-                          <font-awesome-icon icon="angle-down" aria-hidden="true" />
-                        </span>
-                      </button>
-                    </div>
-                    <div class="dropdown-menu" id="author-facet-dropdown-menu" role="menu">
-                      <div class="dropdown-content left">
-                        <a
-                          href="#"
-                          @click.prevent="updateSortOption('count')"
-                          class="dropdown-item"
-                          :class="facetSortBy === 'count' ? 'is-active' : ''"
-                          >{{ $t('facets.most-hits') }}</a
-                        >
-                        <a
-                          href="#"
-                          @click.prevent="updateSortOption('active')"
-                          class="dropdown-item"
-                          :class="facetSortBy === 'active' ? 'is-active' : ''"
-                          >{{ $t('facets.active-facets') }}</a
-                        >
-                        <a
-                          href="#"
-                          @click.prevent="updateSortOption('label')"
-                          :class="facetSortBy === 'label' ? 'is-active' : ''"
-                          class="dropdown-item"
-                          >{{ $t('facets.by-name') }}</a
-                        >
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <span>
-                  <p class="pb-3">
-                    <input
-                      class="input mb-2"
-                      v-model="filterValue"
-                      type="text"
-                      :placeholder="$t('search.filter')"
-                    />
-                    <span class="menu-label p-2" v-if="filterValue !== undefined">
-                      {{ $t('search.relevant-facets', [filteredFacets?.length]) }}
-                    </span>
-                  </p>
-                </span>
-              </div>
-            </div>
-            <div
-              class="container facet-list is-flex is-flex-direction is-justify-content-center is-flex-wrap-wrap is-align-items-center"
-            >
-              <span v-for="facet of filteredFacets" v-bind:key="sha1(facet)">
-                <FilterTag
-                  :label="facet.label"
-                  :count="facet.count"
-                  :active="facet.active"
-                  :showCount="true"
-                  @func="toggleFacet(facet)"
-                />
-              </span>
-            </div>
-          </template>
+            </span>
+          </div>
+        </div>
+        <div
+          class="facet-list is-flex is-flex-direction-column is-flex-wrap-nowrap is-align-items-center"
+        >
+          <span v-for="facet of filteredFacets" v-bind:key="sha1(facet)">
+            <FilterTag
+              :label="facet.label"
+              :count="facet.count"
+              :active="facet.active"
+              :showCount="true"
+              @func="toggleFacet(facet)"
+            />
+          </span>
+        </div>
+      </template>
 
-          <template #footer>
-            <div class="columns">
-              <span
-                class="column footer-icon pb-2 is-small has-text-centered is-clickable"
-                :class="{ rotate: !showing }"
-                @click="toggle()"
-              >
-                <font-awesome-icon icon="circle-chevron-up" size="lg" />
-              </span>
-            </div>
-          </template>
-        </AccordionCard>
-      </aside>
-    </div>
+      <template #footer>
+        <div class="columns">
+          <span
+            class="column footer-icon p-2 is-small has-text-centered is-clickable"
+            :class="{ rotate: !showing }"
+            @click="toggle()"
+          >
+            <font-awesome-icon icon="circle-chevron-up" size="lg" />
+          </span>
+        </div>
+      </template>
+    </AccordionCard>
   </div>
-  <div v-show="openMobileFacets" class="is-hidden-desktop">
+
+  <div v-show="openMobileFacets" class="menu is-flex is-flex-direction-column is-hidden-desktop">
     <div>
       <p class="menu-label is-size-5 label">
         {{ $t('facets.title') }}
@@ -185,7 +185,7 @@ Description: presents the facet bar
         </span>
       </p>
     </div>
-    <div>
+    <div class="is-flex is-flex-direction-column">
       <div class="columns is-vcentered m-1">
         <div class="column is-8 is-size-7">
           <span
@@ -282,25 +282,23 @@ Description: presents the facet bar
           </div>
         </div>
       </div>
-      <div>
-        <span>
-          <p class="pb-3">
-            <input
-              class="input mb-2"
-              v-model="filterValue"
-              type="text"
-              :placeholder="$t('search.filter')"
-            />
-            <span class="menu-label p-2" v-if="filterValue !== undefined">
-              {{ $t('search.relevant-facets', [filteredFacets?.length]) }}
-            </span>
-          </p>
-        </span>
-      </div>
+      <span>
+        <p class="pb-3">
+          <input
+            class="input mb-2"
+            v-model="filterValue"
+            type="text"
+            :placeholder="$t('search.filter')"
+          />
+          <span class="menu-label p-2" v-if="filterValue !== undefined">
+            {{ $t('search.relevant-facets', [filteredFacets?.length]) }}
+          </span>
+        </p>
+      </span>
       <div
-        class="container facet-list is-flex is-flex-direction is-justify-content-center is-flex-wrap-wrap is-align-items-center"
+        class="facet-list is-flex is-flex-direction-column is-justify-content-center is-flex-wrap-wrap is-align-items-center"
       >
-        <span v-for="facet of filteredFacets" v-bind:key="sha1(facet)">
+        <span v-for="facet of filteredFacets" :key="sha1(facet)">
           <FilterTag
             :label="facet.label"
             :count="facet.count"

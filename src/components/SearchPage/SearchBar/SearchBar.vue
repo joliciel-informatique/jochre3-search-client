@@ -14,7 +14,9 @@ Description: presents the search bar
     <div class="">
       <div class="pb-0 mb-0 field has-addons">
         <p class="control">
-          <a id="searchBarLabel" class="button is-static">{{ $t('search.search') }} </a>
+          <a id="searchBarLabel" class="button is-static is-hidden-mobile"
+            >{{ $t('search.search') }}
+          </a>
         </p>
         <div class="control container">
           <p
@@ -72,14 +74,15 @@ Description: presents the search bar
         <p class="control" v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
           <a class="button is-static is-clickable">
             <label for="strictSearchCheckbox" class="mx-2 is-clickable"
-              ><span class="is-hidden-touch">{{ $t('search.related-word-forms') }}</span>
-              <span
-                ><input
-                  id="strictSearchCheckbox"
-                  type="checkbox"
-                  aria-label="strict search"
-                  v-model="strict"
-                  @change="emit('newSearch')" /></span
+              ><span
+                ><span class="is-hidden-mobile">{{ $t('search.related-word-forms') }}</span>
+                <span class="px-2"
+                  ><input
+                    id="strictSearchCheckbox"
+                    type="checkbox"
+                    aria-label="strict search"
+                    v-model="strict"
+                    @change="emit('newSearch')" /></span></span
             ></label>
           </a>
         </p>
