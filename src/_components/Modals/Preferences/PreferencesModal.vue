@@ -29,7 +29,10 @@
             <div class="is-flex is-flex-direction-row m-2">
               <span class="px-2">{{ $t('preferences.snippets-per-book') }}</span>
               <div class="control is-expanded">
-                <label class="switch is-rounded is-small">
+                <label
+                  class="switch is-rounded is-small"
+                  :class="preferences.language === 'en' ? '' : 'switch-ltr'"
+                >
                   <input type="checkbox" v-model="displayPerBook" />
                   <span class="check"></span>
                 </label>
