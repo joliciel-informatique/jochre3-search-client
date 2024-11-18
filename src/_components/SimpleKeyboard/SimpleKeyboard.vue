@@ -45,7 +45,7 @@ const positionKeyboard = () => {
     const { top, left, width, height } = parent as DOMRect
     const container = document.getElementById(`${attachTo.value}-keyboard`) as HTMLDivElement
     if ((isTablet.value && isMobile.value) || isPortrait.value) {
-      container.setAttribute('style', `top:${top + height}px;width: ${width - 2}`)
+      container.setAttribute('style', `top:${top + height}px;width: ${width - 2}px`)
     } else {
       container.setAttribute(
         'style',
