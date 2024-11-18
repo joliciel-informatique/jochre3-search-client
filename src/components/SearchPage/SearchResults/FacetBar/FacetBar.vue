@@ -12,7 +12,8 @@ Description: presents the facet bar
 <template>
   <!-- <div class="facetColumn column is-2 is-hidden-touch"> -->
   <div
-    class="box table-of-contents is-flex is-flex-direction-column right facets menu is-hidden-touch"
+    class="box table-of-contents is-flex is-flex-direction-column facets menu is-hidden-touch"
+    :class="preferences.displayLeftToRight ? 'right' : 'left'"
     role="navigation"
     tabindex="1"
   >

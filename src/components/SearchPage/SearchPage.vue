@@ -84,7 +84,7 @@
     </nav>
     <HeaderPage />
   </header>
-  <main>
+  <main :class="preferences.displayLeftToRight ? '' : 'rtl-align'">
     <!-- Contents table on desktop -->
     <div
       v-if="query.length && searchResults?.length"
