@@ -12,7 +12,9 @@
           <img :src="wordImage" :alt="$t('fix-word.image-alt', [wordSuggestion])" />
         </div>
         <span class="columns pb-0 mb-0 field">
-          <span class="column field has-addons has-addons-left is-horizontal">
+          <span
+            class="column is-flex is-flex-direction-row is-flex-wrap-nowrap field has-addons has-addons-left is-horizontal"
+          >
             <p class="control is-expanded">
               <input
                 :id="`wordCorrectionInput-${wordSuggestion}`"

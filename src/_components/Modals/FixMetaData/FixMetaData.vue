@@ -16,7 +16,7 @@
       <div class="p-2">{{ $t('fix-metadata.instructions.normal') }}</div>
       <div class="columns field has-addons">
         <span
-          class="column field is-horizontal"
+          class="column is-flex is-flex-direction-row is-flex-wrap-nowrap field is-horizontal"
           :class="metadataModal.field !== 'publicationYear' ? 'has-icons-right' : ''"
         >
           <p class="control is-expanded">
