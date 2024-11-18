@@ -27,17 +27,24 @@
           <div class="column">
             <h1 class="label">{{ $t('preferences.snippets-heading') }}</h1>
             <div class="is-flex is-flex-direction-row m-2">
-              <span class="px-2">{{ $t('preferences.snippets-per-book') }}</span>
+              <!-- the switch needs labels inverted if right-to-left -->
+              <span class="px-2" v-if="preferences.displayLeftToRight">{{
+                $t('preferences.snippets-per-book')
+              }}</span>
+              <span class="px-2" v-else>{{ $t('preferences.snippets-as-list') }}</span>
               <div class="control is-expanded">
                 <label
                   class="switch is-rounded is-small"
-                  :class="preferences.language === 'en' ? '' : 'switch-ltr'"
+                  :class="preferences.displayLeftToRight ? '' : 'switch-ltr'"
                 >
                   <input type="checkbox" v-model="displayPerBook" />
                   <span class="check"></span>
                 </label>
               </div>
-              <span class="px-2">{{ $t('preferences.snippets-as-list') }}</span>
+              <span class="px-2" v-if="preferences.displayLeftToRight">{{
+                $t('preferences.snippets-as-list')
+              }}</span>
+              <span class="px-2" v-else>{{ $t('preferences.snippets-per-book') }}</span>
             </div>
           </div>
         </div>
