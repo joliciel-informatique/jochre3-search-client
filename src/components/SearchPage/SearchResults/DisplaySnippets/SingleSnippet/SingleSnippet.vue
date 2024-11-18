@@ -10,7 +10,7 @@ Methods: getSelectedWord (local), toggleImageSnippet (local), fetchData (importe
 Description: displays text snippets from the OCR text
 -->
 <template>
-  <li :docRef="docRef" class="card snippet mr-2 mb-4" :bookIndex :snippetIndex>
+  <li :docRef="docRef" class="card snippet mb-4" :bookIndex :snippetIndex>
     <header
       class="card-header"
       :class="selectedEntry.docRef === docRef ? 'selected-snippet' : 'snippet'"
@@ -24,7 +24,7 @@ Description: displays text snippets from the OCR text
       </p>
       <!-- Open page in book -->
       <button
-        class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column"
+        class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column has-text-centered"
         aria-label="view book"
         v-tooltip:top="$t('results.show-original-page', [snippet.page])"
         v-if="snippet.deepLink"
@@ -34,12 +34,12 @@ Description: displays text snippets from the OCR text
         <span class="icon">
           <font-awesome-icon icon="book-open" size="lg" />
         </span>
-        <span class="is-size-7">{{ $t('snippet.open-page') }}</span>
+        <span v-if="!preferences.isMobile" class="is-size-7">{{ $t('snippet.open-page') }}</span>
       </button>
 
       <!-- View transcribed text -->
       <button
-        class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column"
+        class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column has-text-centered"
         aria-label="view transcription"
         v-tooltip:top="$t('results.show-text')"
         @click="openTranscribedText()"
@@ -48,7 +48,9 @@ Description: displays text snippets from the OCR text
         <span class="icon">
           <font-awesome-icon icon="file-lines" size="lg" />
         </span>
-        <span class="is-size-7">{{ $t('snippet.open-transcription') }}</span>
+        <span v-if="!preferences.isMobile" class="is-size-7">{{
+          $t('snippet.open-transcription')
+        }}</span>
       </button>
     </header>
     <div class="card-content" :data-docref="docRef" :data-page="snippet.page">

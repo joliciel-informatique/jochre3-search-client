@@ -214,6 +214,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
     needsRightToLeft,
     isMobile,
     isTablet,
+    isDesktop,
     corpusLeftToRight,
     displayPerBook,
     facetSortBy: facetSortBy,

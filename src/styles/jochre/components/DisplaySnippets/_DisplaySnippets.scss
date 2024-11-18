@@ -2,28 +2,31 @@
 
 .snippets-on {
   position: relative;
-  left: 0.5vw;
-  width: 99%;
+  // // left: 0.5vw;
+  // &.desktop {
+  //   // width: 50vw;
+  // }
+  // &.mobile {
+  //   // width: 96vw;
+  // }
 }
 
 .bla {
-  position: fixed;
   justify-items: center;
   overflow-y: scroll;
-  height: 76%;
-  // height: 77vh;
-  // width: 98vw;
+  height: calc(100vh - 150px);
   &.on-desktop {
     left: 27vw;
     right: 19vw;
     width: 52vw;
     scrollbar-width: thin;
   }
-  &.on-mobile {
-    left: 2vw;
-    right: 2vw;
-    // width: 96vw;
-  }
+  // &.on-mobile {
+  //   // height: 75vh;
+  //   // left: 2vw;
+  //   // right: 2vw;
+  //   // width: 96vw;
+  // }
 }
 
 .card.metadata {

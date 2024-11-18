@@ -12,7 +12,7 @@ Description: controls text snippets from the OCR text
 <template>
   <div
     id="snippets"
-    class="bla is-flex is-justify-content-center"
+    class="is-flex is-justify-content-center bla"
     :class="preferences.isTablet || preferences.isMobile ? `on-mobile` : `on-desktop`"
     tabindex="-1"
     v-if="!isLoading"
@@ -26,7 +26,7 @@ Description: controls text snippets from the OCR text
           class="is-invisible"
         />
         <ul
-          class="pb-2 pt-4 snippets-on"
+          class="p-2 pt-4 snippets-on"
           :class="
             preferences.isTablet || preferences.isMobile
               ? `mobile is-hidden-desktop`
