@@ -7,8 +7,8 @@
     }"
   >
     <nav class="is-flex is-flex-direction-column navbar" id="navbar" role="navigation">
-      <div class="navbar-brand is-flex is-flex-direction-row is-flex-wrap-nowrap">
-        <div class="navbar-item is-flex is-flex-grow-1 is-flex-shrink-3">
+      <div class="navbar-brand is-flex is-flex-direction-row is-justify-content-space-between">
+        <div class="navbar-item is-flex is-flex-direction-row is-flex-grow-5 is-flex-shrink-1">
           <SearchBar
             @newSearch="newSearch"
             @resetSearchResults="resetSearchResults"
@@ -23,7 +23,7 @@
           <UserOptions />
         </div>
         <div
-          class="navbar-burger is-flex is-flex-shrink-2 mr-5 has-text-white is-hidden-desktop"
+          class="navbar-burger is-flex is-flex-grow-1 has-text-white is-hidden-desktop"
           :class="openNavBarMobileMenu ? 'is-active' : ''"
           role="button"
           aria-label="menu"
