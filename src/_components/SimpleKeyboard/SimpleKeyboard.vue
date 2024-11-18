@@ -143,7 +143,6 @@ onMounted(() => {
     onKeyPress: onKeyPress,
     onKeyReleased: onKeyReleased,
     ...keyboardLayout,
-    // rtl: true,
     autoUseTouchEvents: true
   })
   addEventListeners()

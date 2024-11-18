@@ -52,13 +52,9 @@
 import { computed, onBeforeUpdate, ref, type Ref } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
-import { usePreferencesStore } from '@/stores/PreferencesStore'
-
-const preferences = usePreferencesStore()
 
 const wordModal: Ref = defineModel('wordModal')
 const notification: Ref = defineModel('notification')
-const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 const wordImage = ref('')
 const wordLoading = ref(false)
 const wordSuggestion = ref('')
@@ -79,12 +75,6 @@ onBeforeUpdate(async () => {
     wordLoading.value = false
   }
 })
-
-// const toggleKeyboard = (attachTo: string) => {
-//   simpleKeyboard.value.attachTo = attachTo
-//   simpleKeyboard.value.show = !simpleKeyboard.value.show
-//   simpleKeyboard.value.ref = wordSuggestion
-// }
 
 const loadWordImage = async (params: URLSearchParams) => {
   const response = await fetchData('word-image', 'get', params, 'image/png', 'arraybuffer')
