@@ -187,9 +187,13 @@ $menu-nested-list-margin: 1em;
 }
 
 .navbar-mobile {
-  position: fixed;
+  position: absolute;
   right: 0.5vw;
-  top: 55px;
+
+  @media screen and (max-width: 1023px) {
+    top: 55px;
+  }
+
   z-index: 100;
   .menu {
     .is-hidden-desktop {

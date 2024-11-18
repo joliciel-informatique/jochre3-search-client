@@ -19,9 +19,12 @@
             v-model:is-loading="isLoading"
           />
         </div>
-        <div class="navbar-item is-align-self-flex-start user-options is-hidden-touch">
-          <UserOptions />
-        </div>
+        <UserOptions
+          v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+          v-model:open-nav-bar-mobile-menu="openNavBarMobileMenu"
+        />
+        <!-- <div class="navbar-item is-align-self-flex-start user-options is-hidden-touch">
+        </div> -->
         <div
           class="navbar-burger is-flex is-flex-grow-1 has-text-white is-hidden-desktop"
           :class="openNavBarMobileMenu ? 'is-active' : ''"
@@ -37,6 +40,14 @@
             <span aria-hidden="true"></span>
           </div>
         </div>
+        <!-- <div v-show="openNavBarMobileMenu" class="navbar-mobile" id="navbar-mobile">
+          <div class="menu is-pulled-right panel">
+            <UserOptions
+              v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+              v-model:open-nav-bar-mobile-menu="openNavBarMobileMenu"
+            />
+          </div>
+        </div> -->
       </div>
       <AdvancedSearch
         @newSearch="newSearch"
@@ -72,14 +83,6 @@
           @reset-search-results="resetSearchResults"
           @new-search="newSearch"
         />
-      </div>
-      <div v-show="openNavBarMobileMenu" class="navbar-mobile" id="navbar-mobile">
-        <div class="menu is-pulled-right panel">
-          <UserOptions
-            v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-            v-model:open-nav-bar-mobile-menu="openNavBarMobileMenu"
-          />
-        </div>
       </div>
     </nav>
     <HeaderPage />
@@ -264,18 +267,6 @@ onMounted(() => {
       }
     }
   })
-  // if (window.innerWidth < 1024 && window.innerWidth > 768) {
-  //   isTablet.value = true
-  //   isMobile.value = false
-  // }
-
-  // if (window.innerWidth <= 768) {
-  //   isTablet.value = false
-  //   isMobile.value = true
-  // }
-  // !isPortrait.value && !isMobile.value
-  //   ? document.getElementById('header')?.setAttribute('style', 'display:none')
-  //   : document.getElementById('header')?.setAttribute('style', 'display:flex')
 
   router.isReady().then(() => {
     if (route.query['query']) query.value = (route.query['query'] as string).trim()
