@@ -156,6 +156,7 @@ Description: presents the facet bar
               :count="facet.count"
               :active="facet.active"
               :showCount="true"
+              :right-to-left="!preferences.corpusLeftToRight"
               @func="toggleFacet(facet)"
             />
           </span>
@@ -304,6 +305,7 @@ Description: presents the facet bar
             :count="facet.count"
             :active="facet.active"
             :showCount="true"
+            :right-to-left="!preferences.corpusLeftToRight"
             @func="toggleFacet(facet)"
           />
         </span>
@@ -319,6 +321,7 @@ import type { AggregationBin } from '@/assets/interfacesExternals'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { insertInSortedArray } from '@/assets/functions'
 import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
+import { convertTypeAcquisitionFromJson } from 'typescript'
 
 const preferences = usePreferencesStore()
 const defaultFacetCount = [5, 10, 15, 20]

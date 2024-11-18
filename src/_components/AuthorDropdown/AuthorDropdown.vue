@@ -27,6 +27,7 @@
           :label="author.label"
           :count="author.count"
           :showCount="false"
+          :right-to-left="includeAuthor && !preferences.corpusLeftToRight"
           @func="delAuthor"
         />
       </div>
@@ -38,7 +39,9 @@ import { onMounted, ref, watch, type Ref } from 'vue'
 import { fetchData } from '@/assets/fetchMethods'
 import { sha1 } from 'object-hash'
 import FilterTag from '../FilterTag/FilterTag.vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
 
+const preferences = usePreferencesStore()
 const { attachTo } = defineProps(['attachTo'])
 const authorDropdownItems = ref<Array<{ label: string; count: number }>>([])
 const authorText: Ref = defineModel('authorText')
