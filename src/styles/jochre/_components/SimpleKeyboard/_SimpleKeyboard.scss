@@ -11,13 +11,25 @@
   font-style: normal;
   position: fixed;
   color: $foreground-color-2;
-  min-width: 700px;
   border: 0.1rem solid $background-color-1;
   padding: 1em;
   margin-top: 0.25em;
-}
 
-.hg-theme-default .hg-button-enter,
-.hg-button-alt {
-  max-width: 3rem;
+  @media screen and (max-width: 768px) {
+    left: 0px;
+    width: 100vw;
+  }
+
+  .hg-button {
+    margin-left: 5px;
+    margin-right: 0px;
+  }
+
+  .hg-button-enter,
+  .hg-button-mobileAlt,
+  .hg-button-mobileNumbers,
+  .hg-button-mobileDefault,
+  .hg-button-mobileChars {
+    max-width: 3rem;
+  }
 }

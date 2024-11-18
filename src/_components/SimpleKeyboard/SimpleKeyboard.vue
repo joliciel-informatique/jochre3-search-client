@@ -25,11 +25,15 @@ import Keyboard, { SimpleKeyboard } from 'simple-keyboard'
 import 'simple-keyboard/build/css/index.css'
 import keyboardYiddish from '@/assets/keyboardLayouts/keyboardYiddish'
 import keyboardMobile from '@/assets/keyboardLayouts/keyboardMobile'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { storeToRefs } from 'pinia'
 
-// const { attachTo } = defineProps(['attachTo']) // The id of the HTML element it's attachTo to
 const show = ref(false)
 const reference = defineModel('reference')
 const attachTo = defineModel<string>('attachTo', { default: '' })
+const preferences = usePreferencesStore()
+
+const { isMobile, isPortrait, isTablet, isDesktop } = storeToRefs(preferences)
 
 const emit = defineEmits(['onEnter'])
 
@@ -40,16 +44,18 @@ const positionKeyboard = () => {
   if (parent) {
     const { top, left, width, height } = parent as DOMRect
     const container = document.getElementById(`${attachTo.value}-keyboard`) as HTMLDivElement
-    container.setAttribute(
-      'style',
-      `top:${top + height}px;left:${left}px;width:${width - 2}px;position:fixed`
-    )
+    if ((isTablet.value && isMobile.value) || isPortrait.value) {
+      container.setAttribute('style', `top:${top + height}px;width: ${width - 2}`)
+    } else {
+      container.setAttribute(
+        'style',
+        `top:${top + height}px;left:${left}px;width:${width - 2}px;position:fixed`
+      )
+    }
   }
 }
 
-const toggleKeyboard = () => {
-  show.value = !show.value
-}
+const toggleKeyboard = () => (show.value = !show.value)
 
 const switchLayout = (button: string) => {
   const layouts = ['default', 'numbers', 'shift', 'alt', 'chars']
@@ -58,7 +64,7 @@ const switchLayout = (button: string) => {
   const isValidLayout =
     layouts.filter((layout) => targetLayout.toLowerCase().includes(layout)).length !== 0
   if (!isValidLayout) return false
-  const defaultKeyboard = currentLayout?.includes('mobile') ? 'keyboardMobile' : 'default'
+  const defaultKeyboard = currentLayout?.includes('mobile') ? currentLayout : 'default'
   const layout = currentLayout === targetLayout ? defaultKeyboard : targetLayout
   keyboard.setOptions({ layoutName: layout })
   return true
@@ -124,14 +130,27 @@ watch(show, (newV) => {
   }
 })
 
+window.addEventListener('resize', () => {
+  positionKeyboard()
+  // console.log(isDesktop.value, isTablet.value, isMobile.value, isPortrait.value)
+})
+
+watch([isMobile, isTablet, isPortrait, isDesktop], () => {
+  positionKeyboard()
+})
+
 onMounted(() => {
+  const keyboardLayout = isMobile || isPortrait || isTablet ? keyboardMobile : keyboardYiddish
+  const keyboardLayoutName = isMobile || isPortrait || isTablet ? 'mobileDefault' : 'default'
+  // console.log(isMobile, isPortrait, isTablet)
+  // console.log(keyboardLayout, keyboardLayoutName)
   keyboard = new Keyboard(`${attachTo.value}-keyboard-container`, {
-    layoutName: 'default',
+    layoutName: keyboardLayoutName,
     inputName: 'default',
     onKeyPress: onKeyPress,
     onKeyReleased: onKeyReleased,
-    ...keyboardYiddish,
-    rtl: true,
+    ...keyboardLayout,
+    // rtl: true,
     autoUseTouchEvents: true
   })
   addEventListeners()
