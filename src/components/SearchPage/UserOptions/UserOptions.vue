@@ -65,7 +65,7 @@
         target="_blank"
       >
         <font-awesome-icon class="panel-icon" icon="gear" size="lg" />
-        <span> Preferences </span>
+        <span>{{ $t('header.preferences') }}</span>
       </a>
       <a class="panel-block" @click.prevent="signout()" :title="$t('header.logout')">
         <font-awesome-icon class="panel-icon" icon="right-from-bracket" size="lg" />
