@@ -17,18 +17,16 @@
           >
             <p class="control is-expanded">
               <input
-                :id="`wordCorrectionInput-${wordSuggestion}`"
+                :id="`wordCorrectionInput-${offset}`"
+                name="wordCorrectionInput"
                 class="input"
-                :class="{
-                  'rtl-align': preferences.needsRightToLeft
-                }"
                 type="text"
                 lang="yi"
                 v-model="wordSuggestion"
               />
             </p>
-            <simple-keyboard
-              :attach-to="`wordCorrectionInput-${wordSuggestion}`"
+            <simple-key
+              :attach-to="`wordCorrectionInput-${offset}`"
               v-model:reference="wordSuggestion"
               @onEnter="null"
             />
@@ -51,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUpdate, ref, type Ref } from 'vue'
+import { computed, onBeforeUpdate, ref, type Ref } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
@@ -64,6 +62,7 @@ const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 const wordImage = ref('')
 const wordLoading = ref(false)
 const wordSuggestion = ref('')
+const offset = computed(() => `${wordModal.value.docRef}-${wordModal.value.globalOffset}`)
 
 onBeforeUpdate(async () => {
   if (wordModal.value.docRef && wordModal.value.selection) {

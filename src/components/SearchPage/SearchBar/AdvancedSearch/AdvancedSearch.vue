@@ -62,7 +62,7 @@ Description: the advanced search toolbox
                     />
                   </span>
                 </p>
-                <simple-keyboard
+                <simple-key
                   attach-to="advanced-search-authors"
                   v-model:reference="authorText"
                   @onEnter="() => emit('newSearch')"
@@ -97,7 +97,7 @@ Description: the advanced search toolbox
                   @keyup.enter="emit('newSearch')"
                 />
               </p>
-              <simple-keyboard
+              <simple-key
                 attach-to="bookTitle"
                 v-model:reference="title"
                 @onEnter="() => emit('newSearch')"

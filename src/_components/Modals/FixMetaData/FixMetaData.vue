@@ -37,7 +37,7 @@
               :title="$t('search.keyboard')"
             />
           </p>
-          <simple-keyboard
+          <simple-key
             v-model:attach-to="metadataModal.field"
             v-model:reference="metadataModal.value"
             @onEnter="null"
@@ -73,7 +73,7 @@
                   :placeholder="$t('search.authorPlaceholder')"
                 />
               </p>
-              <simple-keyboard
+              <simple-key
                 :attach-to="`new-author-${metadataModal.field}`"
                 v-model:reference="authorText"
                 @onEnter="null"
