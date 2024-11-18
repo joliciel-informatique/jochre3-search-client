@@ -66,7 +66,7 @@ Description: presents the search bar
             ></span>
           </p>
         </div>
-        <simple-keyboard
+        <simple-key
           attach-to="query"
           v-model:reference="query"
           @onEnter="() => emit('newSearch')"

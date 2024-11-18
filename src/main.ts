@@ -56,7 +56,7 @@ app.use(CookieConsentVue, cookieConsentConfig)
 
 // app.component('SearchPage', SearchPage)
 app.component('author-dropdown', AuthorDropdown)
-app.component('simple-keyboard', SimpleKeyboard)
+app.component('simple-key', SimpleKeyboard)
 app.component('font-awesome-icon', FontAwesomeIcon)
 
 console.log('Starting up')

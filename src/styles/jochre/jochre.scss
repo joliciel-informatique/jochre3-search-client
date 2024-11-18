@@ -159,3 +159,19 @@ main {
 .pagination {
   --bulma-pagination-margin: 0;
 }
+
+@media screen and (max-width: 768px) {
+  .modal-content {
+    width: unset;
+  }
+}
+
+.modal-card-head {
+  white-space: nowrap;
+  max-width: 100%;
+  p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100px;
+  }
+}

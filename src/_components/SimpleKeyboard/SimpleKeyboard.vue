@@ -130,27 +130,19 @@ watch(show, (newV) => {
   }
 })
 
-window.addEventListener('resize', () => {
-  positionKeyboard()
-  // console.log(isDesktop.value, isTablet.value, isMobile.value, isPortrait.value)
-})
+window.addEventListener('resize', () => positionKeyboard())
 
-watch([isMobile, isTablet, isPortrait, isDesktop], () => {
-  positionKeyboard()
-})
+watch([isMobile, isTablet, isPortrait, isDesktop], () => positionKeyboard())
 
 onMounted(() => {
   const keyboardLayout = isMobile || isPortrait || isTablet ? keyboardMobile : keyboardYiddish
   const keyboardLayoutName = isMobile || isPortrait || isTablet ? 'mobileDefault' : 'default'
-  // console.log(isMobile, isPortrait, isTablet)
-  // console.log(keyboardLayout, keyboardLayoutName)
   keyboard = new Keyboard(`${attachTo.value}-keyboard-container`, {
     layoutName: keyboardLayoutName,
     inputName: 'default',
     onKeyPress: onKeyPress,
     onKeyReleased: onKeyReleased,
     ...keyboardLayout,
-    // rtl: true,
     autoUseTouchEvents: true
   })
   addEventListeners()

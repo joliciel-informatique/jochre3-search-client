@@ -12,21 +12,21 @@
           <img :src="wordImage" :alt="$t('fix-word.image-alt', [wordSuggestion])" />
         </div>
         <span class="columns pb-0 mb-0 field">
-          <span class="column field has-addons has-addons-left is-horizontal">
+          <span
+            class="column is-flex is-flex-direction-row is-flex-wrap-nowrap field has-addons has-addons-left is-horizontal"
+          >
             <p class="control is-expanded">
               <input
-                :id="`wordCorrectionInput-${wordSuggestion}`"
+                :id="`wordCorrectionInput-${offset}`"
+                name="wordCorrectionInput"
                 class="input"
-                :class="{
-                  'rtl-align': preferences.needsRightToLeft
-                }"
                 type="text"
                 lang="yi"
                 v-model="wordSuggestion"
               />
             </p>
-            <simple-keyboard
-              :attach-to="`wordCorrectionInput-${wordSuggestion}`"
+            <simple-key
+              :attach-to="`wordCorrectionInput-${offset}`"
               v-model:reference="wordSuggestion"
               @onEnter="null"
             />
@@ -49,19 +49,16 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUpdate, ref, type Ref } from 'vue'
+import { computed, onBeforeUpdate, ref, type Ref } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
-import { usePreferencesStore } from '@/stores/PreferencesStore'
-
-const preferences = usePreferencesStore()
 
 const wordModal: Ref = defineModel('wordModal')
 const notification: Ref = defineModel('notification')
-const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 const wordImage = ref('')
 const wordLoading = ref(false)
 const wordSuggestion = ref('')
+const offset = computed(() => `${wordModal.value.docRef}-${wordModal.value.globalOffset}`)
 
 onBeforeUpdate(async () => {
   if (wordModal.value.docRef && wordModal.value.selection) {
@@ -78,12 +75,6 @@ onBeforeUpdate(async () => {
     wordLoading.value = false
   }
 })
-
-// const toggleKeyboard = (attachTo: string) => {
-//   simpleKeyboard.value.attachTo = attachTo
-//   simpleKeyboard.value.show = !simpleKeyboard.value.show
-//   simpleKeyboard.value.ref = wordSuggestion
-// }
 
 const loadWordImage = async (params: URLSearchParams) => {
   const response = await fetchData('word-image', 'get', params, 'image/png', 'arraybuffer')

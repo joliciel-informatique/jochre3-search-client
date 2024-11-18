@@ -16,7 +16,7 @@
       <div class="p-2">{{ $t('fix-metadata.instructions.normal') }}</div>
       <div class="columns field has-addons">
         <span
-          class="column field is-horizontal"
+          class="column is-flex is-flex-direction-row is-flex-wrap-nowrap field is-horizontal"
           :class="metadataModal.field !== 'publicationYear' ? 'has-icons-right' : ''"
         >
           <p class="control is-expanded">
@@ -37,7 +37,7 @@
               :title="$t('search.keyboard')"
             />
           </p>
-          <simple-keyboard
+          <simple-key
             v-model:attach-to="metadataModal.field"
             v-model:reference="metadataModal.value"
             @onEnter="null"
@@ -73,7 +73,7 @@
                   :placeholder="$t('search.authorPlaceholder')"
                 />
               </p>
-              <simple-keyboard
+              <simple-key
                 :attach-to="`new-author-${metadataModal.field}`"
                 v-model:reference="authorText"
                 @onEnter="null"
