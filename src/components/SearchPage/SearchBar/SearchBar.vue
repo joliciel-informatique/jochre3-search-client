@@ -10,15 +10,15 @@ Methods: None
 Description: presents the search bar
 -->
 <template>
-  <div id="searchBar" class="container is-max-desktop has-text-white has-text-weight-semibold p-1">
-    <div class="">
-      <div class="pb-0 mb-0 field has-addons">
+  <div id="searchBar" class="container is-max-desktop has-text-white has-text-weight-semibold">
+    <div class="is-flex is-flex-direction-row is-flex-grow-1">
+      <div class="is-flex is-flex-direction-row is-flex-grow-1 pb-0 mb-0 field has-addons">
         <p class="control">
           <a id="searchBarLabel" class="button is-static is-hidden-mobile"
             >{{ $t('search.search') }}
           </a>
         </p>
-        <div class="control container">
+        <div class="control is-expanded">
           <p
             class="control container"
             :class="{
