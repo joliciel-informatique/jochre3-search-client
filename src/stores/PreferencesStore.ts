@@ -72,21 +72,31 @@ export const usePreferencesStore = defineStore('preferences', () => {
     toggleOff: Array<Ref>,
     event: Event | null = null
   ) => {
-    if ((event && (event as MediaQueryListEvent).matches) || !event) {
+    const allVariables = [...toggleOn, ...toggleOff]
+    allVariables.forEach((variable) => (variable.value = false))
+
+    if (event && (event as MediaQueryListEvent).matches) {
       toggleOn.map((variable) => (variable.value = true))
       toggleOff.map((variable) => (variable.value = false))
     }
     getScreenOrientation()
+    console.log(isMobile.value, isTablet.value, isDesktop.value, isPortrait.value)
   }
 
   // Function called only in onMounted
   const initializeMedia = () => {
-    if (window.matchMedia('(min-width: 1024px) and (max-width: 1216px)').matches)
+    if (window.matchMedia('(min-width: 1024px)').matches) {
       toggleDevicesVariables([isDesktop], [isMobile, isTablet])
-    if (window.matchMedia('(min-width: 769px) and (max-width: 1023px)').matches)
+      console.log('desktop')
+    }
+    if (window.matchMedia('(min-width: 769px) and (max-width: 1023px)').matches) {
       toggleDevicesVariables([isTablet], [isMobile, isDesktop])
-    if (window.matchMedia('(min-width: 60px) and (max-width: 768px)').matches)
+      console.log('tablet')
+    }
+    if (window.matchMedia('(min-width: 60px) and (max-width: 768px)').matches) {
       toggleDevicesVariables([isMobile], [isTablet, isDesktop])
+      console.log('mobile')
+    }
   }
 
   /** Watch for screen orientation: landscape to portrait
@@ -97,21 +107,24 @@ export const usePreferencesStore = defineStore('preferences', () => {
   /** Watch for breakpoint change */
   window
     .matchMedia('(min-width: 1024px) and (max-width: 1216px)')
-    .addEventListener('change', (event: Event) =>
+    .addEventListener('change', (event: Event) => {
+      console.log('desktop')
       toggleDevicesVariables([isDesktop], [isMobile, isTablet], event)
-    )
+    })
 
   window
     .matchMedia('(min-width: 769px) and (max-width: 1023px)')
-    .addEventListener('change', (event: Event) =>
+    .addEventListener('change', (event: Event) => {
+      console.log('tablet')
       toggleDevicesVariables([isTablet], [isMobile, isDesktop], event)
-    )
+    })
 
   window
     .matchMedia('(min-width: 60px) and (max-width: 768px)')
-    .addEventListener('change', (event: Event) =>
+    .addEventListener('change', (event: Event) => {
+      console.log('mobile')
       toggleDevicesVariables([isMobile], [isTablet, isDesktop], event)
-    )
+    })
 
   function save() {
     const authenticated = keycloak?.authenticated ?? false
