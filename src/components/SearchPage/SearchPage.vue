@@ -195,7 +195,9 @@ import { usePreferencesStore } from '../../stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
-const { show, isTablet, isMobile, isPortrait } = storeToRefs(preferences)
+const { initializeMedia } = preferences
+
+const { show } = storeToRefs(preferences)
 
 import { storeToRefs } from 'pinia'
 
@@ -267,6 +269,8 @@ onMounted(() => {
       }
     }
   })
+
+  initializeMedia()
 
   router.isReady().then(() => {
     if (route.query['query']) query.value = (route.query['query'] as string).trim()
