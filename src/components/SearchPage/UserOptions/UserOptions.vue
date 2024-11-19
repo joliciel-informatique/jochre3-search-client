@@ -36,7 +36,12 @@
     </div>
 
     <!-- User options on mobile -->
-    <div v-show="openNavBarMobileMenu" class="navbar-mobile" id="navbar-mobile">
+    <div
+      v-show="openNavBarMobileMenu"
+      class="navbar-mobile"
+      :class="preferences.displayLeftToRight ? 'right' : 'left'"
+      id="navbar-mobile"
+    >
       <div class="menu is-pulled-right panel">
         <div class="is-hidden-desktop">
           <a
