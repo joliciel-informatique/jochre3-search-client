@@ -34,7 +34,7 @@ Description: controls text snippets from the OCR text
           :class="
             preferences.isTablet || preferences.isMobile || preferences.isPortrait
               ? `mobile is-hidden-desktop`
-              : `desktop is-hidden-mobile`
+              : `desktop is-hidden-touch`
           "
           v-show="displayPerBook || (!displayPerBook && selectedEntry?.docRef === result.docRef)"
         >
