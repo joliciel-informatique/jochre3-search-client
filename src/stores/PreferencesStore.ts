@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, type Ref } from 'vue'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { fetchData } from '@/assets/fetchMethods'
 import { useCookies } from '@vueuse/integrations/useCookies'
@@ -54,43 +54,64 @@ export const usePreferencesStore = defineStore('preferences', () => {
     'facetSortBy'
   ])
 
-  screen.orientation.addEventListener('change', (event: Event) => {
+  const getScreenOrientation = (event: Event | null = null) => {
+    let angle, type
     if (event && event.target) {
-      const angle = (event.target as ScreenOrientation).angle
-      const type = (event.target as ScreenOrientation).type
-      isPortrait.value = angle === 0 && type.includes('portrait') ? true : false
+      angle = event.target as ScreenOrientation
+      type = (event.target as ScreenOrientation).type
+    } else {
+      angle = screen.orientation.angle
+      type = screen.orientation.type
     }
-  })
+    isPortrait.value = angle === 0 && type.includes('portrait') ? true : false
+  }
 
+  // Helper function to toggle variables
+  const toggleDevicesVariables = (
+    toggleOn: Array<Ref>,
+    toggleOff: Array<Ref>,
+    event: Event | null = null
+  ) => {
+    if ((event && (event as MediaQueryListEvent).matches) || !event) {
+      toggleOn.map((variable) => (variable.value = true))
+      toggleOff.map((variable) => (variable.value = false))
+    }
+    getScreenOrientation()
+  }
+
+  // Function called only in onMounted
+  const initializeMedia = () => {
+    if (window.matchMedia('(min-width: 1024px) and (max-width: 1216px)').matches)
+      toggleDevicesVariables([isDesktop], [isMobile, isTablet])
+    if (window.matchMedia('(min-width: 769px) and (max-width: 1023px)').matches)
+      toggleDevicesVariables([isTablet], [isMobile, isDesktop])
+    if (window.matchMedia('(min-width: 60px) and (max-width: 768px)').matches)
+      toggleDevicesVariables([isMobile], [isTablet, isDesktop])
+  }
+
+  /** Watch for screen orientation: landscape to portrait
+   * NOTE: Desktop screens are never portrait
+   */
+  screen.orientation.addEventListener('change', (event: Event) => getScreenOrientation(event))
+
+  /** Watch for breakpoint change */
   window
     .matchMedia('(min-width: 1024px) and (max-width: 1216px)')
-    .addEventListener('change', (event: Event) => {
-      isDesktop.value = event && (event as MediaQueryListEvent).matches ? true : false
-      if (isDesktop.value) {
-        isTablet.value = false
-        isMobile.value = false
-      }
-    })
+    .addEventListener('change', (event: Event) =>
+      toggleDevicesVariables([isDesktop], [isMobile, isTablet], event)
+    )
 
   window
     .matchMedia('(min-width: 769px) and (max-width: 1023px)')
-    .addEventListener('change', (event: Event) => {
-      isTablet.value = event && (event as MediaQueryListEvent).matches ? true : false
-      if (isTablet.value) {
-        isMobile.value = false
-        isDesktop.value = false
-      }
-    })
+    .addEventListener('change', (event: Event) =>
+      toggleDevicesVariables([isTablet], [isMobile, isDesktop], event)
+    )
 
   window
     .matchMedia('(min-width: 60px) and (max-width: 768px)')
-    .addEventListener('change', (event: Event) => {
-      isMobile.value = event && (event as MediaQueryListEvent).matches ? true : false
-      if (isMobile.value) {
-        isTablet.value = false
-        isDesktop.value = false
-      }
-    })
+    .addEventListener('change', (event: Event) =>
+      toggleDevicesVariables([isMobile], [isTablet, isDesktop], event)
+    )
 
   function save() {
     const authenticated = keycloak?.authenticated ?? false
@@ -220,6 +241,9 @@ export const usePreferencesStore = defineStore('preferences', () => {
     facetSortBy: facetSortBy,
     save,
     load,
-    loadFromCookies
+    loadFromCookies,
+    toggleDevicesVariables,
+    getScreenOrientation,
+    initializeMedia
   }
 })

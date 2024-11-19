@@ -13,7 +13,11 @@ Description: controls text snippets from the OCR text
   <div
     id="snippets"
     class="is-flex is-justify-content-center bla"
-    :class="preferences.isTablet || preferences.isMobile ? `on-mobile` : `on-desktop`"
+    :class="
+      preferences.isTablet || preferences.isMobile || preferences.isPortrait
+        ? `on-mobile`
+        : `on-desktop`
+    "
     tabindex="-1"
     v-if="!isLoading"
   >
@@ -28,7 +32,7 @@ Description: controls text snippets from the OCR text
         <ul
           class="p-2 pt-4 snippets-on"
           :class="
-            preferences.isTablet || preferences.isMobile
+            preferences.isTablet || preferences.isMobile || preferences.isPortrait
               ? `mobile is-hidden-desktop`
               : `desktop is-hidden-mobile`
           "
