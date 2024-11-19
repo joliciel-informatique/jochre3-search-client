@@ -105,7 +105,11 @@
           @keyup.enter="selectEntry(result, index)"
           tabindex="0"
           class="grid"
-          :class="selectedEntry?.docRef === result.docRef ? 'is-active' : ''"
+          :class="{
+            'is-active': selectedEntry?.docRef === result.docRef,
+            'has-text-right': !preferences.corpusLeftToRight,
+            'rtl-align': preferences.needsRightToLeft
+          }"
           >{{ `${index + pageNumberOffset}| ${result.metadata.title}` }}
         </a>
       </li>
