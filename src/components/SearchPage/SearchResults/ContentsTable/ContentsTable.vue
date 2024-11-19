@@ -51,7 +51,11 @@
     <a
       class="button toc-index-btn has-background-info has-text-white"
       @click.prevent="openMobileSearchResultsToc = !openMobileSearchResultsToc"
-      ><font-awesome-icon icon="list" size="lg" class="m-2"
+      ><font-awesome-icon
+        icon="list"
+        size="lg"
+        class="m-2"
+        :class="{ 'fa-flip-horizontal': !preferences.displayLeftToRight }"
     /></a>
     <a
       class="button toc-index-btn has-background-info has-text-white"
