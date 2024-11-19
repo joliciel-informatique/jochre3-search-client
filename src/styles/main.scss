@@ -188,7 +188,14 @@ $menu-nested-list-margin: 1em;
 
 .navbar-mobile {
   position: absolute;
-  right: 0.5vw;
+
+  &.left {
+    left: 0.5vw;
+  }
+
+  &.right {
+    right: 0.5vw;
+  }
 
   @media screen and (max-width: 1023px) {
     top: 55px;
