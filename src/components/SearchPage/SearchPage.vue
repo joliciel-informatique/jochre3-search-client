@@ -293,11 +293,7 @@ const newPage = () => runSearch()
 const newSearch = () => (page.value = 1) && runSearch()
 
 const runSearch = () => {
-  hasAdvancedSearchCriteria.value = false
-  search().then((res) => {
-    isLoading.value = res ? true : false
-    // positionSnippets()
-  })
+  search()
 }
 
 const defineSearchParams = () => {
@@ -314,15 +310,21 @@ const defineSearchParams = () => {
 
 const params = ref(defineSearchParams())
 
-const resetSearchResults = () => {
-  query.value = ''
-  isLoading.value = false
-  hasSearch.value = false
+const clearSearchResults = () => {
   facets.value = []
   searchResults.value = []
   totalHits.value = 0
+  firstSearchResult.value = undefined
 
   page.value = 1
+}
+
+const resetSearchResults = () => {
+  clearSearchResults()
+  query.value = ''
+  isLoading.value = false
+  hasSearch.value = false
+
   title.value = ''
   fromYear.value = null
   toYear.value = null
@@ -341,10 +343,8 @@ watch(searchResults, (newV) => {
   const navbar = document.getElementById('navbar')
   if (newV?.length) {
     header?.setAttribute('style', 'display:none')
-    //     // navbar?.classList.add('is-fixed-top')
   } else {
     header?.setAttribute('style', 'display:flex')
-    //     // navbar?.classList.remove('is-fixed-top')
   }
 })
 
@@ -462,7 +462,10 @@ const search = async () => {
 
   showAdvancedSearchPanel.value = false
 
-  if (!hasSearch.value) return
+  if (!hasSearch.value) {
+    isLoading.value = false
+    return
+  }
 
   const searchParams = new URLSearchParams(defineSearchParams())
 
@@ -470,8 +473,6 @@ const search = async () => {
   if (addAuthorInclude) searchParams.append('author-include', authorInclude.value.toString())
   if (docRefs.value)
     docRefs.value.split(/\W+/).forEach((docRef) => searchParams.append('doc-refs', docRef))
-
-  // const facetParams = new URLSearchParams({ ...Object.fromEntries(params) })
 
   searchParams.append(
     'first',
@@ -503,49 +504,76 @@ const search = async () => {
   params.value = searchParams
 
   return fetchData('search', 'get', searchParams)
-    .then((response) =>
-      response.json().then(({ results, totalCount }) => {
-        hasSearch.value = true
-        isLoading.value = false
-        if (results && results.length) {
-          searchResults.value = results
-          firstSearchResult.value = results[0]
-          totalHits.value = totalCount
-        }
-        if (!hasActiveFacets) {
-          searchFacets()
-            .then((results) => {
-              q?.parentElement?.classList.remove('is-loading')
-              q?.removeAttribute('disabled')
-              return false
-            })
-            .catch((error) => {
-              notification.value = {
-                show: true,
-                error: true,
-                delay: 4000,
-                msg: `Error: ${error}`
-              }
-            })
-        } else {
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json().then(({ results, totalCount }) => {
+          console.log(`Found ${totalCount} results`)
+
+          q?.parentElement?.classList.remove('is-loading')
+          q?.removeAttribute('disabled')
+          isLoading.value = false
+
+          if (results && results.length) {
+            console.log(`Setting ${totalCount} results`)
+            searchResults.value = results
+            firstSearchResult.value = results[0]
+            totalHits.value = totalCount
+
+            if (!hasActiveFacets) {
+              searchFacets()
+                .then((results) => {
+                  q?.parentElement?.classList.remove('is-loading')
+                  q?.removeAttribute('disabled')
+                  isLoading.value = false
+                  return false
+                })
+                .catch((error) => {
+                  console.error(`Error fetching facets: ${error}`)
+                  notification.value = {
+                    show: true,
+                    error: true,
+                    delay: 4000,
+                    msg: `Error: ${error}`
+                  }
+                })
+            }
+          } else {
+            console.log(`No results found, clearing`)
+            clearSearchResults()
+          }
+          return true
+        })
+      } else {
+        return response.json().then((json) => {
+          const error = 'message' in json ? json['message'] : 'An unexpected error occurred'
+          console.error(`Response status ${response.status}: ${error}`)
+          clearSearchResults()
+          notification.value = {
+            show: true,
+            error: true,
+            delay: 4000,
+            msg: `Error: ${error}`
+          }
           q?.parentElement?.classList.remove('is-loading')
           q?.removeAttribute('disabled')
           isLoading.value = false
           return false
-        }
-      })
-    )
+        })
+      }
+    })
     .catch((error) => {
+      console.error(`Error running search: ${error}`)
+      clearSearchResults()
       notification.value = {
         show: true,
         error: true,
         delay: 4000,
         msg: `Error: ${error}`
       }
-      isLoading.value = false
-      hasSearch.value = true
       q?.parentElement?.classList.remove('is-loading')
       q?.removeAttribute('disabled')
+      isLoading.value = false
+      return false
     })
 }
 
