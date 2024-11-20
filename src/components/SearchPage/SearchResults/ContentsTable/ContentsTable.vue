@@ -8,10 +8,10 @@
     tabindex="1"
   >
     <p class="menu-label is-size-5 label">
-      {{ $t('results.contents-table-header') }}
+      {{ $t('toc.contents-table-header') }}
     </p>
     <p class="menu-label label pt-4">
-      {{ $t('results.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
+      {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
     </p>
     <div class="scroll-list">
       <ul class="menu-list">
@@ -92,11 +92,11 @@
     <p
       class="menu-label is-size-5 label p-2 is-flex is-flex-direction-row is-justify-content-space-between"
     >
-      {{ $t('results.contents-table-header') }}
+      {{ $t('toc.contents-table-header') }}
       <font-awesome-icon icon="gear" @click="preferences.show = true" />
     </p>
     <p class="menu-label label pt-4">
-      {{ $t('results.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
+      {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
     </p>
     <ul class="menu-list p-2">
       <li v-for="(result, index) of searchResults" :key="result.docRef">

@@ -21,7 +21,7 @@ Description: presents the facet bar
       <template #header>
         <p class="menu-label is-size-5 label">
           {{ $t('facets.title') }}
-          <span v-tooltip:top="$t('search.what-are-facets')">
+          <span v-tooltip:top="$t('facets.what-are-facets')">
             <font-awesome-icon icon="question-circle" />
           </span>
         </p>
@@ -34,7 +34,7 @@ Description: presents the facet bar
                 class=""
                 :class="preferences.displayLeftToRight ? 'has-text-left' : 'has-text-right'"
               >
-                <p>{{ $t('search.display-number-of-author-facets') }}</p>
+                <p>{{ $t('facets.display-number-of-author-facets') }}</p>
               </span>
             </div>
             <div class="column is-4 is-size-7">
@@ -131,7 +131,7 @@ Description: presents the facet bar
                   class="input mb-2"
                   v-model="filterValue"
                   type="text"
-                  :placeholder="$t('search.filter')"
+                  :placeholder="$t('facets.filter')"
                 />
                 <span class="menu-label p-2" v-if="filterValue !== undefined">
                   {{ $t('search.relevant-facets', [filteredFacets?.length]) }}
@@ -174,7 +174,7 @@ Description: presents the facet bar
     <div>
       <p class="menu-label is-size-5 label">
         {{ $t('facets.title') }}
-        <span v-tooltip:top="$t('search.what-are-facets')">
+        <span v-tooltip:top="$t('facets.what-are-facets')">
           <font-awesome-icon icon="question-circle" />
         </span>
       </p>
@@ -282,10 +282,10 @@ Description: presents the facet bar
             class="input mb-2"
             v-model="filterValue"
             type="text"
-            :placeholder="$t('search.filter')"
+            :placeholder="$t('facets.filter')"
           />
           <span class="menu-label p-2" v-if="filterValue !== undefined">
-            {{ $t('search.relevant-facets', [filteredFacets?.length]) }}
+            {{ $t('facets.relevant-facets', [filteredFacets?.length]) }}
           </span>
         </p>
       </span>
