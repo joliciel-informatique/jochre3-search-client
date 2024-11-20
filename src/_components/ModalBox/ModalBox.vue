@@ -22,7 +22,7 @@
           <div class="buttons">
             <slot name="footer" :closeFunction="close"></slot>
             <button class="button is-link is-light" @click="close">
-              {{ $t('cancel') }}
+              {{ $t('modal.cancel') }}
             </button>
           </div>
         </footer>

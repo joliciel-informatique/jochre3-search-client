@@ -52,7 +52,7 @@
     </template>
     <template #footer>
       <button class="button is-link" @click="save($i18n as VueI18n.VueI18n)">
-        {{ $t('save') }}
+        {{ $t('modal.save') }}
       </button>
     </template>
   </ModalBox>

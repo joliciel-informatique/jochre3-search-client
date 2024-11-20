@@ -60,7 +60,7 @@ Description: controls text snippets from the OCR text
     </ul>
   </div>
   <div v-else>
-    <h1>{{ $t('loading') }}</h1>
+    <h1>{{ $t('results.loading') }}</h1>
   </div>
 </template>
 

@@ -42,7 +42,7 @@
         :disabled="!authenticated"
         @click="save(modalBox.closeFunction)"
       >
-        {{ $t('save') }}
+        {{ $t('modal.save') }}
       </button>
     </template>
   </ModalBox>
