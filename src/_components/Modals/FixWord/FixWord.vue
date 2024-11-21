@@ -17,7 +17,7 @@
           >
             <p class="control is-expanded">
               <input
-                :id="`wordCorrectionInput-${offset}`"
+                :id="`wordCorrectionInput-${textInputId}`"
                 name="wordCorrectionInput"
                 class="input"
                 type="text"
@@ -26,7 +26,7 @@
               />
             </p>
             <simple-key
-              :attach-to="`wordCorrectionInput-${offset}`"
+              :attach-to="`wordCorrectionInput-${textInputId}`"
               v-model:reference="wordSuggestion"
               @onEnter="null"
             />
@@ -58,15 +58,16 @@ const notification: Ref = defineModel('notification')
 const wordImage = ref('')
 const wordLoading = ref(false)
 const wordSuggestion = ref('')
-const offset = computed(() => `${wordModal.value.docRef}-${wordModal.value.globalOffset}`)
+const wordOffset = computed(
+  () => wordModal.value.globalOffset + wordModal.value.selection.anchorOffset
+)
+const textInputId = computed(() => `${wordModal.value.docRef}-${wordOffset.value}`)
 
 onBeforeUpdate(async () => {
   if (wordModal.value.docRef && wordModal.value.selection) {
     const params: URLSearchParams = new URLSearchParams({
       'doc-ref': wordModal.value.docRef,
-      'word-offset': (
-        wordModal.value.globalOffset + wordModal.value.selection.anchorOffset
-      ).toString()
+      'word-offset': wordOffset.value.toString()
     })
 
     wordLoading.value = true
@@ -114,7 +115,7 @@ const loadWordText = async (params: URLSearchParams) => {
 const save = (closeFunc: Function) => {
   const data = JSON.stringify({
     docRef: wordModal.value.docRef,
-    offset: +wordModal.value.globalOffset,
+    offset: wordOffset.value,
     suggestion: wordSuggestion.value
   })
   fetchData('suggest-word', 'post', data, 'application/json')
