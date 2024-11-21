@@ -29,7 +29,7 @@
                 english: fieldLeftToRight && preferences.needsLeftToRight,
                 'rtl-align': !fieldLeftToRight && preferences.needsRightToLeft
               }"
-              lang="yi"
+              :lang="preferences.corpusLanguage"
               name="fixWordSuggestionInput"
               v-model="metadataModal.value"
               :disabled="authorList.length > 0"
