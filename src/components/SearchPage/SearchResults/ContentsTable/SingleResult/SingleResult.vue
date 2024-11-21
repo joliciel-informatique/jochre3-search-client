@@ -47,7 +47,7 @@ Description: presents OCR record metadata
             v-model:metadata-modal="metadataModal"
             :doc-ref="result.docRef"
             :field="field"
-            :value="(result.metadata as any)[field]"
+            :value="(result.metadata as any)[field] ?? ''"
           />
         </div>
         <div class="has-text-right is-size-7 px-2" aria-label="document reference" tabindex="3">

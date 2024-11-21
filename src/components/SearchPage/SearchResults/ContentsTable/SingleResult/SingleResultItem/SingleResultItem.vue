@@ -36,24 +36,27 @@ Description: display single metadata item
 
 <script setup lang="ts">
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { type Ref } from 'vue'
 
 const preferences = usePreferencesStore()
 
-const { field, value, docRef } = defineProps(['field', 'value', 'docRef'])
+const field: Ref = defineModel('field')
+const value: Ref = defineModel('value')
+const docRef: Ref = defineModel('docRef')
 
 const metadataModal = defineModel('metadataModal')
 
-let title: string = `results.${field}`
-title = field === 'titleEnglish' ? `results.alternate-title` : title
-title = field === 'authorEnglish' ? `results.alternate-author` : title
-title = field === 'publicationYear' ? `results.publication-year` : title
+let title: string = `results.${field.value}`
+title = field.value === 'titleEnglish' ? `results.alternate-title` : title
+title = field.value === 'authorEnglish' ? `results.alternate-author` : title
+title = field.value === 'publicationYear' ? `results.publication-year` : title
 
 const openMetadataModal = () => {
   metadataModal.value = {
     show: true,
-    docRef: docRef,
-    field: field,
-    value: value
+    docRef: docRef.value,
+    field: field.value,
+    value: value.value
   }
 }
 </script>
