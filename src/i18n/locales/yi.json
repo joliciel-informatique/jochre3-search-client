@@ -66,7 +66,8 @@
     "open-transcription": "טראַנסקריבירטן טעקסט"
   },
   "navigation": {
-    "jump-to": "שפּרינגט צו זײַט"
+    "currently-viewing-pages": "YI__Currently viewing pages {0}",
+    "jump-to": "YI__Jump to page"
   },
   "preferences": {
     "title": "דעם באַניצערס פּרעפֿערענצן",
@@ -116,6 +117,7 @@
     "cancel": "אַנולירן",
     "save": "אױפֿהיטן די בײַטן"
   },
+  "generating-book-view": "YI__Generating a book view of the transcription. Please wait...",
   "pagination": {
     "next": ">>",
     "previous": "<<",

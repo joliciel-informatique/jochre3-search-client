@@ -16,7 +16,8 @@
 @forward './components/Switch/Switch';
 @forward './components/FilterTag/FilterTag';
 @forward './components/PageNumbering/PageNumbering';
-@forward './components//IndexPage/IndexPage';
+@forward './components/IndexPage/IndexPage';
+@forward './components/TranscribedText/TranscribedText.scss';
 
 // _Component Styling
 @forward './_components/AccordionCard/AccordionCard';
@@ -141,6 +142,7 @@
 
 :root {
   --c-z-index: 1000;
+  --transcription-text-font-size: 0.5em;
 }
 
 main {

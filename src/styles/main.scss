@@ -13,7 +13,7 @@
 html {
   height: 100%;
   overflow-x: hidden;
-  overflow-y: hidden;
+  // overflow-y: hidden;
 }
 
 body {
@@ -130,16 +130,21 @@ $menu-nested-list-margin: 1em;
 
 .table-of-contents-of-transcribed-text {
   display: block;
-  position: sticky;
-  top: 5vh;
-  left: 1vw;
-  height: 75vh;
-  z-index: 9;
+  // position: absolute;
+  // top: 5vh;
+  // left: 1vw;
+  height: 67vh;
+  // z-index: 9;
 
-  & > .menu > .menu-list {
+  > .menu > .columns > .column {
     overflow-y: scroll;
-    max-height: 62vh;
+    max-height: 58vh;
   }
+
+  // & > .menu > .menu-list {
+  //   overflow-y: scroll;
+  //   max-height: 58vh;
+  // }
 }
 
 .icon.is-clicked > svg > path {

@@ -80,7 +80,6 @@ export const usePreferencesStore = defineStore('preferences', () => {
       toggleOff.map((variable) => (variable.value = false))
     }
     getScreenOrientation()
-    console.log(isMobile.value, isTablet.value, isDesktop.value, isPortrait.value)
   }
 
   // Function called only in onMounted
@@ -126,7 +125,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
       toggleDevicesVariables([isMobile], [isTablet, isDesktop], event)
     })
 
-  function save() {
+  const save = () => {
     const authenticated = keycloak?.authenticated ?? false
     if (authenticated) {
       const params = JSON.stringify({
@@ -167,7 +166,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
     facetSortBy?: string
   }
 
-  async function load(): Promise<string> {
+  const load = async (): Promise<string> => {
     return fetchData('preferences/user', 'get')
       .then((res) => {
         if (res.status === 200) {
@@ -207,7 +206,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
       })
   }
 
-  function loadFromCookies() {
+  const loadFromCookies = () => {
     const authenticated = keycloak?.authenticated ?? false
 
     if (!authenticated) {

@@ -23,3 +23,19 @@ export const insertInSortedArray = (array: any[], value: number) => {
   }
   return low
 }
+
+export const flatten = (arr: any) => {
+  let ret: any[] = []
+  for (let i = 0; i < arr.length; i++) {
+    if (Array.isArray(arr[i])) {
+      ret = ret.concat(flatten(arr[i]))
+    } else {
+      ret.push(arr[i])
+    }
+  }
+  return ret
+}
+
+export const replaceAt = (str: string, index: number, replacement: string) => {
+  return str.substring(0, index) + replacement + str.substring(index + replacement.length)
+}

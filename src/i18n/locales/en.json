@@ -70,7 +70,11 @@
     "open-transcription": "Open transcription"
   },
   "navigation": {
-    "jump-to": "Jump to"
+    "back-tooltip": "This button takes you back in your search history",
+    "forward-tooltip": "This button takes you forward in your search history",
+    "clear-tooltip": "This button will clear your search history",
+    "currently-viewing-pages": "Currently viewing pages {0}",
+    "jump-to": "Jump to page"
   },
   "preferences": {
     "title": "Update preferences",
@@ -120,6 +124,7 @@
     "cancel": "Cancel",
     "save": "Save changes"
   },
+  "generating-book-view": "Generating a book view of the transcription. Please wait...",
   "pagination": {
     "next": ">>",
     "previous": "<<",
