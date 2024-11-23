@@ -14,7 +14,7 @@ Description: controls text snippets from the OCR text
     id="snippets"
     class="is-flex is-justify-content-center bla"
     :class="
-      preferences.isTablet || preferences.isMobile || preferences.isPortrait
+      preferences.isMobile || preferences.isTablet || preferences.isPortrait
         ? `on-mobile`
         : `on-desktop`
     "
@@ -32,7 +32,7 @@ Description: controls text snippets from the OCR text
         <ul
           class="p-2 pt-4 snippets-on"
           :class="
-            preferences.isTablet || preferences.isMobile || preferences.isPortrait
+            preferences.isMobile || preferences.isTablet || preferences.isPortrait
               ? `mobile is-hidden-desktop`
               : `desktop is-hidden-touch`
           "

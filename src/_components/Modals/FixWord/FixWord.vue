@@ -58,8 +58,10 @@ const notification: Ref = defineModel('notification')
 const wordImage = ref('')
 const wordLoading = ref(false)
 const wordSuggestion = ref('')
-const wordOffset = computed(
-  () => wordModal.value.globalOffset + wordModal.value.selection.anchorOffset
+const wordOffset = computed(() =>
+  wordModal.value.globalOffset
+    ? wordModal.value?.globalOffset + wordModal.value.selection.anchorOffset
+    : null
 )
 const textInputId = computed(() => `${wordModal.value.docRef}-${wordOffset.value}`)
 

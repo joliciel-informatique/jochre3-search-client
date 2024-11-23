@@ -18,6 +18,7 @@
     "keyboard": "Open Yiddish on-screen keyboard",
     "field-instructions": "*These fields accept Roman or Yiddish characters.",
     "author": "Author",
+    "display-number-of-author-facets": "Number of author names",
     "authorPlaceholder": "Type author name (case-sensitive)",
     "title": "Book title",
     "date-from": "Published between",
