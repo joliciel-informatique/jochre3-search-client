@@ -67,7 +67,7 @@
     "open-transcription": "טראַנסקריבירטן טעקסט"
   },
   "navigation": {
-    "currently-viewing-pages": "YI__Currently viewing pages {0}",
+    "currently-viewing-pages": "YI__Currently viewing page {0}/{1}",
     "jump-to": "YI__Jump to page"
   },
   "preferences": {

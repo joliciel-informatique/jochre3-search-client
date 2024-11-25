@@ -7,7 +7,7 @@
   }
 }
 
-//LOADER STYLES
+// Loader style
 .loader-wrapper {
   position: static;
   top: 0;
@@ -38,6 +38,11 @@
   position: relative;
 }
 
+.scroll-container {
+  width: 100%;
+  overflow-y: scroll;
+}
+
 .book-title {
   white-space: nowrap;
   overflow: hidden;
@@ -46,42 +51,42 @@
 }
 
 .doc-text {
-  max-width: 80vmin;
-  // width: 100%;
+  min-width: 50vw;
+
   &.active {
     div {
       box-shadow: 0 0.5em 0.5em 0;
     }
   }
-  .page {
-    max-width: 100%;
-    // width: 100%;
-    // padding-top: 200%; /* defines aspect ratio */
-    // position: relative;
 
-    margin: 1vh 0 0 1vh;
-    // max-height: 60vmin;
-    // height: 60vmin;
-    // max-width: 46.37vmin;
-    // width: 46.37vmin;
+  .page {
+    width: 93vmin;
+    // width: 100%;
 
     &-text {
-      max-width: 30%;
       margin: 1em 0 0 1em;
       font-size: var(--transcription-text-font-size);
-      // white-space: pre;
-      // font-size: 0.5em;
-      // font-size: 2vh;
-      // p {
-      // white-space: normal;
-      // width: min-content;
-      // }
+
+      .text-snippet {
+        margin-bottom: 1vmin;
+        text-indent: 1em;
+      }
+
+      .highlight {
+        padding: 0.02rem;
+        color: $hl-text-color;
+        background-color: $hl-color;
+        border-radius: $hl-box-radius;
+        padding: $hl-box-padding;
+        box-shadow: $hl-box-shadow rgba($hl-box-shadow-color, $hl-box-shadow-color-alpha);
+        font-weight: bold;
+        border: none;
+        cursor: crosshair !important;
+      }
     }
 
-    .logical-page-number {
+    .physical-page-number {
       font-size: 1em;
-    }
-    &.title {
     }
   }
   .title {
@@ -90,11 +95,5 @@
 
   .subtitle {
     font-size: 10px;
-  }
-
-  div > hr {
-    background-color: red;
-    height: 0.5rem;
-    margin: 1rem;
   }
 }

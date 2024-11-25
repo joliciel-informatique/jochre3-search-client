@@ -3,6 +3,11 @@ export const isInView = (el: Element) => {
   return rect.top >= 0 && rect.bottom <= window.innerHeight
 }
 
+export const isInViewOfDiv = (el: Element) => {
+  const { top, bottom, height } = el.getBoundingClientRect()
+  return top >= 0 && bottom > height
+}
+
 export const isSticking = (el: HTMLElement) => {
   const observer = new IntersectionObserver(
     ([e]) => e.target.classList.toggle('is-pinned', e.intersectionRatio < 1),
@@ -10,6 +15,26 @@ export const isSticking = (el: HTMLElement) => {
   )
 
   observer.observe(el)
+}
+
+export const mostFrequentUsingMap = (arr: Array<number>) => {
+  const counts = new Map()
+
+  for (const num of arr) {
+    counts.set(num, (counts.get(num) || 0) + 1)
+  }
+
+  let mostFrequent
+  let maxCount = 0
+
+  counts.forEach((count, num) => {
+    if (count > maxCount) {
+      maxCount = count
+      mostFrequent = num
+    }
+  })
+
+  return mostFrequent
 }
 
 export const insertInSortedArray = (array: any[], value: number) => {

@@ -74,7 +74,7 @@
     "back-tooltip": "This button takes you back in your search history",
     "forward-tooltip": "This button takes you forward in your search history",
     "clear-tooltip": "This button will clear your search history",
-    "currently-viewing-pages": "Currently viewing pages {0}",
+    "currently-viewing-pages": "Currently viewing page {0}/{1}",
     "jump-to": "Jump to page"
   },
   "preferences": {
