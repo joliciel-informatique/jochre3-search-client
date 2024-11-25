@@ -50,11 +50,11 @@
       :class="{
         'rtl-align': preferences.needsRightToLeft
       }"
-      id="transcribed-text"
       role="article"
     >
       <div
         class="scroll-container is-flex is-flex-direction-column is-align-content-center"
+        id="scroll-container"
         v-show="!isLoading"
       >
         <div
@@ -95,7 +95,7 @@ import { onMounted, ref } from 'vue'
 import { onBeforeRouteUpdate, useRouter, useRoute } from 'vue-router'
 import { fetchData } from '@/assets/fetchMethods'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import { isInViewOfDiv, mostFrequentUsingMap } from '@/assets/functions'
+import { isInView, isInViewOfDiv, mostFrequentUsingMap } from '@/assets/functions'
 import { sha1 } from 'object-hash'
 import { storeToRefs } from 'pinia'
 
@@ -121,6 +121,7 @@ const getPagesInView = () => {
   const pagesInView = Array.from(document.querySelectorAll('.box.page'))
     .map((page) => (isInViewOfDiv(page) ? parseInt(page.getAttribute('id')!) : null))
     .filter((x) => x)
+  console.log(pagesInView)
   if (pagesInView.length) pageRangeInView.value = `${pagesInView[0]}`
 }
 
@@ -135,13 +136,13 @@ onMounted(() => {
     if (route.query['query']) query.value = (route.query['query'] as string).trim()
     if (route.query['strict']) strict.value = route.query['strict'] === 'true'
     updateText()
-    document.getElementById('transcribed-text')?.addEventListener('scroll', getPagesInView, false)
+    document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
   })
 })
 
 onUpdated(() => {
   getPagesInView()
-  document.getElementById('transcribed-text')?.addEventListener('scroll', getPagesInView, false)
+  document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
 })
 
 const defineSearchParams = () => {
