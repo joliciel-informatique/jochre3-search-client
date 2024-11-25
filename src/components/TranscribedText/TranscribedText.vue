@@ -212,29 +212,22 @@ const updateText = () => {
 
           // Add highlights
           if (page.highlights.length) {
-            const str = page.text.substring(page.highlights[0][0], page.highlights[0][1])
-            // page.highlights.forEach((highlight: any) => {
-            const t = `<span class='highlight'>${str}</span>`
-            page.text = page.text.replace(str, t)
-            // })
-            //   // const textSpan = document.createElement('span')
-            //   const highlights = page.highlights.map((highlight: [number, number]) => {
-            //     return h('span', {
-            //       class: 'highlight',
-            //       innerHTML: page.text.slice(highlight[0], highlight[1])
-            //     })
-            //     // const termSpan = document.createElement('span')
-            //     // termSpan.classList.add('highlight')
-            //     // termSpan.innerHTML = page.text.slice(highlight[0], highlight[1])
-            //     // const newText = page.text.replace(
-            //     // page.text.slice(highlight[0], highlight[1]),
-            //     // termSpan.outerHTML
-            //     // )
-            //     // textSpan.innerHTML = newText
-            //   })
-            //   const vnode = h('span', [...highlights])
-            //   page.text = vnode
-            //   return page
+            var sections: string[] = []
+            var lastPos = 0
+            for (const highlight of page.highlights) {
+              if (highlight[0] > lastPos) {
+                sections.push(page.text.substring(lastPos, highlight[0]))
+              }
+              const str = page.text.substring(highlight[0], highlight[1])
+              const span = `<span class='highlight'>${str}</span>`
+              sections.push(span)
+              lastPos = highlight[1]
+            }
+            if (page.text.length > lastPos) {
+              sections.push(page.text.substring(lastPos, page.text.length))
+            }
+            const newText = sections.join('')
+            page.text = newText
           }
 
           // Partition text in paragraphs
