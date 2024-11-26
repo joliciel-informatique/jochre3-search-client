@@ -81,7 +81,7 @@
   <div v-else class="is-flex is-flex-direction-column has-text-centered p-5">
     <!-- Generating a book view -->
     <span class="m-5"
-      ><h1>{{ $t('generating-book-view') }}</h1></span
+      ><h1>{{ $t('transcribed-text.generating-book-view') }}</h1></span
     >
     <div class="loader-wrapper is-active mt-5">
       <div class="loader is-loading is-active"></div>

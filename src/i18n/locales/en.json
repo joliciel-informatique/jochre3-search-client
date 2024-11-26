@@ -18,7 +18,6 @@
     "keyboard": "Open Yiddish on-screen keyboard",
     "field-instructions": "*These fields accept Roman or Yiddish characters.",
     "author": "Author",
-    "display-number-of-author-facets": "Number of author names",
     "authorPlaceholder": "Type author name (case-sensitive)",
     "title": "Book title",
     "date-from": "Published between",
@@ -50,7 +49,7 @@
     "facet-count-all": "All"
   },
   "results": {
-    "loading": "Loading...",
+    "loading": "Retrieving search results...",
     "click-image-snippet": "Click to load original image",
     "alternate-title": "Title in transcription",
     "volume": "Volume",
@@ -71,9 +70,6 @@
     "open-transcription": "Open transcription"
   },
   "navigation": {
-    "back-tooltip": "This button takes you back in your search history",
-    "forward-tooltip": "This button takes you forward in your search history",
-    "clear-tooltip": "This button will clear your search history",
     "currently-viewing-pages": "Currently viewing page {0}/{1}",
     "jump-to": "Jump to page"
   },
@@ -117,15 +113,12 @@
     "unauthenticated": "In order to fix document meta data, please login first."
   },
   "transcribed-text": {
-    "table-of-contents": "Table of contents",
-    "page": "Page {0}",
-    "logical-page": "({0})"
+    "generating-book-view": "Generating a book view of the transcription. Please wait..."
   },
   "modal": {
     "cancel": "Cancel",
     "save": "Save changes"
   },
-  "generating-book-view": "Generating a book view of the transcription. Please wait...",
   "pagination": {
     "next": ">>",
     "previous": "<<",

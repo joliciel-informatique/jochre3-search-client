@@ -186,7 +186,7 @@ Description: presents the facet bar
             class=""
             :class="preferences.displayLeftToRight ? 'has-text-left' : 'has-text-right'"
           >
-            <p>{{ $t('search.display-number-of-author-facets') }}</p>
+            <p>{{ $t('facets.display-number-of-author-facets') }}</p>
           </span>
         </div>
         <div class="column is-4 is-size-7">

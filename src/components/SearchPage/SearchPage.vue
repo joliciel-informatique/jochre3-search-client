@@ -136,7 +136,7 @@
       class="is-flex is-flex-direction-column has-text-centered pt-5"
     >
       <!-- Loading with query, but no results -->
-      <h1>{{ $t('loading') }}</h1>
+      <h1>{{ $t('results.loading') }}</h1>
     </div>
 
     <!-- Not loading, with query, but no results -->

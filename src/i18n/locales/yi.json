@@ -13,7 +13,6 @@
     "related-word-forms-tooltip": "שטעלט אַ פֿײגעלע אױסצושליסן פֿאַרבונדענע װערטער־פֿאָרמעס, למשל „שרײבן“, „שרײבט“, „געשריבן“",
     "keyboard": "עפֿנט די ייִדישע קלאַװיאַטור",
     "field-instructions": "*די בלאַנקען נעמען אָן לאַטײנישע אָדער ייִדישע אותיות.",
-    "display-number-of-author-facets": "YI__Number of author names",
     "author": "מחבר",
     "authorPlaceholder": "שרײַבט ארײַן דעם נאָמן פֿונעם מחבר",
     "title": "טיטל",
@@ -46,7 +45,7 @@
     "facet-count-all": "אַלע"
   },
   "results": {
-    "loading": "אָנלאָדנדיק...",
+    "loading": "אָפּנעמענדיק די זוך רעזַלטאַטן...",
     "click-image-snippet": "גיט אַ קװעטש אַרױסצוּװײַזן דעם פֿראַגמענט פֿונעם זײַטל",
     "alternate-title": "טיטל אין טראַנסקריפציע",
     "volume": "באַנד",
@@ -67,8 +66,8 @@
     "open-transcription": "טראַנסקריבירטן טעקסט"
   },
   "navigation": {
-    "currently-viewing-pages": "YI__Currently viewing page {0}/{1}",
-    "jump-to": "YI__Jump to page"
+    "currently-viewing-pages": "זײַטל {0} פֿון {1}",
+    "jump-to": "שפּרינגט צו זײַטל"
   },
   "preferences": {
     "title": "דעם באַניצערס פּרעפֿערענצן",
@@ -110,15 +109,12 @@
     "unauthenticated": "בכֿדי אױסצובעסערן אַן אַטריבוט, דאַרף מען ארײַנלאָגירן."
   },
   "transcribed-text": {
-    "table-of-contents": "תּוכן",
-    "page": "זײַטל {0}",
-    "logical-page": "({0})"
+    "generating-book-view": "גענערירנדיק אַ טראַנסקריפּציע פֿונעם גאַנצן בוך..."
   },
   "modal": {
     "cancel": "אַנולירן",
     "save": "אױפֿהיטן די בײַטן"
   },
-  "generating-book-view": "YI__Generating a book view of the transcription. Please wait...",
   "pagination": {
     "next": ">>",
     "previous": "<<",
@@ -126,7 +122,6 @@
     "bottom": "לעצטער פֿראַגמענט"
   },
   "header": {
-    "logo": "/images/jochreLogo.png",
     "title": "",
     "preferences": "פּרעפֿערענצן",
     "login": "ארײַנלאָגירן",
