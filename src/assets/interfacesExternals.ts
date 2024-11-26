@@ -75,7 +75,7 @@ export interface Highlight {
 }
 
 export interface HighlightedPage {
-  index: number
+  physicalPageNumber: number
   logicalPageNumber?: number
   highlights?: Highlight[]
   text: string

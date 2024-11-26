@@ -82,9 +82,9 @@
           :key="sha1(!page)"
           class="doc-text is-inline-flex is-flex-direction-column is-align-content-center is-flex-wrap-wrap mb-2"
         >
-          <div class="box page" :id="page.index">
+          <div class="box page" :id="page.physicalPageNumber">
             <span class="physical-page-number has-text-left has-text-weight-semibold">
-              {{ page.index }} ({{ page.logicalPageNumber }})
+              {{ page.physicalPageNumber }} ({{ page.logicalPageNumber }})
               <hr />
             </span>
             <div
@@ -185,20 +185,26 @@ const updateText = () => {
     .then((bookData) => {
       const highlightedBook = bookData as HighlightedDocument
       if (highlightedBook.pages.length) {
-        // Find the lowest index page number: index is physical page
-        firstIndexedPage.value = Math.min(...highlightedBook.pages.map((page) => page.index))
+        // Find the lowest physical page number
+        firstIndexedPage.value = Math.min(
+          ...highlightedBook.pages.map((page) => page.physicalPageNumber)
+        )
 
         // A hacky way to fix incorrect logical page numbers based on most common difference between assigned logical and physical numbers
-        const overallOffset = highlightedBook.pages.map((p) => p.index - (p.logicalPageNumber ?? 0))
+        const overallOffset = highlightedBook.pages.map(
+          (p) => p.physicalPageNumber - (p.logicalPageNumber ?? 0)
+        )
         const offset = mostFrequentUsingMap(overallOffset)
         if (offset) {
-          highlightedBook.pages.forEach((page) => (page.logicalPageNumber = page.index - offset))
+          highlightedBook.pages.forEach(
+            (page) => (page.logicalPageNumber = page.physicalPageNumber - offset)
+          )
         }
 
         pagesWithHighlights.value = []
         highlightedBook.pages.forEach((page) => {
           if (page.highlights && page.highlights.length > 0) {
-            pagesWithHighlights.value.push(page.index)
+            pagesWithHighlights.value.push(page.physicalPageNumber)
           }
         })
       }
