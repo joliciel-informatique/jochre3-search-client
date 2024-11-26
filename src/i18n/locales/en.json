@@ -113,7 +113,11 @@
     "unauthenticated": "In order to fix document meta data, please login first."
   },
   "transcribed-text": {
-    "generating-book-view": "Generating a book view of the transcription. Please wait..."
+    "generating-book-view": "Generating a book view of the transcription. Please wait...",
+    "prev-match": "<<",
+    "next-match": ">>",
+    "prev-match-tooltip": "Previous page with matching highlights",
+    "next-match-tooltip": "Next page with matching highlights"
   },
   "modal": {
     "cancel": "Cancel",
