@@ -73,22 +73,22 @@
           </p>
         </div>
       </div>
-      <div class="is-flex is-flex-direction-column">
-        <span
-          class="is-flex is-flex-direction-row is-justify-content-space-between is-align-items-end pb-1"
-        >
-          <font-awesome-icon icon="text-height" size="lg" />
-          <font-awesome-icon icon="text-height" size="2xs" />
-        </span>
-        <input
-          class="slider is-fullwidth is-info"
-          step="1"
-          min="3"
-          max="7"
-          type="range"
-          v-model="textSize"
-        />
-      </div>
+    </div>
+    <div id="text-options" class="text-options box is-flex is-flex-direction-column">
+      <span
+        class="is-flex is-flex-direction-row is-justify-content-space-between is-align-items-end pb-1"
+      >
+        <font-awesome-icon icon="text-height" size="lg" />
+        <font-awesome-icon icon="text-height" size="2xs" />
+      </span>
+      <input
+        class="slider is-fullwidth is-info"
+        step="1"
+        min="3"
+        max="7"
+        type="range"
+        v-model="textSize"
+      />
     </div>
     <div
       class="panel-block box m-3 px-3 is-flex is-flex-direction-column is-justify-content-center"
@@ -202,11 +202,7 @@ const defineSearchParams = () => {
   )
 }
 
-watch(textSize, (newV) => {
-  if (newV) {
-    textSizeClass.value = `is-size-${newV}`
-  }
-})
+watch(textSize, (newV) => (textSizeClass.value = newV ? `is-size-${newV}` : 'is-size-6'))
 
 const updateText = () => {
   const params = new URLSearchParams(defineSearchParams())
