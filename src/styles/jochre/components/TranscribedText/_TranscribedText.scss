@@ -2,8 +2,7 @@
 
 .transcribed-text {
   .panel-block {
-    overflow-y: scroll;
-    max-height: 64vh;
+    max-height: 63vh;
   }
 }
 
@@ -60,8 +59,7 @@
   }
 
   .page {
-    width: 93vmin;
-    // width: 100%;
+    width: 84vmin;
 
     &-text {
       margin: 1em 0 0 1em;

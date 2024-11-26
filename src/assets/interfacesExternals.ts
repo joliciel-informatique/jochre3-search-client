@@ -68,3 +68,20 @@ interface Metadata {
   volume: string
   url: string
 }
+
+export interface Highlight {
+  start: number
+  end: number
+}
+
+export interface HighlightedPage {
+  physicalPageNumber: number
+  logicalPageNumber?: number
+  highlights?: Highlight[]
+  text: string
+}
+
+export interface HighlightedDocument {
+  title: string
+  pages: HighlightedPage[]
+}
