@@ -67,66 +67,32 @@ export const usePreferencesStore = defineStore('preferences', () => {
   }
 
   // Helper function to toggle variables
-  const toggleDevicesVariables = (
-    toggleOn: Array<Ref>,
-    toggleOff: Array<Ref>,
-    event: Event | null = null
-  ) => {
+  const toggleDevicesVariables = (toggleOn: Array<Ref>, toggleOff: Array<Ref>) => {
     const allVariables = [...toggleOn, ...toggleOff]
     allVariables.forEach((variable) => (variable.value = false))
-
-    if (event && (event as MediaQueryListEvent).matches) {
-      toggleOn.map((variable) => (variable.value = true))
-      toggleOff.map((variable) => (variable.value = false))
-    }
+    toggleOn.forEach((variable) => (variable.value = true))
     getScreenOrientation()
     console.log(isMobile.value, isTablet.value, isDesktop.value, isPortrait.value)
   }
 
   // Function called only in onMounted
   const initializeMedia = () => {
-    if (window.matchMedia('(min-width: 1024px)').matches) {
+    console.log('resize')
+    if (window.matchMedia('(min-width: 1024px)').matches)
       toggleDevicesVariables([isDesktop], [isMobile, isTablet])
-      console.log('desktop')
-    }
-    if (window.matchMedia('(min-width: 769px) and (max-width: 1023px)').matches) {
+    if (window.matchMedia('(min-width: 769px) and (max-width: 1023px)').matches)
       toggleDevicesVariables([isTablet], [isMobile, isDesktop])
-      console.log('tablet')
-    }
-    if (window.matchMedia('(min-width: 60px) and (max-width: 768px)').matches) {
+    if (window.matchMedia('(min-width: 60px) and (max-width: 768px)').matches)
       toggleDevicesVariables([isMobile], [isTablet, isDesktop])
-      console.log('mobile')
-    }
   }
 
-  /** Watch for screen orientation: landscape to portrait
+  /** Watch for screen orientation (landscape to portrait) and breakpoint changes
    * NOTE: Desktop screens are never portrait
    */
   screen.orientation.addEventListener('change', (event: Event) => getScreenOrientation(event))
+  window.addEventListener('resize', () => initializeMedia())
 
-  /** Watch for breakpoint change */
-  window
-    .matchMedia('(min-width: 1024px) and (max-width: 1216px)')
-    .addEventListener('change', (event: Event) => {
-      console.log('desktop')
-      toggleDevicesVariables([isDesktop], [isMobile, isTablet], event)
-    })
-
-  window
-    .matchMedia('(min-width: 769px) and (max-width: 1023px)')
-    .addEventListener('change', (event: Event) => {
-      console.log('tablet')
-      toggleDevicesVariables([isTablet], [isMobile, isDesktop], event)
-    })
-
-  window
-    .matchMedia('(min-width: 60px) and (max-width: 768px)')
-    .addEventListener('change', (event: Event) => {
-      console.log('mobile')
-      toggleDevicesVariables([isMobile], [isTablet, isDesktop], event)
-    })
-
-  function save() {
+  const save = () => {
     const authenticated = keycloak?.authenticated ?? false
     if (authenticated) {
       const params = JSON.stringify({
@@ -167,7 +133,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
     facetSortBy?: string
   }
 
-  async function load(): Promise<string> {
+  const load = async (): Promise<string> => {
     return fetchData('preferences/user', 'get')
       .then((res) => {
         if (res.status === 200) {
@@ -207,7 +173,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
       })
   }
 
-  function loadFromCookies() {
+  const loadFromCookies = () => {
     const authenticated = keycloak?.authenticated ?? false
 
     if (!authenticated) {
@@ -239,7 +205,6 @@ export const usePreferencesStore = defineStore('preferences', () => {
     show,
     storePreferencesInCookie,
     language,
-    isPortrait,
     resultsPerPage,
     authorFacetCount,
     corpusLanguage,
@@ -249,6 +214,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
     isMobile,
     isTablet,
     isDesktop,
+    isPortrait,
     corpusLeftToRight,
     displayPerBook,
     facetSortBy: facetSortBy,

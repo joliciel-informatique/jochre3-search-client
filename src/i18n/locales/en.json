@@ -49,7 +49,7 @@
     "facet-count-all": "All"
   },
   "results": {
-    "loading": "Loading...",
+    "loading": "Retrieving search results...",
     "click-image-snippet": "Click to load original image",
     "alternate-title": "Title in transcription",
     "volume": "Volume",
@@ -70,7 +70,8 @@
     "open-transcription": "Open transcription"
   },
   "navigation": {
-    "jump-to": "Jump to"
+    "currently-viewing-pages": "Currently viewing page {0}/{1}",
+    "jump-to": "Jump to page"
   },
   "preferences": {
     "title": "Update preferences",
@@ -112,9 +113,7 @@
     "unauthenticated": "In order to fix document meta data, please login first."
   },
   "transcribed-text": {
-    "table-of-contents": "Table of contents",
-    "page": "Page {0}",
-    "logical-page": "({0})"
+    "generating-book-view": "Generating a book view of the transcription. Please wait..."
   },
   "modal": {
     "cancel": "Cancel",

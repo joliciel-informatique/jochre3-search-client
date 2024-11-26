@@ -45,7 +45,7 @@
     "facet-count-all": "אַלע"
   },
   "results": {
-    "loading": "אָנלאָדנדיק...",
+    "loading": "אָפּנעמענדיק די זוך רעזַלטאַטן...",
     "click-image-snippet": "גיט אַ קװעטש אַרױסצוּװײַזן דעם פֿראַגמענט פֿונעם זײַטל",
     "alternate-title": "טיטל אין טראַנסקריפציע",
     "volume": "באַנד",
@@ -66,7 +66,8 @@
     "open-transcription": "טראַנסקריבירטן טעקסט"
   },
   "navigation": {
-    "jump-to": "שפּרינגט צו זײַט"
+    "currently-viewing-pages": "זײַטל {0} פֿון {1}",
+    "jump-to": "שפּרינגט צו זײַטל"
   },
   "preferences": {
     "title": "דעם באַניצערס פּרעפֿערענצן",
@@ -108,9 +109,7 @@
     "unauthenticated": "בכֿדי אױסצובעסערן אַן אַטריבוט, דאַרף מען ארײַנלאָגירן."
   },
   "transcribed-text": {
-    "table-of-contents": "תּוכן",
-    "page": "זײַטל {0}",
-    "logical-page": "({0})"
+    "generating-book-view": "גענערירנדיק אַ טראַנסקריפּציע פֿונעם גאַנצן בוך..."
   },
   "modal": {
     "cancel": "אַנולירן",
@@ -123,7 +122,6 @@
     "bottom": "לעצטער פֿראַגמענט"
   },
   "header": {
-    "logo": "/images/jochreLogo.png",
     "title": "",
     "preferences": "פּרעפֿערענצן",
     "login": "ארײַנלאָגירן",

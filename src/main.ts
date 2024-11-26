@@ -35,11 +35,14 @@ const messages = {
   yi: yi
 }
 
+// if (App && App.compilerOptions) App.compilerOptions.whitespace = 'preserve'
+
 const customizedMessages = {}
 
 const pinia: Pinia = createPinia()
 
 const app = createApp(App)
+app.config.compilerOptions.whitespace = 'preserve'
 
 directives(app)
 

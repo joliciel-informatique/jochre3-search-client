@@ -1,79 +1,129 @@
 <template>
-  <div class="column is-flex is-vcentered bookTitle m-2">
-    <h1
-      :class="{
-        'rtl-align': preferences.needsRightToLeft
-      }"
+  <div v-if="book" class="transcribed-text panel">
+    <div
+      class="panel-heading is-flex is-justify-content-space-between m-2"
+      :class="
+        (isMobile && !isTablet) || (!isMobile && isTablet)
+          ? 'is-flex-direction-column is-align-items-end'
+          : 'is-flex-direction-row is-align-items-center '
+      "
+      id="panel-heading"
     >
-      {{ bookTitle }}
-    </h1>
-  </div>
-  <div class="columns transcribedText" role="navigation">
-    <div class="column table-of-contents is-one-fifth box p-3">
-      <p class="menu-label">{{ $t('transcribed-text.table-of-contents') }}</p>
-      <aside class="menu p-2">
-        <div class="p-2 mb-0 field has-addons">
+      <h1
+        class="book-title"
+        :class="{
+          'rtl-align': preferences.needsRightToLeft
+        }"
+      >
+        <span>{{ book.title }}</span>
+      </h1>
+      <div
+        class="is-flex"
+        :class="
+          (isMobile && !isTablet) || (!isMobile && isTablet)
+            ? 'is-flex-direction-column is-align-items-end'
+            : 'is-flex-direction-row is-align-items-center'
+        "
+      >
+        <span class="is-size-6 p-2">
+          {{ $t('navigation.currently-viewing-pages', [pageRangeInView, book.pages.length]) }}
+        </span>
+        <div class="is-flex is-size-6 is-flex-direction-row pb-0 mb-0 field has-addons">
           <p class="control">
-            <a class="button is-static level-item">{{ $t('navigation.jump-to') }}</a>
+            <a class="button is-size-6 p-2 is-static">{{ $t('navigation.jump-to') }}</a>
           </p>
-          <p class="control container">
+          <p class="control">
             <input
-              class="input is-normal is-rounded"
+              class="input is-small p-2 is-size-6 has-text-centered"
               type="number"
-              :min="firstPage"
-              :max="bookPages.length"
-              v-model="currentPage"
+              :min="firstIndexedPage"
+              :max="book.pages.length"
+              v-model.lazy="currentPage"
               @change="scrollTo(currentPage)"
             />
           </p>
         </div>
-        <hr />
-        <ul class="menu-list m-2">
-          <li v-for="page in bookPages" :key="page.page">
-            <a @click="scrollTo(page.page)">
-              {{ $t('transcribed-text.page', [page.label]) }}
-              <span v-if="page.logicalNumber">{{
-                $t('transcribed-text.logical-page', [page.logicalNumber])
-              }}</span>
-            </a>
-          </li>
-        </ul>
-      </aside>
+      </div>
     </div>
-    <div class="column is-1"></div>
     <div
-      v-html="docText"
-      class="column m-3 p-3"
+      class="panel-block box m-3 px-3 is-flex is-flex-direction-column is-justify-content-center"
       :class="{
         'rtl-align': preferences.needsRightToLeft
       }"
       role="article"
-    ></div>
+    >
+      <div
+        class="scroll-container is-flex is-flex-direction-column is-align-content-center"
+        id="scroll-container"
+        v-show="!isLoading"
+      >
+        <div
+          v-for="page in book.pages"
+          :key="sha1(!page)"
+          class="doc-text is-inline-flex is-flex-direction-column is-align-content-center is-flex-wrap-wrap mb-2"
+        >
+          <div class="box page" :id="page.index">
+            <span class="physical-page-number has-text-left has-text-weight-semibold">
+              {{ page.index }} ({{ page.logicalPageNumber }})
+              <hr />
+            </span>
+            <div
+              class="is-flex is-flex-direction-column is-flex-wrap-wrap m-2"
+              :class="preferences.isMobile ? '' : 'is-align-content-start'"
+            >
+              <p class="page-text is-size-6" v-html="page.text"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div v-else class="is-flex is-flex-direction-column has-text-centered p-5">
+    <!-- Generating a book view -->
+    <span class="m-5"
+      ><h1>{{ $t('transcribed-text.generating-book-view') }}</h1></span
+    >
+    <div class="loader-wrapper is-active mt-5">
+      <div class="loader is-loading is-active"></div>
+      <font-awesome-icon icon="book-open" color="grey" size="2xl" />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
-import { watch } from 'vue'
+import { onUpdated } from 'vue'
 import { onMounted, ref } from 'vue'
 import { onBeforeRouteUpdate, useRouter, useRoute } from 'vue-router'
 import { fetchData } from '@/assets/fetchMethods'
-import { type BookPages } from '@/assets/interfacesExternals'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { isInView, isInViewOfDiv, mostFrequentUsingMap } from '@/assets/functions'
+import { sha1 } from 'object-hash'
+import { storeToRefs } from 'pinia'
 
 const preferences = usePreferencesStore()
+const firstIndexedPage = ref()
+
+const { isMobile, isDesktop, isPortrait, isTablet } = storeToRefs(preferences)
 
 const router = useRouter()
 const route = useRoute()
 
 const docRef = ref('')
 const pageNumber = ref()
-const docText = ref('')
-const bookBody = ref()
-const bookTitle = ref('')
-const bookPages = ref<Array<BookPages>>([])
+const book = ref()
+
 const currentPage = ref()
-const firstPage = ref()
 const query = ref()
 const strict = ref(false)
+const pageRangeInView = ref()
+const isLoading = ref(true)
+
+const getPagesInView = () => {
+  const pagesInView = Array.from(document.querySelectorAll('.box.page'))
+    .map((page) => (isInViewOfDiv(page) ? parseInt(page.getAttribute('id')!) : null))
+    .filter((x) => x)
+  console.log(pagesInView)
+  if (pagesInView.length) pageRangeInView.value = `${pagesInView[0]}`
+}
 
 onMounted(() => {
   docRef.value = route.params.docRef as string
@@ -86,7 +136,13 @@ onMounted(() => {
     if (route.query['query']) query.value = (route.query['query'] as string).trim()
     if (route.query['strict']) strict.value = route.query['strict'] === 'true'
     updateText()
+    document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
   })
+})
+
+onUpdated(() => {
+  getPagesInView()
+  document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
 })
 
 const defineSearchParams = () => {
@@ -100,68 +156,32 @@ const defineSearchParams = () => {
 const updateText = () => {
   const params = new URLSearchParams(defineSearchParams())
   params.append('doc-ref', docRef.value)
+  params.append('text-as-html', 'true')
 
-  fetchData('text-as-html', 'get', params, 'text/html')
-    .then((res) => res.text())
-    .then((res) => (docText.value = res))
-    .then(() => document.getElementById(`page${route.params.page}`)?.scrollIntoView())
-    .then(() => {
-      const footer = document.getElementsByClassName('footer')[0]
-      footer.setAttribute('style', 'position:sticky;bottom:0')
+  fetchData('highlighted-text', 'get', params)
+    .then((res) => res.json())
+    .then((bookData) => {
+      if ('pages' in bookData && bookData.pages.length) {
+        // Find the lowest index page number: index is physical page
+        firstIndexedPage.value = Math.min(...bookData.pages.map((page: any) => page.index))
+
+        // A hacky way to fix incorrect logical page numbers based on most common difference between assigned logical and physical numbers
+        const overallOffset = bookData.pages.map((p: any) => p.index - p.logicalPageNumber)
+        const offset = mostFrequentUsingMap(overallOffset)
+        if (offset) {
+          bookData.pages.forEach((page: any) => (page.logicalPageNumber = page.index - offset))
+        }
+      }
+
+      book.value = bookData
     })
+    .then(() => document.getElementById(`${route.params.page}`)?.scrollIntoView())
+  isLoading.value = false
 }
 
-// Build table of contents
-watch(docText, (newVal) => {
-  bookBody.value = new DOMParser().parseFromString(newVal, 'text/html').body
-
-  bookTitle.value = (bookBody.value.firstChild as HTMLElement).innerText
-
-  const pages = Array.from(bookBody.value.querySelectorAll('div[id]:not([id=""])')).map((div) =>
-    (div as HTMLDivElement).id.replace('page', '')
-  )
-
-  bookPages.value = pages.map((page: string, idx: number) => {
-    const pageNum = /^[+-]?\d+(\.\d+)?$/.test(page) ? parseInt(page) : 1
-    if (idx === 0) firstPage.value = page
-    return {
-      page: pageNum,
-      label: page.replace('page', 'page '),
-      logicalNumber: findPageNumber(pageNum)
-    }
-  })
-})
-
-const scrollTo = (page: number) => {
-  const client = document.getElementById(`page${page}`)
-  if (client) {
-    const top = client.getBoundingClientRect().top + window.pageYOffset
-    window.scrollTo({ top: top, behavior: 'smooth' })
-  }
-}
-
-const findPageNumber = (number: number): number => {
-  const currentElement = bookBody.value.querySelector(`div#page${number}`)
-  if (!currentElement) return number
-  const textFragments = []
-  const walker = document.createTreeWalker(currentElement, NodeFilter.SHOW_TEXT)
-  while (walker.nextNode()) {
-    textFragments.push(walker.currentNode)
-  }
-
-  const numbers = textFragments
-    .map((fragment) =>
-      /^[+-]?\d+(\.\d+)?$/.test((fragment as Text).data) ? (fragment as Text).data : null
-    )
-    .reverse()
-    .filter((fragment) => fragment)
-
-  return numbers.length && numbers[0] ? parseInt(numbers[0]) : 0
-}
+const scrollTo = (page: number) =>
+  document.getElementById(page.toString())?.scrollIntoView({ behavior: 'smooth' })
 
 // When URL is changed manually?
-onBeforeRouteUpdate(async () => {
-  // react to route changes...
-  updateText()
-})
+onBeforeRouteUpdate(async () => updateText())
 </script>
