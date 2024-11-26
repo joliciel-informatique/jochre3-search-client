@@ -43,6 +43,26 @@
             />
           </p>
         </div>
+        <nav class="pagination" role="navigation">
+          <div class="control">
+            <button
+              class="pagination-previous is-small m-1 has-text-white"
+              @click="scrollToPreviousHighlight()"
+              v-tooltip:bottom="$t('transcribed-text.prev-match-tooltip')"
+            >
+              {{ $t('transcribed-text.prev-match') }}
+            </button>
+          </div>
+          <div class="control">
+            <button
+              class="pagination-next is-small m-1 has-text-white"
+              @click="scrollToNextHighlight()"
+              v-tooltip:bottom="$t('transcribed-text.next-match-tooltip')"
+            >
+              {{ $t('transcribed-text.next-match') }}
+            </button>
+          </div>
+        </nav>
       </div>
     </div>
     <div
@@ -91,13 +111,14 @@
 </template>
 <script setup lang="ts">
 import { onUpdated } from 'vue'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, type Ref } from 'vue'
 import { onBeforeRouteUpdate, useRouter, useRoute } from 'vue-router'
 import { fetchData } from '@/assets/fetchMethods'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { isInView, isInViewOfDiv, mostFrequentUsingMap } from '@/assets/functions'
 import { sha1 } from 'object-hash'
 import { storeToRefs } from 'pinia'
+import type { HighlightedDocument } from '@/assets/interfacesExternals'
 
 const preferences = usePreferencesStore()
 const firstIndexedPage = ref()
@@ -116,12 +137,13 @@ const query = ref()
 const strict = ref(false)
 const pageRangeInView = ref()
 const isLoading = ref(true)
+const pagesWithHighlights: Ref<number[]> = ref([])
 
 const getPagesInView = () => {
   const pagesInView = Array.from(document.querySelectorAll('.box.page'))
     .map((page) => (isInViewOfDiv(page) ? parseInt(page.getAttribute('id')!) : null))
     .filter((x) => x)
-  console.log(pagesInView)
+
   if (pagesInView.length) pageRangeInView.value = `${pagesInView[0]}`
 }
 
@@ -161,19 +183,27 @@ const updateText = () => {
   fetchData('highlighted-text', 'get', params)
     .then((res) => res.json())
     .then((bookData) => {
-      if ('pages' in bookData && bookData.pages.length) {
+      const highlightedBook = bookData as HighlightedDocument
+      if (highlightedBook.pages.length) {
         // Find the lowest index page number: index is physical page
-        firstIndexedPage.value = Math.min(...bookData.pages.map((page: any) => page.index))
+        firstIndexedPage.value = Math.min(...highlightedBook.pages.map((page) => page.index))
 
         // A hacky way to fix incorrect logical page numbers based on most common difference between assigned logical and physical numbers
-        const overallOffset = bookData.pages.map((p: any) => p.index - p.logicalPageNumber)
+        const overallOffset = highlightedBook.pages.map((p) => p.index - (p.logicalPageNumber ?? 0))
         const offset = mostFrequentUsingMap(overallOffset)
         if (offset) {
-          bookData.pages.forEach((page: any) => (page.logicalPageNumber = page.index - offset))
+          highlightedBook.pages.forEach((page) => (page.logicalPageNumber = page.index - offset))
         }
+
+        pagesWithHighlights.value = []
+        highlightedBook.pages.forEach((page) => {
+          if (page.highlights && page.highlights.length > 0) {
+            pagesWithHighlights.value.push(page.index)
+          }
+        })
       }
 
-      book.value = bookData
+      book.value = highlightedBook
     })
     .then(() => document.getElementById(`${route.params.page}`)?.scrollIntoView())
   isLoading.value = false
@@ -181,6 +211,31 @@ const updateText = () => {
 
 const scrollTo = (page: number) =>
   document.getElementById(page.toString())?.scrollIntoView({ behavior: 'smooth' })
+
+const scrollToPreviousHighlight = () => {
+  getPagesInView()
+
+  const pageInView = pageRangeInView.value
+  const reversePages = pagesWithHighlights.value.slice().reverse()
+  const prevHighlight = reversePages.find((num) => num < pageInView)
+  console.log(`Pages with highlights: ${reversePages.join(',')}`)
+  console.log(`Page in view: ${pageInView}. Previous highlight: ${prevHighlight}`)
+  if (prevHighlight) {
+    scrollTo(prevHighlight)
+  }
+}
+
+const scrollToNextHighlight = () => {
+  getPagesInView()
+
+  const pageInView = pageRangeInView.value
+  const nextHighlight = pagesWithHighlights.value.find((num) => num > pageInView)
+  console.log(`Pages with highlights: ${pagesWithHighlights.value.join(',')}`)
+  console.log(`Page in view: ${pageInView}. Next highlight: ${nextHighlight}`)
+  if (nextHighlight) {
+    scrollTo(nextHighlight)
+  }
+}
 
 // When URL is changed manually?
 onBeforeRouteUpdate(async () => updateText())
