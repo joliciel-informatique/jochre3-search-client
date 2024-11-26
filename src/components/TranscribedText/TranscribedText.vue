@@ -46,6 +46,7 @@
             <button class="button is-small" @click="scrollToPreviousHighlight()">
               <svg
                 class="svg-inline--fa fa-magnifying-glass-arrow-left"
+                :class="{ 'fa-flip-horizontal': !preferences.displayLeftToRight }"
                 aria-hidden="true"
                 focusable="false"
                 data-prefix="fas"
@@ -64,7 +65,10 @@
           </p>
           <p class="control">
             <button class="button is-small" @click="scrollToNextHighlight()">
-              <font-awesome-icon icon="magnifying-glass-arrow-right" />
+              <font-awesome-icon
+                icon="magnifying-glass-arrow-right"
+                :class="{ 'fa-flip-horizontal': !preferences.displayLeftToRight }"
+              />
             </button>
           </p>
         </div>
