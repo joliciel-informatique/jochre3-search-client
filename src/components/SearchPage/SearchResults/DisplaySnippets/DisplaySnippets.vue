@@ -71,7 +71,7 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import SingleSnippet from '../DisplaySnippets/SingleSnippet/SingleSnippet.vue'
 import { isInView } from '@/assets/functions'
-import { onMounted } from 'vue'
+import { onMounted, onUpdated } from 'vue'
 
 const preferences = usePreferencesStore()
 
@@ -104,9 +104,12 @@ const scrolling = () => {
       )
       .pop()
 
+    console.log(snippetsInView)
+
     if (idx && searchResults.value) selectedEntry.value = searchResults.value[+idx]
   }
 }
 
 onMounted(() => document.getElementById('snippets')?.addEventListener('scroll', scrolling))
+onUpdated(() => document.getElementById('snippets')?.addEventListener('scroll', scrolling))
 </script>
