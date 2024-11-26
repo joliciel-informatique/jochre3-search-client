@@ -44,6 +44,22 @@
           </p>
         </div>
       </div>
+      <div class="is-flex is-flex-direction-column">
+        <span
+          class="is-flex is-flex-direction-row is-justify-content-space-between is-align-items-end pb-1"
+        >
+          <font-awesome-icon icon="text-height" size="lg" />
+          <font-awesome-icon icon="text-height" size="2xs" />
+        </span>
+        <input
+          class="slider is-fullwidth is-info"
+          step="1"
+          min="3"
+          max="7"
+          type="range"
+          v-model="textSize"
+        />
+      </div>
     </div>
     <div
       class="panel-block box m-3 px-3 is-flex is-flex-direction-column is-justify-content-center"
@@ -71,7 +87,7 @@
               class="is-flex is-flex-direction-column is-flex-wrap-wrap m-2"
               :class="preferences.isMobile ? '' : 'is-align-content-start'"
             >
-              <p class="page-text is-size-6" v-html="page.text"></p>
+              <p class="page-text" :class="textSizeClass" v-html="page.text"></p>
             </div>
           </div>
         </div>
@@ -90,7 +106,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onUpdated } from 'vue'
+import { onUpdated, watch } from 'vue'
 import { onMounted, ref } from 'vue'
 import { onBeforeRouteUpdate, useRouter, useRoute } from 'vue-router'
 import { fetchData } from '@/assets/fetchMethods'
@@ -110,6 +126,8 @@ const route = useRoute()
 const docRef = ref('')
 const pageNumber = ref()
 const book = ref()
+const textSize = ref(4)
+const textSizeClass = ref('is-size-6')
 
 const currentPage = ref()
 const query = ref()
@@ -152,6 +170,12 @@ const defineSearchParams = () => {
     strict.value.toString() !== null ? { strict: strict.value.toString() } : null
   )
 }
+
+watch(textSize, (newV) => {
+  if (newV) {
+    textSizeClass.value = `is-size-${newV}`
+  }
+})
 
 const updateText = () => {
   const params = new URLSearchParams(defineSearchParams())
