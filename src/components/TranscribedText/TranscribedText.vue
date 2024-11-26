@@ -28,9 +28,9 @@
         <span class="is-size-6 p-2">
           {{ $t('navigation.currently-viewing-pages', [pageRangeInView, book.pages.length]) }}
         </span>
-        <div class="is-flex is-size-6 is-flex-direction-row pb-0 mb-0 field has-addons">
+        <div class="pb-0 mb-0 field has-addons">
           <p class="control">
-            <a class="button is-size-6 p-2 is-static">{{ $t('navigation.jump-to') }}</a>
+            <a class="button is-size-6 is-small is-static">{{ $t('navigation.jump-to') }}</a>
           </p>
           <p class="control">
             <input
@@ -42,27 +42,32 @@
               @change="scrollTo(currentPage)"
             />
           </p>
+          <p class="control">
+            <button class="button is-small" @click="scrollToPreviousHighlight()">
+              <svg
+                class="svg-inline--fa fa-magnifying-glass-arrow-left"
+                aria-hidden="true"
+                focusable="false"
+                data-prefix="fas"
+                data-icon="magnifying-glass-arrow-left"
+                role="img"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  class
+                  fill="currentColor"
+                  d="M 416.321 207.697 C 416.321 253.597 401.421 295.997 376.321 330.397 L 502.921 457.097 C 515.421 469.597 515.421 489.897 502.921 502.397 C 490.421 514.897 470.121 514.897 457.621 502.397 L 331.021 375.697 C 296.621 400.897 254.221 415.697 208.321 415.697 C 93.421 415.697 0.321 322.597 0.321 207.697 C 0.321 92.797 93.421 -0.303 208.321 -0.303 C 323.221 -0.303 416.321 92.797 416.321 207.697 Z M 175.129 118.579 L 103.129 190.579 C 93.729 199.879 93.729 215.079 103.129 224.479 L 175.129 296.479 C 184.429 305.879 199.629 305.779 209.029 296.479 C 218.429 287.179 218.429 271.979 209.029 262.579 L 178.029 231.579 L 296.129 231.579 C 309.429 231.579 320.129 220.879 320.129 207.579 C 320.129 194.279 309.429 183.579 296.129 183.579 L 178.029 183.579 L 209.029 152.579 C 218.429 143.279 218.329 128.079 209.029 118.679 C 199.729 109.279 184.529 109.279 175.129 118.679 Z"
+                ></path>
+              </svg>
+            </button>
+          </p>
+          <p class="control">
+            <button class="button is-small" @click="scrollToNextHighlight()">
+              <font-awesome-icon icon="magnifying-glass-arrow-right" />
+            </button>
+          </p>
         </div>
-        <nav class="pagination" role="navigation">
-          <div class="control">
-            <button
-              class="pagination-previous is-small m-1 has-text-white"
-              @click="scrollToPreviousHighlight()"
-              v-tooltip:bottom="$t('transcribed-text.prev-match-tooltip')"
-            >
-              {{ $t('transcribed-text.prev-match') }}
-            </button>
-          </div>
-          <div class="control">
-            <button
-              class="pagination-next is-small m-1 has-text-white"
-              @click="scrollToNextHighlight()"
-              v-tooltip:bottom="$t('transcribed-text.next-match-tooltip')"
-            >
-              {{ $t('transcribed-text.next-match') }}
-            </button>
-          </div>
-        </nav>
       </div>
     </div>
     <div
@@ -115,7 +120,7 @@ import { onMounted, ref, type Ref } from 'vue'
 import { onBeforeRouteUpdate, useRouter, useRoute } from 'vue-router'
 import { fetchData } from '@/assets/fetchMethods'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import { isInView, isInViewOfDiv, mostFrequentUsingMap } from '@/assets/functions'
+import { isInViewOfDiv, mostFrequentUsingMap } from '@/assets/functions'
 import { sha1 } from 'object-hash'
 import { storeToRefs } from 'pinia'
 import type { HighlightedDocument } from '@/assets/interfacesExternals'
@@ -123,7 +128,7 @@ import type { HighlightedDocument } from '@/assets/interfacesExternals'
 const preferences = usePreferencesStore()
 const firstIndexedPage = ref()
 
-const { isMobile, isDesktop, isPortrait, isTablet } = storeToRefs(preferences)
+const { isMobile, isTablet } = storeToRefs(preferences)
 
 const router = useRouter()
 const route = useRoute()
@@ -220,27 +225,17 @@ const scrollTo = (page: number) =>
 
 const scrollToPreviousHighlight = () => {
   getPagesInView()
-
-  const pageInView = pageRangeInView.value
-  const reversePages = pagesWithHighlights.value.slice().reverse()
-  const prevHighlight = reversePages.find((num) => num < pageInView)
-  console.log(`Pages with highlights: ${reversePages.join(',')}`)
-  console.log(`Page in view: ${pageInView}. Previous highlight: ${prevHighlight}`)
-  if (prevHighlight) {
-    scrollTo(prevHighlight)
-  }
+  const prevHighlight = pagesWithHighlights.value
+    .slice()
+    .reverse()
+    .find((num) => num < pageRangeInView.value)
+  if (prevHighlight) scrollTo(prevHighlight)
 }
 
 const scrollToNextHighlight = () => {
   getPagesInView()
-
-  const pageInView = pageRangeInView.value
-  const nextHighlight = pagesWithHighlights.value.find((num) => num > pageInView)
-  console.log(`Pages with highlights: ${pagesWithHighlights.value.join(',')}`)
-  console.log(`Page in view: ${pageInView}. Next highlight: ${nextHighlight}`)
-  if (nextHighlight) {
-    scrollTo(nextHighlight)
-  }
+  const nextHighlight = pagesWithHighlights.value.find((num) => num > pageRangeInView.value)
+  if (nextHighlight) scrollTo(nextHighlight)
 }
 
 // When URL is changed manually?
