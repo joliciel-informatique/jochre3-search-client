@@ -73,7 +73,7 @@
           v-model:metadata-modal="metadataModal"
           v-model:notification="notification"
           v-model:word-modal="wordModal"
-          v-model:selected-entry="firstSearchResult"
+          v-model:selected-entry-idx="selectedEntryIdx"
           v-model:total-hits="totalHits"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
@@ -101,7 +101,7 @@
           v-model:metadata-modal="metadataModal"
           v-model:notification="notification"
           v-model:word-modal="wordModal"
-          v-model:selected-entry="firstSearchResult"
+          v-model:selected-entry-idx="selectedEntryIdx"
           v-model:total-hits="totalHits"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
@@ -117,7 +117,7 @@
         v-model:image-modal="imageModal"
         v-model:notification="notification"
         v-model:word-modal="wordModal"
-        v-model:selected-entry="firstSearchResult"
+        v-model:selected-entry-idx="selectedEntryIdx"
         v-model:search-results="searchResults"
         v-model:is-loading="isLoading"
         v-model:query="query"
@@ -204,8 +204,9 @@ import { storeToRefs } from 'pinia'
 const { authorFacetCount } = storeToRefs(preferences)
 
 const query = ref('')
-const firstSearchResult = ref<SearchResult>()
-const searchResults = defineModel<Array<SearchResult>>('searchResults')
+// const selectedEntry = ref<SearchResult>()
+const selectedEntryIdx = ref(0)
+const searchResults = ref<Array<SearchResult>>([])
 const totalHits: Ref = defineModel('totalHits')
 const page: Ref = defineModel('page')
 const imageModal: Ref = defineModel('imageModal')
@@ -239,6 +240,12 @@ const openMobileFacets = ref(false)
 const openNavBarMobileMenu = ref(false)
 
 const facets = ref<Array<AggregationBin>>([])
+
+watch(selectedEntryIdx, (newV: number) => {
+  console.log(newV)
+  // if (newV && searchResults.value && searchResults.value.length)
+  // selectedEntry.value = (searchResults as any)[newV]
+})
 
 onMounted(() => {
   window.addEventListener('click', (e: MouseEvent | TouchEvent) => {
@@ -318,7 +325,7 @@ const clearSearchResults = () => {
   facets.value = []
   searchResults.value = []
   totalHits.value = 0
-  firstSearchResult.value = undefined
+  // selectedEntry.value = undefined
 
   page.value = 1
 }
@@ -520,7 +527,8 @@ const search = async () => {
           if (results && results.length) {
             console.log(`Setting ${totalCount} results`)
             searchResults.value = results
-            firstSearchResult.value = results[0]
+            selectedEntryIdx.value = 0
+            // selectedEntry.value = results[selectedEntryIdx.value]
             totalHits.value = totalCount
 
             if (!hasActiveFacets) {

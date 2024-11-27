@@ -19,7 +19,7 @@ Description: controls text snippets from the OCR text
         : `on-desktop`
     "
     tabindex="-1"
-    v-if="!isLoading"
+    v-if="!isLoading && searchResults?.length"
   >
     <ul>
       <li v-for="(result, bookIndex) of searchResults" :key="sha1(result)">
@@ -36,7 +36,10 @@ Description: controls text snippets from the OCR text
               ? `mobile is-hidden-desktop`
               : `desktop is-hidden-touch`
           "
-          v-show="displayPerBook || (!displayPerBook && selectedEntry?.docRef === result.docRef)"
+          v-show="
+            displayPerBook ||
+            (!displayPerBook && searchResults[selectedEntryIdx]?.docRef === result.docRef)
+          "
         >
           <SingleSnippet
             v-for="(snippet, index) in result.snippets"
@@ -53,7 +56,7 @@ Description: controls text snippets from the OCR text
             v-model:image-modal="imageModal"
             v-model:word-modal="wordModal"
             v-model:notification="notification"
-            v-model:selected-entry="selectedEntry"
+            v-model:selected-entry-idx="selectedEntryIdx"
           />
         </ul>
       </li>
@@ -79,8 +82,9 @@ const { displayPerBook } = storeToRefs(preferences)
 const imageModal = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const notification = defineModel('notification')
-const selectedEntry = defineModel<SearchResult>('selectedEntry')
-const activeBook = ref([+0])
+// const selectedEntry = defineModel<SearchResult>('selectedEntry')
+const selectedEntryIdx = defineModel<number>('selectedEntryIdx', { default: 0 })
+// const activeBook = ref([+0])
 const searchResults = defineModel<SearchResult[]>('searchResults')
 const query = defineModel<string>('query')
 const strict = defineModel<boolean>('strict')
@@ -98,38 +102,34 @@ const scrolling = () => {
 
     if (snippetsDiv && snippets.length) {
       if (snippetsDiv.scrollTop === 0) {
-        activeBook.value = [+0] // top
+        selectedEntryIdx.value = 0 // top
       } else if (
         snippetsDiv.scrollHeight ===
           Math.floor(snippetsDiv.scrollTop + snippetsDiv.getBoundingClientRect().height) ||
         snippetsDiv.scrollHeight ===
           Math.ceil(snippetsDiv.scrollTop + snippetsDiv.getBoundingClientRect().height)
       ) {
-        if (searchResults.value) activeBook.value = [searchResults.value.length - 1] // bottom
+        if (searchResults.value) selectedEntryIdx.value = searchResults.value.length - 1 // bottom
       } else if (
         snippetsDiv.scrollHeight >
         Math.floor(snippetsDiv.scrollTop + snippetsDiv.getBoundingClientRect().height)
       ) {
-        activeBook.value = snippets.map((snippet: Element) => {
-          const bookIndex = snippet.getAttribute('bookindex')
-          return Math.ceil((snippet as HTMLElement).getBoundingClientRect().top) <
-            snippetsDiv.offsetHeight / 2 && bookIndex
-            ? +bookIndex
-            : 0
-        })
+        selectedEntryIdx.value = Math.max(
+          ...snippets.map((snippet: Element) => {
+            const bookIndex = snippet.getAttribute('bookindex')
+            return Math.ceil((snippet as HTMLElement).getBoundingClientRect().top) <
+              snippetsDiv.offsetHeight / 2 && bookIndex
+              ? +bookIndex
+              : 0
+          })
+        )
       } else {
         // Scrolling down
         console.log('else')
       }
     }
-
-    activeBook.value = [Math.max(...activeBook.value)]
   }
 }
-
-watch(activeBook, (newV) => {
-  if (searchResults.value) selectedEntry.value = searchResults.value[newV[0]]
-})
 
 onMounted(() => document.getElementById('snippets')?.addEventListener('scroll', scrolling))
 onUpdated(() => document.getElementById('snippets')?.addEventListener('scroll', scrolling))

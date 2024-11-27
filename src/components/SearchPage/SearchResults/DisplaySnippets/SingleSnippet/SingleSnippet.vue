@@ -13,9 +13,13 @@ Description: displays text snippets from the OCR text
   <li :docRef="docRef" class="card snippet mb-4" :bookIndex :snippetIndex>
     <header
       class="card-header"
-      :class="selectedEntry.docRef === docRef ? 'selected-snippet' : 'snippet'"
+      :class="selectedEntryIdx === bookIndex ? 'selected-snippet' : 'snippet'"
     >
-      <p class="card-header-title snippet-header">
+      <p
+        class="card-header-title snippet-header"
+        :class="selectedEntryIdx === bookIndex ? '' : 'is-clickable'"
+        @click="selectedEntryIdx = bookIndex"
+      >
         {{ $t('results.page', [snippet.page]) }}&nbsp;•&nbsp;<span
           class="is-size-6 snippet-book-title"
           :class="{ 'rtl-align': preferences.needsRightToLeft }"
@@ -153,7 +157,8 @@ const { snippet, docRef, bookIndex, snippetIndex, query, strict } = defineProps(
 const imageModal: Ref = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const notification = defineModel('notification')
-const selectedEntry: Ref = defineModel('selectedEntry')
+// const selectedEntry: Ref = defineModel('selectedEntry')
+const selectedEntryIdx: Ref = defineModel<number>('selectedEntryIdx', { default: 0 })
 
 const image = ref('')
 const imageIsLoading = ref(false)
