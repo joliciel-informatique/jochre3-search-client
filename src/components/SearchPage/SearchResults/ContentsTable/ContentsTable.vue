@@ -15,13 +15,13 @@
     </p>
     <div class="scroll-list" id="scrollList">
       <ul class="menu-list">
-        <li class="px-2" v-for="(result, index) of searchResults" :key="result.docRef">
+        <li class="px-2" v-for="(result, bookIndex) of searchResults" :key="result.docRef">
           <a
-            @click="selectEntry(result, index)"
-            @keyup.enter="selectEntry(result, index)"
+            @click="selectEntry(bookIndex)"
+            @keyup.enter="selectEntry(bookIndex)"
             tabindex="0"
             class="grid"
-            :class="selectedEntry?.docRef === result.docRef ? 'is-active' : ''"
+            :class="searchResults[selectedEntryIdx]?.docRef === result.docRef ? 'is-active' : ''"
           >
             <SingleResult
               v-model:image-modal="imageModal"
@@ -29,9 +29,9 @@
               v-model:metadata-modal="metadataModal"
               v-model:notification="notification"
               v-model:showing="showing"
-              v-model:selectedEntry="selectedEntry"
+              v-model:selectedEntryIdx="selectedEntryIdx"
               :result
-              :index
+              :bookIndex
               :page-number-offset
             />
           </a>
@@ -68,27 +68,36 @@
     >
       <span class="m-1 ml-2 pt-1" :class="{ 'rtl-align': preferences.needsRightToLeft }">
         <span>
-          {{ selectedEntry?.metadata.title }}
-          ({{ selectedEntry?.metadata.author ?? $t('results.result-unknown-author') }})
+          {{ searchResults[selectedEntryIdx]?.metadata.title }}
+          ({{
+            searchResults[selectedEntryIdx]?.metadata.author ?? $t('results.result-unknown-author')
+          }})
         </span>
       </span>
     </a>
     <PageNumbering @newPage="emit('newPage')" v-model:totalHits="totalHits" v-model:page="page" />
   </div>
-  <aside class="toc-drawer menu box p-2" v-show="openMobileMetadataPanel">
+  <aside
+    v-if="searchResults?.length"
+    class="toc-drawer menu box p-2"
+    v-show="openMobileMetadataPanel"
+  >
     <SingleResult
       v-model:image-modal="imageModal"
       v-model:word-modal="wordModal"
       v-model:metadata-modal="metadataModal"
       v-model:notification="notification"
       v-model:showing="showing"
-      v-model:selectedEntry="selectedEntry"
-      :result="selectedEntry"
-      :index="selectedEntryIndex"
+      v-model:selected-entry-idx="selectedEntryIdx"
+      :result="searchResults[selectedEntryIdx]"
       :page-number-offset
     />
   </aside>
-  <aside class="toc-drawer menu box p-2" v-show="openMobileSearchResultsToc">
+  <aside
+    v-if="searchResults?.length"
+    class="toc-drawer menu box p-2"
+    v-show="openMobileSearchResultsToc"
+  >
     <p
       class="menu-label is-size-5 label p-2 is-flex is-flex-direction-row is-justify-content-space-between"
     >
@@ -101,12 +110,12 @@
     <ul class="menu-list p-2">
       <li v-for="(result, index) of searchResults" :key="result.docRef">
         <a
-          @click="selectEntry(result, index)"
-          @keyup.enter="selectEntry(result, index)"
+          @click="selectEntry(index)"
+          @keyup.enter="selectEntry(index)"
           tabindex="0"
           class="grid"
           :class="{
-            'is-active': selectedEntry?.docRef === result.docRef,
+            'is-active': searchResults[selectedEntryIdx]?.docRef === result.docRef,
             'has-text-right': !preferences.corpusLeftToRight,
             'rtl-align': preferences.needsRightToLeft
           }"
@@ -143,8 +152,8 @@ const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
 const notification: Ref = defineModel('notification')
-const selectedEntry = defineModel<SearchResult>('selectedEntry')
-const selectedEntryIndex = ref(0)
+// const selectedEntry = defineModel<SearchResult>('selectedEntry')
+const selectedEntryIdx = defineModel<number>('selectedEntryIdx', { default: 0 })
 const totalHits: Ref = defineModel('totalHits')
 const facets: Ref = defineModel('facets')
 
@@ -160,9 +169,8 @@ const lastResult = computed(() => {
   return totalHits.value < last ? totalHits.value : last
 })
 
-const selectEntry = (entry: SearchResult, index: number) => {
-  selectedEntry.value = entry
-  selectedEntryIndex.value = index
+const selectEntry = (index: number) => {
+  selectedEntryIdx.value = index
   const navBarHeight = document.getElementById('topbar')?.getBoundingClientRect().height
   const top = document.getElementById(`hr-${index}`)?.getBoundingClientRect().top
   if (navBarHeight && top)
@@ -170,12 +178,11 @@ const selectEntry = (entry: SearchResult, index: number) => {
       top: top - navBarHeight,
       behavior: 'smooth'
     })
-  // scrollList
 }
 
 onMounted(() => {
   const results = searchResults.value
-  if (results) selectEntry(results[0], 0)
+  if (results) selectEntry(0)
 })
 
 const emit = defineEmits(['newPage', 'resetSearchResults', 'newSearch'])

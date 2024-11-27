@@ -54,6 +54,20 @@
       color: $background-color-5;
     }
 
+    &:hover {
+      background-color: $background-color-2-transparency-50;
+      color: $white;
+      transition: all 230ms ease-in-out;
+      > .card-header-icon > span {
+        color: $white;
+        transition: all 230ms ease-in-out;
+      }
+      .card-header-title {
+        color: $white;
+        transition: all 230ms ease-in-out;
+      }
+    }
+
     > .card-header-icon > span {
       color: $background-color-5;
     }
