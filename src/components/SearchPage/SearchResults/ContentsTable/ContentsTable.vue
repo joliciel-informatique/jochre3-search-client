@@ -13,7 +13,7 @@
     <p class="menu-label label pt-4">
       {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
     </p>
-    <div class="scroll-list">
+    <div class="scroll-list" id="scrollList">
       <ul class="menu-list">
         <li class="px-2" v-for="(result, index) of searchResults" :key="result.docRef">
           <a
@@ -170,6 +170,7 @@ const selectEntry = (entry: SearchResult, index: number) => {
       top: top - navBarHeight,
       behavior: 'smooth'
     })
+  // scrollList
 }
 
 onMounted(() => {
