@@ -1,5 +1,5 @@
 <template>
-  <div v-if="authenticated">
+  <div class="is-flex-grow-1" v-if="authenticated">
     <!-- User options on desktop -->
     <div class="is-hidden-touch">
       <div
