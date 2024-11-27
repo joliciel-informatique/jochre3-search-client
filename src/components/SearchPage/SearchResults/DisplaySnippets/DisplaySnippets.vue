@@ -70,8 +70,7 @@ import { sha1 } from 'object-hash'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import SingleSnippet from '../DisplaySnippets/SingleSnippet/SingleSnippet.vue'
-import { isInView } from '@/assets/functions'
-import { onMounted } from 'vue'
+import { onMounted, onUpdated, ref, watch } from 'vue'
 
 const preferences = usePreferencesStore()
 
@@ -81,6 +80,7 @@ const imageModal = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const notification = defineModel('notification')
 const selectedEntry = defineModel<SearchResult>('selectedEntry')
+const activeBook = ref([+0])
 const searchResults = defineModel<SearchResult[]>('searchResults')
 const query = defineModel<string>('query')
 const strict = defineModel<boolean>('strict')
@@ -89,24 +89,48 @@ const isLoading = defineModel('isLoading')
 // How many snippets for each volume are in view upon scroll only if shown in continuous list
 const scrolling = () => {
   if (displayPerBook.value) {
-    const snippets =
-      preferences.isMobile || preferences.isTablet ? '.snippets-on li' : '.snippets-on li'
+    // First/top element is marked as active by default
+    // Check if user scrolled all the down: mark last element as active
+    // If else: activate books below the middle of the screen
 
-    const snippetsInView = Array.from(document.querySelectorAll(snippets))
-      .map((snippet) => (isInView(snippet) ? snippet.getAttribute('bookindex') : null))
-      .filter((x) => x)
+    const snippetsDiv = document.getElementById('snippets')
+    const snippets = Array.from(document.querySelectorAll('.snippets-on li'))
 
-    const idx = snippetsInView
-      .sort(
-        (a, b) =>
-          snippetsInView.filter((v) => v === a).length -
-          snippetsInView.filter((v) => v === b).length
-      )
-      .pop()
+    if (snippetsDiv && snippets.length) {
+      if (snippetsDiv.scrollTop === 0) {
+        activeBook.value = [+0] // top
+      } else if (
+        snippetsDiv.scrollHeight ===
+          Math.floor(snippetsDiv.scrollTop + snippetsDiv.getBoundingClientRect().height) ||
+        snippetsDiv.scrollHeight ===
+          Math.ceil(snippetsDiv.scrollTop + snippetsDiv.getBoundingClientRect().height)
+      ) {
+        if (searchResults.value) activeBook.value = [searchResults.value.length - 1] // bottom
+      } else if (
+        snippetsDiv.scrollHeight >
+        Math.floor(snippetsDiv.scrollTop + snippetsDiv.getBoundingClientRect().height)
+      ) {
+        activeBook.value = snippets.map((snippet: Element) => {
+          const bookIndex = snippet.getAttribute('bookindex')
+          return Math.ceil((snippet as HTMLElement).getBoundingClientRect().top) <
+            snippetsDiv.offsetHeight / 2 && bookIndex
+            ? +bookIndex
+            : 0
+        })
+      } else {
+        // Scrolling down
+        console.log('else')
+      }
+    }
 
-    if (idx && searchResults.value) selectedEntry.value = searchResults.value[+idx]
+    activeBook.value = [Math.max(...activeBook.value)]
   }
 }
 
+watch(activeBook, (newV) => {
+  if (searchResults.value) selectedEntry.value = searchResults.value[newV[0]]
+})
+
 onMounted(() => document.getElementById('snippets')?.addEventListener('scroll', scrolling))
+onUpdated(() => document.getElementById('snippets')?.addEventListener('scroll', scrolling))
 </script>
