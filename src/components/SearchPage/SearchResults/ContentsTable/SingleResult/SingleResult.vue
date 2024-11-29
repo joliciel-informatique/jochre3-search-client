@@ -13,12 +13,12 @@ Description: presents OCR record metadata
   <div v-if="result" :docRef="result.docRef" :id="result.docRef" class="metadata mt-2">
     <AccordionCard
       :id="result.docRef"
-      :showing="(!bookIndex || bookIndex === selectedEntryIdx) && showing"
+      :showing="(bookIndex < 0 || bookIndex === selectedEntryIdx) && showing"
     >
       <template #header>
         <p class="pb-2 is-flex is-flex-direction-row is-justify-content-space-between">
           <span class="is-align-self-flex-start"
-            >{{ (bookIndex ?? selectedEntryIdx) + pageNumberOffset }}|</span
+            >{{ (bookIndex < 0 ? selectedEntryIdx : bookIndex) + pageNumberOffset }}|</span
           >
           <span class="is-align-self-flex-start is-flex-grow-1 has-text-left"
             >{{ result.metadata.title ?? result.docRef }} ({{
@@ -90,7 +90,7 @@ const preferences = usePreferencesStore()
 const fields = ['titleEnglish', 'author', 'authorEnglish', 'publicationYear', 'publisher']
 
 const metadataModal = defineModel('metadataModal')
-const showing = defineModel<boolean>('showing', { default: false })
+const showing = defineModel<boolean>('showing', { default: true })
 const selectedEntry = defineModel<SearchResult>('selectedEntry')
 const selectedEntryIdx = defineModel<number>('selectedEntryIdx')
 

@@ -28,10 +28,9 @@
               v-model:word-modal="wordModal"
               v-model:metadata-modal="metadataModal"
               v-model:notification="notification"
-              v-model:showing="showing"
               v-model:selectedEntryIdx="selectedEntryIdx"
-              :result
-              :bookIndex
+              :result="result"
+              :book-index="bookIndex"
               :page-number-offset
             />
           </a>
@@ -87,9 +86,9 @@
       v-model:word-modal="wordModal"
       v-model:metadata-modal="metadataModal"
       v-model:notification="notification"
-      v-model:showing="showing"
       v-model:selected-entry-idx="selectedEntryIdx"
       :result="searchResults[selectedEntryIdx]"
+      :book-index="-1"
       :page-number-offset
     />
   </aside>
@@ -134,7 +133,7 @@
 </template>
 <script setup lang="ts">
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import { computed, onMounted, ref, type Ref } from 'vue'
+import { computed, onMounted, type Ref } from 'vue'
 
 import SingleResult from '../ContentsTable/SingleResult/SingleResult.vue'
 import type { SearchResult } from '@/assets/interfacesExternals'
@@ -142,8 +141,6 @@ import PageNumbering from '../../SearchBar/Navigation/PageNumbering/PageNumberin
 import FacetBar from '../FacetBar/FacetBar.vue'
 
 const preferences = usePreferencesStore()
-
-const showing = ref(true)
 
 const searchResults = defineModel<Array<SearchResult>>('searchResults')
 const page: Ref = defineModel('page')
