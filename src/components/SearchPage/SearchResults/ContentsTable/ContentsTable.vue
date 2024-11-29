@@ -131,7 +131,6 @@
       v-model:open-mobile-facets="openMobileFacets"
     />
   </aside>
-  <!-- </div> -->
 </template>
 <script setup lang="ts">
 import { usePreferencesStore } from '@/stores/PreferencesStore'
