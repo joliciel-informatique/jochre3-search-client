@@ -101,7 +101,6 @@
         <span v-if="preferences.language === 'en'">EN</span>
       </a>
     </div> -->
-  <!-- </div> -->
 </template>
 <script setup lang="ts">
 import VueI18n from 'vue-i18n'

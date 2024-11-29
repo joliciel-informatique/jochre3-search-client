@@ -72,7 +72,9 @@ export const usePreferencesStore = defineStore('preferences', () => {
     allVariables.forEach((variable) => (variable.value = false))
     toggleOn.forEach((variable) => (variable.value = true))
     getScreenOrientation()
-    console.log(isMobile.value, isTablet.value, isDesktop.value, isPortrait.value)
+    // console.log(
+    //   `isMobile: ${isMobile.value} isTablet: ${isTablet.value} isDesktop: ${isDesktop.value} isPortrait: ${isPortrait.value}`
+    // )
   }
 
   // Function called only in onMounted
