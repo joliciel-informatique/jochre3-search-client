@@ -80,7 +80,7 @@
         >
           <div class="box page" :id="page.physicalPageNumber">
             <span class="physical-page-number has-text-left has-text-weight-semibold">
-              {{ page.physicalPageNumber }} ({{ page.logicalPageNumber }})
+              {{ page.physicalPageNumber }}
               <hr />
             </span>
             <div
