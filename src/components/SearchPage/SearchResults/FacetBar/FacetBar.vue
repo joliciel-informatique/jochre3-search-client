@@ -90,7 +90,7 @@ Description: presents the facet bar
               <div class="dropdown is-hoverable">
                 <div class="dropdown-trigger">
                   <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
-                    <span>{{ $t('facets.most-hits') }}</span>
+                    <span ref="dropdownTrigger">{{ $t('facets.most-hits') }}</span>
                     <span class="icon is-small">
                       <font-awesome-icon icon="angle-down" aria-hidden="true" />
                     </span>
@@ -100,24 +100,24 @@ Description: presents the facet bar
                   <div class="dropdown-content left">
                     <a
                       href="#"
-                      @click.prevent="updateSortOption('count')"
+                      @click.prevent="updateSortOption('count', $t('facets.most-hits'))"
                       class="dropdown-item"
                       :class="facetSortBy === 'count' ? 'is-active' : ''"
                       >{{ $t('facets.most-hits') }}</a
                     >
                     <a
                       href="#"
-                      @click.prevent="updateSortOption('active')"
-                      class="dropdown-item"
-                      :class="facetSortBy === 'active' ? 'is-active' : ''"
-                      >{{ $t('facets.active-facets') }}</a
-                    >
-                    <a
-                      href="#"
-                      @click.prevent="updateSortOption('label')"
+                      @click.prevent="updateSortOption('label', $t('facets.by-name'))"
                       :class="facetSortBy === 'label' ? 'is-active' : ''"
                       class="dropdown-item"
                       >{{ $t('facets.by-name') }}</a
+                    >
+                    <a
+                      href="#"
+                      @click.prevent="updateSortOption('active', $t('facets.active-facets'))"
+                      class="dropdown-item"
+                      :class="facetSortBy === 'active' ? 'is-active' : ''"
+                      >{{ $t('facets.active-facets') }}</a
                     >
                   </div>
                 </div>
@@ -242,7 +242,7 @@ Description: presents the facet bar
           <div class="dropdown is-hoverable">
             <div class="dropdown-trigger">
               <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
-                <span>{{ $t('facets.most-hits') }}</span>
+                <span ref="dropdownTrigger">{{ $t('facets.most-hits') }}</span>
                 <span class="icon is-small">
                   <font-awesome-icon icon="angle-down" aria-hidden="true" />
                 </span>
@@ -252,24 +252,24 @@ Description: presents the facet bar
               <div class="dropdown-content left">
                 <a
                   href="#"
-                  @click.prevent="updateSortOption('count')"
+                  @click.prevent="updateSortOption('count', $t('facets.most-hits'))"
                   class="dropdown-item"
                   :class="facetSortBy === 'count' ? 'is-active' : ''"
                   >{{ $t('facets.most-hits') }}</a
                 >
                 <a
                   href="#"
-                  @click.prevent="updateSortOption('active')"
-                  class="dropdown-item"
-                  :class="facetSortBy === 'active' ? 'is-active' : ''"
-                  >{{ $t('facets.active-facets') }}</a
-                >
-                <a
-                  href="#"
-                  @click.prevent="updateSortOption('label')"
+                  @click.prevent="updateSortOption('label', $t('facets.by-name'))"
                   :class="facetSortBy === 'label' ? 'is-active' : ''"
                   class="dropdown-item"
                   >{{ $t('facets.by-name') }}</a
+                >
+                <a
+                  href="#"
+                  @click.prevent="updateSortOption('active', $t('facets.active-facets'))"
+                  class="dropdown-item"
+                  :class="facetSortBy === 'active' ? 'is-active' : ''"
+                  >{{ $t('facets.active-facets') }}</a
                 >
               </div>
             </div>
@@ -314,7 +314,6 @@ import type { AggregationBin } from '@/assets/interfacesExternals'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { insertInSortedArray } from '@/assets/functions'
 import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
-import { convertTypeAcquisitionFromJson } from 'typescript'
 
 const preferences = usePreferencesStore()
 const defaultFacetCount = [5, 10, 15, 20]
@@ -331,6 +330,7 @@ const facetSortBy = ref(preferences.facetSortBy)
 const facetCount = ref(defaultFacetCount)
 const filteredFacets = ref()
 const filterValue = ref(undefined)
+const dropdownTrigger = ref()
 const emit = defineEmits(['newSearch'])
 
 onMounted(() => (filteredFacets.value = facets.value))
@@ -342,12 +342,6 @@ const updateFacetCount = (val: number) => {
   preferences.save()
 }
 
-const updateSortOption = (val: string) => {
-  facetSortBy.value = val
-  preferences.facetSortBy = facetSortBy.value
-  preferences.save()
-}
-
 // Update the facet list based on a filter
 const updateFilter = (val: string) => {
   filteredFacets.value = facets.value
@@ -355,17 +349,42 @@ const updateFilter = (val: string) => {
     .filter((x: AggregationBin) => x)
 }
 
-watch(facetSortBy, (newV) => {
+const updateSortOption = (val: string, textValue: string) => {
+  if (dropdownTrigger.value) {
+    dropdownTrigger.value.innerHTML = textValue
+    facetSortBy.value = val
+    preferences.facetSortBy = facetSortBy.value
+    preferences.save()
+  }
+}
+
+const sortBy = (option: string) => {
   const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
-  if (newV === 'count')
+  if (option === 'count') {
     filteredFacets.value = filteredFacets.value.sort(
       (a: AggregationBin, b: AggregationBin) => b.count - a.count
     )
-  if (newV === 'label')
+  }
+  if (option === 'label') {
     filteredFacets.value = filteredFacets.value.sort((a: AggregationBin, b: AggregationBin) =>
       collator.compare(a.label, b.label)
     )
-})
+  }
+
+  if (option === 'active') {
+    const activeFilters = filteredFacets.value
+      .map((a: AggregationBin) => (a.active ? a : null))
+      .filter((x: AggregationBin) => x)
+      .sort((a: AggregationBin, b: AggregationBin) => b.count - a.count)
+    const inactiveFilters = filteredFacets.value
+      .map((a: AggregationBin) => (!a.active ? a : null))
+      .filter((x: AggregationBin) => x)
+      .sort((a: AggregationBin, b: AggregationBin) => b.count - a.count)
+    filteredFacets.value = [...activeFilters, ...inactiveFilters]
+  }
+}
+
+watch(facetSortBy, (newV) => sortBy(newV))
 
 // Updates filtered facets based on value
 watch(filterValue, (newV) => {
@@ -414,9 +433,10 @@ watch(filteredFacets, (newV, oldV) => {
 // Activate a facet
 const toggleFacet = (facet: AggregationBin) => {
   facet.active = !facet.active
-  filteredFacets.value.sort((a: AggregationBin, b: AggregationBin) =>
-    a.active === b.active ? 0 : a.active ? -1 : 1
-  )
+  sortBy(facetSortBy.value)
+  // filteredFacets.value.sort((a: AggregationBin, b: AggregationBin) =>
+  //   a.active === b.active ? 0 : a.active ? -1 : 1
+  // )
   emit('newSearch')
 }
 </script>
