@@ -13,9 +13,15 @@
     <p class="menu-label label pt-4">
       {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
     </p>
-    <div class="scroll-list" id="scrollList">
+    <div class="scroll-list" ref="scrollListDesktop">
       <ul class="menu-list">
-        <li class="px-2" v-for="(result, bookIndex) of searchResults" :key="result.docRef">
+        <li
+          class="px-2"
+          :id="`metadata-${result.docRef}`"
+          v-for="(result, bookIndex) of searchResults"
+          :key="result.docRef"
+          :ref="results.set"
+        >
           <a
             @click="selectEntry(bookIndex)"
             @keyup.enter="selectEntry(bookIndex)"
@@ -135,12 +141,13 @@
 </template>
 <script setup lang="ts">
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import { computed, onMounted, ref, type Ref } from 'vue'
+import { computed, nextTick, ref, watch, type Ref } from 'vue'
 
 import SingleResult from '../ContentsTable/SingleResult/SingleResult.vue'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import PageNumbering from '../../SearchBar/Navigation/PageNumbering/PageNumbering.vue'
 import FacetBar from '../FacetBar/FacetBar.vue'
+import { useTemplateRefsList } from '@vueuse/core'
 
 const preferences = usePreferencesStore()
 
@@ -163,6 +170,10 @@ const openMobileFacets = defineModel('openMobileFacets')
 
 const pageNumberOffset = computed(() => (page.value - 1) * preferences.resultsPerPage + 1) // Same line as in SearchInfo: firstResult
 
+// ContentTable tree is reactive; Vue Refs required to keep synchronous with DOM
+const scrollListDesktop = ref()
+const results = useTemplateRefsList()
+
 const firstResult = computed(() => (page.value - 1) * preferences.resultsPerPage + 1)
 const lastResult = computed(() => {
   const last = page.value * preferences.resultsPerPage
@@ -176,14 +187,24 @@ const selectEntry = (index: number) => {
   if (navBarHeight && top)
     document.getElementById('snippets')?.scrollBy({
       top: top - navBarHeight,
-      behavior: 'smooth'
+      behavior: 'instant'
     })
 }
 
-onMounted(() => {
-  const results = searchResults.value
-  if (results) selectEntry(0)
-})
-
 const emit = defineEmits(['newPage', 'resetSearchResults', 'newSearch'])
+
+watch(selectedEntryIdx, () => {
+  nextTick(() => {
+    setTimeout(() => {
+      const rectTop = scrollListDesktop.value.getBoundingClientRect()
+      const active = results.value
+        .filter((el: Element) => el.children[0].classList.contains('is-active'))[0]
+        .getBoundingClientRect()
+      scrollListDesktop.value.scrollBy({
+        top: active.top - rectTop.top,
+        behavior: 'smooth'
+      })
+    }, 300)
+  })
+})
 </script>
