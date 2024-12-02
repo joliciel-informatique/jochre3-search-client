@@ -10,7 +10,7 @@ Methods: fixMetaData (imported)
 Description: presents OCR record metadata
 -->
 <template>
-  <div v-if="result" :docRef="result.docRef" :id="result.docRef" class="metadata mt-2">
+  <div v-if="result" :docRef="result.docRef" class="metadata mt-2">
     <AccordionCard :id="result.docRef" :showing="bookIndex === selectedEntryIdx && showing">
       <template #header>
         <p class="pb-2 is-flex is-flex-direction-row is-justify-content-space-between">
@@ -74,7 +74,6 @@ import { sha1 } from 'object-hash'
 import AccordionCard from '../../../../../_components/AccordionCard/AccordionCard.vue'
 import { usePreferencesStore } from '../../../../../stores/PreferencesStore'
 import type { SearchResult } from '../../../../../assets/interfacesExternals'
-import { onMounted } from 'vue'
 
 const { result, bookIndex, pageNumberOffset } = defineProps([
   'result',
