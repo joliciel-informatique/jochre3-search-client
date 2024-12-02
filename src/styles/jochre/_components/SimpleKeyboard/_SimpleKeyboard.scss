@@ -20,16 +20,27 @@
     width: 100vw;
   }
 
-  .hg-button {
-    margin-left: 5px;
-    margin-right: 0px;
-  }
+  .hg-rows {
+    .hg-row {
+      .hg-button {
+        margin-left: 3px;
+        margin-right: 1px;
 
-  .hg-button-enter,
-  .hg-button-mobileAlt,
-  .hg-button-mobileNumbers,
-  .hg-button-mobileDefault,
-  .hg-button-mobileChars {
-    max-width: 3rem;
+        &.hg-standardBtn {
+          width: unset;
+          margin-right: unset;
+        }
+        &:not(:last-child) {
+          margin-right: 0;
+        }
+      }
+      &.hg-button-enter,
+      &.hg-button-mobileAlt,
+      &.hg-button-mobileNumbers,
+      &.hg-button-mobileDefault,
+      &.hg-button-mobileChars {
+        max-width: 3rem;
+      }
+    }
   }
 }
