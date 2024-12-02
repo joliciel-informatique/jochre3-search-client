@@ -23,8 +23,6 @@
           v-model:show-advanced-search-panel="showAdvancedSearchPanel"
           v-model:open-nav-bar-mobile-menu="openNavBarMobileMenu"
         />
-        <!-- <div class="navbar-item is-align-self-flex-start user-options is-hidden-touch">
-        </div> -->
         <div
           class="navbar-burger is-flex is-flex-grow-1 has-text-white is-hidden-desktop"
           :class="openNavBarMobileMenu ? 'is-active' : ''"

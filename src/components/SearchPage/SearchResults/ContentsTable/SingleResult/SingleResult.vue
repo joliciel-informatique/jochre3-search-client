@@ -10,11 +10,16 @@ Methods: fixMetaData (imported)
 Description: presents OCR record metadata
 -->
 <template>
-  <div v-if="result" :docRef="result.docRef" class="metadata mt-2">
-    <AccordionCard :id="result.docRef" :showing="bookIndex === selectedEntryIdx && showing">
+  <div v-if="result" :docRef="result.docRef" :id="result.docRef" class="metadata mt-2">
+    <AccordionCard
+      :id="result.docRef"
+      :showing="(bookIndex < 0 || bookIndex === selectedEntryIdx) && showing"
+    >
       <template #header>
         <p class="pb-2 is-flex is-flex-direction-row is-justify-content-space-between">
-          <span class="is-align-self-flex-start">{{ bookIndex + pageNumberOffset }}|</span>
+          <span class="is-align-self-flex-start"
+            >{{ (bookIndex < 0 ? selectedEntryIdx : bookIndex) + pageNumberOffset }}|</span
+          >
           <span class="is-align-self-flex-start is-flex-grow-1 has-text-left"
             >{{ result.metadata.title ?? result.docRef }} ({{
               result.metadata.author ?? $t('results.result-unknown-author')
@@ -69,11 +74,11 @@ Description: presents OCR record metadata
 </template>
 
 <script setup lang="ts">
-import SingleResultItem from '../../ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
+import SingleResultItem from '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
 import { sha1 } from 'object-hash'
-import AccordionCard from '../../../../../_components/AccordionCard/AccordionCard.vue'
-import { usePreferencesStore } from '../../../../../stores/PreferencesStore'
-import type { SearchResult } from '../../../../../assets/interfacesExternals'
+import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+import type { SearchResult } from '@/assets/interfacesExternals'
 
 const { result, bookIndex, pageNumberOffset } = defineProps([
   'result',
@@ -85,7 +90,7 @@ const preferences = usePreferencesStore()
 const fields = ['titleEnglish', 'author', 'authorEnglish', 'publicationYear', 'publisher']
 
 const metadataModal = defineModel('metadataModal')
-const showing = defineModel<boolean>('showing', { default: false })
+const showing = defineModel<boolean>('showing', { default: true })
 const selectedEntry = defineModel<SearchResult>('selectedEntry')
 const selectedEntryIdx = defineModel<number>('selectedEntryIdx')
 
@@ -94,9 +99,9 @@ const toggle = () => (showing.value = !showing.value)
 const openMetadataModal = () => {
   metadataModal.value = {
     show: true,
-    docRef: selectedEntry.value?.docRef,
+    docRef: result.docRef,
     field: 'title',
-    value: selectedEntry.value?.metadata.title ?? selectedEntry.value?.docRef
+    value: result.metadata.title
   }
 }
 </script>

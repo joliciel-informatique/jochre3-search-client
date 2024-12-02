@@ -34,10 +34,9 @@
               v-model:word-modal="wordModal"
               v-model:metadata-modal="metadataModal"
               v-model:notification="notification"
-              v-model:showing="showing"
               v-model:selectedEntryIdx="selectedEntryIdx"
-              :result
-              :bookIndex
+              :result="result"
+              :book-index="bookIndex"
               :page-number-offset
             />
           </a>
@@ -93,9 +92,9 @@
       v-model:word-modal="wordModal"
       v-model:metadata-modal="metadataModal"
       v-model:notification="notification"
-      v-model:showing="showing"
       v-model:selected-entry-idx="selectedEntryIdx"
       :result="searchResults[selectedEntryIdx]"
+      :book-index="-1"
       :page-number-offset
     />
   </aside>
@@ -137,7 +136,6 @@
       v-model:open-mobile-facets="openMobileFacets"
     />
   </aside>
-  <!-- </div> -->
 </template>
 <script setup lang="ts">
 import { usePreferencesStore } from '@/stores/PreferencesStore'
@@ -150,8 +148,6 @@ import FacetBar from '../FacetBar/FacetBar.vue'
 import { useTemplateRefsList } from '@vueuse/core'
 
 const preferences = usePreferencesStore()
-
-const showing = ref(true)
 
 const searchResults = defineModel<Array<SearchResult>>('searchResults')
 const page: Ref = defineModel('page')
