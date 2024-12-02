@@ -87,9 +87,16 @@ Description: presents the facet bar
               >
             </div>
             <div class="column is-4 is-size-7">
-              <div class="dropdown is-hoverable">
+              <div
+                class="dropdown is-hoverable"
+                :class="preferences.displayLeftToRight ? 'is-right' : 'is-left'"
+              >
                 <div class="dropdown-trigger">
-                  <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
+                  <button
+                    class="button py-0"
+                    aria-haspopup="true"
+                    aria-controls="author-facet-dropdown-menu"
+                  >
                     <span>{{ $t('facets.most-hits') }}</span>
                     <span class="icon is-small">
                       <font-awesome-icon icon="angle-down" aria-hidden="true" />
