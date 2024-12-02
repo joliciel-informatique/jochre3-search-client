@@ -37,7 +37,7 @@
     "contents-table-subheader": "Found {0} books, showing {1}-{2}"
   },
   "facets": {
-    "title": "Filter by author",
+    "title": "Top {0} authors",
     "display-number-of-author-facets": "Authors to display",
     "what-are-facets": "These are the authors with the most books matching your search criteria. Click an author name to filter/narrow your search results.",
     "filter": "Filter",

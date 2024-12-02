@@ -20,7 +20,7 @@ Description: presents the facet bar
     <AccordionCard :showing="showing">
       <template #header>
         <p class="menu-label is-size-5 label">
-          {{ $t('facets.title') }}
+          {{ $t('facets.title', [authorFacetCount]) }}
           <span v-tooltip:top="$t('facets.what-are-facets')">
             <font-awesome-icon icon="question-circle" />
           </span>
@@ -41,7 +41,7 @@ Description: presents the facet bar
               <div class="dropdown is-hoverable">
                 <div class="dropdown-trigger">
                   <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
-                    <span>{{ authorFacetCount > 0 ? authorFacetCount : 'all' }}</span>
+                    <span>{{ authorFacetCount }}</span>
                     <span class="icon is-small">
                       <font-awesome-icon icon="angle-down" aria-hidden="true" />
                     </span>
@@ -58,10 +58,10 @@ Description: presents the facet bar
                         >{{ val }}</a
                       >
                     </div>
-                    <hr class="dropdown-divider" />
+                    <!-- <hr class="dropdown-divider" />
                     <a href="#" @click.prevent="updateFacetCount(0)" class="dropdown-item">{{
                       $t('facets.facet-count-all')
-                    }}</a>
+                    }}</a> -->
                     <hr class="dropdown-divider" />
                     <div class="dropdown-item">
                       <input
@@ -193,7 +193,7 @@ Description: presents the facet bar
           <div class="dropdown is-hoverable">
             <div class="dropdown-trigger">
               <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
-                <span>{{ authorFacetCount > 0 ? authorFacetCount : 'all' }}</span>
+                <span>{{ authorFacetCount }}</span>
                 <span class="icon is-small">
                   <font-awesome-icon icon="angle-down" aria-hidden="true" />
                 </span>
@@ -210,10 +210,10 @@ Description: presents the facet bar
                     >{{ val }}</a
                   >
                 </div>
-                <hr class="dropdown-divider" />
+                <!-- <hr class="dropdown-divider" />
                 <a href="#" @click.prevent="updateFacetCount(0)" class="dropdown-item">{{
                   $t('facets.facet-count-all')
-                }}</a>
+                }}</a> -->
                 <hr class="dropdown-divider" />
                 <div class="dropdown-item">
                   <input
@@ -307,7 +307,7 @@ Description: presents the facet bar
   </div>
 </template>
 <script setup lang="ts">
-import { computed, onMounted, ref, watch, type Ref } from 'vue'
+import { computed, ref, watch, type Ref } from 'vue'
 import FilterTag from '@/_components/FilterTag/FilterTag.vue'
 import { sha1 } from 'object-hash'
 import type { AggregationBin } from '@/assets/interfacesExternals'
@@ -341,8 +341,6 @@ const dropdownTriggerValue = computed(() => {
 
 const emit = defineEmits(['newSearch'])
 
-onMounted(() => (filteredFacets.value = facets.value))
-
 // Set user preferences from dropdown options
 const updateFacetCount = (val: number) => {
   authorFacetCount.value = val
@@ -357,6 +355,7 @@ const updateFilter = (val: string) => {
     .filter((x: AggregationBin) => x)
 }
 
+// Perpetuate option to dropdown trigger text and user preference
 const updateSortOption = (val: string, textValue: string) => {
   if (dropdownTrigger.value) {
     dropdownTrigger.value.innerHTML = textValue
@@ -366,7 +365,8 @@ const updateSortOption = (val: string, textValue: string) => {
   }
 }
 
-const sortBy = (option: string) => {
+// Sort facets by option
+const sortBy = (option: string = 'count') => {
   const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
   if (option === 'count') {
     filteredFacets.value = filteredFacets.value.sort(
@@ -392,6 +392,14 @@ const sortBy = (option: string) => {
   }
 }
 
+// Activate a facet
+const toggleFacet = (facet: AggregationBin) => {
+  facet.active = !facet.active
+  sortBy(facetSortBy.value)
+  emit('newSearch')
+}
+
+// Update sort
 watch(facetSortBy, (newV) => sortBy(newV))
 
 // Updates filtered facets based on value
@@ -407,18 +415,23 @@ watch(filterValue, (newV) => {
 // Updates all facets to be filtered/shown
 watch(facets, () => {
   filteredFacets.value = facets.value
+  sortBy(facetSortBy.value)
   if (filterValue.value !== undefined) updateFilter(filterValue.value)
 })
 
-// Update options in dropdown
-watch(authorFacetCount, () => {
-  if (!defaultFacetCount.includes(authorFacetCount.value)) {
-    const index = insertInSortedArray(defaultFacetCount, authorFacetCount.value)
-    facetCount.value = [
-      ...defaultFacetCount.slice(0, index),
-      authorFacetCount.value,
-      ...defaultFacetCount.slice(index)
-    ]
+// Update number of authors to display
+watch(authorFacetCount, (newV, oldV) => {
+  // Limit to numbers 1-100
+  if (newV > 100 || newV < 1 || isNaN(newV)) {
+    authorFacetCount.value = oldV
+    if (!defaultFacetCount.includes(authorFacetCount.value)) {
+      const index = insertInSortedArray(defaultFacetCount, authorFacetCount.value)
+      facetCount.value = [
+        ...defaultFacetCount.slice(0, index),
+        authorFacetCount.value,
+        ...defaultFacetCount.slice(index)
+      ]
+    }
   }
   if (filterValue.value !== undefined) updateFilter(filterValue.value)
 })
@@ -437,14 +450,4 @@ watch(filteredFacets, (newV, oldV) => {
     if (missingActiveFacets.length) emit('newSearch')
   }
 })
-
-// Activate a facet
-const toggleFacet = (facet: AggregationBin) => {
-  facet.active = !facet.active
-  sortBy(facetSortBy.value)
-  // filteredFacets.value.sort((a: AggregationBin, b: AggregationBin) =>
-  //   a.active === b.active ? 0 : a.active ? -1 : 1
-  // )
-  emit('newSearch')
-}
 </script>
