@@ -7,16 +7,12 @@
 .table-of-contents {
   position: relative;
   top: 0;
-  // bottom: 5vh;
-  // max-height: 75vh;
   background-color: $background-color-1;
-  overflow: hidden;
-  // overflow-y: scroll;
+  overflow: visible;
 
   .scroll-list {
     overflow-y: scroll;
     scrollbar-width: thin;
-    // max-height: 60vh;
   }
 
   &.is-hidden-desktop {
@@ -47,21 +43,15 @@
   &.right {
     right: 2vw;
   }
-
-  // .searchResultsList {
-  // height: 100%;
-  // }
 }
 
 .facet-list {
   overflow: auto;
   max-height: 30vh;
   scrollbar-width: thin;
-  // max-width: 30vw;
 }
 
 .toc-mobile {
-  // height: 7vh;
   background-color: $white;
 
   &.toc-mobile-left {
@@ -72,21 +62,6 @@
     right: 0;
   }
 }
-
-// .toc-button {
-//   position: fixed;
-//   top: 7vh;
-//   background-color: white;
-
-//   &.toc-mobile-left {
-//     left: 0;
-//   }
-
-//   &.toc-mobile-right {
-//     right: 0;
-//   }
-//   &.toc-mobile-middle {
-//   }
 
 .button {
   &.toc-index-btn {
@@ -106,16 +81,12 @@
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      // display: block;
     }
   }
 }
 .toc-drawer {
   position: fixed;
-  // top: 15vh;
-  // right: 1vw;
   left: 1vw;
-  // height: 83vh;
   border: 0.1em solid $background-color-1;
   max-width: 70vw;
   max-height: 70vh;
@@ -123,12 +94,5 @@
   .menu-list {
     max-height: 50vh;
     overflow-y: scroll;
-    //   border: 1px solid $foreground-color-2;
-    //   border-radius: 0.5em;
-
-    //   a:not(.is-active) {
-    //     background-color: unset;
-    // }
   }
 }
-// }
