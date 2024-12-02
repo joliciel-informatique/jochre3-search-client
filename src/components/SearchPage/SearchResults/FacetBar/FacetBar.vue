@@ -90,7 +90,7 @@ Description: presents the facet bar
               <div class="dropdown is-hoverable">
                 <div class="dropdown-trigger">
                   <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
-                    <span ref="dropdownTrigger">{{ $t('facets.most-hits') }}</span>
+                    <span ref="dropdownTrigger">{{ dropdownTriggerValue }}</span>
                     <span class="icon is-small">
                       <font-awesome-icon icon="angle-down" aria-hidden="true" />
                     </span>
@@ -307,13 +307,14 @@ Description: presents the facet bar
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, watch, type Ref } from 'vue'
+import { computed, onMounted, ref, watch, type Ref } from 'vue'
 import FilterTag from '@/_components/FilterTag/FilterTag.vue'
 import { sha1 } from 'object-hash'
 import type { AggregationBin } from '@/assets/interfacesExternals'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { insertInSortedArray } from '@/assets/functions'
 import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
+import { useI18n } from 'vue-i18n'
 
 const preferences = usePreferencesStore()
 const defaultFacetCount = [5, 10, 15, 20]
@@ -331,6 +332,13 @@ const facetCount = ref(defaultFacetCount)
 const filteredFacets = ref()
 const filterValue = ref(undefined)
 const dropdownTrigger = ref()
+const dropdownTriggerValue = computed(() => {
+  const { t } = useI18n()
+  if (facetSortBy.value === 'label') return t('facets.by-name')
+  if (facetSortBy.value === 'active') return t('facets.active-facets')
+  return t('facets.most-hits')
+})
+
 const emit = defineEmits(['newSearch'])
 
 onMounted(() => (filteredFacets.value = facets.value))
