@@ -60,8 +60,18 @@ input:-webkit-autofill:active {
   line-height: $font-size-3;
 }
 
-.button.is-small {
-  line-height: unset;
+.button .is-small {
+  line-height: normal;
+}
+
+button {
+  &.is-small {
+    line-height: normal;
+  }
+}
+
+.pagination-link {
+  line-height: normal;
 }
 
 .control > .button {
