@@ -49,6 +49,16 @@
   overflow: auto;
   max-height: 30vh;
   scrollbar-width: thin;
+  span > div {
+    max-width: 10vw;
+  }
+  &.on-mobile {
+    span > div {
+      max-width: 20vw;
+      width: 20vw;
+    }
+  }
+  // max-width: 30vw;
 }
 
 .toc-mobile {

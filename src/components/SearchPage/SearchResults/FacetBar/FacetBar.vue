@@ -297,7 +297,7 @@ Description: presents the facet bar
         </p>
       </span>
       <div
-        class="facet-list is-flex is-flex-direction-row is-justify-content-center is-flex-wrap-wrap is-align-items-center"
+        class="facet-list on-mobile is-flex is-flex-direction-column is-justify-content-center is-flex-wrap-wrap is-align-items-center"
       >
         <span v-for="facet of filteredFacets" :key="sha1(facet)">
           <FilterTag
