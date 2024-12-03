@@ -16,10 +16,6 @@ Description: display single metadata item
       >{{ $t(title) }}
       <span
         class="is-flex is-align-self-flex-start icon menu-list-icon is-clickable"
-        v-tooltip="[
-          preferences.displayLeftToRight ? 'left' : 'right',
-          $t('fix-metadata.edit-button-tooltip')
-        ]"
         aria-labelledby="edit"
         tabindex="3"
         @click="openMetadataModal"

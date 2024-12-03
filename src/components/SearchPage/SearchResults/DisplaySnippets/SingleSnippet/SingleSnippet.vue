@@ -30,7 +30,6 @@ Description: displays text snippets from the OCR text
       <button
         class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column has-text-centered"
         aria-label="view book"
-        v-tooltip:top="$t('results.show-original-page', [snippet.page])"
         v-if="snippet.deepLink"
         @click="openDeepLink(snippet.deepLink)"
         @keyup.enter="openDeepLink(snippet.deepLink)"
@@ -45,7 +44,6 @@ Description: displays text snippets from the OCR text
       <button
         class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column has-text-centered"
         aria-label="view transcription"
-        v-tooltip:top="$t('results.show-text')"
         @click="openTranscribedText()"
         @keyup.enter="openTranscribedText()"
       >
