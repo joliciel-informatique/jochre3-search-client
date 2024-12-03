@@ -143,12 +143,43 @@
 :root {
   --c-z-index: 1000;
   --transcription-text-font-size: 0.5em;
+
+  --bulma-link-h: 0deg;
+  --bulma-link-s: 0%;
+  --bulma-link-l: 45%;
 }
 
-main {
-  // min-height: 41vh;
-  overflow-y: auto;
+.navbar {
+  --bulma-navbar-h: 183;
+  --bulma-navbar-s: 43%;
+  --bulma-navbar-l: 36.5%;
+  // --bulma-navbar-background-color: hsl(183deg, 43%, 45.9%);
+  --bulma-navbar-item-background-l: 37%;
+  --bulma-navbar-item-background-l-delta: 36%;
+  --bulma-navbar-item-color-l: 100%;
+  --bulma-navbar-item-selected-h: 183deg;
+  --bulma-navbar-item-selected-s: 43%;
+  --bulma-navbar-item-selected-l: 36.5%;
+  --bulma-navbar-item-selected-background-l: 50%;
+  --bulma-navbar-item-selected-color-l: 100%;
+  --bulma-navbar-tab-active-background-color: hsl(183deg, 43%, 36.5%);
+  --bulma-navbar-dropdown-arrow: white;
+  --bulma-navbar-dropdown-item-h: 183;
+  --bulma-navbar-dropdown-item-s: 43%;
+  --bulma-navbar-dropdown-item-l: 36.5%;
+  --bulma-navbar-dropdown-item-color-l: 36.5%;
+  --bulma-navbar-divider-background-l: 36.5%;
 }
+
+.navbar-item,
+.navbar-link {
+  border-radius: 0.5em;
+}
+
+// main {
+// min-height: 41vh;
+// overflow-y: auto;
+// }
 
 #topbar {
   top: 0px;
