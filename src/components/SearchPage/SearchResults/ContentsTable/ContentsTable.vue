@@ -48,7 +48,7 @@
   <!-- ToC Search Results on mobile -->
   <div
     v-if="searchResults?.length"
-    class="is-hidden-desktop toc-mobile has-text-centered-touch is-flex-tablet is-align-items-center is-flex-wrap-nowrap is-flex-direction-row is-justify-content-space-between p-2"
+    class="is-hidden-desktop is-relative toc-mobile has-text-centered-touch is-flex-tablet is-align-items-center is-flex-wrap-nowrap is-flex-direction-row is-justify-content-space-between p-2"
     id="mobile-navigation"
     role="navigation"
     tabindex="1"
@@ -84,7 +84,7 @@
   </div>
   <aside
     v-if="searchResults?.length"
-    class="toc-drawer menu box p-2"
+    class="toc-drawer menu box p-2 metadata on-mobile"
     v-show="openMobileMetadataPanel"
   >
     <SingleResult
@@ -103,13 +103,13 @@
     class="toc-drawer menu box p-2"
     v-show="openMobileSearchResultsToc"
   >
-    <p
+    <!-- <p
       class="menu-label is-size-5 label p-2 is-flex is-flex-direction-row is-justify-content-space-between"
     >
       {{ $t('toc.contents-table-header') }}
       <font-awesome-icon icon="gear" @click="preferences.show = true" />
-    </p>
-    <p class="menu-label label pt-4">
+    </p> -->
+    <p class="menu-label label pt-4 has-text-centered">
       {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
     </p>
     <ul class="menu-list p-2">

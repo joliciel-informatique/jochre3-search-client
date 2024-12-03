@@ -1,0 +1,17 @@
+@use '../../../custom/Custom' as *;
+
+.advancedSearch {
+  // position: absolute;
+  background-color: $background-color-1;
+  // overflow-y: scroll;
+}
+
+#advancedSearchPanel {
+  height: 72vh;
+  overflow-y: auto;
+  z-index: 100;
+  .body-inner {
+    // overflow-y: scroll;
+    // max-height: 123vh;
+  }
+}

@@ -11,7 +11,6 @@ Description: controls text snippets from the OCR text
 -->
 <template>
   <div
-    id="snippets"
     class="is-flex is-justify-content-center bla"
     :class="
       preferences.isMobile || preferences.isTablet || preferences.isPortrait
@@ -21,7 +20,7 @@ Description: controls text snippets from the OCR text
     tabindex="-1"
     v-if="!isLoading && searchResults?.length"
   >
-    <ul>
+    <ul id="snippets">
       <li v-for="(result, bookIndex) of searchResults" :key="sha1(result)">
         <hr
           :bookindex="bookIndex"
@@ -73,7 +72,7 @@ import { sha1 } from 'object-hash'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import SingleSnippet from '../DisplaySnippets/SingleSnippet/SingleSnippet.vue'
-import { onMounted, onUpdated, ref, watch } from 'vue'
+import { onMounted, onUpdated } from 'vue'
 
 const preferences = usePreferencesStore()
 
@@ -82,9 +81,7 @@ const { displayPerBook } = storeToRefs(preferences)
 const imageModal = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const notification = defineModel('notification')
-// const selectedEntry = defineModel<SearchResult>('selectedEntry')
 const selectedEntryIdx = defineModel<number>('selectedEntryIdx', { default: 0 })
-// const activeBook = ref([+0])
 const searchResults = defineModel<SearchResult[]>('searchResults')
 const query = defineModel<string>('query')
 const strict = defineModel<boolean>('strict')
@@ -94,7 +91,7 @@ const isLoading = defineModel('isLoading')
 const scrolling = () => {
   if (displayPerBook.value) {
     // First/top element is marked as active by default
-    // Check if user scrolled all the down: mark last element as active
+    // Check if user scrolled all the way down: mark last element as active
     // If else: activate books below the middle of the screen
 
     const snippetsDiv = document.getElementById('snippets')

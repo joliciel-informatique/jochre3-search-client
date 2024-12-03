@@ -76,7 +76,7 @@ Description: the advanced search toolbox
             v-model:author-list="authorList"
           />
 
-          <span class="columns is-mobile is-vcentered mt-1 p-1">
+          <span class="columns is-vcentered mt-1 p-1">
             <p
               class="column is-2 is-flex is-desktop is-flex-grow-1 has-text-white"
               id="searchTitle"
@@ -104,7 +104,7 @@ Description: the advanced search toolbox
               />
             </span>
           </span>
-          <span class="columns is-mobile is-vcentered mt-1 p-1">
+          <span class="columns is-vcentered mt-1 p-1">
             <p class="column is-2 is-flex is-desktop is-flex-grow-1 has-text-white">
               {{ $t('search.document-reference') }}
             </p>
@@ -121,7 +121,7 @@ Description: the advanced search toolbox
               />
             </span>
           </span>
-          <span class="columns is-mobile is-vcentered mt-1 p-1">
+          <span class="columns is-vcentered mt-1 p-1">
             <p
               class="column is-2 is-flex is-desktop is-flex-grow-1 has-text-white"
               id="searchDateFrom"

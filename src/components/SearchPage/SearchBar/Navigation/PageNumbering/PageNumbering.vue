@@ -254,8 +254,8 @@ watch(atTop, (newV) => {
   const snippetDiv = document.getElementById('snippets')
   if (snippetDiv) {
     newV
-      ? snippetDiv.scrollTo({ top: 0, behavior: 'smooth' })
-      : snippetDiv.scrollTo({ top: snippetDiv.scrollHeight, behavior: 'smooth' })
+      ? snippetDiv.scrollTo({ top: 0, behavior: 'instant' })
+      : snippetDiv.scrollTo({ top: snippetDiv.scrollHeight, behavior: 'instant' })
   }
 })
 
