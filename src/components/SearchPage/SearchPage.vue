@@ -280,7 +280,7 @@ onMounted(() => {
         return { label: authorName, count: 10, active: false }
       })
 
-    newSearch()
+    runSearch()
   })
 })
 
