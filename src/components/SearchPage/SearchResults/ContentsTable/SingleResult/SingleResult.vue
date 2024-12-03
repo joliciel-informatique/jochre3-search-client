@@ -25,15 +25,7 @@ Description: presents OCR record metadata
               result.metadata.author ?? $t('results.result-unknown-author')
             }})</span
           >
-          <span
-            tabindex="3"
-            @click="openMetadataModal"
-            @keyup.enter="openMetadataModal"
-            v-tooltip="[
-              preferences.displayLeftToRight ? 'left' : 'right',
-              $t('fix-metadata.edit-button-tooltip')
-            ]"
-          >
+          <span tabindex="3" @click="openMetadataModal" @keyup.enter="openMetadataModal">
             <span class="icon fa-sm">
               <font-awesome-icon icon="pen-to-square" />
             </span>
