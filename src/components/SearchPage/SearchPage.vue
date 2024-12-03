@@ -231,12 +231,6 @@ const openNavBarMobileMenu = ref(false)
 
 const facets = ref<Array<AggregationBin>>([])
 
-watch(selectedEntryIdx, (newV: number) => {
-  console.log(newV)
-  // if (newV && searchResults.value && searchResults.value.length)
-  // selectedEntry.value = (searchResults as any)[newV]
-})
-
 onMounted(() => {
   window.addEventListener('click', (e: MouseEvent | TouchEvent) => {
     if (openNavBarMobileMenu.value) {
@@ -315,7 +309,6 @@ const clearSearchResults = () => {
   facets.value = []
   searchResults.value = []
   totalHits.value = 0
-  // selectedEntry.value = undefined
 
   page.value = 1
 }
@@ -341,7 +334,6 @@ const resetSearchResults = () => {
 
 watch(searchResults, (newV) => {
   const header = document.getElementById('header')
-  const navbar = document.getElementById('navbar')
   if (newV?.length) {
     header?.setAttribute('style', 'display:none')
   } else {
