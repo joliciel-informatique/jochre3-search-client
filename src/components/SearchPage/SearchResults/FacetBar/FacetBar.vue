@@ -19,11 +19,16 @@ Description: presents the facet bar
   >
     <AccordionCard :showing="showing">
       <template #header>
-        <p class="menu-label is-size-5 label">
-          {{ $t('facets.title', [authorFacetCount]) }}
-          <span v-tooltip:top="$t('facets.what-are-facets')">
-            <font-awesome-icon icon="question-circle" />
-          </span>
+        <p
+          class="menu-label is-size-5 label is-flex is-flex-direction-column is-align-items-center"
+        >
+          <span class="is-flex is-flex-direction-row is-align-items-center"
+            >{{ $t('facets.title', [authorFacetCount]) }}
+            <span class="pl-1 is-size-6" v-tooltip:top="$t('facets.what-are-facets')">
+              <font-awesome-icon icon="question-circle" /> </span
+          ></span>
+
+          <span class="pt-2 is-size-7 is-italic">{{ $t('facets.subtitle') }}</span>
         </p>
       </template>
       <template #content>
@@ -97,7 +102,7 @@ Description: presents the facet bar
                     aria-haspopup="true"
                     aria-controls="author-facet-dropdown-menu"
                   >
-                  <span ref="dropdownTrigger">{{ dropdownTriggerValue }}</span>
+                    <span ref="dropdownTrigger">{{ dropdownTriggerValue }}</span>
                     <span class="icon is-small">
                       <font-awesome-icon icon="angle-down" aria-hidden="true" />
                     </span>

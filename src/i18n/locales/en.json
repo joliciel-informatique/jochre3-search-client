@@ -38,6 +38,7 @@
   },
   "facets": {
     "title": "Top {0} authors",
+    "subtitle": "relevant to your query",
     "display-number-of-author-facets": "Authors to display",
     "what-are-facets": "These are the authors with the most books matching your search criteria. Click an author name to filter/narrow your search results.",
     "filter": "Filter",
