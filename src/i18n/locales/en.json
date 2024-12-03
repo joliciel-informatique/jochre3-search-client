@@ -127,8 +127,8 @@
   "pagination": {
     "next": ">>",
     "previous": "<<",
-    "top": "First result",
-    "bottom": "Last result"
+    "top": "First snippet",
+    "bottom": "Last snippet"
   },
   "header": {
     "logo": "/images/jochreLogo.png",

@@ -123,8 +123,8 @@
   "pagination": {
     "next": ">>",
     "previous": "<<",
-    "top": "ערשטער פֿראַגמענט",
-    "bottom": "לעצטער פֿראַגמענט"
+    "top": "YI_First snippet",
+    "bottom": "YI_Last snippet"
   },
   "header": {
     "title": "",
