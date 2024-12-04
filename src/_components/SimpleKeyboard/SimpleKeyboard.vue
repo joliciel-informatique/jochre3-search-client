@@ -1,14 +1,13 @@
 <template>
-  <p class="control" :id="`${attachTo}-keyboard-btn`" :key="`${attachTo}-keyboard-btn`">
-    <button
-      class="button is-clickable"
-      @click="toggleKeyboard"
-      :alt="$t('search.keyboard')"
-      :title="$t('search.keyboard')"
-    >
-      <span>
-        <font-awesome-icon icon="keyboard" />
-      </span>
+  <p
+    class="control"
+    :id="`${attachTo}-keyboard-btn`"
+    :key="`${attachTo}-keyboard-btn`"
+    @click="toggleKeyboard"
+    tabindex="1"
+  >
+    <button class="button is-clickable" :alt="$t('search.keyboard')" :title="$t('search.keyboard')">
+      <font-awesome-icon icon="keyboard" />
     </button>
   </p>
   <div v-show="show" class="keyboardClass has-text-primary is-family-primary">
@@ -16,6 +15,7 @@
       :id="`${attachTo}-keyboard`"
       class="hg-theme-default hg-layout-default"
       :class="`${attachTo}-keyboard-container`"
+      tabindex="0"
     ></div>
   </div>
 </template>
@@ -44,6 +44,11 @@ const positionKeyboard = () => {
   if (parent) {
     const { top, left, width, height } = parent as DOMRect
     const container = document.getElementById(`${attachTo.value}-keyboard`) as HTMLDivElement
+
+    // Set tabindex on keyboard buttons
+    const children = container.querySelectorAll('.hg-button')
+    children.forEach((child) => child.setAttribute('tabindex', '0'))
+
     if ((isTablet.value && isMobile.value) || isPortrait.value) {
       container.setAttribute('style', `top:${top + height}px`)
     } else {
