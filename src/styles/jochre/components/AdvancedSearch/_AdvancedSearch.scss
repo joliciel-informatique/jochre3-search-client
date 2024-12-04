@@ -7,11 +7,11 @@
 }
 
 #advancedSearchPanel {
-  height: 72vh;
+  height: 65vh;
   overflow-y: auto;
   z-index: 100;
-  .body-inner {
-    // overflow-y: scroll;
-    // max-height: 123vh;
-  }
+  // .body-inner {
+  // overflow-y: scroll;
+  // max-height: 123vh;
+  // }
 }
