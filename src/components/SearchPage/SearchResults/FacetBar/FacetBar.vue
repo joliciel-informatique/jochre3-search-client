@@ -274,7 +274,7 @@ Description: presents the facet bar
           <div class="dropdown is-hoverable">
             <div class="dropdown-trigger">
               <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
-                <span ref="dropdownTrigger">{{ $t('facets.most-hits') }}</span>
+                <span ref="dropdownTrigger">{{ dropdownTriggerValue }}</span>
                 <span class="icon is-small">
                   <font-awesome-icon icon="angle-down" aria-hidden="true" />
                 </span>
