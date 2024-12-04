@@ -38,6 +38,7 @@
             />
           </p>
           <simple-key
+            v-if="metadataModal.field !== 'publicationYear'"
             v-model:attach-to="metadataModal.field"
             v-model:reference="metadataModal.value"
             @onEnter="null"
