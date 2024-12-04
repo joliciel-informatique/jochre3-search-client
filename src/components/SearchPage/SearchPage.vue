@@ -414,7 +414,7 @@ watch(openMobileFacets, (newV) => {
 })
 
 const searchFacets = async () => {
-  const facetParams = new URLSearchParams({ ...Object.fromEntries(params.value) })
+  const facetParams = new URLSearchParams(params.value.toString())
   facetParams.append('field', 'Author')
   if (preferences.authorFacetCount > 0)
     facetParams.append('maxBins', preferences.authorFacetCount.toString())
