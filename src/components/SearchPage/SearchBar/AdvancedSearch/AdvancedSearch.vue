@@ -75,7 +75,6 @@ Description: the advanced search toolbox
             v-model:author-text="authorText"
             v-model:author-list="authorList"
           />
-
           <span class="columns is-mobile is-vcentered mt-1 p-1">
             <p
               class="column is-2 is-flex is-desktop is-flex-grow-1 has-text-white"
@@ -205,18 +204,11 @@ const docRefs = defineModel('docRefs')
 const sortBy = defineModel('sortBy')
 const facets: Ref = defineModel('facets')
 const excludeFromSearch = defineModel('excludeFromSearch')
-// const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 const disabled = computed(
   () => facets.value.filter((facet: { active: string }) => (facet.active ? facet : null)).length
 )
 
 const excludeAuthors = () => (excludeFromSearch.value = !excludeFromSearch.value)
-
-// const toggleKeyboard = (attachTo: string) => {
-// simpleKeyboard.value.attachTo = attachTo
-// simpleKeyboard.value.show = !simpleKeyboard.value.show
-// simpleKeyboard.value.ref = title
-// }
 
 const runSearch = () => emit('newSearch')
 

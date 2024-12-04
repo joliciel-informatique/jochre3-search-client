@@ -250,12 +250,21 @@ onMounted(() => {
     const navbarAdvancedSearchBtn = document.getElementById('advancedSearchBtn')
     if (showAdvancedSearchPanel.value) {
       const advancedSearchPanel = document.getElementById('advancedSearchPanel')
+      const dropdownList = document.getElementById('advanced-search-authors-author-dropdown-list')
+      const dropdownContent = document.getElementById('advanced-search-authors-author-tags')
+      const dropdownItems = Array.from(document.querySelectorAll('.filterTag'))
       if (
         e.target instanceof Element &&
         !navbarAdvancedSearchBtn?.contains(e.target) &&
         !navbarMobileMenu?.contains(e.target) &&
-        !advancedSearchPanel?.contains(e.target)
+        !advancedSearchPanel?.contains(e.target) &&
+        !dropdownList?.contains(e.target) &&
+        !dropdownContent?.contains(e.target) &&
+        dropdownItems.every((tag: Element) =>
+          document.getElementById((tag as HTMLElement).id)?.contains(e.target)
+        )
       ) {
+        console.log('clicking not inside areas', e.target)
         showAdvancedSearchPanel.value = false
       }
     }
