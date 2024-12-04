@@ -80,7 +80,7 @@
   <main :class="preferences.displayLeftToRight ? '' : 'rtl-align'">
     <!-- Contents table on desktop -->
     <div
-      v-if="query.length && searchResults?.length"
+      v-if="hasSearch && searchResults?.length"
       class="is-flex is-flex-direction-row is-justify-content-space-between"
     >
       <div class="is-hidden-touch">
@@ -122,7 +122,7 @@
       </div>
     </div>
     <div
-      v-else-if="isLoading && query && !searchResults?.length"
+      v-else-if="isLoading && hasSearch && !searchResults?.length"
       class="is-flex is-flex-direction-column has-text-centered pt-5"
     >
       <!-- Loading with query, but no results -->
@@ -139,7 +139,7 @@
       </h1>
     </div>
 
-    <!-- Not loading, no query, no results -->
+    <!-- Not loading, no search, no results -->
     <IndexSize
       v-else
       v-model:is-loading="isLoading"
