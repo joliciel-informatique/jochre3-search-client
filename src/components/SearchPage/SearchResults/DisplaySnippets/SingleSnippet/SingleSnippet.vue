@@ -19,6 +19,8 @@ Description: displays text snippets from the OCR text
         class="card-header-title snippet-header"
         :class="selectedEntryIdx === bookIndex ? '' : 'is-clickable'"
         @click="selectedEntryIdx = bookIndex"
+        tabindex="0"
+        :aria-label="`Page ${snippet.page} in ${title} by ${author ?? $t('results.result-unknown-author')}`"
       >
         {{ $t('results.page', [snippet.page]) }}&nbsp;•&nbsp;<span
           class="is-size-6 snippet-book-title"
@@ -33,6 +35,7 @@ Description: displays text snippets from the OCR text
         v-if="snippet.deepLink"
         @click="openDeepLink(snippet.deepLink)"
         @keyup.enter="openDeepLink(snippet.deepLink)"
+        tabindex="0"
       >
         <span class="icon">
           <font-awesome-icon icon="book-open" size="lg" />
@@ -46,6 +49,7 @@ Description: displays text snippets from the OCR text
         aria-label="view transcription"
         @click="openTranscribedText()"
         @keyup.enter="openTranscribedText()"
+        tabindex="0"
       >
         <span class="icon">
           <font-awesome-icon icon="file-lines" size="lg" />
@@ -75,7 +79,7 @@ Description: displays text snippets from the OCR text
         <div
           class="load-original-image-button column button is-flex is-align-items-center is-size-7"
           :class="imageIsLoading ? 'is-loading' : ''"
-          tabindex="3"
+          tabindex="0"
           :alt="$t('results.click-image-snippet')"
           @click="
             image
@@ -126,9 +130,10 @@ Description: displays text snippets from the OCR text
             rtl: !preferences.corpusLeftToRight
           }"
           v-html="snippet.text"
-          tabindex="3"
+          tabindex="0"
           @dblclick="openWordModal"
           v-touch:longtap="openWordModal"
+          :aria-label="snippet.text"
         ></div>
       </div>
     </div>

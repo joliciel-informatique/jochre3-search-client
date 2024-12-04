@@ -13,9 +13,12 @@ Description: presents the current indexed number of books
   <div
     id="indexPage"
     class="is-flex is-flex-direction-column is-align-items-center has-text-centered"
+    tabindex="-1"
   >
-    <div class="is-size-5 is-size-7-mobile p-5" v-html="$t('search.about')"></div>
-    <div class="is-size-5 is-size-7-mobile">{{ $t('search.index-size', [indexSize]) }}</div>
+    <div class="is-size-5 is-size-7-mobile p-5" tabindex="-1" v-html="$t('search.about')"></div>
+    <div class="is-size-5 is-size-7-mobile" tabindex="-1">
+      {{ $t('search.index-size', [indexSize]) }}
+    </div>
   </div>
 </template>
 <script setup lang="ts">

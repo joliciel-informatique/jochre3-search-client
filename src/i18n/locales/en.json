@@ -25,7 +25,7 @@
     "document-reference": "Document reference(s)",
     "document-reference-placeholder": "Add document references separated by a comma",
     "sort-by": "Sort by",
-    "reset": "Clear results",
+    "reset": "Reset search",
     "sort": {
       "score": "score",
       "date-ascending": "year ↑",

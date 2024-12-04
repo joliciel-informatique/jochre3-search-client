@@ -40,6 +40,7 @@ Description: presents the search bar
                 }
               "
               :placeholder="$t('search.query')"
+              tabindex="0"
             />
             <span
               class="icon is-small is-clickable"
@@ -80,6 +81,7 @@ Description: presents the search bar
                   ><input
                     id="strictSearchCheckbox"
                     type="checkbox"
+                    tabindex="0"
                     aria-label="strict search"
                     v-model="strict"
                     @change="emit('newSearch')" /></span></span
@@ -95,6 +97,7 @@ Description: presents the search bar
         class="navbar-item"
         href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
         target="_blank"
+        tabindex="0"
       >
         <span>
           <font-awesome-icon icon="book-open" />
@@ -105,17 +108,22 @@ Description: presents the search bar
         id="advancedSearchBtn"
         class="navbar-item has-text-white is-flex-desktop"
         @click.prevent="showAdvancedSearchPanel = !showAdvancedSearchPanel"
+        @keyup.enter="showAdvancedSearchPanel = !showAdvancedSearchPanel"
+        @keyup.space="showAdvancedSearchPanel = !showAdvancedSearchPanel"
+        tabindex="0"
       >
-        <font-awesome-icon
-          :icon="
-            showAdvancedSearchPanel
-              ? 'magnifying-glass-minus'
-              : hasAdvancedSearchCriteria
-                ? 'sliders'
-                : 'magnifying-glass-plus'
-          "
-        />
-        {{ $t('search.advanced-search') }}
+        <span>
+          <font-awesome-icon
+            :icon="
+              showAdvancedSearchPanel
+                ? 'magnifying-glass-minus'
+                : hasAdvancedSearchCriteria
+                  ? 'sliders'
+                  : 'magnifying-glass-plus'
+            "
+          />
+          {{ $t('search.advanced-search') }}
+        </span>
       </a>
     </div>
   </div>

@@ -3,6 +3,7 @@
     id="header"
     class="columns is-mobile has-background-primary has-text-white m-0 p-0 header-footer-content"
     aria-role="banner"
+    tabindex="-1"
   >
     <div class="column is-2 p-2">
       <span class="logo">

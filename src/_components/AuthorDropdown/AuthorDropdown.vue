@@ -4,6 +4,7 @@
     role="menu"
     v-show="authorDropdownItems.length > 0"
     class="dropdown"
+    tabindex="0"
   >
     <div class="dropdown-content">
       <a
@@ -11,16 +12,16 @@
         :key="sha1(author)"
         class="dropdown-item"
         @click="addAuthor(author)"
+        @keyup.enter="addAuthor(author)"
+        @keyup.space="addAuthor(author)"
+        tabindex="0"
       >
         {{ author.label }}
       </a>
     </div>
   </div>
-  <div v-if="authorList.length" class="columns">
-    <div
-      :id="`${attachTo}-author-tags`"
-      class="column flex is-flex is-flex-direction-row is-flex-wrap-wrap"
-    >
+  <div v-show="authorList.length" class="columns" :id="`${attachTo}-author-tags`">
+    <div class="column flex is-flex is-flex-direction-row is-flex-wrap-wrap">
       <div v-for="author of authorList" :key="sha1(author)">
         <FilterTag
           :label="author.label"
@@ -91,12 +92,25 @@ const addAuthor = (author: { label: string; count: number }) => {
   allowMultiple ? authorList.value.push(author) : (authorList.value = [author])
   authorText.value = ''
   authorDropdownItems.value = []
+
+  const grandParent = document.getElementById(attachTo)?.parentElement?.parentElement?.parentElement
+  const selectedAuthors = document.getElementById(`${attachTo}-author-tags`) as HTMLDivElement
+  if (grandParent && selectedAuthors) {
+    selectedAuthors?.setAttribute('style', `position: relative`)
+    grandParent.appendChild(selectedAuthors)
+  }
+
+  const origin = document.getElementById(attachTo)
+  origin?.focus()
 }
 
 const delAuthor = (value: { label: string }) => {
   authorList.value = authorList.value.filter(
     (author: { label: string; count: number }) => author.label !== value.label
   )
+
+  const origin = document.getElementById(attachTo)
+  origin?.focus()
 }
 
 const positionList = () => {
