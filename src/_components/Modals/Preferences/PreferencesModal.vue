@@ -26,12 +26,14 @@
         <div class="columns is-vcentered py-3">
           <div class="column">
             <h1 class="label">{{ $t('preferences.snippets-heading') }}</h1>
-            <div class="is-flex is-flex-direction-row m-2">
+            <div class="is-flex is-flex-direction-row is-align-items-center m-2">
               <!-- the switch needs labels inverted if right-to-left -->
-              <span class="px-2" v-if="preferences.displayLeftToRight">{{
+              <span class="px-4 has-text-centered" v-if="preferences.displayLeftToRight">{{
                 $t('preferences.snippets-per-book')
               }}</span>
-              <span class="px-2" v-else>{{ $t('preferences.snippets-as-list') }}</span>
+              <span class="px-2 has-text-centered" v-else>{{
+                $t('preferences.snippets-as-list')
+              }}</span>
               <div class="control is-expanded">
                 <label
                   class="switch is-rounded is-small"
