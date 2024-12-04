@@ -130,11 +130,16 @@
     </div>
 
     <!-- Not loading, with query, but no results -->
-    <div v-else-if="query.length && !isLoading && !searchResults?.length">
-      <h1 class="column">
+    <div
+      v-else-if="query.length && !isLoading && !searchResults?.length"
+      class="m-5 has-text-centered"
+    >
+      <h1
+        class="column is-flex is-flex-direction-column is-justify-content-center is-align-items-center"
+      >
         <span class="no-results"> {{ $t('results.none') }}! </span>
-        <div class="is-justify-content-center is-align-items-center no-results-image m-6">
-          <font-awesome-icon class="fa-10x" icon="ban" />
+        <div class="is-flex is-justify-content-center is-align-items-center no-results-image m-6">
+          <font-awesome-icon icon="ban" size="2xl" />
         </div>
       </h1>
     </div>
