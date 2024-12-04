@@ -35,16 +35,6 @@ Description: the advanced search toolbox
                   'has-icons-right': !preferences.displayLeftToRight
                 }"
               >
-                <input
-                  id="advanced-search-authors"
-                  type="text"
-                  class="input"
-                  lang="yi"
-                  name="findAuthorInput"
-                  v-model="authorText"
-                  :disabled="disabled"
-                  :placeholder="$t('search.authorPlaceholder')"
-                />
                 <span
                   class="control icon is-small"
                   :class="{
@@ -59,9 +49,27 @@ Description: the advanced search toolbox
                     name="findAuthorCheckbox"
                     :disabled="disabled"
                     @click="excludeAuthors"
+                    tabindex="0"
                   />
                 </span>
+                <input
+                  id="advanced-search-authors"
+                  type="text"
+                  class="input"
+                  lang="yi"
+                  name="findAuthorInput"
+                  v-model="authorText"
+                  :disabled="disabled"
+                  :placeholder="$t('search.authorPlaceholder')"
+                  tabindex="0"
+                />
               </p>
+              <author-dropdown
+                attach-to="advanced-search-authors"
+                :allowMultiple="true"
+                v-model:author-text="authorText"
+                v-model:author-list="authorList"
+              />
               <simple-key
                 attach-to="advanced-search-authors"
                 v-model:reference="authorText"
@@ -70,13 +78,6 @@ Description: the advanced search toolbox
             </span>
           </span>
         </span>
-        <author-dropdown
-          attach-to="advanced-search-authors"
-          :allowMultiple="true"
-          v-model:author-text="authorText"
-          v-model:author-list="authorList"
-        />
-
         <span class="columns is-vcentered mt-1 p-1">
           <p class="column is-2 is-flex is-desktop is-flex-grow-1 has-text-white" id="searchTitle">
             {{ $t('search.title') }}
@@ -172,12 +173,23 @@ Description: the advanced search toolbox
           </select>
         </span>
         <p class="has-text-warning">{{ $t('search.field-instructions') }}</p>
-        <div class="field has-text-centered p-2">
-          <button class="button is-light" @click="emit('resetSearchResults')">
+        <div
+          class="field has-text-centered p-2 is-flex is-flex-direction-row is-justify-content-space-between"
+        >
+          <button
+            class="button is-light"
+            @click="emit('resetSearchResults')"
+            @keyup.enter="emit('resetSearchResults')"
+            tabindex="0"
+          >
             {{ $t('search.reset') }}
           </button>
-          &nbsp;
-          <button class="button is-info" @click="runSearch()">
+          <button
+            class="button is-info"
+            @click="runSearch()"
+            @keyup.enter="runSearch()"
+            tabindex="0"
+          >
             {{ $t('search.search-button') }}
           </button>
         </div>
