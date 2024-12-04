@@ -199,7 +199,7 @@ Description: the advanced search toolbox
   </div>
 </template>
 <script setup lang="ts">
-import { computed, ref, type Ref } from 'vue'
+import { computed, onMounted, ref, type Ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 const preferences = usePreferencesStore()
 
@@ -215,18 +215,20 @@ const docRefs = defineModel('docRefs')
 const sortBy = defineModel('sortBy')
 const facets: Ref = defineModel('facets')
 const excludeFromSearch = defineModel('excludeFromSearch')
-// const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 const disabled = computed(
   () => facets.value.filter((facet: { active: string }) => (facet.active ? facet : null)).length
 )
 
-const excludeAuthors = () => (excludeFromSearch.value = !excludeFromSearch.value)
+const closeOnEscape = (e: KeyboardEvent) => {
+  if (e.key === 'Escape' && showAdvancedSearchPanel.value) showAdvancedSearchPanel.value = false
+  document.removeEventListener('keyup', closeOnEscape, true)
+}
 
-// const toggleKeyboard = (attachTo: string) => {
-// simpleKeyboard.value.attachTo = attachTo
-// simpleKeyboard.value.show = !simpleKeyboard.value.show
-// simpleKeyboard.value.ref = title
-// }
+onMounted(() => {
+  window.addEventListener('keyup', closeOnEscape, true)
+})
+
+const excludeAuthors = () => (excludeFromSearch.value = !excludeFromSearch.value)
 
 const runSearch = () => emit('newSearch')
 
