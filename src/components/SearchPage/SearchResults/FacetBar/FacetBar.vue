@@ -160,7 +160,7 @@ Description: presents the facet bar
                   :placeholder="$t('facets.filter')"
                 />
                 <span class="menu-label p-2" v-if="filterValue !== undefined">
-                  {{ $t('search.relevant-facets', [filteredFacets?.length]) }}
+                  {{ $t('facets.relevant-facets', [filteredFacets?.length]) }}
                 </span>
               </p>
             </span>
