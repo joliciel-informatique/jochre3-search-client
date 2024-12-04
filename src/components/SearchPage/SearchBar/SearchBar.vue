@@ -88,9 +88,11 @@ Description: presents the search bar
         </p>
       </div>
     </div>
-    <div class="is-flex is-flex-direction-row is-justify-content-space-between is-hidden-touch">
+    <div
+      class="py-2 is-flex is-flex-direction-row is-justify-content-space-between is-hidden-touch"
+    >
       <a
-        class="navbar-item has-text-white"
+        class="navbar-item"
         href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
         target="_blank"
       >

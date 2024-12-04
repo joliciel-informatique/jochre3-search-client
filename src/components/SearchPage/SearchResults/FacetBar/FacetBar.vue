@@ -22,19 +22,33 @@ Description: presents the facet bar
         <p
           class="menu-label is-size-5 label is-flex is-flex-direction-column is-align-items-center"
         >
-          <span class="is-flex is-flex-direction-row is-align-items-center"
-            >{{ $t('facets.title', [authorFacetCount]) }}
-            <span class="pl-1 is-size-6" v-tooltip:top="$t('facets.what-are-facets')">
+          <span class="is-flex is-flex-direction-row is-align-items-center">
+            <span
+              class="pl-1 is-size-6"
+              v-show="
+                !preferences.displayLeftToRight && preferences.isDesktop && !preferences.isPortrait
+              "
+              v-tooltip:bottom="$t('facets.what-are-facets')"
+            >
+              <font-awesome-icon icon="question-circle" />
+            </span>
+            {{ $t('facets.title', [authorFacetCount]) }}
+            <span
+              class="pl-1 is-size-6"
+              v-show="
+                preferences.displayLeftToRight && preferences.isDesktop && !preferences.isPortrait
+              "
+              v-tooltip:bottom="$t('facets.what-are-facets')"
+            >
               <font-awesome-icon icon="question-circle" /> </span
           ></span>
-
           <span class="pt-2 is-size-7 is-italic">{{ $t('facets.subtitle') }}</span>
         </p>
       </template>
       <template #content>
         <div class="is-flex is-flex-direction-column">
           <div class="columns is-vcentered m-1">
-            <div class="column is-8 is-size-7">
+            <div class="column is-6 is-size-7">
               <span
                 class=""
                 :class="preferences.displayLeftToRight ? 'has-text-left' : 'has-text-right'"
@@ -42,7 +56,7 @@ Description: presents the facet bar
                 <p>{{ $t('facets.display-number-of-author-facets') }}</p>
               </span>
             </div>
-            <div class="column is-4 is-size-7">
+            <div class="column is-6 is-size-7">
               <div class="dropdown is-hoverable">
                 <div class="dropdown-trigger">
                   <button class="button py-0" aria-haspopup="true" aria-controls="dropdown-menu">
@@ -83,7 +97,7 @@ Description: presents the facet bar
             </div>
           </div>
           <div class="columns is-vcentered m-1">
-            <div class="column is-8 is-size-7">
+            <div class="column is-6 is-size-7">
               <span
                 class=""
                 :class="preferences.displayLeftToRight ? 'has-text-left' : 'has-text-right'"
@@ -91,7 +105,7 @@ Description: presents the facet bar
                 {{ $t('facets.sort-by-label') }}</span
               >
             </div>
-            <div class="column is-4 is-size-7">
+            <div class="column is-6 is-size-7">
               <div
                 class="dropdown is-hoverable"
                 :class="preferences.displayLeftToRight ? 'is-right' : 'is-left'"
@@ -183,14 +197,20 @@ Description: presents the facet bar
   </div>
 
   <div v-show="openMobileFacets" class="menu is-flex is-flex-direction-column is-hidden-desktop">
-    <div>
-      <p class="menu-label is-size-5 label">
-        {{ $t('facets.title') }}
-        <span v-tooltip:top="$t('facets.what-are-facets')">
-          <font-awesome-icon icon="question-circle" />
-        </span>
-      </p>
-    </div>
+    <!-- <div> -->
+    <p class="menu-label is-size-5 label is-flex is-flex-direction-column is-align-items-center">
+      <span class="is-flex is-flex-direction-row is-align-items-center"
+        >{{ $t('facets.title', [authorFacetCount]) }}
+        <span
+          class="pl-1 is-size-6"
+          v-show="preferences.isDesktop && !preferences.isPortrait"
+          v-tooltip:bottom="$t('facets.what-are-facets')"
+        >
+          <font-awesome-icon icon="question-circle" /> </span
+      ></span>
+      <span class="pt-2 is-size-7 is-italic">{{ $t('facets.subtitle') }}</span>
+    </p>
+    <!-- </div> -->
     <div class="is-flex is-flex-direction-column">
       <div class="columns is-vcentered m-1">
         <div class="column is-8 is-size-7">
@@ -302,7 +322,7 @@ Description: presents the facet bar
         </p>
       </span>
       <div
-        class="facet-list on-mobile is-flex is-flex-direction-column is-justify-content-center is-flex-wrap-wrap is-align-items-center"
+        class="facet-list on-mobile is-flex is-flex-direction-column is-flex-wrap-nowrap is-align-items-center"
       >
         <span v-for="facet of filteredFacets" :key="sha1(facet)">
           <FilterTag

@@ -13,20 +13,28 @@
 
 .bla {
   justify-items: center;
-  overflow-y: scroll;
-  height: calc(100vh - 150px);
+  position: relative;
+  top: 2vh;
+  min-height: 76vh;
+  max-height: 76vh;
   &.on-desktop {
-    left: 27vw;
-    right: 19vw;
     width: 52vw;
-    scrollbar-width: thin;
+    // ul {
+    //   overflow-y: scroll;
+    //   scrollbar-width: thin;
+    // }
   }
-  // &.on-mobile {
-  //   // height: 75vh;
-  //   // left: 2vw;
-  //   // right: 2vw;
-  //   // width: 96vw;
-  // }
+  &.on-mobile {
+    width: 100vw;
+  }
+  > ul {
+    scrollbar-width: thin;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    // height: 75vh;
+    // left: 2vw;
+    // right: 2vw;
+  }
 }
 
 .card.metadata {

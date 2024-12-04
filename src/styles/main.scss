@@ -12,8 +12,7 @@
 
 html {
   height: 100%;
-  overflow-x: hidden;
-  // overflow-y: hidden;
+  overflow: hidden;
 }
 
 body {
@@ -199,6 +198,14 @@ $menu-nested-list-margin: 1em;
 .search-content {
   position: sticky;
   flex: 1 1 auto;
+}
+
+#navbar {
+  top: 0px;
+  position: sticky;
+  z-index: 43;
+  background-color: $background-color-1;
+  max-height: 20vh;
 }
 
 .navbar-mobile {
