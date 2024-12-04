@@ -1,0 +1,52 @@
+@use '../../../custom/Custom' as *;
+
+.control[id$='-keyboard-btn']:focus-within {
+  outline: 2px solid black;
+  border-radius: 3px;
+  z-index: 1002;
+}
+
+.keyboardClass {
+  position: fixed;
+  z-index: 41;
+}
+
+.hg-theme-default {
+  font-family: $font-family-1;
+  font-size: 0.8rem;
+  font-style: normal;
+  position: fixed;
+  color: $foreground-color-2;
+  border: 0.1rem solid $background-color-1;
+  padding: 1em;
+  margin-top: 0.25em;
+
+  @media screen and (max-width: 768px) {
+    left: 0px;
+    width: 100vw;
+  }
+
+  .hg-rows {
+    .hg-row {
+      .hg-button {
+        margin-left: 3px;
+        margin-right: 1px;
+
+        &.hg-standardBtn {
+          width: unset;
+          margin-right: unset;
+        }
+        &:not(:last-child) {
+          margin-right: 0;
+        }
+      }
+      &.hg-button-enter,
+      &.hg-button-mobileAlt,
+      &.hg-button-mobileNumbers,
+      &.hg-button-mobileDefault,
+      &.hg-button-mobileChars {
+        max-width: 3rem;
+      }
+    }
+  }
+}

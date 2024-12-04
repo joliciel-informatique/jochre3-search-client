@@ -1,5 +1,6 @@
 .button[id^='filterTag'] div {
-  width: 10vw;
+  width: 200px;
+  max-width: 45vw;
   overflow: hidden;
   text-overflow: ellipsis;
 }

@@ -10,18 +10,26 @@ Methods: getSelectedWord (local), toggleImageSnippet (local), fetchData (importe
 Description: displays text snippets from the OCR text
 -->
 <template>
-  <div :docRef="docRef" :bookIndex :index="index" class="card snippet m-4">
+  <li :docRef="docRef" class="card snippet mb-4" :bookIndex :snippetIndex>
     <header
       class="card-header"
-      :class="selectedEntry.docRef === docRef ? 'selected-snippet' : 'snippet'"
+      :class="selectedEntryIdx === bookIndex ? 'selected-snippet' : 'snippet'"
     >
-      <p class="card-header-title">{{ $t('results.page', [snippet.page]) }}</p>
-
+      <p
+        class="card-header-title snippet-header"
+        :class="selectedEntryIdx === bookIndex ? '' : 'is-clickable'"
+        @click="selectedEntryIdx = bookIndex"
+      >
+        {{ $t('results.page', [snippet.page]) }}&nbsp;•&nbsp;<span
+          class="is-size-6 snippet-book-title"
+          :class="{ 'rtl-align': preferences.needsRightToLeft }"
+          >{{ title }} ({{ author ?? $t('results.result-unknown-author') }})</span
+        >
+      </p>
       <!-- Open page in book -->
       <button
-        class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column"
+        class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column has-text-centered"
         aria-label="view book"
-        v-tooltip:top="$t('results.show-original-page', [snippet.page])"
         v-if="snippet.deepLink"
         @click="openDeepLink(snippet.deepLink)"
         @keyup.enter="openDeepLink(snippet.deepLink)"
@@ -29,24 +37,25 @@ Description: displays text snippets from the OCR text
         <span class="icon">
           <font-awesome-icon icon="book-open" size="lg" />
         </span>
-        <span class="is-size-7">{{ $t('snippet.open-page') }}</span>
+        <span v-if="!preferences.isMobile" class="is-size-7">{{ $t('snippet.open-page') }}</span>
       </button>
 
       <!-- View transcribed text -->
       <button
-        class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column"
+        class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column has-text-centered"
         aria-label="view transcription"
-        v-tooltip:top="$t('results.show-text')"
-        @click="openDeepLink(`/text/${docRef}/page/${snippet.page}`)"
-        @keyup.enter="openDeepLink(`/text/${docRef}/page/${snippet.page}`)"
+        @click="openTranscribedText()"
+        @keyup.enter="openTranscribedText()"
       >
         <span class="icon">
           <font-awesome-icon icon="file-lines" size="lg" />
         </span>
-        <span class="is-size-7">{{ $t('snippet.open-transcription') }}</span>
+        <span v-if="!preferences.isMobile" class="is-size-7">{{
+          $t('snippet.open-transcription')
+        }}</span>
       </button>
     </header>
-    <div class="card-content" :data-index="index" :data-docref="docRef" :data-page="snippet.page">
+    <div class="card-content" :data-docref="docRef" :data-page="snippet.page">
       <div class="columns">
         <div
           v-if="preferences.displayLeftToRight === preferences.corpusLeftToRight"
@@ -79,33 +88,32 @@ Description: displays text snippets from the OCR text
               : toggleImageSnippet()
           "
         >
-          <div>
-            <div
-              v-if="!image"
-              class="is-flex is-flex-direction-column is-align-items-center m-2"
-              visibility:hidden
-            >
-              <div class="p-3" :hidden="imageIsLoading">
-                <button class="is-large is-flex is-align-items-center">
-                  <span class="icon" :hidden="imageIsLoading">
-                    <font-awesome-icon icon="file-image" size="2xl" />
-                  </span>
-                </button>
-              </div>
-              <span :hidden="imageIsLoading">{{ $t('results.click-image-snippet') }}</span>
+          <div
+            v-if="!image"
+            class="is-flex is-flex-direction-column is-align-items-center m-2"
+            visibility:hidden
+          >
+            <div class="p-3" :hidden="imageIsLoading">
+              <button class="is-large is-flex is-align-items-center">
+                <span class="icon" :hidden="imageIsLoading">
+                  <font-awesome-icon icon="file-image" size="2xl" />
+                </span>
+              </button>
             </div>
+            <span :hidden="imageIsLoading">{{ $t('results.click-image-snippet') }}</span>
+          </div>
 
-            <!-- Show snippet image -->
-            <div v-else>
-              <img
-                class="image-snippet"
-                :src="image"
-                title="Image"
-                :alt="`Image for page ${snippet.page}`"
-              />
-            </div>
+          <!-- Show snippet image -->
+          <div v-else>
+            <img
+              class="image-snippet"
+              :src="image"
+              title="Image"
+              :alt="`Image for page ${snippet.page}`"
+            />
           </div>
         </div>
+        <br class="is-hidden-desktop" />
         <div
           v-if="preferences.displayLeftToRight !== preferences.corpusLeftToRight"
           :class="{
@@ -124,7 +132,7 @@ Description: displays text snippets from the OCR text
         ></div>
       </div>
     </div>
-  </div>
+  </li>
 </template>
 
 <script setup lang="ts">
@@ -134,16 +142,21 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
-const { index, snippet, docRef, bookIndex } = defineProps([
-  'index',
+const { snippet, docRef, bookIndex, snippetIndex, query, strict } = defineProps([
   'snippet',
   'docRef',
-  'bookIndex'
+  'bookIndex',
+  'snippetIndex',
+  'query',
+  'strict',
+  'title',
+  'author'
 ])
 const imageModal: Ref = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const notification = defineModel('notification')
-const selectedEntry: Ref = defineModel('selectedEntry')
+// const selectedEntry: Ref = defineModel('selectedEntry')
+const selectedEntryIdx: Ref = defineModel<number>('selectedEntryIdx', { default: 0 })
 
 const image = ref('')
 const imageIsLoading = ref(false)
@@ -217,6 +230,18 @@ const openImageModal = (title: string) => {
     title: title,
     data: image.value ? image.value : null
   }
+}
+
+const openTranscribedText = () => {
+  const textParams = new URLSearchParams()
+  if (query) {
+    textParams.append('query', query)
+  }
+  if (strict) {
+    textParams.append('strict', strict)
+  }
+  const url = `/text/${docRef}/page/${snippet.page}/?` + textParams.toString()
+  openDeepLink(url)
 }
 
 const openDeepLink = (url: string) => window.open(url, '_blank')

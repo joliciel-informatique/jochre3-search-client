@@ -12,8 +12,7 @@
 
 html {
   height: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 body {
@@ -60,8 +59,18 @@ input:-webkit-autofill:active {
   line-height: $font-size-3;
 }
 
-.button.is-small {
-  line-height: unset;
+.button .is-small {
+  line-height: normal;
+}
+
+button {
+  &.is-small {
+    line-height: normal;
+  }
+}
+
+.pagination-link {
+  line-height: normal;
 }
 
 .control > .button {
@@ -130,16 +139,21 @@ $menu-nested-list-margin: 1em;
 
 .table-of-contents-of-transcribed-text {
   display: block;
-  position: sticky;
-  top: 5vh;
-  left: 1vw;
-  height: 75vh;
-  z-index: 9;
+  // position: absolute;
+  // top: 5vh;
+  // left: 1vw;
+  height: 67vh;
+  // z-index: 9;
 
-  & > .menu > .menu-list {
-    overflow-y: auto;
-    max-height: 62vh;
+  > .menu > .columns > .column {
+    overflow-y: scroll;
+    max-height: 58vh;
   }
+
+  // & > .menu > .menu-list {
+  //   overflow-y: scroll;
+  //   max-height: 58vh;
+  // }
 }
 
 .icon.is-clicked > svg > path {
@@ -147,8 +161,29 @@ $menu-nested-list-margin: 1em;
 }
 
 .pagination {
-  border-top: 1px solid;
+  // border-top: 1px solid;
   border-color: $background-color-3;
+}
+
+.pagination-link {
+  max-width: 2.5em;
+}
+
+.pagination-number-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.snippet-header {
+  white-space: nowrap;
+  width: 200px;
+}
+
+.snippet-book-title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .no-results {
@@ -163,4 +198,49 @@ $menu-nested-list-margin: 1em;
 .search-content {
   position: sticky;
   flex: 1 1 auto;
+}
+
+#navbar {
+  top: 0px;
+  position: sticky;
+  z-index: 43;
+  background-color: $background-color-1;
+  max-height: 20vh;
+}
+
+.navbar-mobile {
+  position: absolute;
+
+  &.left {
+    left: 0.5vw;
+  }
+
+  &.right {
+    right: 0.5vw;
+  }
+
+  @media screen and (max-width: 1023px) {
+    top: 55px;
+  }
+
+  z-index: 100;
+  .menu {
+    .is-hidden-desktop {
+      .panel-block {
+        background-color: $white;
+        border-right: 0.2em solid $white;
+        border-left: 0.2em solid $white;
+        &:first-child {
+          border-start-start-radius: var(--bulma-panel-radius);
+          border-start-end-radius: var(--bulma-panel-radius);
+          border-top: 0.2em solid $white;
+          border-right: 0.2em solid $white;
+        }
+        &:last-child {
+          border-right: 0.2em solid $white;
+          border-bottom: 0.2em solid $white;
+        }
+      }
+    }
+  }
 }

@@ -1,28 +1,126 @@
 @use '../../../custom/Custom' as *;
 
-.table-of-contents {
-  display: block;
-  position: sticky;
-  top: 20vh;
-  height: 77vh;
-  left: 2vw;
-  background-color: $background-color-1;
+.contentsColumn {
+  height: 4vh;
+}
 
-  .menu-list {
-    overflow-y: scroll;
-    max-height: 57vh;
+.table-of-contents {
+  position: relative;
+  top: 2vh;
+  background-color: $background-color-1;
+  overflow: visible;
+  max-height: 85vh;
+
+  .accordion-card {
+    height: -webkit-fill-available;
   }
 
-  .facet-list {
+  .scroll-list {
     overflow-y: scroll;
-    max-height: 57vh;
+    scrollbar-width: thin;
+    height: -webkit-fill-available;
+  }
+
+  &.is-hidden-desktop {
+    height: 0vh;
+  }
+
+  &.search-results {
+    width: 24vw;
+    height: 76vh;
+  }
+
+  &.facets {
+    width: 17vw;
+    height: 76vh;
+  }
+
+  .menu-list {
+    // overflow-y: scroll;
+    max-height: 59vh;
   }
 
   .transcribed-text {
     z-index: 9;
   }
 
-  #searchResultsList {
-    height: 100%;
+  &.left {
+    left: 2vw;
+  }
+
+  &.right {
+    right: 2vw;
+  }
+}
+
+.facet-list {
+  overflow: auto;
+  // max-height: 30vh;
+  scrollbar-width: thin;
+  span > div {
+    max-width: 10vw;
+  }
+  &.on-mobile {
+    height: 30vh;
+    overflow-y: scroll;
+    span > div {
+      max-width: 50vw;
+      width: 50vw;
+    }
+  }
+  // max-width: 30vw;
+}
+
+.toc-mobile {
+  background-color: $white;
+  z-index: 1;
+
+  &.toc-mobile-left {
+    left: 0;
+  }
+
+  &.toc-mobile-right {
+    right: 0;
+  }
+}
+
+.button {
+  &.toc-index-btn {
+    width: 8vw;
+    height: var(--bulma-control-height);
+    width: var(--bulma-control-height);
+  }
+
+  &.toc-metadata-btn {
+    width: 42vw;
+    max-width: 42vw;
+    overflow: hidden;
+    height: var(--bulma-control-height);
+    min-width: var(--bulma-control-height);
+
+    span {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+}
+.toc-drawer {
+  position: fixed;
+  left: 1vw;
+  border: 0.1em solid $background-color-1;
+  max-width: 70vw;
+  max-height: 70vh;
+
+  &.metadata {
+    &.on-mobile {
+      height: 70vh;
+      overflow-y: scroll;
+    }
+  }
+
+  .menu-list {
+    max-height: 50vh;
+    overflow-y: scroll;
   }
 }

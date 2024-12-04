@@ -15,12 +15,6 @@
     "excludeAuthors": "Checking this box will exclude selected authors from the query",
     "related-word-forms": "Strict",
     "related-word-forms-tooltip": "Checking this box will exclude related word forms (of the same stem/lemma) in search results (e.g. 'eat, 'eaten', 'ate')",
-    "display-number-of-author-facets": "Authors to display",
-    "what-are-facets": "These are the authors with the most books matching your search criteria. Click an author name to filter/narrow your search results.",
-    "filter": "Filter",
-    "relevant-facets": "Your filter returned {0} relevant names",
-    "snippets-per-book": "Show snippets continuously",
-    "display-snippets-per-book": "Display all snippets per book or all snippets in this list of search results.",
     "keyboard": "Open Yiddish on-screen keyboard",
     "field-instructions": "*These fields accept Roman or Yiddish characters.",
     "author": "Author",
@@ -39,10 +33,16 @@
     }
   },
   "toc": {
-    "snippets-to-display": "Snippets per book"
+    "contents-table-header": "Search results",
+    "contents-table-subheader": "Found {0} books, showing {1}-{2}"
   },
   "facets": {
-    "title": "Filter by author",
+    "title": "Top {0} authors",
+    "subtitle": "relevant to your query",
+    "display-number-of-author-facets": "Authors to display",
+    "what-are-facets": "These are the authors with the most books matching your search criteria. Click an author name to filter/narrow your search results.",
+    "filter": "Filter",
+    "relevant-facets": "Your filter returned {0} relevant names",
     "most-hits": "Most hits",
     "active-facets": "Selected authors",
     "by-name": "Name",
@@ -50,8 +50,8 @@
     "facet-count-all": "All"
   },
   "results": {
+    "loading": "Retrieving search results...",
     "click-image-snippet": "Click to load original image",
-    "tap-image-snippet": "Tap to load original image",
     "alternate-title": "Title in transcription",
     "volume": "Volume",
     "author": "Author",
@@ -59,13 +59,7 @@
     "publisher": "Publisher",
     "publication-year": "Date",
     "document-reference": "Document reference: {0}",
-    "contents-table-header": "Search results",
-    "contents-table-subheader": "Found {0} books, showing {1}-{2}",
-    "result-count": "{0} books total",
-    "result-current-tooltip": "You are currently viewing this book and snippet",
-    "result-current-book-and-snippet": "Book {0}/{1} ({2}/{3}) of {4} books total",
     "result-unknown-author": "unknown author",
-    "reset": "Clear results",
     "none": "Uh-oh! Your query did not return any results",
     "show-original-page": "Go to book (page {0})",
     "show-text": "View transcribed text",
@@ -77,18 +71,16 @@
     "open-transcription": "Open transcription"
   },
   "navigation": {
-    "back-tooltip": "This button takes you back in your search history",
-    "forward-tooltip": "This button takes you forward in your search history",
-    "clear-tooltip": "This button will clear your search history",
-    "jump-to": "Jump to"
+    "currently-viewing-pages": "Currently viewing page {0}/{1}",
+    "jump-to": "Jump to page"
   },
   "preferences": {
     "title": "Update preferences",
+    "general-heading": "General",
     "language": "Interface language",
-    "results-per-page": "Results per page",
-    "snippets-per-result": "Snippets per book",
-    "author-facet-count": "Number of author names to display",
-    "display-snippets-per-book": "Show snippets per book?"
+    "snippets-heading": "Snippet display",
+    "snippets-per-book": "One book at a time",
+    "snippets-as-list": "As continuous list"
   },
   "fix-word": {
     "title": "Fix a word",
@@ -110,10 +102,6 @@
       "authors": "This individual may already be in our database under a different name.",
       "authorsInstruction": "If so, choose the best name below."
     },
-    "field": "Field:",
-    "current-value": "Current value:",
-    "new-value": "Value:",
-    "or-merge-with": "or merge with:",
     "field-type": {
       "title": "Title",
       "titleEnglish": "Title in transcription",
@@ -126,25 +114,24 @@
     "unauthenticated": "In order to fix document meta data, please login first."
   },
   "transcribed-text": {
-    "table-of-contents": "Table of contents",
-    "page": "Page {0}",
-    "logical-page": "({0})"
+    "generating-book-view": "Generating a book view of the transcription. Please wait...",
+    "prev-match": "<<",
+    "next-match": ">>",
+    "prev-match-tooltip": "Previous page with matching highlights",
+    "next-match-tooltip": "Next page with matching highlights"
   },
-  "cancel": "Cancel",
-  "save": "Save changes",
-  "error": "An error occurred.",
-  "back": "Back",
-  "forward": "Forward",
-  "loading": "Loading...",
+  "modal": {
+    "cancel": "Cancel",
+    "save": "Save changes"
+  },
   "pagination": {
     "next": ">>",
     "previous": "<<",
-    "top": "First result",
-    "bottom": "Last result"
+    "top": "First snippet",
+    "bottom": "Last snippet"
   },
   "header": {
     "logo": "/images/jochreLogo.png",
-    "logo-url": "/",
     "title": "",
     "preferences": "Preferences",
     "login": "Login",

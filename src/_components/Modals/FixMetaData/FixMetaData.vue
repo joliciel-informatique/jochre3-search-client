@@ -14,12 +14,12 @@
         {{ $t('fix-metadata.unauthenticated') }}
       </div>
       <div class="p-2">{{ $t('fix-metadata.instructions.normal') }}</div>
-      <div class="pb-0 mb-0 field has-addons">
+      <div class="columns field has-addons">
         <span
-          class="control container"
+          class="column is-flex is-flex-direction-row is-flex-wrap-nowrap field is-horizontal"
           :class="metadataModal.field !== 'publicationYear' ? 'has-icons-right' : ''"
         >
-          <p class="control container is-expanded">
+          <p class="control is-expanded">
             <input
               :id="metadataModal.field"
               :type="metadataModal.field === 'publicationYear' ? 'number' : 'text'"
@@ -29,56 +29,64 @@
                 english: fieldLeftToRight && preferences.needsLeftToRight,
                 'rtl-align': !fieldLeftToRight && preferences.needsRightToLeft
               }"
-              :alt="$t('search.keyboard')"
-              :title="$t('search.keyboard')"
+              :lang="preferences.corpusLanguage"
               name="fixWordSuggestionInput"
-              lang="yi"
               v-model="metadataModal.value"
               :disabled="authorList.length > 0"
+              :alt="$t('search.keyboard')"
+              :title="$t('search.keyboard')"
             />
           </p>
-          <span
+          <simple-key
             v-if="metadataModal.field !== 'publicationYear'"
-            class="icon is-small is-clickable is-right"
-            :alt="$t('search.keyboard')"
-            :title="$t('search.keyboard')"
-            @click="toggleKeyboard(metadataModal.field)"
-            aria-label="hidden"
-          >
-            <font-awesome-icon icon="keyboard" />
-          </span>
+            v-model:attach-to="metadataModal.field"
+            v-model:reference="metadataModal.value"
+            @onEnter="null"
+          />
         </span>
       </div>
 
-      <div v-show="showFindAuthorDropdown">
-        <div class="columns mt-3">
-          <div
-            class="column is-one-fifth p-2 has-text-warning has-text-weight-semibold"
-            role="document"
-          >
-            {{ $t('fix-metadata.instructions.authorsNote') }}
+      <div class="columns is-flex is-flex-direction-column" v-if="showFindAuthorDropdown">
+        <div
+          class="column is-one-fifth p-2 has-text-warning has-text-weight-semibold"
+          role="document"
+        >
+          {{ $t('fix-metadata.instructions.authorsNote') }}
+        </div>
+        <div class="column is-flex is-flex-direction-column">
+          <div class="p-2 has-text-warning has-text-weight-medium">
+            {{ $t('fix-metadata.instructions.authors') }}
           </div>
-          <div class="column is-flex is-flex-direction-column">
-            <div class="p-2 has-text-warning has-text-weight-medium">
-              {{ $t('fix-metadata.instructions.authors') }}
-            </div>
-            <div class="p-2 has-text-warning has-text-weight-medium">
-              {{ $t('fix-metadata.instructions.authorsInstruction') }}
-            </div>
+          <div class="p-2 has-text-warning has-text-weight-medium">
+            {{ $t('fix-metadata.instructions.authorsInstruction') }}
           </div>
         </div>
-        <div class="pb-0 mb-0 field has-addon">
-          <FindAuthors
-            v-model:authorList="authorList"
-            v-model:exclude="metadataModal.value"
-            v-model:simple-keyboard="simpleKeyboard"
-            v-model:include-author="includeAuthor"
-            v-model:include-author-in-transcription="includeAuthorInTranscription"
-            :multi-value="false"
-            :show-exclude-checkbox="false"
-            :unique-id="`fix-metadata-find-authors-${metadataModal.value}`"
-          />
-        </div>
+        <span class="column field is-horizontal has-addons">
+          <span class="column dropdown" :aria-label="$t('search.author')">
+            <span class="column field has-addons has-addons-left is-horizontal">
+              <p class="control is-expanded">
+                <input
+                  :id="`new-author-${metadataModal.field}`"
+                  type="text"
+                  class="input"
+                  lang="yi"
+                  v-model="authorText"
+                  :placeholder="$t('search.authorPlaceholder')"
+                />
+              </p>
+              <simple-key
+                :attach-to="`new-author-${metadataModal.field}`"
+                v-model:reference="authorText"
+                @onEnter="null"
+              />
+            </span>
+          </span>
+        </span>
+        <author-dropdown
+          :attach-to="`new-author-${metadataModal.field}`"
+          v-model:author-text="authorText"
+          v-model:author-list="authorList"
+        />
       </div>
     </template>
     <template #footer="modalBox">
@@ -87,37 +95,27 @@
         :disabled="!authenticated"
         @click="save(modalBox.closeFunction)"
       >
-        {{ $t('save') }}
+        {{ $t('modal.save') }}
       </button>
     </template>
   </ModalBox>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, type Ref } from 'vue'
+import { ref, computed, type Ref, watch } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
-import FindAuthors from '@/_components/FindAuthors/FindAuthors.vue'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 const preferences = usePreferencesStore()
-
-const simpleKeyboard: Ref = defineModel('simpleKeyboard')
 
 const metadataModal: Ref = defineModel('metadataModal')
 const notification = defineModel('notification')
 const showFindAuthorDropdown = computed(() => metadataModal.value.field?.includes('author'))
 const authorList: Ref = ref<Array<{ label: string; count: number }>>([])
-const includeAuthor = computed(() => metadataModal.value.field === 'author')
-const includeAuthorInTranscription = computed(() => metadataModal.value.field === 'authorEnglish')
+const authorText = ref('')
 const fieldLeftToRight = computed(() =>
   ['authorEnglish', 'titleEnglish', 'publisher'].includes(metadataModal.value.field)
 )
-
-const toggleKeyboard = (attachTo: string) => {
-  simpleKeyboard.value.attachTo = attachTo
-  simpleKeyboard.value.show = !simpleKeyboard.value.show
-  simpleKeyboard.value.ref = metadataModal.value
-}
 
 const save = (closeFunc: Function) => {
   const authorListValue = authorList.value[0]?.label
@@ -163,7 +161,5 @@ const save = (closeFunc: Function) => {
     })
 }
 
-const capitalizeFirstLetter = (string: String) => {
-  return string.charAt(0).toUpperCase() + string.slice(1)
-}
+const capitalizeFirstLetter = (string: String) => string.charAt(0).toUpperCase() + string.slice(1)
 </script>

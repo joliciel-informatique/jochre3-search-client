@@ -1,55 +1,61 @@
 <template>
-  <div class="keyboardClass" v-show="simpleKeyboard.show"></div>
-  <div
-    class="keyboardOverlay"
-    v-show="simpleKeyboard.show"
-    :id="`${attachTo}-keyboardOverlay`"
-  ></div>
+  <p class="control" :id="`${attachTo}-keyboard-btn`" :key="`${attachTo}-keyboard-btn`">
+    <button
+      class="button is-clickable"
+      @click="toggleKeyboard"
+      :alt="$t('search.keyboard')"
+      :title="$t('search.keyboard')"
+    >
+      <span>
+        <font-awesome-icon icon="keyboard" />
+      </span>
+    </button>
+  </p>
+  <div v-show="show" class="keyboardClass has-text-primary is-family-primary">
+    <div
+      :id="`${attachTo}-keyboard`"
+      class="hg-theme-default hg-layout-default"
+      :class="`${attachTo}-keyboard-container`"
+    ></div>
+  </div>
 </template>
 <script setup lang="ts">
-import { onMounted, onUpdated, watch, type Ref } from 'vue'
-import { type SimpleKeyboardType } from '@/assets/interfacesExternals'
+import { onMounted, ref, watch } from 'vue'
 import Keyboard, { SimpleKeyboard } from 'simple-keyboard'
 import 'simple-keyboard/build/css/index.css'
 import keyboardYiddish from '@/assets/keyboardLayouts/keyboardYiddish'
 import keyboardMobile from '@/assets/keyboardLayouts/keyboardMobile'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { storeToRefs } from 'pinia'
 
-const { attachTo } = defineProps(['attachTo']) // The id of the HTML element it's attached to
-const simpleKeyboard: Ref = defineModel<SimpleKeyboardType>('simpleKeyboard')
+const show = ref(false)
+const reference = defineModel('reference')
+const attachTo = defineModel<string>('attachTo', { default: '' })
+const preferences = usePreferencesStore()
+
+const { isMobile, isPortrait, isTablet, isDesktop } = storeToRefs(preferences)
+
+const emit = defineEmits(['onEnter'])
 
 let keyboard: SimpleKeyboard
 
-watch(
-  simpleKeyboard,
-  (newV) => {
-    const iname = newV.attachTo
-    keyboard.setOptions({ iname })
-
-    // Add eventListeners if keyboard opened, else remove eventListeners
-    const el = document.getElementById(iname)
-    if (newV.show) {
-      positionKeyboard() // Position keyboard relative to element
-      addEventListeners()
-      document.getElementById(newV.attachTo)?.focus()
-      el?.classList.add('keyboard-is-open')
-    } else {
-      removeEventListeners()
-      el?.classList.remove('keyboard-is-open')
-    }
-  },
-  { deep: true }
-)
-
 const positionKeyboard = () => {
-  const parent = document.getElementById(simpleKeyboard.value.attachTo)?.getBoundingClientRect()
+  const parent = document.getElementById(attachTo.value)?.getBoundingClientRect()
   if (parent) {
     const { top, left, width, height } = parent as DOMRect
-    const container = document.getElementsByClassName('keyboardClass')[0] as HTMLDivElement
-    container.setAttribute('style', `top:${top + height}px;left:${left}px;width:${width - 2}px`)
+    const container = document.getElementById(`${attachTo.value}-keyboard`) as HTMLDivElement
+    if ((isTablet.value && isMobile.value) || isPortrait.value) {
+      container.setAttribute('style', `top:${top + height}px`)
+    } else {
+      container.setAttribute(
+        'style',
+        `top:${top + height}px;left:${left}px;width:${width - 2}px;position:fixed`
+      )
+    }
   }
 }
 
-const toggleKeyboard = () => (simpleKeyboard.value.show = !simpleKeyboard.value.show)
+const toggleKeyboard = () => (show.value = !show.value)
 
 const switchLayout = (button: string) => {
   const layouts = ['default', 'numbers', 'shift', 'alt', 'chars']
@@ -58,14 +64,14 @@ const switchLayout = (button: string) => {
   const isValidLayout =
     layouts.filter((layout) => targetLayout.toLowerCase().includes(layout)).length !== 0
   if (!isValidLayout) return false
-  const defaultKeyboard = currentLayout?.includes('mobile') ? 'keyboardMobile' : 'default'
+  const defaultKeyboard = currentLayout?.includes('mobile') ? currentLayout : 'default'
   const layout = currentLayout === targetLayout ? defaultKeyboard : targetLayout
   keyboard.setOptions({ layoutName: layout })
   return true
 }
 
 const onKeyPress = (button: string) => {
-  const el = document.getElementById(simpleKeyboard.value.attachTo) as HTMLInputElement // input element
+  const el = document.getElementById(attachTo.value) as HTMLInputElement // input element
 
   if (!switchLayout(button)) {
     let newVal = ''
@@ -73,17 +79,18 @@ const onKeyPress = (button: string) => {
       newVal = el.value.slice(0, -1)
     } else if (button === '{enter}') {
       newVal = el.value
-      simpleKeyboard.value.show = false
+      show.value = !show.value
+      emit('onEnter')
     } else if (button === '{space}') {
       newVal = `${el.value} `
     } else {
       newVal = `${el.value}${button}`
     }
-    simpleKeyboard.value.ref.value = newVal
+    reference.value = newVal
   }
 }
 
-const onKeyReleased = () => document.getElementById(simpleKeyboard.value.attachTo)?.focus()
+const onKeyReleased = () => document.getElementById(attachTo.value)?.focus()
 
 const addEventListeners = () => {
   document.addEventListener('click', closeOutside, true)
@@ -96,37 +103,49 @@ const removeEventListeners = () => {
 }
 
 const closeOutside = (e: MouseEvent) => {
-  const keyboardClass = document.querySelector('.keyboardClass')
-  const keyboardButton = document.getElementById(simpleKeyboard.value.attachTo)?.parentElement
-    ?.nextElementSibling
+  const keyboardElement = document.getElementById(`${attachTo.value}-keyboard`)
+  const keyboardButton = document.getElementById(`${attachTo.value}-keyboard-btn`)
   if (
     e.target instanceof Element &&
     !keyboardButton?.contains(e.target) &&
-    !keyboardClass?.contains(e.target)
+    !keyboardElement?.contains(e.target) &&
+    show.value
   ) {
-    toggleKeyboard()
+    show.value = false
     document.removeEventListener('click', closeOutside, true)
   }
 }
 
 const closeOnEscape = (e: KeyboardEvent) => {
-  e.key === 'Escape' ? toggleKeyboard() : null
+  if (e.key === 'Escape' && show.value) show.value = false
   document.removeEventListener('keydown', closeOnEscape, true)
 }
 
-onMounted(() => {
-  keyboard = new Keyboard('keyboardClass', {
-    layoutName: 'default',
-    inputName: attachTo,
-    onKeyPress: onKeyPress,
-    onKeyReleased: onKeyReleased,
-    ...keyboardYiddish,
-    rtl: true,
-    autoUseTouchEvents: true
-  })
+watch(show, (newV) => {
+  if (newV) {
+    addEventListeners()
+    positionKeyboard()
+  } else {
+    removeEventListeners()
+  }
 })
 
-onUpdated(() => {
-  document.getElementById(simpleKeyboard.value.attachTo)?.focus()
+window.addEventListener('resize', () => positionKeyboard())
+
+watch([isMobile, isTablet, isPortrait, isDesktop], () => positionKeyboard())
+
+onMounted(() => {
+  const keyboardLayout = isMobile || isPortrait || isTablet ? keyboardMobile : keyboardYiddish
+  const keyboardLayoutName = isMobile || isPortrait || isTablet ? 'mobileDefault' : 'default'
+  keyboard = new Keyboard(`${attachTo.value}-keyboard-container`, {
+    layoutName: keyboardLayoutName,
+    inputName: 'default',
+    onKeyPress: onKeyPress,
+    onKeyReleased: onKeyReleased,
+    ...keyboardLayout,
+    autoUseTouchEvents: true
+  })
+  addEventListeners()
+  positionKeyboard()
 })
 </script>

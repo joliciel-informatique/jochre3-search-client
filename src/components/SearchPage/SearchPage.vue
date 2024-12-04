@@ -1,129 +1,184 @@
 <template>
-  <div class="searchBar p-1">
-    <SearchBar
-      @newSearch="newSearch"
-      @resetSearchResults="resetSearchResults"
-      v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-      v-model:has-advanced-search-criteria="hasAdvancedSearchCriteria"
-      v-model:query="query"
-      v-model:strict="strict"
-      v-model:is-loading="isLoading"
-      v-model:simpleKeyboard="simpleKeyboard"
-    />
-    <AdvancedSearch
-      @newSearch="newSearch"
-      @resetSearchResults="resetSearchResults"
-      v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-      v-model:author-list="authorList"
-      v-model:title="title"
-      v-model:to-year="toYear"
-      v-model:from-year="fromYear"
-      v-model:doc-refs="docRefs"
-      v-model:sort-by="sortBy"
-      v-model:facets="facets"
-      v-model:exclude-from-search="excludeFromSearch"
-      v-model:simpleKeyboard="simpleKeyboard"
-    />
-    <FooterNavigation
-      @newPage="newPage()"
-      @resetSearchResults="resetSearchResults()"
-      v-model:totalHits="totalHits"
-      v-model:page="page"
-    />
-  </div>
-  <div
-    class="container is-fluid is-flex-direction-column is-align-items-center has-text-centered p-5"
+  <header
+    id="topbar"
+    class="is-flex is-flex-direction-column-reverse"
+    :class="{
+      'rtl-align': !preferences.displayLeftToRight
+    }"
   >
-    <!-- Not loading with query and results -->
-    <div v-if="(query.length || hasAdvancedSearchCriteria) && searchResults?.length">
-      <div class="columns">
-        <div class="column is-3">
-          <ContentsTable
-            v-model:search-results="searchResults"
-            v-model:page="page"
-            v-model:image-modal="imageModal"
-            v-model:metadata-modal="metadataModal"
-            v-model:notification="notification"
-            v-model:word-modal="wordModal"
-            v-model:selected-entry="firstSearchResult"
-            v-model:total-hits="totalHits"
-          />
-        </div>
-        <div class="column mr-6 ml-6" tabindex="-1">
-          <!-- Not loading with results -->
-          <div v-if="!isLoading">
-            <ul>
-              <li v-for="(result, bookIndex) of searchResults" :key="sha1(result)">
-                <DisplaySnippets
-                  v-model:image-modal="imageModal"
-                  v-model:notification="notification"
-                  v-model:word-modal="wordModal"
-                  v-model:selected-entry="firstSearchResult"
-                  v-model:search-results="searchResults"
-                  :snippets="result.snippets"
-                  :doc-ref="result.docRef"
-                  :url="result.metadata.url"
-                  :bookIndex
-                />
-              </li>
-            </ul>
-          </div>
-
-          <!-- Loading results -->
-          <div v-else>
-            <h1>{{ $t('loading') }}</h1>
-          </div>
-        </div>
-        <div class="column is-2">
-          <FacetBar
+    <nav class="is-flex is-flex-direction-column navbar" id="navbar" role="navigation">
+      <div class="navbar-brand is-flex is-flex-direction-row is-justify-content-space-between">
+        <div class="navbar-item is-flex is-flex-direction-row is-flex-grow-5 is-flex-shrink-1">
+          <SearchBar
             @newSearch="newSearch"
             @resetSearchResults="resetSearchResults"
-            v-model:facets="facets"
+            v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+            v-model:has-advanced-search-criteria="hasAdvancedSearchCriteria"
+            v-model:query="query"
+            v-model:strict="strict"
+            v-model:is-loading="isLoading"
           />
         </div>
+        <UserOptions
+          v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+          v-model:open-nav-bar-mobile-menu="openNavBarMobileMenu"
+        />
+        <div
+          class="navbar-burger is-flex is-flex-grow-1 has-text-white is-hidden-desktop"
+          :class="openNavBarMobileMenu ? 'is-active' : ''"
+          role="button"
+          aria-label="menu"
+          aria-expanded="false"
+          @click="openNavBarMobileMenu = !openNavBarMobileMenu"
+        >
+          <div>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+      <AdvancedSearch
+        @newSearch="newSearch"
+        @resetSearchResults="resetSearchResults"
+        v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+        v-model:author-list="authorList"
+        v-model:title="title"
+        v-model:to-year="toYear"
+        v-model:from-year="fromYear"
+        v-model:doc-refs="docRefs"
+        v-model:sort-by="sortBy"
+        v-model:facets="facets"
+        v-model:exclude-from-search="excludeFromSearch"
+      />
+      <div class="is-hidden-touch">
+        <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" v-model:page="page" />
+      </div>
+      <div class="is-hidden-desktop">
+        <ContentsTable
+          v-model:search-results="searchResults"
+          v-model:page="page"
+          v-model:image-modal="imageModal"
+          v-model:metadata-modal="metadataModal"
+          v-model:notification="notification"
+          v-model:word-modal="wordModal"
+          v-model:selected-entry-idx="selectedEntryIdx"
+          v-model:total-hits="totalHits"
+          v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
+          v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
+          v-model:open-mobile-facets="openMobileFacets"
+          v-model:facets="facets"
+          @new-page="newPage"
+          @reset-search-results="resetSearchResults"
+          @new-search="newSearch"
+        />
+      </div>
+    </nav>
+    <HeaderPage />
+  </header>
+  <main :class="preferences.displayLeftToRight ? '' : 'rtl-align'">
+    <!-- Contents table on desktop -->
+    <div
+      v-if="hasSearch && searchResults?.length"
+      class="is-flex is-flex-direction-row is-justify-content-space-between"
+    >
+      <div class="is-hidden-touch">
+        <ContentsTable
+          v-model:search-results="searchResults"
+          v-model:page="page"
+          v-model:image-modal="imageModal"
+          v-model:metadata-modal="metadataModal"
+          v-model:notification="notification"
+          v-model:word-modal="wordModal"
+          v-model:selected-entry-idx="selectedEntryIdx"
+          v-model:total-hits="totalHits"
+          v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
+          v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
+          v-model:open-mobile-facets="openMobileFacets"
+          v-model:facets="facets"
+          @new-page="newPage"
+          @reset-search-results="resetSearchResults"
+          @new-search="newSearch"
+        />
+      </div>
+      <!-- Not loading, has query and results -->
+      <DisplaySnippets
+        v-model:image-modal="imageModal"
+        v-model:notification="notification"
+        v-model:word-modal="wordModal"
+        v-model:selected-entry-idx="selectedEntryIdx"
+        v-model:search-results="searchResults"
+        v-model:is-loading="isLoading"
+        v-model:query="query"
+        v-model:strict="strict"
+      />
+      <div class="is-hidden-touch">
+        <FacetBar
+          @newSearch="newSearch"
+          v-model:facets="facets"
+          v-model:open-mobile-facets="openMobileFacets"
+        />
       </div>
     </div>
-
-    <!-- Loading with query but no results -->
     <div
-      v-else-if="isLoading && (query.length || hasAdvancedSearchCriteria) && !searchResults?.length"
+      v-else-if="isLoading && hasSearch && !searchResults?.length"
+      class="is-flex is-flex-direction-column has-text-centered pt-5"
     >
-      <h1>{{ $t('loading') }}</h1>
+      <!-- Loading with query, but no results -->
+      <h1>{{ $t('results.loading') }}</h1>
     </div>
 
-    <!-- Not loading with query and no results -->
+    <!-- Not loading, with query, but no results -->
     <div
-      v-else-if="
-        (query.length || hasAdvancedSearchCriteria) && !isLoading && !searchResults?.length
-      "
+      v-else-if="query.length && !isLoading && !searchResults?.length"
+      class="m-5 has-text-centered"
     >
-      <h1>
+      <h1
+        class="column is-flex is-flex-direction-column is-justify-content-center is-align-items-center"
+      >
         <span class="no-results"> {{ $t('results.none') }}! </span>
-        <div class="is-justify-content-center is-align-items-center no-results-image m-6">
-          <font-awesome-icon class="fa-10x" icon="ban" />
+        <div class="is-flex is-justify-content-center is-align-items-center no-results-image m-6">
+          <font-awesome-icon icon="ban" size="2xl" />
         </div>
       </h1>
     </div>
 
-    <div v-else>
-      <IndexSize v-model:is-loading="isLoading" v-model:notification="notification" />
-    </div>
-  </div>
+    <!-- Not loading, no search, no results -->
+    <IndexSize
+      v-else
+      v-model:is-loading="isLoading"
+      v-model:notification="notification"
+      v-model:total-hits="totalHits"
+    />
+  </main>
+  <footer
+    id="footer"
+    v-show="!searchResults?.length"
+    class="footer has-text-white mt-auto pt-5 p-2"
+    :class="{
+      'rtl-align': !preferences.displayLeftToRight
+    }"
+  >
+    <FooterPage v-model:total-hits="totalHits" />
+  </footer>
 </template>
 <script setup lang="ts">
 import { onMounted, ref, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchData } from '../../assets/fetchMethods'
-import { sha1 } from 'object-hash'
 
 // Import Child components
 import SearchBar from './SearchBar/SearchBar.vue'
 import AdvancedSearch from './SearchBar/AdvancedSearch/AdvancedSearch.vue'
 import ContentsTable from './SearchResults/ContentsTable/ContentsTable.vue'
 import DisplaySnippets from './SearchResults/DisplaySnippets/DisplaySnippets.vue'
-import FooterNavigation from '../FooterPage/FooterNavigation/FooterNavigation.vue'
+import PageNumbering from './SearchBar/Navigation/PageNumbering/PageNumbering.vue'
 import FacetBar from './SearchResults/FacetBar/FacetBar.vue'
 import IndexSize from './SearchResults/IndexSize/IndexSize.vue'
+import HeaderPage from '../HeaderPage/HeaderPage.vue'
+import UserOptions from './UserOptions/UserOptions.vue'
+import FooterPage from '../FooterPage/FooterPage.vue'
 
 // Import interfaces
 import { type SearchResult, type AggregationBin } from '../../assets/interfacesExternals'
@@ -135,16 +190,20 @@ import { usePreferencesStore } from '../../stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
 
-import { storeToRefs } from 'pinia'
-import { faBan } from '@fortawesome/free-solid-svg-icons'
+const { initializeMedia } = preferences
 
-const { resultsPerPage, authorFacetCount, snippetsPerResult } = storeToRefs(preferences)
+const { show } = storeToRefs(preferences)
+
+import { storeToRefs } from 'pinia'
+
+const { authorFacetCount } = storeToRefs(preferences)
 
 const query = ref('')
-const firstSearchResult = ref<SearchResult>()
-const searchResults = defineModel<Array<SearchResult>>('searchResults')
-const totalHits: Ref = defineModel('totalHits')
-const page: Ref = defineModel('page')
+// const selectedEntry = ref<SearchResult>()
+const selectedEntryIdx = ref(0)
+const searchResults = ref<Array<SearchResult>>([])
+const totalHits = ref()
+const page = ref(1)
 const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
@@ -162,8 +221,7 @@ const fromYear = ref()
 const toYear = ref()
 const docRefs = ref('')
 const sortBy = ref('Score')
-
-const simpleKeyboard: Ref = defineModel('simpleKeyboard')
+const resultsPerPage = ref(10)
 
 // Startup variables: may move to App.vue or HomeView.vue
 const router = useRouter()
@@ -171,9 +229,54 @@ const route = useRoute()
 
 const hasAdvancedSearchCriteria = ref(false)
 const showAdvancedSearchPanel = ref(false)
+const openMobileSearchResultsToc = ref(false)
+const openMobileMetadataPanel = ref(false)
+const openMobileFacets = ref(false)
+const openNavBarMobileMenu = ref(false)
+
 const facets = ref<Array<AggregationBin>>([])
 
 onMounted(() => {
+  window.addEventListener('click', (e: MouseEvent | TouchEvent) => {
+    if (openNavBarMobileMenu.value) {
+      const navbarMobile = document.getElementById('navbar-mobile')
+      const navbarMobileBtn = document.getElementsByClassName('navbar-burger')[0]
+      if (
+        e.target instanceof Element &&
+        !navbarMobile?.contains(e.target) &&
+        !navbarMobileBtn?.contains(e.target)
+      )
+        openNavBarMobileMenu.value = false
+    }
+  })
+
+  window.addEventListener('click', (e: MouseEvent | TouchEvent) => {
+    const navbarMobileMenu = document.getElementById('navbar-mobile')
+    const navbarAdvancedSearchBtn = document.getElementById('advancedSearchBtn')
+    if (showAdvancedSearchPanel.value) {
+      const advancedSearchPanel = document.getElementById('advancedSearchPanel')
+      const dropdownList = document.getElementById('advanced-search-authors-author-dropdown-list')
+      const dropdownContent = document.getElementById('advanced-search-authors-author-tags')
+      const dropdownItems = Array.from(document.querySelectorAll('.filterTag'))
+      if (
+        e.target instanceof Element &&
+        !navbarAdvancedSearchBtn?.contains(e.target) &&
+        !navbarMobileMenu?.contains(e.target) &&
+        !advancedSearchPanel?.contains(e.target) &&
+        !dropdownList?.contains(e.target) &&
+        !dropdownContent?.contains(e.target) &&
+        dropdownItems.every((tag: Element) =>
+          document.getElementById((tag as HTMLElement).id)?.contains(e.target as Element)
+        )
+      ) {
+        console.log('clicking not inside areas', e.target)
+        showAdvancedSearchPanel.value = false
+      }
+    }
+  })
+
+  initializeMedia()
+
   router.isReady().then(() => {
     if (route.query['query']) query.value = (route.query['query'] as string).trim()
     if (route.query['strict']) strict.value = route.query['strict'] === 'true'
@@ -191,39 +294,15 @@ onMounted(() => {
         return { label: authorName, count: 10, active: false }
       })
 
-    const stylesheet = document.createElement('link')
-    stylesheet.type = 'text/css'
-    stylesheet.rel = 'stylesheet'
-    document.head.appendChild(stylesheet)
-
-    stylesheet.href = '/css/keyboard.css'
-
-    const plugin = document.createElement('script')
-    plugin.type = 'module'
-
-    document.head.appendChild(plugin)
-
-    plugin.src = '/js/keyboard.js'
-    plugin.async = true
-
-    newSearch()
+    runSearch()
   })
 })
 
-const newPage = () => {
-  runSearch()
-}
-
-const newSearch = () => {
-  page.value = 1
-  runSearch()
-}
+const newPage = () => runSearch()
+const newSearch = () => (page.value = 1) && runSearch()
 
 const runSearch = () => {
-  hasAdvancedSearchCriteria.value = false
-  search().then((res) => {
-    isLoading.value = res ? true : false
-  })
+  search()
 }
 
 const defineSearchParams = () => {
@@ -240,15 +319,20 @@ const defineSearchParams = () => {
 
 const params = ref(defineSearchParams())
 
-const resetSearchResults = () => {
-  query.value = ''
-  isLoading.value = false
-  hasSearch.value = false
+const clearSearchResults = () => {
   facets.value = []
   searchResults.value = []
   totalHits.value = 0
 
   page.value = 1
+}
+
+const resetSearchResults = () => {
+  clearSearchResults()
+  query.value = ''
+  isLoading.value = false
+  hasSearch.value = false
+
   title.value = ''
   fromYear.value = null
   toYear.value = null
@@ -259,18 +343,83 @@ const resetSearchResults = () => {
   hasAdvancedSearchCriteria.value = false
   showAdvancedSearchPanel.value = false
 
-  simpleKeyboard.value.show = false
-
   window.history.replaceState({}, document.title, '/')
 }
+
+watch(searchResults, (newV) => {
+  const header = document.getElementById('header')
+  if (newV?.length) {
+    header?.setAttribute('style', 'display:none')
+  } else {
+    header?.setAttribute('style', 'display:flex')
+  }
+})
 
 watch(excludeFromSearch, () => (authorInclude.value = !excludeFromSearch.value))
 watch(resultsPerPage, () => search())
 watch(authorFacetCount, () => searchFacets())
-watch(snippetsPerResult, () => search())
+
+// Close all other panels on Mobile
+watch(showAdvancedSearchPanel, (newV) => {
+  if (newV) {
+    openMobileSearchResultsToc.value = false
+    openMobileMetadataPanel.value = false
+    openMobileFacets.value = false
+    openNavBarMobileMenu.value = false
+    preferences.show = false
+  }
+})
+
+watch(openMobileSearchResultsToc, (newV) => {
+  if (newV) {
+    showAdvancedSearchPanel.value = false
+    openMobileMetadataPanel.value = false
+    openMobileFacets.value = false
+    openNavBarMobileMenu.value = false
+    preferences.show = false
+  }
+})
+watch(openMobileMetadataPanel, (newV) => {
+  if (newV) {
+    showAdvancedSearchPanel.value = false
+    openMobileSearchResultsToc.value = false
+    openMobileFacets.value = false
+    openNavBarMobileMenu.value = false
+    preferences.show = false
+  }
+})
+watch(openNavBarMobileMenu, (newV) => {
+  if (newV) {
+    showAdvancedSearchPanel.value = false
+    openMobileSearchResultsToc.value = false
+    openMobileMetadataPanel.value = false
+    openMobileFacets.value = false
+    preferences.show = false
+  }
+})
+
+watch(show, (newV) => {
+  if (newV) {
+    showAdvancedSearchPanel.value = false
+    openMobileSearchResultsToc.value = false
+    openMobileMetadataPanel.value = false
+    openMobileFacets.value = false
+    openNavBarMobileMenu.value = false
+  }
+})
+
+watch(openMobileFacets, (newV) => {
+  if (newV) {
+    showAdvancedSearchPanel.value = false
+    openMobileSearchResultsToc.value = false
+    openMobileMetadataPanel.value = false
+    openNavBarMobileMenu.value = false
+    preferences.show = false
+  }
+})
 
 const searchFacets = async () => {
-  const facetParams = new URLSearchParams({ ...Object.fromEntries(params.value) })
+  const facetParams = new URLSearchParams(params.value.toString())
   facetParams.append('field', 'Author')
   if (preferences.authorFacetCount > 0)
     facetParams.append('maxBins', preferences.authorFacetCount.toString())
@@ -321,6 +470,7 @@ const search = async () => {
   showAdvancedSearchPanel.value = false
 
   if (!hasSearch.value) {
+    isLoading.value = false
     return
   }
 
@@ -331,15 +481,13 @@ const search = async () => {
   if (docRefs.value)
     docRefs.value.split(/\W+/).forEach((docRef) => searchParams.append('doc-refs', docRef))
 
-  // const facetParams = new URLSearchParams({ ...Object.fromEntries(params) })
-
   searchParams.append(
     'first',
     page.value ? ((page.value - 1) * resultsPerPage.value).toString() : '10'
   )
   searchParams.append('max', resultsPerPage.value.toString())
   searchParams.append('sort', sortBy.value.trim())
-  searchParams.append('max-snippets', snippetsPerResult.value.toString())
+  searchParams.append('max-snippets', '10')
   searchParams.append('row-padding', '2')
   searchParams.append('physical-newlines', 'false')
 
@@ -363,48 +511,77 @@ const search = async () => {
   params.value = searchParams
 
   return fetchData('search', 'get', searchParams)
-    .then((response) =>
-      response.json().then(({ results, totalCount }) => {
-        hasSearch.value = true
-        isLoading.value = false
-        searchResults.value = results
-        firstSearchResult.value = results[0]
-        totalHits.value = totalCount
-        if (!hasActiveFacets) {
-          searchFacets()
-            .then((results) => {
-              q?.parentElement?.classList.remove('is-loading')
-              q?.removeAttribute('disabled')
-              return false
-            })
-            .catch((error) => {
-              notification.value = {
-                show: true,
-                error: true,
-                delay: 4000,
-                msg: `Error: ${error}`
-              }
-            })
-        } else {
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json().then(({ results, totalCount }) => {
+          console.log(`Found ${totalCount} results`)
+
+          q?.parentElement?.classList.remove('is-loading')
+          q?.removeAttribute('disabled')
+          isLoading.value = false
+
+          if (results && results.length) {
+            console.log(`Setting ${totalCount} results`)
+            searchResults.value = results
+            selectedEntryIdx.value = 0
+            // selectedEntry.value = results[selectedEntryIdx.value]
+            totalHits.value = totalCount
+
+            if (!hasActiveFacets) {
+              searchFacets()
+                .then((results) => {
+                  q?.parentElement?.classList.remove('is-loading')
+                  q?.removeAttribute('disabled')
+                  isLoading.value = false
+                  return false
+                })
+                .catch((error) => {
+                  console.error(`Error fetching facets: ${error}`)
+                  notification.value = {
+                    show: true,
+                    error: true,
+                    delay: 4000,
+                    msg: `Error: ${error}`
+                  }
+                })
+            }
+          } else {
+            console.log(`No results found, clearing`)
+            clearSearchResults()
+          }
+          return true
+        })
+      } else {
+        return response.json().then((json) => {
+          const error = 'message' in json ? json['message'] : 'An unexpected error occurred'
+          console.error(`Response status ${response.status}: ${error}`)
+          clearSearchResults()
+          notification.value = {
+            show: true,
+            error: true,
+            delay: 4000,
+            msg: `Error: ${error}`
+          }
           q?.parentElement?.classList.remove('is-loading')
           q?.removeAttribute('disabled')
           isLoading.value = false
           return false
-        }
-      })
-    )
+        })
+      }
+    })
     .catch((error) => {
-      console.log(error)
+      console.error(`Error running search: ${error}`)
+      clearSearchResults()
       notification.value = {
         show: true,
         error: true,
         delay: 4000,
         msg: `Error: ${error}`
       }
-      isLoading.value = false
-      hasSearch.value = true
       q?.parentElement?.classList.remove('is-loading')
       q?.removeAttribute('disabled')
+      isLoading.value = false
+      return false
     })
 }
 

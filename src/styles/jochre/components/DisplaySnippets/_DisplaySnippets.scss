@@ -1,5 +1,42 @@
 @use '../../../custom/Custom' as *;
 
+.snippets-on {
+  position: relative;
+  // // left: 0.5vw;
+  // &.desktop {
+  //   // width: 50vw;
+  // }
+  // &.mobile {
+  //   // width: 96vw;
+  // }
+}
+
+.bla {
+  justify-items: center;
+  position: relative;
+  top: 2vh;
+  min-height: 76vh;
+  max-height: 76vh;
+  &.on-desktop {
+    width: 52vw;
+    // ul {
+    //   overflow-y: scroll;
+    //   scrollbar-width: thin;
+    // }
+  }
+  &.on-mobile {
+    width: 100vw;
+  }
+  > ul {
+    scrollbar-width: thin;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    // height: 75vh;
+    // left: 2vw;
+    // right: 2vw;
+  }
+}
+
 .card.metadata {
   top: 0;
   position: sticky;
@@ -23,6 +60,20 @@
     background-color: $white;
     .card-header-title {
       color: $background-color-5;
+    }
+
+    &:hover {
+      background-color: $background-color-2-transparency-50;
+      color: $white;
+      transition: all 230ms ease-in-out;
+      > .card-header-icon > span {
+        color: $white;
+        transition: all 230ms ease-in-out;
+      }
+      .card-header-title {
+        color: $white;
+        transition: all 230ms ease-in-out;
+      }
     }
 
     > .card-header-icon > span {
