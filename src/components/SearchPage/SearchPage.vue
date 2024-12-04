@@ -261,7 +261,7 @@ onMounted(() => {
         !dropdownList?.contains(e.target) &&
         !dropdownContent?.contains(e.target) &&
         dropdownItems.every((tag: Element) =>
-          document.getElementById((tag as HTMLElement).id)?.contains(e.target)
+          document.getElementById((tag as HTMLElement).id)?.contains(e.target as Element)
         )
       ) {
         console.log('clicking not inside areas', e.target)
