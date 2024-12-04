@@ -72,6 +72,7 @@ Description: the advanced search toolbox
           </span>
           <author-dropdown
             attach-to="advanced-search-authors"
+            :allowMultiple="true"
             v-model:author-text="authorText"
             v-model:author-list="authorList"
           />

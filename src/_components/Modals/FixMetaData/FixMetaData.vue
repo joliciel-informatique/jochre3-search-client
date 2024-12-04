@@ -80,12 +80,12 @@
               />
             </span>
           </span>
-          <author-dropdown
-            :attach-to="`new-author-${metadataModal.field}`"
-            v-model:author-text="authorText"
-            v-model:author-list="authorList"
-          />
         </span>
+        <author-dropdown
+          :attach-to="`new-author-${metadataModal.field}`"
+          v-model:author-text="authorText"
+          v-model:author-list="authorList"
+        />
       </div>
     </template>
     <template #footer="modalBox">
@@ -115,10 +115,6 @@ const authorText = ref('')
 const fieldLeftToRight = computed(() =>
   ['authorEnglish', 'titleEnglish', 'publisher'].includes(metadataModal.value.field)
 )
-
-watch(metadataModal, (newV) => {
-  console.log(newV.field)
-})
 
 const save = (closeFunc: Function) => {
   const authorListValue = authorList.value[0]?.label
