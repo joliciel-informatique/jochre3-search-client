@@ -132,7 +132,7 @@
     <!-- Not loading, with query, but no results -->
     <div
       v-else-if="query.length && !isLoading && !searchResults?.length"
-      class="mt-5 has-text-centered"
+      class="m-5 has-text-centered"
     >
       <h1
         class="column is-flex is-flex-direction-column is-justify-content-center is-align-items-center"
