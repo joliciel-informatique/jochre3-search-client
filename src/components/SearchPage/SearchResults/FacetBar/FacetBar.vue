@@ -22,13 +22,22 @@ Description: presents the facet bar
         <p
           class="menu-label is-size-5 label is-flex is-flex-direction-column is-align-items-center"
         >
-          <span
-            class="is-flex is-flex-direction-row is-align-items-center"
-            :class="preferences.displayLeftToRight ? 'rtl-align' : 'ltr-align'"
-            >{{ $t('facets.title', [authorFacetCount]) }}
+          <span class="is-flex is-flex-direction-row is-align-items-center">
             <span
               class="pl-1 is-size-6"
-              v-show="preferences.isDesktop && !preferences.isPortrait"
+              v-show="
+                !preferences.displayLeftToRight && preferences.isDesktop && !preferences.isPortrait
+              "
+              v-tooltip:bottom="$t('facets.what-are-facets')"
+            >
+              <font-awesome-icon icon="question-circle" />
+            </span>
+            {{ $t('facets.title', [authorFacetCount]) }}
+            <span
+              class="pl-1 is-size-6"
+              v-show="
+                preferences.displayLeftToRight && preferences.isDesktop && !preferences.isPortrait
+              "
               v-tooltip:bottom="$t('facets.what-are-facets')"
             >
               <font-awesome-icon icon="question-circle" /> </span
