@@ -118,7 +118,8 @@
     "prev-match": "<<",
     "next-match": ">>",
     "prev-match-tooltip": "Previous page with matching highlights",
-    "next-match-tooltip": "Next page with matching highlights"
+    "next-match-tooltip": "Next page with matching highlights",
+    "book-not-found": "Uh-oh! We could not find a record for document reference '{0}'!"
   },
   "modal": {
     "cancel": "Cancel",

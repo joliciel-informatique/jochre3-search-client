@@ -114,7 +114,8 @@
     "prev-match": "<<",
     "next-match": ">>",
     "prev-match-tooltip": "פֿריערדיקע זײַטל מיט געשטימטע הױכפּונקטן",
-    "next-match-tooltip": "קומעדיקע זײַטל מיט געשטימטע הױכפּונקטן"
+    "next-match-tooltip": "קומעדיקע זײַטל מיט געשטימטע הױכפּונקטן",
+    "book-not-found": "YI__Uh-oh! We could not find a record for document reference '{0}'!"
   },
   "modal": {
     "cancel": "אַנולירן",
