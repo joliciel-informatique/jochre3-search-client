@@ -16,7 +16,6 @@ import yi from './i18n/locales/yi.json'
 import keycloakParams from './security/keycloak.json'
 import { mergeDeep } from './assets/deepMerge'
 
-import SearchPage from './components/SearchPage/SearchPage.vue'
 import { fetchData, setURL, setToken } from './assets/fetchMethods'
 
 import './styles/main.scss'
@@ -45,12 +44,6 @@ const app = createApp(App)
 app.config.compilerOptions.whitespace = 'preserve'
 
 directives(app)
-
-// Good place for authentication logic: see https://router.vuejs.org/guide/advanced/navigation-guards.html
-// router.beforeEach((to, from, next) => {
-//   if (!authenticated) next('/login')
-//   else next()
-// })
 
 app.use(router)
 app.use(pinia)
