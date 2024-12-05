@@ -50,7 +50,6 @@ app.use(pinia)
 app.use<Vue3TouchEventsOptions>(Vue3TouchEvents, {})
 app.use(CookieConsentVue, cookieConsentConfig)
 
-// app.component('SearchPage', SearchPage)
 app.component('author-dropdown', AuthorDropdown)
 app.component('simple-key', SimpleKeyboard)
 app.component('font-awesome-icon', FontAwesomeIcon)
