@@ -28,6 +28,15 @@
       "date-descending": "יאָר ↓"
     }
   },
+  "notification": {
+    "error": {
+      "UnparsableQuery": "YI__Your query doesn't seem quite right. Please check your search query",
+      "generic": "YI__Something went wrong. Contact us if the error persists!"
+    },
+    "success": {
+      "generic": "YI__Success!"
+    }
+  },
   "toc": {
     "contents-table-header": "זוך־רעזולטאַטן",
     "contents-table-subheader": "ביכער {1}-{2} פֿון {0} סך־הכּל"

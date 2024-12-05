@@ -32,6 +32,16 @@
       "date-descending": "year ↓"
     }
   },
+  "notification": {
+    "error": {
+      "UnparsableQuery": "Your query doesn't seem quite right. Please check your search query",
+      "404": "That didn't work, the server returned a 404 status code!",
+      "generic": "Something went wrong. Contact us if the error persists!"
+    },
+    "success": {
+      "generic": "Success!"
+    }
+  },
   "toc": {
     "contents-table-header": "Search results",
     "contents-table-subheader": "Found {0} books, showing {1}-{2}"
