@@ -140,8 +140,7 @@ const bookStore = useBookStore()
 const { updateText } = bookStore
 
 const { isMobile, isTablet } = storeToRefs(preferences)
-const { book, docRef, page, query, strict, isLoading } = storeToRefs(bookStore)
-const { pagesWithHighlights } = bookStore
+const { book, docRef, page, query, strict, isLoading, pagesWithHighlights } = storeToRefs(bookStore)
 
 const router = useRouter()
 const route = useRoute()
@@ -178,7 +177,7 @@ onMounted(async () => {
       : 1
     currentPage.value = pageNumber.value
 
-    currentHighlightIdx.value = pagesWithHighlights.indexOf(pageNumber.value)
+    currentHighlightIdx.value = pagesWithHighlights.value.indexOf(pageNumber.value)
   })
 
   document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
@@ -193,13 +192,13 @@ onUpdated(() => {
 // If current page is updated
 watch(currentPage, (newV) => {
   // Set first highlight of new page as active
-  const highLightIdx = pagesWithHighlights.indexOf(newV)
+  const highLightIdx = pagesWithHighlights.value.indexOf(newV)
   if (highLightIdx !== -1) {
     currentHighlightIdx.value = highLightIdx
   } else {
     // Set nearest highlight active if no highlights on the page
     let idx = getClosestPageIndexWithHighlights(newV)
-    const highLightIdx = pagesWithHighlights.indexOf(idx)
+    const highLightIdx = pagesWithHighlights.value.indexOf(idx)
     currentHighlightIdx.value = highLightIdx
   }
   scrollTo(newV)
@@ -209,16 +208,16 @@ watch(currentPage, (newV) => {
 watch(currentHighlightIdx, (newV) => highlight(newV))
 
 const getClosestPageIndexWithHighlights = (idx: number) =>
-  Array.from(new Set(pagesWithHighlights.map((p: number) => p))).reduce(
+  Array.from(new Set(pagesWithHighlights.value.map((p: number) => p))).reduce(
     (prev, curr) => (Math.abs(curr - idx) < Math.abs(prev - idx) ? curr : prev),
     0
   )
 
 const highlight = (highLightIndex: number, scroll: boolean = true) => {
-  const highLightIdx = pagesWithHighlights[highLightIndex]
+  const highLightIdx = pagesWithHighlights.value[highLightIndex]
   if (highLightIdx !== -1) {
     const doc = document.getElementById(`${highLightIdx}`)
-    const highlightIndices = pagesWithHighlights.reduce(
+    const highlightIndices = pagesWithHighlights.value.reduce(
       (acc: Array<number>, curr: number, index: number) => {
         if (curr === highLightIdx) acc.push(index)
         return acc
