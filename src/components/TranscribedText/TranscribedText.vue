@@ -44,7 +44,7 @@
             />
           </p>
           <p class="control">
-            <button class="button is-small" @click="scrollToPreviousHighlight()">
+              @click="currentHighlightIdx--"
               <font-awesome-icon
                 icon="chevron-up"
                 :class="{ 'fa-flip-horizontal': !preferences.displayLeftToRight }"
@@ -52,7 +52,7 @@
             </button>
           </p>
           <p class="control">
-            <button class="button is-small" @click="scrollToNextHighlight()">
+              @click="currentHighlightIdx++"
               <font-awesome-icon
                 icon="chevron-down"
                 :class="{ 'fa-flip-horizontal': !preferences.displayLeftToRight }"
@@ -145,6 +145,8 @@ const lastPage = computed(
   () => book.value?.pages.map((page) => page.physicalPageNumber)[book.value?.pages.length - 1]
 )
 
+const currentHighlightIdx = ref(0)
+
 onMounted(async () => {
   router.isReady().then(async () => {
     isLoading.value = true
@@ -166,6 +168,8 @@ onMounted(async () => {
       ? parseInt(route.params.page as string)
       : 1
     currentPage.value = pageNumber.value
+
+    currentHighlightIdx.value = pagesWithHighlights.indexOf(pageNumber.value)
   })
 
   document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
@@ -176,6 +180,36 @@ onUpdated(() => {
   getPagesInView()
   document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
 })
+
+// If buttons are pressed
+watch(currentHighlightIdx, (newV) => highlight(newV))
+
+
+const highlight = (highLightIndex: number, scroll: boolean = true) => {
+  const highLightIdx = pagesWithHighlights[highLightIndex]
+  if (highLightIdx !== -1) {
+    const doc = document.getElementById(`${highLightIdx}`)
+    const highlightIndices = pagesWithHighlights.reduce(
+      (acc: Array<number>, curr: number, index: number) => {
+        if (curr === highLightIdx) acc.push(index)
+        return acc
+      },
+      []
+    )
+
+    if (doc) {
+      const highlights = doc.querySelectorAll('.highlight')
+      highlights.forEach((highlight, key) => {
+        highlight.classList.remove('active')
+        if (key === highlightIndices.indexOf(highLightIndex)) {
+          highlight.classList.add('active')
+          if (scroll) highlight.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+      })
+    }
+  }
+}
+
 
 const scrollTo = (page: number) =>
   document.getElementById(page.toString())?.scrollIntoView({ behavior: 'smooth' })
