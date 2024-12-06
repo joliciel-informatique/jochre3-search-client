@@ -155,7 +155,9 @@ onMounted(async () => {
   router.isReady().then(async () => {
     isLoading.value = true
     query.value =
-      hasOwn(route.query, 'query') && route.query.query === 'string' ? route.query.query.trim() : ''
+      hasOwn(route.query, 'query') && typeof route.query.query === 'string'
+        ? route.query.query.trim()
+        : ''
     strict.value = hasOwn(route.query, 'strict') && route.query.strict ? true : false
     docRef.value =
       hasOwn(route.params, 'docRef') && typeof route.params.docRef === 'string'
