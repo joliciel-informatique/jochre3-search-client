@@ -117,7 +117,7 @@
 </template>
 <script setup lang="ts">
 import { onUpdated, watch } from 'vue'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, type Ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useBookStore } from '@/stores/BookStore'
@@ -125,6 +125,9 @@ import { isInViewOfDiv } from '@/assets/functions'
 import { sha1 } from 'object-hash'
 import { storeToRefs } from 'pinia'
 import { hasOwn } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
+
+const i18n = useI18n()
 
 const preferences = usePreferencesStore()
 const bookStore = useBookStore()
@@ -132,6 +135,7 @@ const { updateText } = bookStore
 
 const { isMobile, isTablet } = storeToRefs(preferences)
 const { book, docRef, page, pagesWithHighlights, query, strict, isLoading } = storeToRefs(bookStore)
+const notification: Ref = defineModel('notification')
 
 const router = useRouter()
 const route = useRoute()
@@ -183,22 +187,42 @@ onUpdated(() => {
   document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
 })
 
-const scrollTo = (page: number) =>
+const scrollTo = (page: number) => {
   document.getElementById(page.toString())?.scrollIntoView({ behavior: 'smooth' })
+}
 
 const scrollToPreviousHighlight = () => {
   getPagesInView()
+
   const prevHighlight = pagesWithHighlights.value
     .slice()
     .reverse()
     .find((num) => num < pageRangeInView.value)
 
-  if (prevHighlight) currentPage.value = prevHighlight
+  if (prevHighlight) {
+    scrollTo(prevHighlight)
+  } else {
+    notification.value = {
+      show: true,
+      error: true,
+      delay: 4000,
+      msg: i18n.t('transcribed-text.no-more-highlights')
+    }
+  }
 }
 
 const scrollToNextHighlight = () => {
   getPagesInView()
   const nextHighlight = pagesWithHighlights.value.find((num) => num > pageRangeInView.value)
-  if (nextHighlight) currentPage.value = nextHighlight
+  if (nextHighlight) {
+    scrollTo(nextHighlight)
+  } else {
+    notification.value = {
+      show: true,
+      error: true,
+      delay: 4000,
+      msg: i18n.t('transcribed-text.no-more-highlights')
+    }
+  }
 }
 </script>

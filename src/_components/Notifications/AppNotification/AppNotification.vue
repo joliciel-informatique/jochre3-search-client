@@ -12,8 +12,8 @@
           :class="notification.error ? 'has-background-danger' : 'has-background-success'"
         >
           <p class="card-header-title has-text-white">
-            <span v-if="notification.error">Uh-oh!</span>
-            <span v-else class="is-info">Success</span>
+            <span v-if="notification.error">{{ $t('notification.error-title') }} </span>
+            <span v-else class="is-info">{{ $t('notification.success.title') }} </span>
           </p>
           <button
             class="card-header-icon"
