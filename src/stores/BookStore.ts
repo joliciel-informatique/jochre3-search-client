@@ -1,19 +1,18 @@
-import type { HighlightedDocument } from '@/assets/interfacesExternals'
+import { type HighlightedDocument } from '@/assets/interfacesExternals'
 import { defineStore } from 'pinia'
-import { ref, type Ref } from 'vue'
+import { ref } from 'vue'
 import { fetchData } from '@/assets/fetchMethods'
 import { mostFrequentUsingMap } from '@/assets/functions'
 
 export const useBookStore = defineStore('bookStore', () => {
-  const bookData = ref<boolean | HighlightedDocument>(false)
   const docRef = ref('')
   const query = ref()
   const page = ref('1')
-  const book = ref()
+  const book = ref<HighlightedDocument>()
   const strict = ref(false)
   const firstIndexedPage = ref()
   const isLoading = ref(true)
-  const pagesWithHighlights: Ref<number[]> = ref([])
+  const pagesWithHighlights = ref<Array<number>>([]) // index = highlight, value = pagenumber
 
   const defineSearchParams = () => {
     return Object.assign(
@@ -31,8 +30,8 @@ export const useBookStore = defineStore('bookStore', () => {
     const res = await fetchData('highlighted-text', 'get', params).catch((err) => console.log(err))
 
     if (res && res.ok) {
-      bookData.value = await res.json()
-      const highlightedBook = bookData.value as HighlightedDocument
+      book.value = await res.json()
+      const highlightedBook = book.value as HighlightedDocument
       if (highlightedBook.pages.length) {
         // Find the lowest physical page number
         firstIndexedPage.value = Math.min(
@@ -49,18 +48,17 @@ export const useBookStore = defineStore('bookStore', () => {
             (page) => (page.logicalPageNumber = page.physicalPageNumber - offset)
           )
         }
-
         pagesWithHighlights.value = []
         highlightedBook.pages.forEach((page) => {
           if (page.highlights && page.highlights.length > 0) {
-            pagesWithHighlights.value.push(page.physicalPageNumber)
+            page.highlights.forEach(() => pagesWithHighlights.value.push(page.physicalPageNumber))
           }
         })
       }
 
       book.value = highlightedBook
     } else {
-      book.value = false
+      book.value = undefined
     }
   }
 
