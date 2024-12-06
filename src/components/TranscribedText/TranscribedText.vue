@@ -44,7 +44,11 @@
             />
           </p>
           <p class="control">
+            <button
+              class="button is-small"
               @click="currentHighlightIdx--"
+              :disabled="currentHighlightIdx === 0"
+            >
               <font-awesome-icon
                 icon="chevron-up"
                 :class="{ 'fa-flip-horizontal': !preferences.displayLeftToRight }"
@@ -52,7 +56,11 @@
             </button>
           </p>
           <p class="control">
+            <button
+              class="button is-small"
               @click="currentHighlightIdx++"
+              :disabled="currentHighlightIdx === pagesWithHighlights.length - 1"
+            >
               <font-awesome-icon
                 icon="chevron-down"
                 :class="{ 'fa-flip-horizontal': !preferences.displayLeftToRight }"
@@ -79,7 +87,7 @@
           :key="sha1(!page)"
           class="doc-text is-inline-flex is-flex-direction-column is-align-content-center is-flex-wrap-wrap mb-2"
         >
-          <div class="box page" :id="page.physicalPageNumber">
+          <div class="box page" :id="`${page.physicalPageNumber}`">
             <span class="physical-page-number has-text-left has-text-weight-semibold">
               {{ page.physicalPageNumber }}
               <hr />
@@ -117,7 +125,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onUpdated, watch } from 'vue'
+import { computed, onUpdated, watch } from 'vue'
 import { onMounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
@@ -132,7 +140,8 @@ const bookStore = useBookStore()
 const { updateText } = bookStore
 
 const { isMobile, isTablet } = storeToRefs(preferences)
-const { book, docRef, page, pagesWithHighlights, query, strict, isLoading } = storeToRefs(bookStore)
+const { book, docRef, page, query, strict, isLoading } = storeToRefs(bookStore)
+const { pagesWithHighlights } = bookStore
 
 const router = useRouter()
 const route = useRoute()
@@ -181,9 +190,29 @@ onUpdated(() => {
   document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
 })
 
+// If current page is updated
+watch(currentPage, (newV) => {
+  // Set first highlight of new page as active
+  const highLightIdx = pagesWithHighlights.indexOf(newV)
+  if (highLightIdx !== -1) {
+    currentHighlightIdx.value = highLightIdx
+  } else {
+    // Set nearest highlight active if no highlights on the page
+    let idx = getClosestPageIndexWithHighlights(newV)
+    const highLightIdx = pagesWithHighlights.indexOf(idx)
+    currentHighlightIdx.value = highLightIdx
+  }
+  scrollTo(newV)
+})
+
 // If buttons are pressed
 watch(currentHighlightIdx, (newV) => highlight(newV))
 
+const getClosestPageIndexWithHighlights = (idx: number) =>
+  Array.from(new Set(pagesWithHighlights.map((p: number) => p))).reduce(
+    (prev, curr) => (Math.abs(curr - idx) < Math.abs(prev - idx) ? curr : prev),
+    0
+  )
 
 const highlight = (highLightIndex: number, scroll: boolean = true) => {
   const highLightIdx = pagesWithHighlights[highLightIndex]
@@ -210,23 +239,14 @@ const highlight = (highLightIndex: number, scroll: boolean = true) => {
   }
 }
 
+const getPagesInView = () => {
+  const pagesInView = Array.from(document.querySelectorAll('.box.page'))
+    .map((page) => (isInViewOfDiv(page) ? parseInt(page.getAttribute('id')!) : null))
+    .filter((x) => x)
+
+  if (pagesInView.length) pageRangeInView.value = `${pagesInView[0]}`
+}
 
 const scrollTo = (page: number) =>
   document.getElementById(page.toString())?.scrollIntoView({ behavior: 'smooth' })
-
-const scrollToPreviousHighlight = () => {
-  getPagesInView()
-  const prevHighlight = pagesWithHighlights.value
-    .slice()
-    .reverse()
-    .find((num) => num < pageRangeInView.value)
-
-  if (prevHighlight) currentPage.value = prevHighlight
-}
-
-const scrollToNextHighlight = () => {
-  getPagesInView()
-  const nextHighlight = pagesWithHighlights.value.find((num) => num > pageRangeInView.value)
-  if (nextHighlight) currentPage.value = nextHighlight
-}
 </script>
