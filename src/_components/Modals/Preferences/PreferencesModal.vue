@@ -53,7 +53,7 @@
       </div>
     </template>
     <template #footer>
-      <button class="button is-link" @click="save($i18n as VueI18n.VueI18n)">
+      <button class="button is-link" @click="save()">
         {{ $t('modal.save') }}
       </button>
     </template>
@@ -65,7 +65,9 @@ import { storeToRefs } from 'pinia'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { ref } from 'vue'
-import VueI18n from 'vue-i18n'
+import { useI18n } from 'vue-i18n'
+
+const i18n = useI18n()
 
 const notification = defineModel('notification')
 const preferences = usePreferencesStore()
@@ -73,10 +75,10 @@ const languageToSet = ref<string>(preferences.language)
 
 const { displayPerBook, language } = storeToRefs(preferences)
 
-const save = (i18n: VueI18n.VueI18n) => {
+const save = () => {
   if (languageToSet.value != language.value) {
     language.value = languageToSet.value
-    i18n.locale = language.value
+    i18n.locale.value = language.value
   }
   preferences.save()
   preferences.show = false
