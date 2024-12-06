@@ -40,6 +40,7 @@
               :max="book.pages.length"
               v-model.lazy="currentPage"
               @change="scrollTo(currentPage)"
+              @keyup.enter="scrollTo(currentPage)"
             />
           </p>
           <p class="control">
