@@ -16,7 +16,6 @@ import yi from './i18n/locales/yi.json'
 import keycloakParams from './security/keycloak.json'
 import { mergeDeep } from './assets/deepMerge'
 
-import SearchPage from './components/SearchPage/SearchPage.vue'
 import { fetchData, setURL, setToken } from './assets/fetchMethods'
 
 import './styles/main.scss'
@@ -46,18 +45,11 @@ app.config.compilerOptions.whitespace = 'preserve'
 
 directives(app)
 
-// Good place for authentication logic: see https://router.vuejs.org/guide/advanced/navigation-guards.html
-// router.beforeEach((to, from, next) => {
-//   if (!authenticated) next('/login')
-//   else next()
-// })
-
 app.use(router)
 app.use(pinia)
 app.use<Vue3TouchEventsOptions>(Vue3TouchEvents, {})
 app.use(CookieConsentVue, cookieConsentConfig)
 
-// app.component('SearchPage', SearchPage)
 app.component('author-dropdown', AuthorDropdown)
 app.component('simple-key', SimpleKeyboard)
 app.component('font-awesome-icon', FontAwesomeIcon)

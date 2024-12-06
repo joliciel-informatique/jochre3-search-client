@@ -36,7 +36,7 @@
             <input
               class="input is-small p-2 is-size-6 has-text-centered"
               type="number"
-              :min="firstIndexedPage"
+              :min="bookStore.firstIndexedPage"
               :max="book.pages.length"
               v-model.lazy="currentPage"
               @change="scrollTo(currentPage)"
@@ -94,6 +94,16 @@
       </div>
     </div>
   </div>
+  <div v-else-if="!book && !isLoading" class="m-5 has-text-centered">
+    <h1
+      class="column is-flex is-flex-direction-column is-justify-content-center is-align-items-center"
+    >
+      <span class="no-results"> {{ $t('transcribed-text.book-not-found', [docRef]) }} </span>
+      <div class="is-flex is-justify-content-center is-align-items-center no-results-image m-6">
+        <font-awesome-icon icon="ban" size="2xl" />
+      </div>
+    </h1>
+  </div>
   <div v-else class="is-flex is-flex-direction-column has-text-centered p-5">
     <!-- Generating a book view -->
     <span class="m-5"
@@ -107,37 +117,31 @@
 </template>
 <script setup lang="ts">
 import { onUpdated, watch } from 'vue'
-import { onMounted, ref, type Ref } from 'vue'
-import { onBeforeRouteUpdate, useRouter, useRoute } from 'vue-router'
-import { fetchData } from '@/assets/fetchMethods'
+import { onMounted, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import { isInViewOfDiv, mostFrequentUsingMap } from '@/assets/functions'
+import { useBookStore } from '@/stores/BookStore'
+import { isInViewOfDiv } from '@/assets/functions'
 import { sha1 } from 'object-hash'
 import { storeToRefs } from 'pinia'
-import type { HighlightedDocument } from '@/assets/interfacesExternals'
+import { hasOwn } from '@vueuse/core'
 
 const preferences = usePreferencesStore()
-const firstIndexedPage = ref()
+const bookStore = useBookStore()
+const { updateText } = bookStore
 
 const { isMobile, isTablet } = storeToRefs(preferences)
+const { book, docRef, page, pagesWithHighlights, query, strict, isLoading } = storeToRefs(bookStore)
 
 const router = useRouter()
 const route = useRoute()
 
-const docRef = ref('')
+// Variables required for navigation with component
 const pageNumber = ref()
-const book = ref()
-
 const currentPage = ref()
-const query = ref()
-const strict = ref(false)
 const pageRangeInView = ref()
-const isLoading = ref(true)
-const pagesWithHighlights: Ref<number[]> = ref([])
 
-watch(currentPage, (newV) => {
-  scrollTo(newV)
-})
+watch(currentPage, (newV) => scrollTo(newV))
 
 const getPagesInView = () => {
   const pagesInView = Array.from(document.querySelectorAll('.box.page'))
@@ -147,73 +151,37 @@ const getPagesInView = () => {
   if (pagesInView.length) pageRangeInView.value = `${pagesInView[0]}`
 }
 
-onMounted(() => {
-  docRef.value = route.params.docRef as string
-  pageNumber.value = /^[+-]?\d+(\.\d+)?$/.test(route.params.page.toString())
-    ? parseInt(route.params.page as string)
-    : 1
-  currentPage.value = pageNumber.value
+onMounted(async () => {
+  router.isReady().then(async () => {
+    isLoading.value = true
+    query.value =
+      hasOwn(route.query, 'query') && typeof route.query.query === 'string'
+        ? route.query.query.trim()
+        : ''
+    strict.value = hasOwn(route.query, 'strict') && route.query.strict ? true : false
+    docRef.value =
+      hasOwn(route.params, 'docRef') && typeof route.params.docRef === 'string'
+        ? route.params.docRef
+        : ''
 
-  router.isReady().then(() => {
-    if (route.query['query']) query.value = (route.query['query'] as string).trim()
-    if (route.query['strict']) strict.value = route.query['strict'] === 'true'
-    updateText()
-    document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
+    await updateText()
+
+    isLoading.value = false
+
+    pageNumber.value = /^[+-]?\d+(\.\d+)?$/.test(route.params.page.toString())
+      ? parseInt(route.params.page as string)
+      : 1
+    currentPage.value = pageNumber.value
   })
+
+  document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
+  document.getElementById(page.value)?.scrollIntoView()
 })
 
 onUpdated(() => {
   getPagesInView()
   document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
 })
-
-const defineSearchParams = () => {
-  return Object.assign(
-    {},
-    query.value?.length ? { query: query.value.trim() } : null,
-    strict.value.toString() !== null ? { strict: strict.value.toString() } : null
-  )
-}
-
-const updateText = () => {
-  const params = new URLSearchParams(defineSearchParams())
-  params.append('doc-ref', docRef.value)
-  params.append('text-as-html', 'true')
-
-  fetchData('highlighted-text', 'get', params)
-    .then((res) => res.json())
-    .then((bookData) => {
-      const highlightedBook = bookData as HighlightedDocument
-      if (highlightedBook.pages.length) {
-        // Find the lowest physical page number
-        firstIndexedPage.value = Math.min(
-          ...highlightedBook.pages.map((page) => page.physicalPageNumber)
-        )
-
-        // A hacky way to fix incorrect logical page numbers based on most common difference between assigned logical and physical numbers
-        const overallOffset = highlightedBook.pages.map(
-          (p) => p.physicalPageNumber - (p.logicalPageNumber ?? 0)
-        )
-        const offset = mostFrequentUsingMap(overallOffset)
-        if (offset) {
-          highlightedBook.pages.forEach(
-            (page) => (page.logicalPageNumber = page.physicalPageNumber - offset)
-          )
-        }
-
-        pagesWithHighlights.value = []
-        highlightedBook.pages.forEach((page) => {
-          if (page.highlights && page.highlights.length > 0) {
-            pagesWithHighlights.value.push(page.physicalPageNumber)
-          }
-        })
-      }
-
-      book.value = highlightedBook
-    })
-    .then(() => document.getElementById(`${route.params.page}`)?.scrollIntoView())
-  isLoading.value = false
-}
 
 const scrollTo = (page: number) =>
   document.getElementById(page.toString())?.scrollIntoView({ behavior: 'smooth' })
@@ -233,7 +201,4 @@ const scrollToNextHighlight = () => {
   const nextHighlight = pagesWithHighlights.value.find((num) => num > pageRangeInView.value)
   if (nextHighlight) currentPage.value = nextHighlight
 }
-
-// When URL is changed manually?
-onBeforeRouteUpdate(async () => updateText())
 </script>
