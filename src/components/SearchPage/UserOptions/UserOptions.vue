@@ -95,15 +95,8 @@
       </a>
     </div>
   </div>
-  <!-- <div class="navbar-item button is-hidden-desktop">
-      <a @click.prevent="toggleLanguage($i18n as VueI18n.VueI18n)">
-        <span v-if="preferences.language === 'yi'">YI</span>
-        <span v-if="preferences.language === 'en'">EN</span>
-      </a>
-    </div> -->
 </template>
 <script setup lang="ts">
-import VueI18n from 'vue-i18n'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
@@ -117,9 +110,4 @@ const openNavBarMobileMenu = defineModel('openNavBarMobileMenu')
 const signout = () => keycloak?.logout()
 
 const signin = () => keycloak?.login()
-
-const toggleLanguage = (vi18n: VueI18n.VueI18n) => {
-  preferences.language = preferences.language === 'yi' ? 'en' : 'yi'
-  vi18n.locale = preferences.language
-}
 </script>

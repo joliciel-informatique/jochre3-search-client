@@ -1,11 +1,5 @@
 <template>
-  <header
-    id="topbar"
-    class="is-flex is-flex-direction-column-reverse"
-    :class="{
-      'rtl-align': !preferences.displayLeftToRight
-    }"
-  >
+  <header id="topbar" class="is-flex is-flex-direction-column-reverse">
     <nav class="is-flex is-flex-direction-column navbar" id="navbar" role="navigation">
       <div class="navbar-brand is-flex is-flex-direction-row is-justify-content-space-between">
         <div class="navbar-item is-flex is-flex-direction-row is-flex-grow-5 is-flex-shrink-1">
@@ -77,7 +71,7 @@
     </nav>
     <HeaderPage />
   </header>
-  <main :class="preferences.displayLeftToRight ? '' : 'rtl-align'">
+  <main>
     <!-- Contents table on desktop -->
     <div
       v-if="hasSearch && searchResults?.length"

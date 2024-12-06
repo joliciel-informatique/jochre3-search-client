@@ -4,8 +4,7 @@
       class="modal"
       role="dialog"
       :class="{
-        'is-active': data.show,
-        'rtl-align': !preferences.displayLeftToRight
+        'is-active': data.show
       }"
       v-show="data.show"
     >
