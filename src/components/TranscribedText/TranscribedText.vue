@@ -26,7 +26,7 @@
         "
       >
         <span class="is-size-6 p-2">
-          {{ $t('navigation.currently-viewing-pages', [pageRangeInView, book.pages.length]) }}
+          {{ $t('navigation.currently-viewing-pages', [pageRangeInView, lastPage]) }}
         </span>
         <div class="pb-0 mb-0 field has-addons">
           <p class="control">
@@ -140,16 +140,9 @@ const route = useRoute()
 const pageNumber = ref()
 const currentPage = ref()
 const pageRangeInView = ref()
-
-watch(currentPage, (newV) => scrollTo(newV))
-
-const getPagesInView = () => {
-  const pagesInView = Array.from(document.querySelectorAll('.box.page'))
-    .map((page) => (isInViewOfDiv(page) ? parseInt(page.getAttribute('id')!) : null))
-    .filter((x) => x)
-
-  if (pagesInView.length) pageRangeInView.value = `${pagesInView[0]}`
-}
+const lastPage = computed(
+  () => book.value?.pages.map((page) => page.physicalPageNumber)[book.value?.pages.length - 1]
+)
 
 onMounted(async () => {
   router.isReady().then(async () => {
