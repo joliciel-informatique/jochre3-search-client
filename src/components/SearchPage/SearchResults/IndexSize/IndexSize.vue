@@ -24,15 +24,10 @@ Description: presents the current indexed number of books
 <script setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue'
 import { fetchData } from '@/assets/fetchMethods'
-// import { usePreferencesStore } from '@/stores/PreferencesStore'
-// import FooterPage from '@/components/FooterPage/FooterPage.vue'
-// const preferences = usePreferencesStore()
-
-const isLoading: Ref = defineModel('isLoading')
-const notification: Ref = defineModel('notification')
-// const totalHits = defineModel('totalHits')
 
 const indexSize = ref(0)
+const isLoading: Ref = defineModel('isLoading')
+const notification: Ref = defineModel('notification')
 
 onMounted(() => {
   fetchData('size', 'get', undefined, 'json')
