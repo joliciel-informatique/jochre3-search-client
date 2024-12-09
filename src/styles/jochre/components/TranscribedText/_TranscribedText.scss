@@ -80,6 +80,10 @@
         font-weight: bold;
         border: none;
         cursor: crosshair !important;
+
+        &.active {
+          outline: 2px black solid;
+        }
       }
     }
 

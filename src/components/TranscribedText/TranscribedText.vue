@@ -26,7 +26,7 @@
         "
       >
         <span class="is-size-6 p-2">
-          {{ $t('navigation.currently-viewing-pages', [pageRangeInView, book.pages.length]) }}
+          {{ $t('navigation.currently-viewing-pages', [pageRangeInView, lastPage]) }}
         </span>
         <div class="pb-0 mb-0 field has-addons">
           <p class="control">
@@ -40,22 +40,43 @@
               :max="book.pages.length"
               v-model.lazy="currentPage"
               @change="scrollTo(currentPage)"
+              @keyup.enter="scrollTo(currentPage)"
             />
           </p>
           <p class="control">
-            <button class="button is-small" @click="scrollToPreviousHighlight()">
-              <font-awesome-icon
-                icon="chevron-up"
-                :class="{ 'fa-flip-horizontal': !preferences.displayLeftToRight }"
-              />
+            <button
+              class="button is-small"
+              @click="currentHighlightIdx = 0"
+              :disabled="currentHighlightIdx === 0"
+            >
+              <font-awesome-icon icon="angles-up" />
             </button>
           </p>
           <p class="control">
-            <button class="button is-small" @click="scrollToNextHighlight()">
-              <font-awesome-icon
-                icon="chevron-down"
-                :class="{ 'fa-flip-horizontal': !preferences.displayLeftToRight }"
-              />
+            <button
+              class="button is-small"
+              @click="currentHighlightIdx--"
+              :disabled="currentHighlightIdx === 0"
+            >
+              <font-awesome-icon icon="chevron-up" />
+            </button>
+          </p>
+          <p class="control">
+            <button
+              class="button is-small"
+              @click="currentHighlightIdx++"
+              :disabled="currentHighlightIdx === pagesWithHighlights.length - 1"
+            >
+              <font-awesome-icon icon="chevron-down" />
+            </button>
+          </p>
+          <p class="control">
+            <button
+              class="button is-small"
+              @click="currentHighlightIdx = pagesWithHighlights.length - 1"
+              :disabled="currentHighlightIdx === pagesWithHighlights.length - 1"
+            >
+              <font-awesome-icon icon="angles-down" />
             </button>
           </p>
         </div>
@@ -78,7 +99,7 @@
           :key="sha1(!page)"
           class="doc-text is-inline-flex is-flex-direction-column is-align-content-center is-flex-wrap-wrap mb-2"
         >
-          <div class="box page" :id="page.physicalPageNumber">
+          <div class="box page" :id="`${page.physicalPageNumber}`">
             <span class="physical-page-number has-text-left has-text-weight-semibold">
               {{ page.physicalPageNumber }}
               <hr />
@@ -116,7 +137,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onUpdated, watch } from 'vue'
+import { computed, onUpdated, watch } from 'vue'
 import { onMounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
@@ -131,7 +152,7 @@ const bookStore = useBookStore()
 const { updateText } = bookStore
 
 const { isMobile, isTablet } = storeToRefs(preferences)
-const { book, docRef, page, pagesWithHighlights, query, strict, isLoading } = storeToRefs(bookStore)
+const { book, docRef, page, query, strict, isLoading, pagesWithHighlights } = storeToRefs(bookStore)
 
 const router = useRouter()
 const route = useRoute()
@@ -140,16 +161,11 @@ const route = useRoute()
 const pageNumber = ref()
 const currentPage = ref()
 const pageRangeInView = ref()
+const lastPage = computed(
+  () => book.value?.pages.map((page) => page.physicalPageNumber)[book.value?.pages.length - 1]
+)
 
-watch(currentPage, (newV) => scrollTo(newV))
-
-const getPagesInView = () => {
-  const pagesInView = Array.from(document.querySelectorAll('.box.page'))
-    .map((page) => (isInViewOfDiv(page) ? parseInt(page.getAttribute('id')!) : null))
-    .filter((x) => x)
-
-  if (pagesInView.length) pageRangeInView.value = `${pagesInView[0]}`
-}
+const currentHighlightIdx = ref(0)
 
 onMounted(async () => {
   router.isReady().then(async () => {
@@ -172,6 +188,29 @@ onMounted(async () => {
       ? parseInt(route.params.page as string)
       : 1
     currentPage.value = pageNumber.value
+
+    currentHighlightIdx.value = pagesWithHighlights.value.indexOf(pageNumber.value)
+
+    // Add ids to all highlights
+    const highlights = document.querySelectorAll('.highlight')
+    let i = 0
+    highlights.forEach((highlight, key) => {
+      highlight.id = `hi${i++}`
+    })
+
+    // If user clicks on a highlight, set the current highlight to the clicked element
+    for (let i = 0; i <= pagesWithHighlights.value.length; i++) {
+      const element = document.getElementById(`hi${i}`)
+      if (element) {
+        //console.log(`Adding event for element ${i} with classes ${element.classList}`)
+        element.onclick = () => {
+          console.log(`After click, setting current highlight to ${i}`)
+          currentHighlightIdx.value = i
+        }
+      }
+    }
+
+    document.getElementById(`hi${currentHighlightIdx.value}`)?.classList.add('active')
   })
 
   document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
@@ -183,22 +222,63 @@ onUpdated(() => {
   document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
 })
 
+// If current page is updated
+watch(currentPage, (newV) => {
+  // Set first highlight of new page as active
+  const highLightIdx = pagesWithHighlights.value.indexOf(newV)
+  if (highLightIdx !== -1) {
+    currentHighlightIdx.value = highLightIdx
+  } else {
+    // Set nearest highlight active if no highlights on the page
+    let idx = getClosestPageIndexWithHighlights(newV)
+    const highLightIdx = pagesWithHighlights.value.indexOf(idx)
+    currentHighlightIdx.value = highLightIdx
+  }
+  scrollTo(newV)
+})
+
+// If buttons are pressed
+watch(currentHighlightIdx, (newV) => highlight(newV))
+
+const getClosestPageIndexWithHighlights = (idx: number) =>
+  Array.from(new Set(pagesWithHighlights.value.map((p: number) => p))).reduce(
+    (prev, curr) => (Math.abs(curr - idx) < Math.abs(prev - idx) ? curr : prev),
+    0
+  )
+
+const highlight = (highLightIndex: number, scroll: boolean = true) => {
+  const highLightIdx = pagesWithHighlights.value[highLightIndex]
+  if (highLightIdx !== -1) {
+    const doc = document.getElementById(`${highLightIdx}`)
+    const highlightIndices = pagesWithHighlights.value.reduce(
+      (acc: Array<number>, curr: number, index: number) => {
+        if (curr === highLightIdx) acc.push(index)
+        return acc
+      },
+      []
+    )
+
+    if (doc) {
+      const highlights = doc.querySelectorAll('.highlight')
+      highlights.forEach((highlight, key) => {
+        highlight.classList.remove('active')
+        if (key === highlightIndices.indexOf(highLightIndex)) {
+          highlight.classList.add('active')
+          if (scroll) highlight.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+      })
+    }
+  }
+}
+
+const getPagesInView = () => {
+  const pagesInView = Array.from(document.querySelectorAll('.box.page'))
+    .map((page) => (isInViewOfDiv(page) ? parseInt(page.getAttribute('id')!) : null))
+    .filter((x) => x)
+
+  if (pagesInView.length) pageRangeInView.value = `${pagesInView[0]}`
+}
+
 const scrollTo = (page: number) =>
   document.getElementById(page.toString())?.scrollIntoView({ behavior: 'smooth' })
-
-const scrollToPreviousHighlight = () => {
-  getPagesInView()
-  const prevHighlight = pagesWithHighlights.value
-    .slice()
-    .reverse()
-    .find((num) => num < pageRangeInView.value)
-
-  if (prevHighlight) scrollTo(prevHighlight)
-}
-
-const scrollToNextHighlight = () => {
-  getPagesInView()
-  const nextHighlight = pagesWithHighlights.value.find((num) => num > pageRangeInView.value)
-  if (nextHighlight) scrollTo(nextHighlight)
-}
 </script>
