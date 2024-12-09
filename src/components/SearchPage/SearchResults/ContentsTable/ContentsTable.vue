@@ -103,12 +103,6 @@
     class="toc-drawer menu box p-2"
     v-show="openMobileSearchResultsToc"
   >
-    <!-- <p
-      class="menu-label is-size-5 label p-2 is-flex is-flex-direction-row is-justify-content-space-between"
-    >
-      {{ $t('toc.contents-table-header') }}
-      <font-awesome-icon icon="gear" @click="preferences.show = true" />
-    </p> -->
     <p class="menu-label label pt-4 has-text-centered">
       {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
     </p>
@@ -161,9 +155,8 @@ const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
 const notification: Ref = defineModel('notification')
-// const selectedEntry = defineModel<SearchResult>('selectedEntry')
 const selectedEntryIdx = defineModel<number>('selectedEntryIdx', { default: 0 })
-const totalHits: Ref = defineModel('totalHits')
+const totalHits = defineModel<number>('totalHits', { default: 0 })
 const facets: Ref = defineModel('facets')
 
 const openMobileSearchResultsToc = defineModel('openMobileSearchResultsToc')
