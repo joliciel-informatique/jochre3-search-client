@@ -13,13 +13,6 @@ Description: the advanced search toolbox
 -->
 <template>
   <div class="advancedSearch is-flex is-justify-content-center">
-    <!-- <Transition
-      name="advancedSearch"
-      @before-enter="beforeEnter"
-      @enter="enter"
-      @before-leave="beforeLeave"
-      @leave="leave"
-    > -->
     <div id="advancedSearchPanel" class="body m-3 p-3" v-show="showAdvancedSearchPanel">
       <div class="body-inner container is-max-desktop">
         <span class="columns is-vcentered mt-1 p-1">
@@ -195,7 +188,6 @@ Description: the advanced search toolbox
         </div>
       </div>
     </div>
-    <!-- </Transition> -->
   </div>
 </template>
 <script setup lang="ts">
@@ -231,10 +223,4 @@ onMounted(() => {
 const excludeAuthors = () => (excludeFromSearch.value = !excludeFromSearch.value)
 
 const runSearch = () => emit('newSearch')
-
-const beforeEnter = <Element,>(el: Element) => ((el as HTMLElement).style.height = '0')
-const enter = <Element,>(el: Element) => ((el as HTMLElement).style.height = '100%')
-const beforeLeave = <Element,>(el: Element) =>
-  ((el as HTMLElement).style.height = `${(el as HTMLElement).scrollHeight}px`)
-const leave = <Element,>(el: Element) => ((el as HTMLElement).style.height = '0')
 </script>
