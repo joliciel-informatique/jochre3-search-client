@@ -26,19 +26,10 @@
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-// import FooterDefault from './FooterDefault/FooterDefault.vue'
-import { usePreferencesStore } from '@/stores/PreferencesStore'
 
-const FooterDefault = defineAsyncComponent(() => import('./FooterDefault/FooterDefault.vue'))
-const FooterNavigation = defineAsyncComponent(
-  () => import('./FooterNavigation/FooterNavigation.vue')
-)
-
-const preferences = usePreferencesStore()
+// const FooterDefault = defineAsyncComponent(() => import('@/components/FooterPage/FooterDefault/FooterDefault.vue'))
 
 const showFooterNavigation = ref(false)
-// const totalHits = defineModel('totalHits')
-
 const footerLinks = ref()
 
 const footerInfo = (info: {}) => {
