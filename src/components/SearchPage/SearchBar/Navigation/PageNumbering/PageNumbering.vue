@@ -246,8 +246,8 @@ import { isBusy, hasSearch } from '@/assets/appState'
 
 const emit = defineEmits(['newPage'])
 const page: Ref = defineModel('page')
-const atTop = ref(true)
 const totalHits: Ref = defineModel('totalHits')
+const atTop = ref(true)
 const lastPage = computed(() => Math.floor((totalHits.value - 1) / preferences.resultsPerPage) + 1)
 
 watch(atTop, (newV) => {
