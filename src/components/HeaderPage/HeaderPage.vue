@@ -27,7 +27,7 @@
         {{ $t('header.beta') }}
       </div>
       <div class="link" v-for="link in headerLinks" :key="link">
-        <a class="link-subtle" :href="link.link" :target="link.target">
+        <a class="link-subtle is-underlined" :href="link.link" :target="link.target">
           {{ link.title }}
         </a>
       </div>
