@@ -163,16 +163,32 @@ import { useRouter, useRoute } from 'vue-router'
 import { fetchData } from '../../assets/fetchMethods'
 
 // Import Child components
-import SearchBar from './SearchBar/SearchBar.vue'
-import AdvancedSearch from './SearchBar/AdvancedSearch/AdvancedSearch.vue'
-import ContentsTable from './SearchResults/ContentsTable/ContentsTable.vue'
-import DisplaySnippets from './SearchResults/DisplaySnippets/DisplaySnippets.vue'
-import PageNumbering from './SearchBar/Navigation/PageNumbering/PageNumbering.vue'
-import FacetBar from './SearchResults/FacetBar/FacetBar.vue'
-import IndexSize from './SearchResults/IndexSize/IndexSize.vue'
-import HeaderPage from '../HeaderPage/HeaderPage.vue'
-import UserOptions from './UserOptions/UserOptions.vue'
-import FooterPage from '../FooterPage/FooterPage.vue'
+const SearchBar = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchBar/SearchBar.vue')
+)
+const AdvancedSearch = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchBar/AdvancedSearch/AdvancedSearch.vue')
+)
+const PageNumbering = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue')
+)
+const ContentsTable = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchResults/ContentsTable/ContentsTable.vue')
+)
+const DisplaySnippets = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchResults/DisplaySnippets/DisplaySnippets.vue')
+)
+const FacetBar = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue')
+)
+const IndexSize = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchResults/IndexSize/IndexSize.vue')
+)
+const HeaderPage = defineAsyncComponent(() => import('@/components/HeaderPage/HeaderPage.vue'))
+const FooterPage = defineAsyncComponent(() => import('@/components/FooterPage/FooterPage.vue'))
+const UserOptions = defineAsyncComponent(
+  () => import('@/components/SearchPage/UserOptions/UserOptions.vue')
+)
 
 // Import interfaces
 import { type SearchResult, type AggregationBin } from '../../assets/interfacesExternals'
