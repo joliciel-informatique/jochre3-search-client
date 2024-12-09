@@ -102,16 +102,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, type Ref, watch } from 'vue'
+import { ref, computed, type Ref, defineAsyncComponent } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
-import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
-const FindAuthors = defineAsyncComponent(() => import('@/_components/FindAuthors/FindAuthors.vue'))
 const ModalBox = defineAsyncComponent(() => import('@/_components/ModalBox/ModalBox.vue'))
 
 const preferences = usePreferencesStore()
-
 const metadataModal: Ref = defineModel('metadataModal')
 const notification = defineModel('notification')
 const showFindAuthorDropdown = computed(() => metadataModal.value.field?.includes('author'))
