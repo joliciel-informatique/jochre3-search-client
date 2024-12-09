@@ -8,7 +8,6 @@
     </div>
     <div class="column">
       <div class="columns has-text-centered is-align-content-center">
-        <!-- <div class="column" v-html="$t('footer.credits')"></div> -->
         {{ footerInfo($tm('footer.credits')) }}
         <div class="column" v-for="footerColumn in footerLinks" :key="footerColumn">
           <div v-for="col in footerColumn" :key="col">
@@ -19,15 +18,12 @@
     </div>
   </div>
   <div class="columns is-mobile has-text-right p-2">
-    <!-- <a class="button is-link">{{ $t('footer.credits-column-2') }}</a> -->
     <div class="column is-size-7-mobile" v-html="$t('footer.privacy')"></div>
     {{ privacyInfo($tm('footer.privacy')) }}
   </div>
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-
-// const FooterDefault = defineAsyncComponent(() => import('@/components/FooterPage/FooterDefault/FooterDefault.vue'))
 
 const showFooterNavigation = ref(false)
 const footerLinks = ref()
