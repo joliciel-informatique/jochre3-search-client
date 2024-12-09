@@ -138,14 +138,20 @@
   </aside>
 </template>
 <script setup lang="ts">
-import { usePreferencesStore } from '@/stores/PreferencesStore'
-import { computed, nextTick, ref, watch, type Ref } from 'vue'
-
-import SingleResult from '../ContentsTable/SingleResult/SingleResult.vue'
-import type { SearchResult } from '@/assets/interfacesExternals'
-import PageNumbering from '../../SearchBar/Navigation/PageNumbering/PageNumbering.vue'
-import FacetBar from '../FacetBar/FacetBar.vue'
+import { computed, defineAsyncComponent, nextTick, ref, watch, type Ref } from 'vue'
 import { useTemplateRefsList } from '@vueuse/core'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+import type { SearchResult } from '@/assets/interfacesExternals'
+
+const SingleResult = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResult.vue')
+)
+const PageNumbering = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue')
+)
+const FacetBar = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue')
+)
 
 const preferences = usePreferencesStore()
 
