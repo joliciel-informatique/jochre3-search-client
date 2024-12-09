@@ -350,16 +350,11 @@ const AccordionCard = defineAsyncComponent(
   () => import('@/_components/AccordionCard/AccordionCard.vue')
 )
 
+const emit = defineEmits(['newSearch'])
 const preferences = usePreferencesStore()
+
 const defaultFacetCount = [5, 10, 15, 20]
-
-const toggle = () => (showing.value = !showing.value)
-
 const showing = ref(true)
-
-const facets: Ref = defineModel<AggregationBin[]>('facets')
-const openMobileFacets = defineModel('openMobileFacets')
-
 const authorFacetCount = ref(preferences.authorFacetCount)
 const facetSortBy = ref(preferences.facetSortBy)
 const facetCount = ref(defaultFacetCount)
@@ -372,8 +367,10 @@ const dropdownTriggerValue = computed(() => {
   if (facetSortBy.value === 'active') return t('facets.active-facets')
   return t('facets.most-hits')
 })
+const facets: Ref = defineModel<AggregationBin[]>('facets')
+const openMobileFacets = defineModel('openMobileFacets')
 
-const emit = defineEmits(['newSearch'])
+const toggle = () => (showing.value = !showing.value)
 
 // Set user preferences from dropdown options
 const updateFacetCount = (val: number) => {
