@@ -193,12 +193,12 @@ const scrollToPreviousHighlight = () => {
     .reverse()
     .find((num) => num < pageRangeInView.value)
 
-  if (prevHighlight) currentPage.value = prevHighlight
+  if (prevHighlight) scrollTo(prevHighlight)
 }
 
 const scrollToNextHighlight = () => {
   getPagesInView()
   const nextHighlight = pagesWithHighlights.value.find((num) => num > pageRangeInView.value)
-  if (nextHighlight) currentPage.value = nextHighlight
+  if (nextHighlight) scrollTo(nextHighlight)
 }
 </script>
