@@ -1,0 +1,12 @@
+@use '../../../custom/Custom' as *;
+
+.header-beta-flyout {
+  bottom: -1rem;
+  right: 0;
+  font-size: 1rem;
+  color: $foreground-color-1;
+}
+
+// .header-footer-content {
+//   flex: 0 1 auto;
+// }

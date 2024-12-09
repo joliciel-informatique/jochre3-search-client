@@ -1,2 +1,6 @@
 /docker-compose
 /.git
+/public/conf/config.json
+/public/conf/config-remote.json
+/public/images/yiddishbookcenter-ocr.jpg
+/public/fonts

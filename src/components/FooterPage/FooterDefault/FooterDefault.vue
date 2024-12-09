@@ -1,23 +1,29 @@
 <template>
-  <div class="footer-partners columns m-1">
-    <div class="column has-text-centered is-align-content-center">
-      {{ $t('footer.powered-by') }}
-      <a href="https://github.com/urieli/jochre/" target="blank">
-        <img src="/images/jochreLogo.png" style="width: 150px; border: none" :alt="$t('Jochre')" />
-      </a>
-    </div>
-    <!-- <div class="column" v-html="$t('footer.credits')"></div> -->
-    {{ footerInfo($tm('footer.credits')) }}
-    <div class="column" v-for="footerColumn in footerLinks" :key="footerColumn">
-      <div v-for="col in footerColumn" :key="col">
-        <div class="m-2" v-html="prepareColumn(col)"></div>
+  <div class="has-text-white mt-auto is-relative">
+    <div class="footer-partners is-flex is-flex-direction-column is-flex-wrap-nowrap m-1">
+      <div class="column has-text-centered is-align-content-center">
+        {{ $t('footer.powered-by') }}
+        <a href="https://github.com/urieli/jochre/" target="blank">
+          <img
+            src="/images/jochreLogo.png"
+            style="width: 150px; border: none"
+            :alt="$t('Jochre')"
+          />
+        </a>
+      </div>
+      <!-- <div class="column" v-html="$t('footer.credits')"></div> -->
+      {{ footerInfo($tm('footer.credits')) }}
+      <div class="" v-for="footerColumn in footerLinks" :key="footerColumn">
+        <div v-for="col in footerColumn" :key="col">
+          <div class="m-2" v-html="prepareColumn(col)"></div>
+        </div>
+      </div>
+      <div class="has-text-right p-2 is-full">
+        <!-- <a class="button is-link">{{ $t('footer.credits-column-2') }}</a> -->
+        <div v-html="$t('footer.privacy')"></div>
+        {{ privacyInfo($tm('footer.privacy')) }}
       </div>
     </div>
-  </div>
-  {{ privacyInfo($tm('footer.privacy')) }}
-  <div class="column has-text-right p-2 is-full">
-    <!-- <a class="button is-link">{{ $t('footer.credits-column-2') }}</a> -->
-    <div v-html="$t('footer.privacy')"></div>
   </div>
 </template>
 <script setup lang="ts">

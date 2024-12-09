@@ -3,8 +3,6 @@ import App from './App.vue'
 import router from './router'
 import { createPinia, type Pinia } from 'pinia'
 import { createI18n, type I18n } from 'vue-i18n'
-import axios from 'axios'
-import { AxiosError } from 'axios'
 import Keycloak, { type KeycloakConfig, type KeycloakInitOptions } from 'keycloak-js'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
@@ -18,37 +16,43 @@ import yi from './i18n/locales/yi.json'
 import keycloakParams from './security/keycloak.json'
 import { mergeDeep } from './assets/deepMerge'
 
-import SearchPage from './components/SearchPage/SearchPage.vue'
 import { fetchData, setURL, setToken } from './assets/fetchMethods'
 
 import './styles/main.scss'
 import CookieConsentVue from './plugins/CookieConsentVue'
+import AuthorDropdown from './_components/AuthorDropdown/AuthorDropdown.vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+// Adding FontAwesomeIcon as global component
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import SimpleKeyboard from './_components/SimpleKeyboard/SimpleKeyboard.vue'
+library.add(fas) // Adding all FAS icons
 
 const messages = {
   en: en,
   yi: yi
 }
 
+// if (App && App.compilerOptions) App.compilerOptions.whitespace = 'preserve'
+
 const customizedMessages = {}
 
 const pinia: Pinia = createPinia()
 
 const app = createApp(App)
+app.config.compilerOptions.whitespace = 'preserve'
 
 directives(app)
-
-// Good place for authentication logic: see https://router.vuejs.org/guide/advanced/navigation-guards.html
-// router.beforeEach((to, from, next) => {
-//   if (!authenticated) next('/login')
-//   else next()
-// })
 
 app.use(router)
 app.use(pinia)
 app.use<Vue3TouchEventsOptions>(Vue3TouchEvents, {})
 app.use(CookieConsentVue, cookieConsentConfig)
 
-app.component('SearchPage', SearchPage)
+app.component('author-dropdown', AuthorDropdown)
+app.component('simple-key', SimpleKeyboard)
+app.component('font-awesome-icon', FontAwesomeIcon)
 
 console.log('Starting up')
 
@@ -75,7 +79,7 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
     const keycloakStore = useKeycloakStore()
     keycloakStore.keycloak = keycloak
 
-    const preferencesStore = usePreferencesStore()
+    const preferences = usePreferencesStore()
 
     const loginRequired: boolean = config['login-required'] ?? false
     console.warn(`Login required: ${loginRequired}`)
@@ -96,7 +100,7 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
 
         const i18n = createI18n({
           legacy: false,
-          locale: preferencesStore.language,
+          locale: preferences.language,
           fallbackLocale: 'en',
           messages: customizedMessages
         })
@@ -122,84 +126,27 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
             })
         }, 6000)
 
-        // After login, load the user preferences from the database
-        interface UserPreferences {
-          language: string
-          resultsPerPage: number
-          snippetsPerResult: number
-        }
+        setToken(keycloak.token)
 
-        // return fetchData('preferences/user', 'get')
-        // .then((response) => response.json()
-        // .then(({ data }) => {
-        //   preferencesStore.language = (data.language) ? data.language : null
-        //   preferencesStore.resultsPerPage = (data.resultsPerPage) ? data.resultsPerPage : null
-        //   preferencesStore.snippetsPerResult = (data.snippetsPerResult) ? data.snippetsPerResult : null
-        //   return createI18n({
-        //     legacy: false,
-        //     locale: preferencesStore.language,
-        //     fallbackLocale: 'en',
-        //     messages: customizedMessages
-        //   })
-        // }))
-        // .catch((error) => {
-        //   const msg = new Error(`Failed to get user preferences: ${error.message}`)
-        // })
-
-        const i18n = axios
-          .get<UserPreferences>(`${apiUrl}/preferences/user`, {
-            headers: {
-              accept: 'application/json',
-              Authorization: `Bearer ${keycloak?.token}`
-            }
-          })
-          .then((response) => {
-            const language = response.data.language
-            if (language) {
-              preferencesStore.language = language
-            }
-            const resultsPerPage = response.data.resultsPerPage
-            if (resultsPerPage) {
-              preferencesStore.resultsPerPage = resultsPerPage
-            }
-            const snippetsPerResult = response.data.snippetsPerResult
-            if (snippetsPerResult) {
-              preferencesStore.snippetsPerResult = snippetsPerResult
-            }
+        const i18n = preferences
+          .load()
+          .then((language) => {
             const i18n = createI18n({
               legacy: false,
-              locale: preferencesStore.language,
+              locale: language,
               fallbackLocale: 'en',
               messages: customizedMessages
             })
             return i18n
           })
-          .catch((reason: AxiosError) => {
-            if (reason.response?.status === 404) {
-              console.log('No preferences for user')
-              const i18n = createI18n({
-                legacy: false,
-                locale: preferencesStore.language,
-                fallbackLocale: 'en',
-                messages: customizedMessages
-              })
-              return i18n
-            } else {
-              const msg = new Error(`Failed to get user preferences: ${reason}`)
-              // setErrorMessage(msg)
-
-              // Don't mount the app
-              // console.error(reason.message)
-              // throw reason
-
-              const i18n = createI18n({
-                legacy: false,
-                locale: 'en',
-                fallbackLocale: 'en',
-                messages: customizedMessages
-              })
-              return i18n
-            }
+          .catch((error) => {
+            const i18n = createI18n({
+              legacy: false,
+              locale: preferences.language,
+              fallbackLocale: 'en',
+              messages: customizedMessages
+            })
+            return i18n
           })
         return i18n
       }
@@ -209,8 +156,12 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
       expireTimes: '30d'
     })
 
-    myI18n.then((i18nResolved) => {
-      app.use(i18nResolved)
-      app.mount('#app')
-    })
+    myI18n
+      .then((i18nResolved) => {
+        app.use(i18nResolved)
+        app.mount('#app')
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   })

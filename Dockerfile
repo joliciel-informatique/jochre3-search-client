@@ -1,7 +1,11 @@
 # build stage
-FROM node:lts-alpine as build-stage
+#FROM node:lts-alpine as build-stage
+#Moving to previous LTS because of build failure
+FROM node:20.17.0-slim as build-stage
+WORKDIR /app
 WORKDIR /app
 COPY package*.json ./
+
 RUN npm install
 COPY . .
 RUN npm run build

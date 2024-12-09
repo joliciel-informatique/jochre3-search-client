@@ -1,0 +1,226 @@
+// Loading custom style
+@use '../custom/Custom' as *;
+
+// Transitions
+@forward './transitions/_transitions';
+
+// Component Styling
+@forward './components/HeaderPage/HeaderPage';
+@forward './components/FooterPage/FooterPage';
+@forward './components/SearchBar/SearchBar';
+@forward './components/AdvancedSearch/AdvancedSearch';
+@forward './components/FacetBar/FacetBar';
+@forward './components/ToC/ToC';
+@forward './components/Card/Card';
+@forward './components/DisplaySnippets/DisplaySnippets';
+@forward './components/SingleSnippet/SingleSnippet';
+@forward './components/Switch/Switch';
+@forward './components/FilterTag/FilterTag';
+@forward './components/PageNumbering/PageNumbering';
+@forward './components/IndexPage/IndexPage';
+@forward './components/TranscribedText/TranscribedText.scss';
+
+// _Component Styling
+@forward './_components/AccordionCard/AccordionCard';
+@forward './_components/SimpleKeyboard/SimpleKeyboard';
+@forward './_components//ModalBox/ModalBox';
+@forward './_components/Dropdown/Dropdown';
+
+// Directive Styling
+@forward './components/ToolTip/_ToolTip';
+
+// Bulma
+@forward 'bulma/sass' with (
+  $tablet: 768px,
+
+  // Default theme values
+  $primary: $background-color-1,
+  $info: $background-color-2,
+  $link: $background-color-2,
+  $family-primary: $font-family-1,
+
+  $panel-item-border: 0,
+  $body-font-size: $font-size-3,
+  $title-size: $font-size-title,
+
+  $small-font-size: $font-size-2,
+
+  $size-small: $font-size-1,
+  $size-normal: $font-size-3,
+  $size-medium: $font-size-3,
+  $control-size: $font-size-3,
+
+  $body-line-height: unset,
+
+  $navbar-item-color: $white,
+  // $navbar-item-background-l-delta: unset,
+  $navbar-background-color: $background-color-1,
+  $navbar-box-shadow-size: var(--bulma-navbar-box-shadow-size),
+  $navbar-box-shadow-color: var(--bulma-navbar-box-shadow-color),
+  $navbar-height: var(--bulma-navbar-height),
+  $navbar-padding-vertical: var(--bulma-navbar-padding-vertical),
+  $navbar-padding-horizontal: var(--bulma-navbar-padding-horizontal),
+  $navbar-z: 2147483648,
+  $navbar-fixed-z: 2147483648,
+  $navbar-item-img-max-height: 5vh,
+  $navbar-burger-color: $background-color-2,
+  $navbar-tab-hover-background-color: $background-color-2,
+  $navbar-tab-hover-border-bottom-color: $background-color-2,
+  $navbar-tab-active-color: $background-color-2,
+  $navbar-tab-active-background-color: $background-color-2,
+  $navbar-tab-active-border-bottom-color: var(--bulma-navbar-tab-active-border-bottom-color),
+  $navbar-tab-active-border-bottom-style: var(--bulma-navbar-tab-active-border-bottom-style),
+  $navbar-tab-active-border-bottom-width: var(--bulma-navbar-tab-active-border-bottom-width),
+  $navbar-dropdown-background-color: $white,
+  $navbar-dropdown-border-l: var(--bulma-navbar-dropdown-border-l),
+  $navbar-dropdown-border-color: var(--bulma-navbar-dropdown-border-color),
+  $navbar-dropdown-border-style: var(--bulma-navbar-dropdown-border-style),
+  $navbar-dropdown-border-width: var(--bulma-navbar-dropdown-border-width),
+  $navbar-dropdown-offset: var(--bulma-navbar-dropdown-offset),
+  $navbar-dropdown-arrow: $white,
+  $navbar-dropdown-radius: 3px,
+  $navbar-dropdown-z: 2147483648,
+  $navbar-dropdown-boxed-radius: var(--bulma-navbar-dropdown-boxed-radius),
+  $navbar-dropdown-boxed-shadow: var(--bulma-navbar-dropdown-boxed-shadow),
+  $navbar-divider-background-l: var(--bulma-navbar-divider-background-l),
+  $navbar-divider-height: var(--bulma-navbar-divider-height),
+  $navbar-bottom-box-shadow-size: var(--bulma-navbar-bottom-box-shadow-size),
+  $hr-margin: 0,
+  $hr-background-color: $background-color-3,
+
+  $block-spacing: unset,
+
+  // Modal Component
+  $modal-z: 50,
+
+  $dropdown-content-z: 42,
+
+  // Card Component
+  $card-background-color: $white,
+  $card-header-background-color: $background-color-2,
+  $card-header-color: $white,
+  $card-content-background-color: $white,
+  $card-footer-background-color: $background-color-2,
+
+  // Footer Component
+  $column-gap: 0.1rem,
+  $label-spacing: 0.75rem,
+  // $block-spacing: 0.5rem,
+  // Footer styling
+  $footer-padding: 0,
+  $footer-background-color: $background-color-1,
+
+  $radius-rounded: 0.15rem,
+  $card-radius: 0.75rem,
+  $radius: 0.15rem,
+  $control-radius-small: 0.1rem,
+  $input-icon-hover-color: $background-color-2,
+
+  $pagination-ellipsis-color: $white,
+
+  // Dropdown
+  // $dropdown-menu-min-width: var(--bulma-dropdown-menu-min-width),
+  // $dropdown-content-background-color: var(--bulma-dropdown-content-background-color),
+  // $dropdown-content-offset: var(--bulma-dropdown-content-offset),
+  // $dropdown-content-padding-bottom: var(--bulma-dropdown-content-padding-bottom),
+  // $dropdown-content-padding-top: var(--bulma-dropdown-content-padding-top),
+  // $dropdown-content-radius: var(--bulma-dropdown-content-radius),
+  // $dropdown-content-shadow: var(--bulma-dropdown-content-shadow),
+  // $dropdown-content-z: var(--bulma-dropdown-content-z),
+  // $dropdown-divider-background-color: var(--bulma-dropdown-divider-background-color)
+);
+
+@forward 'bulma-switch-control';
+
+@forward './components//UserOptions/UserOptions';
+
+// .navbar {
+//   &.is-fixed-top {
+//     position: sticky;
+//     top: 0px;
+//   }
+//   // --bulma-navbar-item-hover-background-l-delta: -50%;
+// }
+
+:root {
+  --c-z-index: 1000;
+  --transcription-text-font-size: 0.5em;
+}
+
+.navbar {
+  --bulma-navbar-h: 183;
+  --bulma-navbar-s: 43%;
+  --bulma-navbar-l: 36.5%;
+  --bulma-navbar-item-background-l: 37%;
+  --bulma-navbar-item-background-l-delta: 36%;
+  --bulma-navbar-item-color-l: 100%;
+  --bulma-navbar-item-selected-h: 183deg;
+  --bulma-navbar-item-selected-s: 43%;
+  --bulma-navbar-item-selected-l: 36.5%;
+  --bulma-navbar-item-selected-background-l: 50%;
+  --bulma-navbar-item-selected-color-l: 100%;
+  --bulma-navbar-tab-active-background-color: hsl(183deg, 43%, 36.5%);
+  --bulma-navbar-dropdown-arrow: white;
+  --bulma-navbar-dropdown-item-h: 183;
+  --bulma-navbar-dropdown-item-s: 43%;
+  --bulma-navbar-dropdown-item-l: 36.5%;
+  --bulma-navbar-dropdown-item-color-l: 36.5%;
+  --bulma-navbar-divider-background-l: 36.5%;
+}
+
+.navbar-item,
+.navbar-link {
+  border-radius: 0.5em;
+}
+
+// main {
+// min-height: 41vh;
+// overflow-y: auto;
+// }
+
+// #topbar {
+//   top: 0px;
+//   position: sticky;
+//   z-index: 43;
+//   background-color: $background-color-1;
+//   height: 20vh;
+//   // max-height: 40vh;
+// }
+
+.logo img {
+  // position: absolute;
+  // left: 1vmin;
+  // top: 1vmin;
+  // height: 18vmin;
+  // z-index: 19028340912430918243184093823;
+}
+
+main {
+  max-height: 80vh;
+}
+
+.navbar-brand {
+  top: 0;
+  position: sticky;
+  z-index: 1000;
+}
+
+.pagination {
+  --bulma-pagination-margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .modal-content {
+    width: unset;
+  }
+}
+
+.modal-card-head {
+  white-space: nowrap;
+  max-width: 100%;
+  p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100px;
+  }
+}

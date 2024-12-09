@@ -1,0 +1,113 @@
+/** Default YBC JOCHRE CSS Configuration for https://ocr.yiddishbookcenter.org/ */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@100..900&display=swap');
+@font-face {
+  font-family: 'Ramahu';
+  src: url('../fonts/ramahu/RamahU.woff');
+  src:
+    url('../fonts/ramahu/RamahU.woff') format('woff'),
+    url('../fonts/ramahu/RamahU.ttf') format('truetype'),
+    url('../fonts/ramahu/RamahU.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/ramahu/RamahU.svg#svgFontName') format('svg');
+}
+
+/** Base colors */
+$white: #ffffff;
+$black: #000000;
+$transparent: transparent;
+
+$gold: rgb(238, 177, 17);
+$brown: rgb(121, 83, 0);
+$red: rgb(218, 32, 50);
+
+$darkgrey: rgb(103, 103, 103);
+
+// Buttons is blue
+// $blue: rgb(32, 116, 162);
+// $blue: #358185;
+$blue: rgb(53, 129, 133);
+// Banner is gray
+$gray: rgb(117, 117, 117);
+
+$grayHSL: hsl(0deg, 0%, 45.9%);
+$blueHSL: hsl(183deg, 43%, 36.5%);
+
+$flax: rgb(255, 240, 216);
+$green: rgb(93, 112, 114);
+$orange: rgb(209, 104, 79);
+$violet: rgb(136, 134, 158);
+$darkgold: rgb(194, 153, 49);
+// $darkred: rgb(169, 70, 85);
+$warmgray: rgb(190, 191, 155);
+
+/** Background colors */
+$background-color-1: $grayHSL;
+$background-color-2: $blueHSL;
+$background-color-3: $flax;
+$background-color-4: $darkgold;
+$background-color-5: hsl(from $blue h s calc(l + 30));
+
+$background-color-2-transparency-50: rgba($background-color-2, 0.5);
+
+/** Foreground colors */
+$foreground-color-1: $darkgold;
+$foreground-color-2: $darkgrey;
+$foreground-color-3: $orange;
+$foreground-color-4: $red;
+$foreground-color-5: $gold;
+
+$font-family: 'Ramahu', 'Noto Serif Hebrew', serif;
+
+/** Sizing */
+$size-normal: 0.5em;
+
+/** Fonts & text */
+$font-family-1: $font-family;
+$font-weight-1: 200;
+$font-weight-2: 500;
+$font-weight-3: 800;
+$font-line-height-1: 1em;
+$font-size-1: 0.8em;
+$font-size-2: 0.9em;
+$font-size-3: 1em;
+$font-size-title: 1.45em;
+
+/** Footer navigation bar */
+$nav-margin-of-buttons: 0.25em;
+$nav-padding-of-buttons: 0.5em;
+$nav-padding-between-buttons: 0.75em;
+$nav-min-width: 0.5em;
+$nav-color-of-ellipsis: $white;
+$nav-size-of-font: $font-size-3;
+$nav-border-around-buttons: none;
+$nav-color-of-background: $background-color-2;
+$nav-color-of-buttons: $background-color-2;
+$nav-color-of-disabled-buttons: $background-color-2;
+$nav-color-of-disabled-background: $background-color-3;
+$nav-color-of-disabled-border: $background-color-2;
+$nav-color-of-active-button-border: $background-color-2;
+$nav-color-of-active-button-background: $background-color-2;
+$nav-color-of-active-button: $background-color-2;
+
+/** ToolTip styling */
+$tt-min-width: 3em;
+$tt-max-width: 15em;
+$tt-z-index: 10;
+$tt-content-overflow: visible;
+$tt-text-line-height: $font-line-height-1;
+$tt-font: $font-family-1;
+$tt-font-size: $font-size-2;
+$tt-font-weight: $font-weight-1;
+$tt-color-of-font: $white;
+$tt-background-color: $blue;
+$tt-padding: 0.5rem;
+$tt-radius: 0.3rem;
+
+/** Snippet styling */
+$hl-color: $foreground-color-5;
+$hl-text-color: $black;
+$hl-text-hover-color: $white;
+$hl-box-radius: 0.4em;
+$hl-box-padding: 0.05em 0.2em 0.05em 0.2em;
+$hl-box-shadow: 0 0 0.15em 0.15em;
+$hl-box-shadow-color: $foreground-color-5;
+$hl-box-shadow-color-alpha: 0.5;

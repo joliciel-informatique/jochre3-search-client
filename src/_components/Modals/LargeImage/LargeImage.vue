@@ -5,7 +5,7 @@
     </template>
     <template #body>
       <div v-if="imageModal.data">
-        <img :src="imageModal.data" />
+        <img :src="imageModal.data" :alt="$t('large-image.image-alt', [imageModal.title])" />
       </div>
     </template>
     <template #footer></template>

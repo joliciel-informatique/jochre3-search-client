@@ -2,8 +2,7 @@
   <main
     class="hero is-widescreen"
     :class="{
-      'rtl-align': !preferences.displayLeftToRight,
-      yiddish: !preferences.displayLeftToRight
+      'rtl-align': !preferences.displayLeftToRight
     }"
   >
     <HeaderPage />
@@ -19,12 +18,13 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
-import { useKeycloakStore } from '@/stores/KeycloakStore'
-import axios from 'axios'
-import { inject, onMounted, ref } from 'vue'
+import HeaderPage from '@/components/HeaderPage/HeaderPage.vue'
+import FooterPage from '@/components/FooterPage/FooterPage.vue'
+
+import { onMounted, ref } from 'vue'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { fetchData } from '@/assets/fetchMethods'
 
 const preferences = usePreferencesStore()
 
@@ -32,8 +32,6 @@ const HeaderPage = defineAsyncComponent(() => import('@/components/HeaderPage/He
 const FooterPage = defineAsyncComponent(() => import('@/components/FooterPage/FooterPage.vue'))
 
 const route = useRoute()
-const keycloak = useKeycloakStore().keycloak
-const API_URL = inject('apiUrl')
 
 const responseCode = ref<number>()
 
@@ -52,20 +50,13 @@ onBeforeRouteUpdate(async (to, from) => {
 
 async function undoCorrection(metadataCorrectionId: number): Promise<void> {
   console.log(`Undoing correction ${metadataCorrectionId}`)
-  axios
-    .post(
-      `${API_URL}/undo-correction/${metadataCorrectionId}`,
-      {},
-      {
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${keycloak?.token}`
-        }
+  fetchData(`undo-correction/${metadataCorrectionId}`, 'post')
+    .then((res) => {
+      if (res.status === 200) {
+        console.log(`Undo performed`)
+      } else {
+        console.error(`Undo failed. Response: ${res.status}`)
       }
-    )
-    .then(() => {
-      console.log(`Undo performed`)
-      responseCode.value = 200
     })
     .catch((error) => {
       console.error(error)

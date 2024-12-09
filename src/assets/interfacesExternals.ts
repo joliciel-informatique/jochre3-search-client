@@ -1,3 +1,5 @@
+import type { ShallowRef } from 'vue'
+
 export interface Snippet {
   text: string
   page: number
@@ -16,6 +18,12 @@ export interface BookPages {
   page: number
   label: string
   logicalNumber: number
+}
+
+export interface SimpleKeyboardType {
+  show: boolean
+  attachTo: string
+  ref: ShallowRef
 }
 
 export interface Preferences {
@@ -59,4 +67,21 @@ interface Metadata {
   publisher: string
   volume: string
   url: string
+}
+
+export interface Highlight {
+  start: number
+  end: number
+}
+
+export interface HighlightedPage {
+  physicalPageNumber: number
+  logicalPageNumber?: number
+  highlights?: Highlight[]
+  text: string
+}
+
+export interface HighlightedDocument {
+  title: string
+  pages: HighlightedPage[]
 }

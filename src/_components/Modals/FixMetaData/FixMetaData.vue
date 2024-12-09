@@ -13,67 +13,80 @@
       <div v-if="!authenticated" class="is-italic has-text-weight-bold has-text-danger">
         {{ $t('fix-metadata.unauthenticated') }}
       </div>
-      <div class="p-2 has-text-info">{{ $t('fix-metadata.instructions.normal') }}</div>
-      <div class="pb-0 mb-0 field has-addons">
-        <p class="control">
-          <a class="button is-static level-item">{{
-            $t(`fix-metadata.field-type.${metadataModal.field}`)
-          }}</a>
-        </p>
-        <p class="control container">
-          <input
-            class="input is-normal is-rounded keyboardInput"
-            type="text"
-            :alt="$t('search.keyboard')"
-            :title="$t('search.keyboard')"
-            :vki-id="`${metadataModal.docRef}-${metadataModal.field}`"
-            :class="{
-              'ltr-align': fieldLeftToRight && preferences.needsLeftToRight,
-              english: fieldLeftToRight && preferences.needsLeftToRight,
-              'rtl-align': !fieldLeftToRight && preferences.needsRightToLeft,
-              yiddish: !fieldLeftToRight && preferences.needsRightToLeft
-            }"
-            v-model="metadataModal.value"
-            :disabled="authorList.length > 0"
-            lang="yi"
+      <div class="p-2">{{ $t('fix-metadata.instructions.normal') }}</div>
+      <div class="columns field has-addons">
+        <span
+          class="column is-flex is-flex-direction-row is-flex-wrap-nowrap field is-horizontal"
+          :class="metadataModal.field !== 'publicationYear' ? 'has-icons-right' : ''"
+        >
+          <p class="control is-expanded">
+            <input
+              :id="metadataModal.field"
+              :type="metadataModal.field === 'publicationYear' ? 'number' : 'text'"
+              class="input"
+              :class="{
+                'ltr-align': fieldLeftToRight && preferences.needsLeftToRight,
+                english: fieldLeftToRight && preferences.needsLeftToRight,
+                'rtl-align': !fieldLeftToRight && preferences.needsRightToLeft
+              }"
+              :lang="preferences.corpusLanguage"
+              name="fixWordSuggestionInput"
+              v-model="metadataModal.value"
+              :disabled="authorList.length > 0"
+              :alt="$t('search.keyboard')"
+              :title="$t('search.keyboard')"
+            />
+          </p>
+          <simple-key
+            v-if="metadataModal.field !== 'publicationYear'"
+            v-model:attach-to="metadataModal.field"
+            v-model:reference="metadataModal.value"
+            @onEnter="null"
           />
-        </p>
-        <p class="control">
-          <button
-            class="button is-clickable is-medium is-info keyboardInputButton"
-            :alt="$t('search.keyboard')"
-            :title="$t('search.keyboard')"
-            :vki-id="`${metadataModal.docRef}-${metadataModal.field}`"
-          >
-            <font-awesome-icon icon="keyboard" />
-          </button>
-        </p>
+        </span>
       </div>
-      <div v-show="showFindAuthorDropdown">
-        <div class="columns mt-3">
-          <div class="column is-one-fifth p-2 has-text-warning has-text-weight-semibold">
-            {{ $t('fix-metadata.instructions.authorsNote') }}
-          </div>
-          <div
-            class="column is-flex is-flex-direction-column p-2 has-text-warning has-text-weight-medium"
-          >
+
+      <div class="columns is-flex is-flex-direction-column" v-if="showFindAuthorDropdown">
+        <div
+          class="column is-one-fifth p-2 has-text-warning has-text-weight-semibold"
+          role="document"
+        >
+          {{ $t('fix-metadata.instructions.authorsNote') }}
+        </div>
+        <div class="column is-flex is-flex-direction-column">
+          <div class="p-2 has-text-warning has-text-weight-medium">
             {{ $t('fix-metadata.instructions.authors') }}
           </div>
+          <div class="p-2 has-text-warning has-text-weight-medium">
+            {{ $t('fix-metadata.instructions.authorsInstruction') }}
+          </div>
         </div>
-        <div class="p-2 has-text-info">
-          {{ $t('fix-metadata.instructions.authorsInstruction') }}
-        </div>
-        <div class="pb-0 mb-0 field has-addon">
-          <FindAuthors
-            v-model:authorList="authorList"
-            v-model:exclude="metadataModal.value"
-            :multi-value="false"
-            :show-exclude-checkbox="false"
-            v-model:include-author="includeAuthor"
-            v-model:include-author-in-transcription="includeAuthorInTranscription"
-            unique-id="fix-metadata-find-authors"
-          />
-        </div>
+        <span class="column field is-horizontal has-addons">
+          <span class="column dropdown" :aria-label="$t('search.author')">
+            <span class="column field has-addons has-addons-left is-horizontal">
+              <p class="control is-expanded">
+                <input
+                  :id="`new-author-${metadataModal.field}`"
+                  type="text"
+                  class="input"
+                  lang="yi"
+                  v-model="authorText"
+                  :placeholder="$t('search.authorPlaceholder')"
+                />
+              </p>
+              <simple-key
+                :attach-to="`new-author-${metadataModal.field}`"
+                v-model:reference="authorText"
+                @onEnter="null"
+              />
+            </span>
+          </span>
+        </span>
+        <author-dropdown
+          :attach-to="`new-author-${metadataModal.field}`"
+          v-model:author-text="authorText"
+          v-model:author-list="authorList"
+        />
       </div>
     </template>
     <template #footer="modalBox">
@@ -82,16 +95,16 @@
         :disabled="!authenticated"
         @click="save(modalBox.closeFunction)"
       >
-        {{ $t('save') }}
+        {{ $t('modal.save') }}
       </button>
     </template>
   </ModalBox>
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, ref, computed, type Ref } from 'vue'
+import { ref, computed, type Ref, watch } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const FindAuthors = defineAsyncComponent(() => import('@/_components/FindAuthors/FindAuthors.vue'))
@@ -103,8 +116,7 @@ const metadataModal: Ref = defineModel('metadataModal')
 const notification = defineModel('notification')
 const showFindAuthorDropdown = computed(() => metadataModal.value.field?.includes('author'))
 const authorList: Ref = ref<Array<{ label: string; count: number }>>([])
-const includeAuthor = computed(() => metadataModal.value.field === 'author')
-const includeAuthorInTranscription = computed(() => metadataModal.value.field === 'authorEnglish')
+const authorText = ref('')
 const fieldLeftToRight = computed(() =>
   ['authorEnglish', 'titleEnglish', 'publisher'].includes(metadataModal.value.field)
 )
@@ -153,7 +165,5 @@ const save = (closeFunc: Function) => {
     })
 }
 
-const capitalizeFirstLetter = (string: String) => {
-  return string.charAt(0).toUpperCase() + string.slice(1)
-}
+const capitalizeFirstLetter = (string: String) => string.charAt(0).toUpperCase() + string.slice(1)
 </script>

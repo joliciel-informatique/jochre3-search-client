@@ -1,37 +1,57 @@
 {
   "Jochre": "Jochre",
+  "meta": {
+    "title": "Jochre3 OCR Search Engine",
+    "description": "Search text content of documents OCR'd using Jochre3."
+  },
   "search": {
     "about": "Full-text search engine.",
     "index-size": "Index size: {0} books.",
     "query": "Please enter a search term",
     "search": "Search for",
     "search-button": "Search",
+    "advanced-search": "Advanced search",
+    "user-guide": "User guide",
     "excludeAuthors": "Checking this box will exclude selected authors from the query",
     "related-word-forms": "Strict",
-    "facets": "Filter author by name",
-    "what-are-facets": "These are the authors with the most books matching your search criteria. Click an author name to filter/narrow your search results.",
     "related-word-forms-tooltip": "Checking this box will exclude related word forms (of the same stem/lemma) in search results (e.g. 'eat, 'eaten', 'ate')",
     "keyboard": "Open Yiddish on-screen keyboard",
-    "advanced": "Advanced search",
     "field-instructions": "*These fields accept Roman or Yiddish characters.",
     "author": "Author",
     "authorPlaceholder": "Type author name (case-sensitive)",
     "title": "Book title",
     "date-from": "Published between",
     "date-to": "and",
-    "document-reference": "Doucment reference(s)",
+    "document-reference": "Document reference(s)",
     "document-reference-placeholder": "Add document references separated by a comma",
     "sort-by": "Sort by",
-    "reset": "Clear results",
+    "reset": "Reset search",
     "sort": {
       "score": "score",
       "date-ascending": "year ↑",
       "date-descending": "year ↓"
     }
   },
+  "toc": {
+    "contents-table-header": "Search results",
+    "contents-table-subheader": "Found {0} books, showing {1}-{2}"
+  },
+  "facets": {
+    "title": "Top {0} authors",
+    "subtitle": "relevant to your query",
+    "display-number-of-author-facets": "Authors to display",
+    "what-are-facets": "These are the authors with the most books matching your search criteria. Click an author name to filter/narrow your search results.",
+    "filter": "Filter",
+    "relevant-facets": "Your filter returned {0} relevant names",
+    "most-hits": "Most hits",
+    "active-facets": "Selected authors",
+    "by-name": "Name",
+    "sort-by-label": "Sort by",
+    "facet-count-all": "All"
+  },
   "results": {
+    "loading": "Retrieving search results...",
     "click-image-snippet": "Click to load original image",
-    "tap-image-snippet": "Tap to load original image",
     "alternate-title": "Title in transcription",
     "volume": "Volume",
     "author": "Author",
@@ -39,48 +59,49 @@
     "publisher": "Publisher",
     "publication-year": "Date",
     "document-reference": "Document reference: {0}",
-    "contents-table-header": "Table of contents",
-    "result-count": "{0} books total",
-    "result-current-tooltip": "You are currently viewing this book and snippet",
-    "result-current-book-and-snippet": "Book {0}/{1} ({2}/{3}) of {4} books total",
     "result-unknown-author": "unknown author",
-    "reset": "Clear results",
     "none": "Uh-oh! Your query did not return any results",
     "show-original-page": "Go to book (page {0})",
     "show-text": "View transcribed text",
     "word-fix-instructions": "(Double-click on a word to make an OCR correction)",
     "page": "Page {0}"
   },
+  "snippet": {
+    "open-page": "Open page",
+    "open-transcription": "Open transcription"
+  },
   "navigation": {
-    "back-tooltip": "This button takes you back in your search history",
-    "forward-tooltip": "This button takes you forward in your search history",
-    "clear-tooltip": "This button will clear your search history",
-    "jump-to": "Jump to"
+    "currently-viewing-pages": "Currently viewing page {0}/{1}",
+    "jump-to": "Jump to page"
   },
   "preferences": {
     "title": "Update preferences",
+    "general-heading": "General",
     "language": "Interface language",
-    "results-per-page": "Results per page",
-    "snippets-per-result": "Snippets per book"
+    "snippets-heading": "Snippet display",
+    "snippets-per-book": "One book at a time",
+    "snippets-as-list": "As continuous list"
   },
   "fix-word": {
     "title": "Fix a word",
+    "image-alt": "An image that should read {0}",
     "instructions": "Please copy the above exactly below, including punctuation (niqqud, apostrophes, quotes, dashes and so on).",
     "warning": "Do not correct unclear text, i.e. text that is broken, partially visible etc.",
     "unauthenticated": "In order to fix a word, please login first."
   },
+  "large-image": {
+    "title": "Page {0} for {1}",
+    "image-alt": "An image of the text on {0}"
+  },
   "fix-metadata": {
     "title": "Update metadata for \"{0}\"",
+    "edit-button-tooltip": "Edit this value",
     "instructions": {
       "normal": "Please suggest your correction below.",
       "authorsNote": "NOTE",
       "authors": "This individual may already be in our database under a different name.",
       "authorsInstruction": "If so, choose the best name below."
     },
-    "field": "Field:",
-    "current-value": "Current value:",
-    "new-value": "Value:",
-    "or-merge-with": "or merge with:",
     "field-type": {
       "title": "Title",
       "titleEnglish": "Title in transcription",
@@ -93,23 +114,22 @@
     "unauthenticated": "In order to fix document meta data, please login first."
   },
   "transcribed-text": {
-    "table-of-contents": "Table of contents",
-    "page": "Page {0}",
-    "logical-page": "({0})"
+    "generating-book-view": "Generating a book view of the transcription. Please wait...",
+    "prev-match": "<<",
+    "next-match": ">>",
+    "prev-match-tooltip": "Previous page with matching highlights",
+    "next-match-tooltip": "Next page with matching highlights",
+    "book-not-found": "Uh-oh! We could not find a record for document reference '{0}'!"
   },
-  "cancel": "Cancel",
-  "save": "Save changes",
-  "error": "An error occurred.",
-  "back": "Back",
-  "forward": "Forward",
-  "loading": "Loading...",
+  "modal": {
+    "cancel": "Cancel",
+    "save": "Save changes"
+  },
   "pagination": {
-    "first": "first page",
-    "next": "next page",
-    "previous": "previous page",
-    "last": "last page",
-    "top": "To top",
-    "bottom": "To bottom"
+    "next": ">>",
+    "previous": "<<",
+    "top": "First snippet",
+    "bottom": "Last snippet"
   },
   "header": {
     "logo": "/images/jochreLogo.png",

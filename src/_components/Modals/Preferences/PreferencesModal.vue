@@ -5,122 +5,82 @@
     </template>
     <template #body>
       <div class="p-3">
-        <div class="columns is-vcentered">
-          <div class="column is-5">
-            <label class="label">{{ $t('preferences.language') }}</label>
-          </div>
-          <div class="column is-4">
-            <div class="control is-expanded">
-              <span class="select is-fullwidth">
-                <select v-model="setToLanguage">
-                  <option value="yi">ייִדיש</option>
-                  <option value="en">English</option>
-                </select>
-              </span>
+        <div class="columns is-vcentered py-3">
+          <div class="column">
+            <h1 class="label">{{ $t('preferences.general-heading') }}</h1>
+            <div class="is-flex is-flex-direction-column m-2">
+              <div class="columns is-vcentered is-10 pb-2">
+                <span class="column is-4 px-2">{{ $t('preferences.language') }}</span>
+                <div class="column is-4 control">
+                  <span class="select is-fullwidth">
+                    <select name="setToLanguageSelect" v-model="languageToSet">
+                      <option value="yi">ייִדיש</option>
+                      <option value="en">English</option>
+                    </select>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="columns is-vcentered">
-          <div class="column is-5">
-            <label class="label">{{ $t('preferences.results-per-page') }}</label>
-          </div>
-          <div class="column is-4">
-            <div class="control">
-              <input class="input" type="number" v-model="resultsPerPage" />
-            </div>
-          </div>
-        </div>
-        <div class="columns is-vcentered">
-          <div class="column is-5">
-            <label class="label">{{ $t('preferences.snippets-per-result') }}</label>
-          </div>
-          <div class="column is-4">
-            <div class="control is-expanded">
-              <input class="input" type="number" v-model="snippetsPerResult" />
+        <div class="columns is-vcentered py-3">
+          <div class="column">
+            <h1 class="label">{{ $t('preferences.snippets-heading') }}</h1>
+            <div class="is-flex is-flex-direction-row is-align-items-center m-2">
+              <!-- the switch needs labels inverted if right-to-left -->
+              <span class="px-4 has-text-centered" v-if="preferences.displayLeftToRight">{{
+                $t('preferences.snippets-per-book')
+              }}</span>
+              <span class="px-2 has-text-centered" v-else>{{
+                $t('preferences.snippets-as-list')
+              }}</span>
+              <div class="control is-expanded">
+                <label
+                  class="switch is-rounded is-small"
+                  :class="preferences.displayLeftToRight ? '' : 'switch-ltr'"
+                >
+                  <input type="checkbox" v-model="displayPerBook" />
+                  <span class="check"></span>
+                </label>
+              </div>
+              <span class="px-2" v-if="preferences.displayLeftToRight">{{
+                $t('preferences.snippets-as-list')
+              }}</span>
+              <span class="px-2" v-else>{{ $t('preferences.snippets-per-book') }}</span>
             </div>
           </div>
         </div>
       </div>
     </template>
     <template #footer>
-      <button class="button is-link" @click="save($i18n as VueI18n.VueI18n)">
-        {{ $t('save') }}
+      <button class="button is-link" @click="save()">
+        {{ $t('modal.save') }}
       </button>
     </template>
   </ModalBox>
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, ref } from 'vue'
-import { fetchData } from '@/assets/fetchMethods'
 import { storeToRefs } from 'pinia'
-import { useCookies } from '@vueuse/integrations/useCookies'
-import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import VueI18n from 'vue-i18n'
+import ModalBox from '@/_components/ModalBox/ModalBox.vue'
+import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-const ModalBox = defineAsyncComponent(() => import('@/_components/ModalBox/ModalBox.vue'))
+const i18n = useI18n()
 
 const notification = defineModel('notification')
 const preferences = usePreferencesStore()
-const keycloak = useKeycloakStore().keycloak
-const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
-const cookies = useCookies(['locale', 'resultsPerPage', 'snippetsPerResult'])
-const setToLanguage = ref(preferences.language)
+const languageToSet = ref<string>(preferences.language)
 
-const { resultsPerPage, snippetsPerResult } = storeToRefs(preferences)
+const { displayPerBook, language } = storeToRefs(preferences)
 
-const save = (vi18n: VueI18n.VueI18n) => {
-  if (authenticated.value) {
-    const params = JSON.stringify({
-      language: setToLanguage.value,
-      resultsPerPage: preferences.resultsPerPage,
-      snippetsPerResult: preferences.snippetsPerResult
-    })
-
-    fetchData('preferences/user', 'post', params)
-      .then((res) => {
-        if (res.status === 200) {
-          preferences.language = setToLanguage.value
-          vi18n.locale = setToLanguage.value
-
-          notification.value = {
-            show: true,
-            error: false,
-            delay: 2000,
-            msg: `Successfully saved your preferences!`
-          }
-        } else {
-          notification.value = {
-            show: true,
-            error: true,
-            delay: 4000,
-            msg: 'There was an error saving your preferences. You may want to reach out to us!'
-          }
-        }
-      })
-      .catch((error) => {
-        notification.value = {
-          show: true,
-          error: true,
-          delay: 4000,
-          msg: `There was an error: ${error} saving your preferences. You may want to reach out to us!`
-        }
-      })
-  } else {
-    preferences.language = setToLanguage.value
-    vi18n.locale = setToLanguage.value
-    cookies.set('locale', setToLanguage)
-    cookies.set('resultsPerPage', resultsPerPage)
-    cookies.set('snippetsPerResult', snippetsPerResult)
-
-    notification.value = {
-      show: true,
-      error: false,
-      delay: 2000,
-      msg: `Successfully saved your preferences!`
-    }
+const save = () => {
+  if (languageToSet.value != language.value) {
+    language.value = languageToSet.value
+    i18n.locale.value = language.value
   }
+  preferences.save()
   preferences.show = false
 }
 </script>

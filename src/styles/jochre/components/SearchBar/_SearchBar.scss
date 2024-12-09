@@ -1,0 +1,42 @@
+@use '../../../custom/Custom' as *;
+
+.searchBar {
+  background-color: $background-color-1;
+  position: sticky;
+  top: 0;
+  max-height: max-content;
+  z-index: 39;
+}
+
+#query {
+  border: 0px;
+  box-shadow: none;
+}
+
+#query:focus,
+#query:active,
+#query:selected {
+  border: 0;
+}
+
+#searchBar > .container > .field > .control > .button.is-static {
+  background-color: $white;
+  color: $foreground-color-2;
+}
+
+#searchBar > .container > .field > .control > .button {
+  border: 0px;
+  height: 100%;
+  line-height: unset;
+  font-size: unset;
+}
+
+.advancedSearch .body {
+  height: auto;
+  width: 100%;
+}
+
+span:has(#strictSearchCheckbox) {
+  position: relative;
+  top: 0.1em;
+}

@@ -3,6 +3,7 @@
     <div
       class="notification-overlay"
       :class="notification.show ? 'is-active' : ''"
+      role="alert"
       v-show="notification.show"
     >
       <div class="card m-3">
@@ -16,11 +17,11 @@
           </p>
           <button
             class="card-header-icon"
-            aria-label="close"
+            aria-label="dismiss"
             @click="() => (notification.show = !notification.show)"
           >
             <span>
-              <FontAwesomeIcon icon="circle-xmark" class="has-text-white" />
+              <font-awesome-icon icon="circle-xmark" class="has-text-white" />
             </span>
           </button>
         </header>

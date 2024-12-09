@@ -9,38 +9,34 @@
           {{ $t('fix-word.unauthenticated') }}
         </div>
         <div class="p-2 has-text-centered" v-if="wordImage !== ''">
-          <img :src="wordImage" />
+          <img :src="wordImage" :alt="$t('fix-word.image-alt', [wordSuggestion])" />
         </div>
-        <div class="p-2 field has-addons">
-          <span class="column field has-addons has-addons-left is-horizontal">
+        <span class="columns pb-0 mb-0 field">
+          <span
+            class="column is-flex is-flex-direction-row is-flex-wrap-nowrap field has-addons has-addons-left is-horizontal"
+          >
             <p class="control is-expanded">
               <input
+                :id="`wordCorrectionInput-${textInputId}`"
+                name="wordCorrectionInput"
+                class="input"
                 :class="{
-                  input: true,
-                  keyboardInput: true,
                   'rtl-align': preferences.needsRightToLeft
                 }"
-                class="input keyboardInput"
                 type="text"
                 lang="yi"
                 v-model="wordSuggestion"
-                vki-id="fixWord"
               />
             </p>
-            <p class="control">
-              <button
-                class="button is-clickable is-medium is-info keyboardInputButton"
-                vki-id="fixWord"
-                :alt="$t('search.keyboard')"
-                :title="$t('search.keyboard')"
-              >
-                <font-awesome-icon icon="keyboard" />
-              </button>
-            </p>
+            <simple-key
+              :attach-to="`wordCorrectionInput-${textInputId}`"
+              v-model:reference="wordSuggestion"
+              @onEnter="null"
+            />
           </span>
-        </div>
-        <div class="p-2 has-text-info">{{ $t('fix-word.instructions') }}</div>
-        <div class="p-2 has-text-warning">{{ $t('fix-word.warning') }}</div>
+        </span>
+        <div class="p-2 has-text-warning">{{ $t('fix-word.instructions') }}</div>
+        <div class="p-2 has-text-danger">{{ $t('fix-word.warning') }}</div>
       </div>
     </template>
     <template #footer="modalBox">
@@ -49,16 +45,16 @@
         :disabled="!authenticated"
         @click="save(modalBox.closeFunction)"
       >
-        {{ $t('save') }}
+        {{ $t('modal.save') }}
       </button>
     </template>
   </ModalBox>
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, onBeforeUpdate, ref, type Ref } from 'vue'
+import { computed, onBeforeUpdate, ref, type Ref } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
@@ -70,14 +66,18 @@ const notification: Ref = defineModel('notification')
 const wordImage = ref('')
 const wordLoading = ref(false)
 const wordSuggestion = ref('')
+const wordOffset = computed(() =>
+  wordModal.value.globalOffset
+    ? wordModal.value?.globalOffset + wordModal.value.selection.anchorOffset
+    : null
+)
+const textInputId = computed(() => `${wordModal.value.docRef}-${wordOffset.value}`)
 
 onBeforeUpdate(async () => {
   if (wordModal.value.docRef && wordModal.value.selection) {
     const params: URLSearchParams = new URLSearchParams({
       'doc-ref': wordModal.value.docRef,
-      'word-offset': (
-        wordModal.value.globalOffset + wordModal.value.selection.anchorOffset
-      ).toString()
+      'word-offset': wordOffset.value.toString()
     })
 
     wordLoading.value = true
@@ -125,7 +125,7 @@ const loadWordText = async (params: URLSearchParams) => {
 const save = (closeFunc: Function) => {
   const data = JSON.stringify({
     docRef: wordModal.value.docRef,
-    offset: +wordModal.value.globalOffset,
+    offset: wordOffset.value,
     suggestion: wordSuggestion.value
   })
   fetchData('suggest-word', 'post', data, 'application/json')
