@@ -193,24 +193,12 @@ onMounted(async () => {
 
     // Add ids to all highlights
     const highlights = document.querySelectorAll('.highlight')
-    let i = 0
     highlights.forEach((highlight, key) => {
-      highlight.id = `hi${i++}`
+      highlight.addEventListener('click', () => (currentHighlightIdx.value = key))
+      highlight.id = `highlight-${key}`
     })
 
-    // If user clicks on a highlight, set the current highlight to the clicked element
-    for (let i = 0; i <= pagesWithHighlights.value.length; i++) {
-      const element = document.getElementById(`hi${i}`)
-      if (element) {
-        //console.log(`Adding event for element ${i} with classes ${element.classList}`)
-        element.onclick = () => {
-          console.log(`After click, setting current highlight to ${i}`)
-          currentHighlightIdx.value = i
-        }
-      }
-    }
-
-    document.getElementById(`hi${currentHighlightIdx.value}`)?.classList.add('active')
+    highlight(currentHighlightIdx.value)
   })
 
   document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
@@ -247,28 +235,13 @@ const getClosestPageIndexWithHighlights = (idx: number) =>
   )
 
 const highlight = (highLightIndex: number, scroll: boolean = true) => {
-  const highLightIdx = pagesWithHighlights.value[highLightIndex]
-  if (highLightIdx !== -1) {
-    const doc = document.getElementById(`${highLightIdx}`)
-    const highlightIndices = pagesWithHighlights.value.reduce(
-      (acc: Array<number>, curr: number, index: number) => {
-        if (curr === highLightIdx) acc.push(index)
-        return acc
-      },
-      []
-    )
-
-    if (doc) {
-      const highlights = doc.querySelectorAll('.highlight')
-      highlights.forEach((highlight, key) => {
-        highlight.classList.remove('active')
-        if (key === highlightIndices.indexOf(highLightIndex)) {
-          highlight.classList.add('active')
-          if (scroll) highlight.scrollIntoView({ behavior: 'smooth', block: 'center' })
-        }
-      })
-    }
-  }
+  document
+    .querySelectorAll('.highlight.active')
+    .forEach((highlight) => highlight.classList.remove('active'))
+  const highlight = document.getElementById(`highlight-${highLightIndex}`)
+  console.log(highlight)
+  if (highlight) highlight.classList.add('active')
+  if (highlight && scroll) highlight.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
 const getPagesInView = () => {
