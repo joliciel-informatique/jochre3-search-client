@@ -160,7 +160,6 @@ const { snippet, docRef, bookIndex, snippetIndex, query, strict } = defineProps(
 const imageModal: Ref = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const notification = defineModel('notification')
-// const selectedEntry: Ref = defineModel('selectedEntry')
 const selectedEntryIdx: Ref = defineModel<number>('selectedEntryIdx', { default: 0 })
 
 const image = ref('')
