@@ -52,9 +52,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUpdate, ref, type Ref } from 'vue'
+import { computed, defineAsyncComponent, onBeforeUpdate, ref, type Ref } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
-import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
