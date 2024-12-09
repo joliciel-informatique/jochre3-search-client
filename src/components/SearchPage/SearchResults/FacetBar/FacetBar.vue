@@ -197,7 +197,6 @@ Description: presents the facet bar
   </div>
 
   <div v-show="openMobileFacets" class="menu is-flex is-flex-direction-column is-hidden-desktop">
-    <!-- <div> -->
     <p class="menu-label is-size-5 label is-flex is-flex-direction-column is-align-items-center">
       <span class="is-flex is-flex-direction-row is-align-items-center"
         >{{ $t('facets.title', [authorFacetCount]) }}
@@ -210,7 +209,6 @@ Description: presents the facet bar
       ></span>
       <span class="pt-2 is-size-7 is-italic">{{ $t('facets.subtitle') }}</span>
     </p>
-    <!-- </div> -->
     <div class="is-flex is-flex-direction-column">
       <div class="columns is-vcentered m-1">
         <div class="column is-8 is-size-7">
@@ -242,10 +240,6 @@ Description: presents the facet bar
                     >{{ val }}</a
                   >
                 </div>
-                <!-- <hr class="dropdown-divider" />
-                <a href="#" @click.prevent="updateFacetCount(0)" class="dropdown-item">{{
-                  $t('facets.facet-count-all')
-                }}</a> -->
                 <hr class="dropdown-divider" />
                 <div class="dropdown-item">
                   <input
