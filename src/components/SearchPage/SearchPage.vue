@@ -194,22 +194,16 @@ const UserOptions = defineAsyncComponent(
 import { type SearchResult, type AggregationBin } from '../../assets/interfacesExternals'
 
 // This is better kept in Pinia or something similar
-import { hasSearch } from '../../assets/appState'
-
-import { usePreferencesStore } from '../../stores/PreferencesStore'
+import { hasSearch } from '@/assets/appState'
+import { storeToRefs } from 'pinia'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
-
 const { initializeMedia } = preferences
 
-const { show } = storeToRefs(preferences)
-
-import { storeToRefs } from 'pinia'
-
-const { authorFacetCount } = storeToRefs(preferences)
+const { show, authorFacetCount } = storeToRefs(preferences)
 
 const query = ref('')
-// const selectedEntry = ref<SearchResult>()
 const selectedEntryIdx = ref(0)
 const searchResults = ref<Array<SearchResult>>([])
 const totalHits = ref()
@@ -310,13 +304,10 @@ onMounted(() => {
 
 const newPage = () => runSearch()
 const newSearch = () => (page.value = 1) && runSearch()
+const runSearch = () => search()
 
-const runSearch = () => {
-  search()
-}
-
-const defineSearchParams = () => {
-  return Object.assign(
+const defineSearchParams = () =>
+  Object.assign(
     {},
     query.value?.length ? { query: query.value.trim() } : null,
     strict.value.toString() !== null ? { strict: strict.value.toString() } : null,
@@ -325,7 +316,6 @@ const defineSearchParams = () => {
     toYear.value != null && toYear.value > 0 ? { 'to-year': toYear.value.toString() } : null,
     fromYear.value != null && fromYear.value > 0 ? { 'from-year': fromYear.value.toString() } : null
   )
-}
 
 const params = ref(defineSearchParams())
 
@@ -356,15 +346,11 @@ const resetSearchResults = () => {
   window.history.replaceState({}, document.title, '/')
 }
 
-watch(searchResults, (newV) => {
-  const header = document.getElementById('header')
-  if (newV?.length) {
-    header?.setAttribute('style', 'display:none')
-  } else {
-    header?.setAttribute('style', 'display:flex')
-  }
-})
-
+watch(searchResults, (newV) =>
+  document
+    .getElementById('header')
+    ?.setAttribute('style', newV?.length ? 'display:none' : 'display:flex')
+)
 watch(excludeFromSearch, () => (authorInclude.value = !excludeFromSearch.value))
 watch(resultsPerPage, () => search())
 watch(authorFacetCount, () => searchFacets())
@@ -379,7 +365,6 @@ watch(showAdvancedSearchPanel, (newV) => {
     preferences.show = false
   }
 })
-
 watch(openMobileSearchResultsToc, (newV) => {
   if (newV) {
     showAdvancedSearchPanel.value = false
@@ -407,7 +392,6 @@ watch(openNavBarMobileMenu, (newV) => {
     preferences.show = false
   }
 })
-
 watch(show, (newV) => {
   if (newV) {
     showAdvancedSearchPanel.value = false
@@ -417,7 +401,6 @@ watch(show, (newV) => {
     openNavBarMobileMenu.value = false
   }
 })
-
 watch(openMobileFacets, (newV) => {
   if (newV) {
     showAdvancedSearchPanel.value = false
@@ -594,10 +577,4 @@ const search = async () => {
       return false
     })
 }
-
-defineExpose({
-  newSearch,
-  newPage,
-  resetSearchResults
-})
 </script>
