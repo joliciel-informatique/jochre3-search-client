@@ -46,13 +46,19 @@
           <p class="control">
             <button
               class="button is-small"
+              @click="currentHighlightIdx = 0"
+              :disabled="currentHighlightIdx === 0"
+            >
+              <font-awesome-icon icon="angles-up" />
+            </button>
+          </p>
+          <p class="control">
+            <button
+              class="button is-small"
               @click="currentHighlightIdx--"
               :disabled="currentHighlightIdx === 0"
             >
-              <font-awesome-icon
-                icon="chevron-up"
-                :class="{ 'fa-flip-horizontal': !preferences.displayLeftToRight }"
-              />
+              <font-awesome-icon icon="chevron-up" />
             </button>
           </p>
           <p class="control">
@@ -61,10 +67,16 @@
               @click="currentHighlightIdx++"
               :disabled="currentHighlightIdx === pagesWithHighlights.length - 1"
             >
-              <font-awesome-icon
-                icon="chevron-down"
-                :class="{ 'fa-flip-horizontal': !preferences.displayLeftToRight }"
-              />
+              <font-awesome-icon icon="chevron-down" />
+            </button>
+          </p>
+          <p class="control">
+            <button
+              class="button is-small"
+              @click="currentHighlightIdx = pagesWithHighlights.length - 1"
+              :disabled="currentHighlightIdx === pagesWithHighlights.length - 1"
+            >
+              <font-awesome-icon icon="angles-down" />
             </button>
           </p>
         </div>
@@ -178,6 +190,27 @@ onMounted(async () => {
     currentPage.value = pageNumber.value
 
     currentHighlightIdx.value = pagesWithHighlights.value.indexOf(pageNumber.value)
+
+    // Add ids to all highlights
+    const highlights = document.querySelectorAll('.highlight')
+    let i = 0
+    highlights.forEach((highlight, key) => {
+      highlight.id = `hi${i++}`
+    })
+
+    // If user clicks on a highlight, set the current highlight to the clicked element
+    for (let i = 0; i <= pagesWithHighlights.value.length; i++) {
+      const element = document.getElementById(`hi${i}`)
+      if (element) {
+        //console.log(`Adding event for element ${i} with classes ${element.classList}`)
+        element.onclick = () => {
+          console.log(`After click, setting current highlight to ${i}`)
+          currentHighlightIdx.value = i
+        }
+      }
+    }
+
+    document.getElementById(`hi${currentHighlightIdx.value}`)?.classList.add('active')
   })
 
   document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
