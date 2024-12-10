@@ -32,8 +32,8 @@ Description: calculates and presents page numbers
       </div>
       <div>
         <button
-          @click="page--"
-          @keyup.enter="page--"
+          @click="changePage(page - 1)"
+          @keyup.enter="changePage(page - 1)"
           class="pagination-previous is-small"
           :class="page - 1 < 1 ? 'has-text-grey-darker' : 'has-text-white'"
           :disabled="page - 1 < 1"
@@ -45,8 +45,8 @@ Description: calculates and presents page numbers
         <ul class="pagination-list">
           <li v-if="page - 1 > 1">
             <a
-              @click="page = 1"
-              @keyup.enter="page = 1"
+              @click="changePage(1)"
+              @keyup.enter="changePage(1)"
               class="pagination-link is-small m-1 has-text-white"
               aria-label="go to page 1"
               tabindex="2"
@@ -60,8 +60,8 @@ Description: calculates and presents page numbers
             <a
               class="pagination-link is-small m-1 has-text-white"
               tabindex="2"
-              @click="page--"
-              @keyup.enter="page--"
+              @click="changePage(page - 1)"
+              @keyup.enter="changePage(page - 1)"
               :aria-label="`go to page ${page - 1}`"
               ><div class="pagination-number-ellipsis">{{ page - 1 }}</div></a
             >
@@ -77,8 +77,8 @@ Description: calculates and presents page numbers
           </li>
           <li v-if="page < lastPage">
             <a
-              @click="page++"
-              @keyup.enter="page++"
+              @click="changePage(page + 1)"
+              @keyup.enter="changePage(page + 1)"
               class="pagination-link is-small m-1 has-text-white"
               :aria-label="`go to page ${page + 1}`"
               tabindex="2"
@@ -91,8 +91,8 @@ Description: calculates and presents page numbers
           <li v-if="page + 1 < lastPage">
             <a
               v-tooltip:bottom="`Page ${lastPage}`"
-              @click="page = lastPage"
-              @keyup.enter="page = lastPage"
+              @click="changePage(lastPage)"
+              @keyup.enter="changePage(lastPage)"
               class="pagination-link is-small m-1 has-text-white"
               :aria-label="`go to lastpage ${lastPage}`"
               tabindex="2"
@@ -103,8 +103,8 @@ Description: calculates and presents page numbers
       </div>
       <div>
         <button
-          @click="page++"
-          @keyup.enter="page++"
+          @click="changePage(page + 1)"
+          @keyup.enter="changePage(page + 1)"
           class="pagination-next is-small m-1"
           :class="page >= lastPage ? 'has-text-grey-darker' : 'has-text-white'"
           :disabled="page >= lastPage"
@@ -133,8 +133,8 @@ Description: calculates and presents page numbers
     <ul class="pagination-list is-flex-wrap-nowrap">
       <li v-if="(page <= lastPage && page > 1) || (lastPage <= 5 && page > 1)">
         <a
-          @click="page = 1"
-          @keyup.enter="page = 1"
+          @click="changePage(1)"
+          @keyup.enter="changePage(1)"
           class="pagination-link is-small m-1"
           aria-label="go to page 1"
           tabindex="2"
@@ -145,9 +145,9 @@ Description: calculates and presents page numbers
         <a
           class="pagination-link is-small m-1"
           tabindex="2"
-          @click="page = page - 3"
-          @keyup.enter="page = page - 3"
-          :aria-label="`go to page ${page - 1}`"
+          @click="changePage(page - 3)"
+          @keyup.enter="changePage(page - 3)"
+          :aria-label="`go to page ${page - 3}`"
           >{{ page - 3 }}</a
         >
       </li>
@@ -155,9 +155,9 @@ Description: calculates and presents page numbers
         <a
           class="pagination-link is-small m-1"
           tabindex="2"
-          @click="page = page - 2"
-          @keyup.enter="page = page - 2"
-          :aria-label="`go to page ${page - 1}`"
+          @click="changePage(page - 2)"
+          @keyup.enter="changePage(page - 2)"
+          :aria-label="`go to page ${page - 2}`"
           >{{ page - 2 }}</a
         >
       </li>
@@ -165,8 +165,8 @@ Description: calculates and presents page numbers
         <a
           class="pagination-link is-small m-1"
           tabindex="2"
-          @click="page--"
-          @keyup.enter="page--"
+          @click="changePage(page - 1)"
+          @keyup.enter="changePage(page - 1)"
           :aria-label="`go to page ${page - 1}`"
           >{{ page - 1 }}</a
         >
@@ -188,8 +188,8 @@ Description: calculates and presents page numbers
         "
       >
         <a
-          @click="page + 1 > lastPage ? null : page++"
-          @keyup.enter="page++"
+          @click="page + 1 > lastPage ? null : changePage(page + 1)"
+          @keyup.enter="page + 1 > lastPage ? null : changePage(page + 1)"
           class="pagination-link is-small"
           :aria-label="`go to page ${page + 1}`"
           tabindex="2"
@@ -199,8 +199,8 @@ Description: calculates and presents page numbers
       </li>
       <li v-if="page < 3 || (lastPage < 3 && page + 2 > lastPage - 1)">
         <a
-          @click="page + 2 > lastPage ? null : (page = page + 2)"
-          @keyup.enter="page = page + 2"
+          @click="page + 2 > lastPage ? null : changePage(page + 2)"
+          @keyup.enter="page + 2 > lastPage ? null : changePage(page + 2)"
           class="pagination-link is-small"
           :aria-label="`go to next page`"
           tabindex="2"
@@ -210,8 +210,8 @@ Description: calculates and presents page numbers
       </li>
       <li v-if="page === lastPage - (lastPage - 1)">
         <a
-          @click="page + 3 > lastPage ? null : (page = page + 3)"
-          @keyup.enter="page = page + 3"
+          @click="page + 3 > lastPage ? null : changePage(page + 3)"
+          @keyup.enter="page + 3 > lastPage ? null : changePage(page + 3)"
           class="pagination-link is-small"
           :aria-label="`go to next page`"
           tabindex="2"
@@ -221,8 +221,8 @@ Description: calculates and presents page numbers
       </li>
       <li v-if="(page + 1 <= lastPage && page <= lastPage) || (lastPage < 5 && page === lastPage)">
         <a
-          @click="lastPage < 5 ? null : (page = lastPage)"
-          @keyup.enter="page = lastPage"
+          @click="lastPage < 5 ? null : changePage(lastPage)"
+          @keyup.enter="lastPage < 5 ? null : changePage(lastPage)"
           class="pagination-link is-small"
           :aria-label="`go to lastpage ${lastPage}`"
           tabindex="2"
@@ -243,12 +243,21 @@ Description: calculates and presents page numbers
 import { computed, ref, watch, type Ref } from 'vue'
 import { preferences } from '@/assets/fetchMethods'
 import { isBusy, hasSearch } from '@/assets/appState'
+import { useSearchStore } from '@/stores/SearchStore'
+import { storeToRefs } from 'pinia'
 
+const searchStore = useSearchStore()
+const { page } = storeToRefs(searchStore)
 const emit = defineEmits(['newPage'])
-const page: Ref = defineModel('page')
+
 const atTop = ref(true)
 const totalHits: Ref = defineModel('totalHits')
 const lastPage = computed(() => Math.floor((totalHits.value - 1) / preferences.resultsPerPage) + 1)
+
+const changePage = (pageNumber: number) => {
+  page.value = pageNumber
+  emit('newPage')
+}
 
 watch(atTop, (newV) => {
   const snippetDiv = document.getElementById('snippets')
@@ -258,6 +267,4 @@ watch(atTop, (newV) => {
       : snippetDiv.scrollTo({ top: snippetDiv.scrollHeight, behavior: 'instant' })
   }
 })
-
-watch(page, () => emit('newPage'))
 </script>

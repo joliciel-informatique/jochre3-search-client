@@ -80,7 +80,7 @@
         </span>
       </span>
     </a>
-    <PageNumbering @newPage="emit('newPage')" v-model:totalHits="totalHits" v-model:page="page" />
+    <PageNumbering @newPage="emit('newPage')" v-model:totalHits="totalHits" />
   </div>
   <aside
     v-if="searchResults?.length"
@@ -146,11 +146,15 @@ import type { SearchResult } from '@/assets/interfacesExternals'
 import PageNumbering from '../../SearchBar/Navigation/PageNumbering/PageNumbering.vue'
 import FacetBar from '../FacetBar/FacetBar.vue'
 import { useTemplateRefsList } from '@vueuse/core'
+import { useSearchStore } from '@/stores/SearchStore'
+import { storeToRefs } from 'pinia'
+
+const searchStore = useSearchStore()
+const { page } = storeToRefs(searchStore)
 
 const preferences = usePreferencesStore()
 
 const searchResults = defineModel<Array<SearchResult>>('searchResults')
-const page: Ref = defineModel('page')
 const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
