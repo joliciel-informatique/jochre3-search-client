@@ -47,12 +47,11 @@
         v-model:exclude-from-search="excludeFromSearch"
       />
       <div class="is-hidden-touch">
-        <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" v-model:page="page" />
+        <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
       </div>
       <div class="is-hidden-desktop">
         <ContentsTable
           v-model:search-results="searchResults"
-          v-model:page="page"
           v-model:image-modal="imageModal"
           v-model:metadata-modal="metadataModal"
           v-model:notification="notification"
@@ -63,9 +62,9 @@
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
           v-model:facets="facets"
-          @new-page="newPage"
           @reset-search-results="resetSearchResults"
           @new-search="newSearch"
+          @new-page="newPage"
         />
       </div>
     </nav>
@@ -80,7 +79,6 @@
       <div class="is-hidden-touch">
         <ContentsTable
           v-model:search-results="searchResults"
-          v-model:page="page"
           v-model:image-modal="imageModal"
           v-model:metadata-modal="metadataModal"
           v-model:notification="notification"
@@ -91,7 +89,6 @@
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
           v-model:facets="facets"
-          @new-page="newPage"
           @reset-search-results="resetSearchResults"
           @new-search="newSearch"
         />
@@ -191,23 +188,31 @@ const UserOptions = defineAsyncComponent(
 )
 
 // Import interfaces
-import { type SearchResult, type AggregationBin } from '../../assets/interfacesExternals'
+import { type SearchResult, type AggregationBin } from '@/assets/interfacesExternals'
 
 // This is better kept in Pinia or something similar
 import { hasSearch } from '@/assets/appState'
-import { storeToRefs } from 'pinia'
-import { usePreferencesStore } from '@/stores/PreferencesStore'
 
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { useSearchStore } from '@/stores/SearchStore'
+
+const searchStore = useSearchStore()
+const { page } = storeToRefs(searchStore)
 const preferences = usePreferencesStore()
+
 const { initializeMedia } = preferences
 
-const { show, authorFacetCount } = storeToRefs(preferences)
+const { show } = storeToRefs(preferences)
+
+import { storeToRefs } from 'pinia'
+
+const { authorFacetCount } = storeToRefs(preferences)
 
 const query = ref('')
+// const selectedEntry = ref<SearchResult>()
 const selectedEntryIdx = ref(0)
 const searchResults = ref<Array<SearchResult>>([])
 const totalHits = ref()
-const page = ref(1)
 const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
@@ -298,16 +303,15 @@ onMounted(() => {
         return { label: authorName, count: 10, active: false }
       })
 
-    runSearch()
+    runSearch(false)
   })
 })
 
 const newPage = () => runSearch()
 const newSearch = () => (page.value = 1) && runSearch()
-const runSearch = () => search()
 
-const defineSearchParams = () =>
-  Object.assign(
+const defineSearchParams = () => {
+  return Object.assign(
     {},
     query.value?.length ? { query: query.value.trim() } : null,
     strict.value.toString() !== null ? { strict: strict.value.toString() } : null,
@@ -316,6 +320,7 @@ const defineSearchParams = () =>
     toYear.value != null && toYear.value > 0 ? { 'to-year': toYear.value.toString() } : null,
     fromYear.value != null && fromYear.value > 0 ? { 'from-year': fromYear.value.toString() } : null
   )
+}
 
 const params = ref(defineSearchParams())
 
@@ -343,16 +348,20 @@ const resetSearchResults = () => {
   hasAdvancedSearchCriteria.value = false
   showAdvancedSearchPanel.value = false
 
-  window.history.replaceState({}, document.title, '/')
+  history.pushState({}, document.title, '/')
 }
 
-watch(searchResults, (newV) =>
-  document
-    .getElementById('header')
-    ?.setAttribute('style', newV?.length ? 'display:none' : 'display:flex')
-)
+watch(searchResults, (newV) => {
+  const header = document.getElementById('header')
+  if (newV?.length) {
+    header?.setAttribute('style', 'display:none')
+  } else {
+    header?.setAttribute('style', 'display:flex')
+  }
+})
+
 watch(excludeFromSearch, () => (authorInclude.value = !excludeFromSearch.value))
-watch(resultsPerPage, () => search())
+watch(resultsPerPage, () => runSearch(false))
 watch(authorFacetCount, () => searchFacets())
 
 // Close all other panels on Mobile
@@ -365,6 +374,7 @@ watch(showAdvancedSearchPanel, (newV) => {
     preferences.show = false
   }
 })
+
 watch(openMobileSearchResultsToc, (newV) => {
   if (newV) {
     showAdvancedSearchPanel.value = false
@@ -392,6 +402,7 @@ watch(openNavBarMobileMenu, (newV) => {
     preferences.show = false
   }
 })
+
 watch(show, (newV) => {
   if (newV) {
     showAdvancedSearchPanel.value = false
@@ -401,6 +412,7 @@ watch(show, (newV) => {
     openNavBarMobileMenu.value = false
   }
 })
+
 watch(openMobileFacets, (newV) => {
   if (newV) {
     showAdvancedSearchPanel.value = false
@@ -431,7 +443,7 @@ const searchFacets = async () => {
   )
 }
 
-const search = async () => {
+const runSearch = async (addHistory: boolean = true) => {
   isLoading.value = true
 
   const activeFacets = facets.value.filter((facet) => facet.active).map((facet) => facet.label)
@@ -484,7 +496,7 @@ const search = async () => {
   searchParams.append('row-padding', '2')
   searchParams.append('physical-newlines', 'false')
 
-  if (!hasActiveFacets) {
+  if (!hasActiveFacets && addHistory) {
     const urlParams = new URLSearchParams({ ...Object.fromEntries(searchParams) })
     urlParams.delete('authors')
     urlParams.delete('author-include')
@@ -577,4 +589,10 @@ const search = async () => {
       return false
     })
 }
+
+defineExpose({
+  newSearch,
+  newPage,
+  resetSearchResults
+})
 </script>

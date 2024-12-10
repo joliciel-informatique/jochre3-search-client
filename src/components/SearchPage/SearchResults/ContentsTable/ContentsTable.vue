@@ -80,7 +80,7 @@
         </span>
       </span>
     </a>
-    <PageNumbering @newPage="emit('newPage')" v-model:totalHits="totalHits" v-model:page="page" />
+    <PageNumbering @newPage="emit('newPage')" v-model:totalHits="totalHits" />
   </div>
   <aside
     v-if="searchResults?.length"
@@ -103,6 +103,12 @@
     class="toc-drawer menu box p-2"
     v-show="openMobileSearchResultsToc"
   >
+    <!-- <p
+      class="menu-label is-size-5 label p-2 is-flex is-flex-direction-row is-justify-content-space-between"
+    >
+      {{ $t('toc.contents-table-header') }}
+      <font-awesome-icon icon="gear" @click="preferences.show = true" />
+    </p> -->
     <p class="menu-label label pt-4 has-text-centered">
       {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
     </p>
@@ -132,10 +138,13 @@
   </aside>
 </template>
 <script setup lang="ts">
+import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { computed, defineAsyncComponent, nextTick, ref, watch, type Ref } from 'vue'
 import { useTemplateRefsList } from '@vueuse/core'
-import { usePreferencesStore } from '@/stores/PreferencesStore'
+
 import type { SearchResult } from '@/assets/interfacesExternals'
+import { useSearchStore } from '@/stores/SearchStore'
+import { storeToRefs } from 'pinia'
 
 const SingleResult = defineAsyncComponent(
   () => import('@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResult.vue')
@@ -147,14 +156,17 @@ const FacetBar = defineAsyncComponent(
   () => import('@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue')
 )
 
+const searchStore = useSearchStore()
+const { page } = storeToRefs(searchStore)
+
 const preferences = usePreferencesStore()
 
 const searchResults = defineModel<Array<SearchResult>>('searchResults')
-const page: Ref = defineModel('page')
 const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
 const notification: Ref = defineModel('notification')
+// const selectedEntry = defineModel<SearchResult>('selectedEntry')
 const selectedEntryIdx = defineModel<number>('selectedEntryIdx', { default: 0 })
 const totalHits = defineModel<number>('totalHits', { default: 0 })
 const facets: Ref = defineModel('facets')
