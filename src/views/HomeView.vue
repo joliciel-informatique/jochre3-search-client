@@ -20,16 +20,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import SearchPage from '@/components/SearchPage/SearchPage.vue'
-import LargeImage from '@/_components/Modals/LargeImage/LargeImage.vue'
-import FixMetaData from '@/_components/Modals/FixMetaData/FixMetaData.vue'
-import FixWord from '@/_components/Modals/FixWord/FixWord.vue'
-import Notification from '@/_components/Notifications/AppNotification/AppNotification.vue'
-import PreferencesSetup from '@/_components/Modals/Preferences/PreferencesSetup.vue'
-import Preferences from '@/_components/Modals/Preferences/PreferencesModal.vue'
-
+import { ref, defineAsyncComponent } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+
+const SearchPage = defineAsyncComponent(() => import('@/components/SearchPage/SearchPage.vue'))
+const LargeImage = defineAsyncComponent(
+  () => import('@/_components/Modals/LargeImage/LargeImage.vue')
+)
+const FixMetaData = defineAsyncComponent(
+  () => import('@/_components/Modals/FixMetaData/FixMetaData.vue')
+)
+const FixWord = defineAsyncComponent(() => import('@/_components/Modals/FixWord/FixWord.vue'))
+const Notification = defineAsyncComponent(
+  () => import('@/_components/Notifications/AppNotification/AppNotification.vue')
+)
+const PreferencesSetup = defineAsyncComponent(
+  () => import('@/_components/Modals/Preferences/PreferencesSetup.vue')
+)
+const Preferences = defineAsyncComponent(
+  () => import('@/_components/Modals/Preferences/PreferencesModal.vue')
+)
 
 const preferences = usePreferencesStore()
 

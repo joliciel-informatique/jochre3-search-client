@@ -67,15 +67,14 @@ Description: controls text snippets from the OCR text
 </template>
 
 <script setup lang="ts">
+import { onMounted, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { sha1 } from 'object-hash'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import SingleSnippet from '../DisplaySnippets/SingleSnippet/SingleSnippet.vue'
-import { onMounted, onUpdated } from 'vue'
 
 const preferences = usePreferencesStore()
-
 const { displayPerBook } = storeToRefs(preferences)
 
 const imageModal = defineModel('imageModal')

@@ -38,14 +38,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import VueI18n from 'vue-i18n'
 
 const preferences = usePreferencesStore()
 
-const keycloak = useKeycloakStore().keycloak
-const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
 const headerLinks = ref()
 
 const headerInfo = (info: {}) => {
@@ -57,12 +53,5 @@ const headerInfo = (info: {}) => {
     const linked = strippedLinks.map((link: string) => headerText[link])
     headerLinks.value = linked
   }
-}
-
-const loginOrLogout = () => (authenticated.value ? keycloak?.logout() : keycloak?.login())
-
-const toggleLanguage = (vi18n: VueI18n.VueI18n) => {
-  preferences.language = preferences.language === 'yi' ? 'en' : 'yi'
-  vi18n.locale = preferences.language
 }
 </script>

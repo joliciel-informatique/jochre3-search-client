@@ -36,6 +36,8 @@
 </template>
 <script setup lang="ts">
 import { watch, type Ref } from 'vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 const notification: Ref = defineModel('notification')
 
 watch(notification, () =>

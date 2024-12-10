@@ -197,7 +197,6 @@ Description: presents the facet bar
   </div>
 
   <div v-show="openMobileFacets" class="menu is-flex is-flex-direction-column is-hidden-desktop">
-    <!-- <div> -->
     <p class="menu-label is-size-5 label is-flex is-flex-direction-column is-align-items-center">
       <span class="is-flex is-flex-direction-row is-align-items-center"
         >{{ $t('facets.title', [authorFacetCount]) }}
@@ -210,7 +209,6 @@ Description: presents the facet bar
       ></span>
       <span class="pt-2 is-size-7 is-italic">{{ $t('facets.subtitle') }}</span>
     </p>
-    <!-- </div> -->
     <div class="is-flex is-flex-direction-column">
       <div class="columns is-vcentered m-1">
         <div class="column is-8 is-size-7">
@@ -242,10 +240,6 @@ Description: presents the facet bar
                     >{{ val }}</a
                   >
                 </div>
-                <!-- <hr class="dropdown-divider" />
-                <a href="#" @click.prevent="updateFacetCount(0)" class="dropdown-item">{{
-                  $t('facets.facet-count-all')
-                }}</a> -->
                 <hr class="dropdown-divider" />
                 <div class="dropdown-item">
                   <input
@@ -339,25 +333,22 @@ Description: presents the facet bar
   </div>
 </template>
 <script setup lang="ts">
-import { computed, ref, watch, type Ref } from 'vue'
-import FilterTag from '@/_components/FilterTag/FilterTag.vue'
+import { computed, defineAsyncComponent, ref, watch, type Ref } from 'vue'
 import { sha1 } from 'object-hash'
 import type { AggregationBin } from '@/assets/interfacesExternals'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { insertInSortedArray } from '@/assets/functions'
-import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
 import { useI18n } from 'vue-i18n'
+const FilterTag = defineAsyncComponent(() => import('@/_components/FilterTag/FilterTag.vue'))
+const AccordionCard = defineAsyncComponent(
+  () => import('@/_components/AccordionCard/AccordionCard.vue')
+)
 
+const emit = defineEmits(['newSearch'])
 const preferences = usePreferencesStore()
+
 const defaultFacetCount = [5, 10, 15, 20]
-
-const toggle = () => (showing.value = !showing.value)
-
 const showing = ref(true)
-
-const facets: Ref = defineModel<AggregationBin[]>('facets')
-const openMobileFacets = defineModel('openMobileFacets')
-
 const authorFacetCount = ref(preferences.authorFacetCount)
 const facetSortBy = ref(preferences.facetSortBy)
 const facetCount = ref(defaultFacetCount)
@@ -370,8 +361,10 @@ const dropdownTriggerValue = computed(() => {
   if (facetSortBy.value === 'active') return t('facets.active-facets')
   return t('facets.most-hits')
 })
+const facets: Ref = defineModel<AggregationBin[]>('facets')
+const openMobileFacets = defineModel('openMobileFacets')
 
-const emit = defineEmits(['newSearch'])
+const toggle = () => (showing.value = !showing.value)
 
 // Set user preferences from dropdown options
 const updateFacetCount = (val: number) => {

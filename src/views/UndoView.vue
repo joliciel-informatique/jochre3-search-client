@@ -18,16 +18,15 @@
 </template>
 
 <script setup lang="ts">
-import HeaderPage from '@/components/HeaderPage/HeaderPage.vue'
-import FooterPage from '@/components/FooterPage/FooterPage.vue'
-
-import { onMounted, ref } from 'vue'
+import { defineAsyncComponent, onMounted, ref } from 'vue'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { fetchData } from '@/assets/fetchMethods'
 
-const preferences = usePreferencesStore()
+const HeaderPage = defineAsyncComponent(() => import('@/components/HeaderPage/HeaderPage.vue'))
+const FooterPage = defineAsyncComponent(() => import('@/components/FooterPage/FooterPage.vue'))
 
+const preferences = usePreferencesStore()
 const route = useRoute()
 
 const responseCode = ref<number>()
