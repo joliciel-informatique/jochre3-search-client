@@ -22,8 +22,8 @@
     "title": "Book title",
     "date-from": "Published between",
     "date-to": "and",
-    "document-reference": "Document reference(s)",
-    "document-reference-placeholder": "Add document references separated by a comma",
+    "document-reference": "ID number(s)",
+    "document-reference-placeholder": "Add ID numbers separated by a comma",
     "sort-by": "Sort by",
     "reset": "Reset search",
     "sort": {
@@ -58,7 +58,7 @@
     "alternate-author": "Author in transcription",
     "publisher": "Publisher",
     "publication-year": "Date",
-    "document-reference": "Document reference: {0}",
+    "document-reference": "ID number: {0}",
     "result-unknown-author": "unknown author",
     "none": "Uh-oh! Your query did not return any results",
     "show-original-page": "Go to book (page {0})",
@@ -119,7 +119,7 @@
     "next-match": ">>",
     "prev-match-tooltip": "Previous page with matching highlights",
     "next-match-tooltip": "Next page with matching highlights",
-    "book-not-found": "Uh-oh! We could not find a record for document reference '{0}'!"
+    "book-not-found": "Uh-oh! We could not find a record for ID '{0}'!"
   },
   "modal": {
     "cancel": "Cancel",
