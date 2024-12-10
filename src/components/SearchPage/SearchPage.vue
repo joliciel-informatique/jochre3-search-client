@@ -47,12 +47,11 @@
         v-model:exclude-from-search="excludeFromSearch"
       />
       <div class="is-hidden-touch">
-        <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" v-model:page="page" />
+        <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
       </div>
       <div class="is-hidden-desktop">
         <ContentsTable
           v-model:search-results="searchResults"
-          v-model:page="page"
           v-model:image-modal="imageModal"
           v-model:metadata-modal="metadataModal"
           v-model:notification="notification"
@@ -63,9 +62,9 @@
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
           v-model:facets="facets"
-          @new-page="newPage"
           @reset-search-results="resetSearchResults"
           @new-search="newSearch"
+          @new-page="newPage"
         />
       </div>
     </nav>
@@ -80,7 +79,6 @@
       <div class="is-hidden-touch">
         <ContentsTable
           v-model:search-results="searchResults"
-          v-model:page="page"
           v-model:image-modal="imageModal"
           v-model:metadata-modal="metadataModal"
           v-model:notification="notification"
@@ -91,7 +89,6 @@
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
           v-model:facets="facets"
-          @new-page="newPage"
           @reset-search-results="resetSearchResults"
           @new-search="newSearch"
         />
@@ -175,13 +172,16 @@ import UserOptions from './UserOptions/UserOptions.vue'
 import FooterPage from '../FooterPage/FooterPage.vue'
 
 // Import interfaces
-import { type SearchResult, type AggregationBin } from '../../assets/interfacesExternals'
+import { type SearchResult, type AggregationBin } from '@/assets/interfacesExternals'
 
 // This is better kept in Pinia or something similar
-import { hasSearch } from '../../assets/appState'
+import { hasSearch } from '@/assets/appState'
 
-import { usePreferencesStore } from '../../stores/PreferencesStore'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { useSearchStore } from '@/stores/SearchStore'
 
+const searchStore = useSearchStore()
+const { page } = storeToRefs(searchStore)
 const preferences = usePreferencesStore()
 
 const { initializeMedia } = preferences
@@ -197,7 +197,6 @@ const query = ref('')
 const selectedEntryIdx = ref(0)
 const searchResults = ref<Array<SearchResult>>([])
 const totalHits = ref()
-const page = ref(1)
 const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
@@ -288,16 +287,12 @@ onMounted(() => {
         return { label: authorName, count: 10, active: false }
       })
 
-    runSearch()
+    runSearch(false)
   })
 })
 
 const newPage = () => runSearch()
 const newSearch = () => (page.value = 1) && runSearch()
-
-const runSearch = () => {
-  search()
-}
 
 const defineSearchParams = () => {
   return Object.assign(
@@ -337,7 +332,7 @@ const resetSearchResults = () => {
   hasAdvancedSearchCriteria.value = false
   showAdvancedSearchPanel.value = false
 
-  window.history.replaceState({}, document.title, '/')
+  history.pushState({}, document.title, '/')
 }
 
 watch(searchResults, (newV) => {
@@ -350,7 +345,7 @@ watch(searchResults, (newV) => {
 })
 
 watch(excludeFromSearch, () => (authorInclude.value = !excludeFromSearch.value))
-watch(resultsPerPage, () => search())
+watch(resultsPerPage, () => runSearch(false))
 watch(authorFacetCount, () => searchFacets())
 
 // Close all other panels on Mobile
@@ -432,7 +427,7 @@ const searchFacets = async () => {
   )
 }
 
-const search = async () => {
+const runSearch = async (addHistory: boolean = true) => {
   isLoading.value = true
 
   const activeFacets = facets.value.filter((facet) => facet.active).map((facet) => facet.label)
@@ -485,7 +480,7 @@ const search = async () => {
   searchParams.append('row-padding', '2')
   searchParams.append('physical-newlines', 'false')
 
-  if (!hasActiveFacets) {
+  if (!hasActiveFacets && addHistory) {
     const urlParams = new URLSearchParams({ ...Object.fromEntries(searchParams) })
     urlParams.delete('authors')
     urlParams.delete('author-include')
