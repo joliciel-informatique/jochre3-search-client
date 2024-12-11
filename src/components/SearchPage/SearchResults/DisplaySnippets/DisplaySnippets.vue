@@ -28,6 +28,11 @@ Description: controls text snippets from the OCR text
           v-if="displayPerBook"
           class="is-invisible"
         />
+        <BookHeader
+          :bookIndex="bookIndex"
+          :title="result.metadata.title"
+          :author="result.metadata.author"
+        />
         <ul
           class="p-2 pt-4 snippets-on"
           :class="
@@ -72,7 +77,11 @@ import { sha1 } from 'object-hash'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import SingleSnippet from '../DisplaySnippets/SingleSnippet/SingleSnippet.vue'
-import { onMounted, onUpdated } from 'vue'
+import { defineAsyncComponent, onMounted, onUpdated } from 'vue'
+
+const BookHeader = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchResults/DisplaySnippets/BookHeader/BookHeader.vue')
+)
 
 const preferences = usePreferencesStore()
 
