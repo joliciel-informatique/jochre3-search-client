@@ -6,8 +6,10 @@
     tabindex="-1"
   >
     <div class="column is-2 p-2">
-      <span class="logo">
-        <img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')" />
+      <span>
+        <a :href="$t('header.logo-url')">
+          <img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')" />
+        </a>
       </span>
     </div>
     <div class="column p-2 is-col-span-2">
