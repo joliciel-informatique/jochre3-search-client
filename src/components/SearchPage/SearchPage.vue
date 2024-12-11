@@ -2,7 +2,19 @@
   <header id="topbar" class="is-flex is-flex-direction-column-reverse">
     <nav class="is-flex is-flex-direction-column navbar" id="navbar" role="navigation">
       <div class="navbar-brand is-flex is-flex-direction-row is-justify-content-space-between">
-        <div class="navbar-item is-flex is-flex-direction-row is-flex-grow-5 is-flex-shrink-1">
+        <div
+          v-if="searchResults.length"
+          class="navbar-item logo is-flex is-flex-direction-row is-align-items-start is-flex-grow-1 is-flex-shrink-1"
+          :class="isMobile ? 'px-2' : ''"
+        >
+          <a href="/">
+            <img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')" />
+          </a>
+        </div>
+        <div
+          class="navbar-item is-flex is-flex-direction-row is-flex-grow-4 is-flex-shrink-2"
+          :class="isMobile ? 'px-2' : ''"
+        >
           <SearchBar
             @newSearch="newSearch"
             @resetSearchResults="resetSearchResults"
@@ -206,7 +218,7 @@ const { show } = storeToRefs(preferences)
 
 import { storeToRefs } from 'pinia'
 
-const { authorFacetCount } = storeToRefs(preferences)
+const { authorFacetCount, isMobile } = storeToRefs(preferences)
 
 const query = ref('')
 // const selectedEntry = ref<SearchResult>()
