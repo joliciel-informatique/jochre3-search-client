@@ -16,6 +16,7 @@
     "related-word-forms": "Strict",
     "related-word-forms-tooltip": "Checking this box will exclude related word forms (of the same stem/lemma) in search results (e.g. 'eat, 'eaten', 'ate')",
     "keyboard": "Open Yiddish on-screen keyboard",
+    "start-search": "Search!",
     "field-instructions": "*These fields accept Roman or Yiddish characters.",
     "author": "Author",
     "authorPlaceholder": "Type author name (case-sensitive)",
