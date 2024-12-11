@@ -43,7 +43,11 @@ Description: presents the search bar
           />
 
           <span
-            class="icon is-small is-clickable is-right"
+            class="icon is-small is-clickable"
+            :class="{
+              'is-left': !preferences.displayLeftToRight,
+              'is-right': preferences.displayLeftToRight
+            }"
             tabindex="0"
             aria-label="reset"
             @click="emit('resetSearchResults')"
