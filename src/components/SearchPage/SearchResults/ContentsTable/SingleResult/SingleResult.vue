@@ -26,7 +26,7 @@ Description: presents OCR record metadata
             }})</span
           >
           <span tabindex="3" @click="openMetadataModal" @keyup.enter="openMetadataModal">
-            <span class="icon fa-sm">
+            <span class="edit-metadata-btn icon fa-sm">
               <font-awesome-icon icon="pen-to-square" />
             </span>
           </span>

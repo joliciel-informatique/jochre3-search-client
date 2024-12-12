@@ -30,7 +30,7 @@ Description: displays text snippets from the OCR text
       </p>
       <!-- Open page in book -->
       <button
-        class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column has-text-centered"
+        class="open-page-btn card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column has-text-centered"
         aria-label="view book"
         v-if="snippet.deepLink"
         @click="openDeepLink(snippet.deepLink)"
@@ -45,7 +45,7 @@ Description: displays text snippets from the OCR text
 
       <!-- View transcribed text -->
       <button
-        class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column has-text-centered"
+        class="open-transcription-btn card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column has-text-centered"
         aria-label="view transcription"
         @click="openTranscribedText()"
         @keyup.enter="openTranscribedText()"
@@ -59,19 +59,12 @@ Description: displays text snippets from the OCR text
         }}</span>
       </button>
     </header>
-    <div class="card-content" :data-docref="docRef" :data-page="snippet.page">
+    <div class="snippet-data card-content" :data-docref="docRef" :data-page="snippet.page">
       <div class="columns">
         <div
           v-if="preferences.displayLeftToRight === preferences.corpusLeftToRight"
-          :class="{
-            column: true,
-            snippet: true,
-            'has-text-weight-medium': true,
-            'pr-2': true,
-            'pl-2': true,
-            'rtl-align': !preferences.corpusLeftToRight,
-            rtl: !preferences.corpusLeftToRight
-          }"
+          class="column snippet-text py-2 has-text-weight-medium"
+          :class="!preferences.corpusLeftToRight ? 'rtl-align rtl' : ''"
           v-html="snippet.text"
           @dblclick="openWordModal"
           v-touch:longtap="openWordModal"

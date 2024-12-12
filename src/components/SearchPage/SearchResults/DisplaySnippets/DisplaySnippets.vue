@@ -10,6 +10,7 @@ Methods: none
 Description: controls text snippets from the OCR text
 -->
 <template>
+  <VueOnboardingTour v-bind="tourUponSearch" ref="tourUponSearchRef" />
   <div
     class="is-flex is-justify-content-center bla"
     :class="
@@ -67,12 +68,16 @@ Description: controls text snippets from the OCR text
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUpdated } from 'vue'
+import { onMounted, onUpdated, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { sha1 } from 'object-hash'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import SingleSnippet from '../DisplaySnippets/SingleSnippet/SingleSnippet.vue'
+
+import VueOnboardingTour from '@/_components/VueOnboardingTour/VueOnboardingTour.vue'
+import { tourUponSearch } from '@/assets/tours'
+const tourUponSearchRef = ref(null)
 
 const preferences = usePreferencesStore()
 const { displayPerBook } = storeToRefs(preferences)
@@ -127,6 +132,13 @@ const scrolling = () => {
   }
 }
 
-onMounted(() => document.getElementById('snippets')?.addEventListener('scroll', scrolling))
+onMounted(() => {
+  document.getElementById('snippets')?.addEventListener('scroll', scrolling)
+  if (tourUponSearchRef.value) {
+    const tour = tourUponSearchRef.value as any
+    tour.startTour()
+  }
+})
+
 onUpdated(() => document.getElementById('snippets')?.addEventListener('scroll', scrolling))
 </script>

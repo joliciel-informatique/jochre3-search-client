@@ -1,4 +1,5 @@
 import type { ShallowRef } from 'vue'
+import type { VueMessageType } from 'vue-i18n'
 
 export interface Snippet {
   text: string
@@ -84,4 +85,25 @@ export interface HighlightedPage {
 export interface HighlightedDocument {
   title: string
   pages: HighlightedPage[]
+}
+
+export interface Tour {
+  tourId: string | number
+  defaultTemplate?: boolean
+  overlay?: boolean
+  startEvent?: string
+  scrollableContainerSelector?: string
+  cookieStorage?: boolean
+  endDate?: Date
+  labelTerminate?: string
+  steps: TourStep[]
+}
+
+export interface TourStep {
+  target: string
+  title: string
+  description: string
+  tag?: string
+  beforeScript?: () => void
+  afterScript?: () => void
 }

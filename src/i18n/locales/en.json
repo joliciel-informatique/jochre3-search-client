@@ -147,5 +147,35 @@
   },
   "privacy": {
     "policy": "Privacy Policy"
+  },
+  "tours": {
+    "upon-load": {
+      "0": {
+        "target": "#query",
+        "title": "Welcome to the new JOCHRE interface",
+        "description": "Start your journey into Yiddish literature by entering a search term here. You can use Yiddish and Latin characters.",
+        "tag": "New!"
+      },
+      "1": {
+        "target": "#query-keyboard-btn",
+        "title": "Yiddish onscreen keyboard",
+        "description": "If you do not have a Yiddish keyboard configuration set up, simply use our onscreen Yiddish keyboard!"
+      },
+      "2": {
+        "target": "#strictSearchCheckboxBtn",
+        "title": "Strict search",
+        "description": "JOCHRE comes with many features to restrict or expand your search. For example, checking this box excludes any lemmata (derived verb forms) from the search results."
+      },
+      "3": {
+        "target": "#advancedSearchBtn",
+        "title": "Advanced search",
+        "description": "You can search by specific aspects within the metadata too such as author names, dates and publisher information."
+      },
+      "4": {
+        "target": "#userGuideBtn",
+        "title": "User guide",
+        "description": "Note that you can also use special characters in the search bar to format your query. For example, '\"Schvarts\"' (with quotation marks) will not yield the same results as 'Schvarts' without quotation marks. Visit the user guide for a full explanation of your search options!"
+      }
+    }
   }
 }

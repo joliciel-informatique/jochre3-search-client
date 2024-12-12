@@ -11,6 +11,8 @@ import directives from './directives/'
 import Vue3TouchEvents, { type Vue3TouchEventsOptions } from 'vue3-touch-events'
 import cookieConsentConfig from './assets/cookieConsentConfig'
 
+import { setupI18n } from './config/i18n'
+
 import en from './i18n/locales/en.json'
 import yi from './i18n/locales/yi.json'
 import keycloakParams from './security/keycloak.json'
@@ -59,9 +61,9 @@ console.log('Starting up')
 fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
   .then((response) => response.json())
   .then((config) => {
+    console.log('found config')
     mergeDeep(customizedMessages, messages, config)
 
-    console.log('found config')
     const apiUrl = config['api-url'] ?? 'http://localhost:4242'
 
     setURL(apiUrl)
@@ -98,12 +100,8 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
           throw new Error('Login required but not authenticated')
         }
 
-        const i18n = createI18n({
-          legacy: false,
-          locale: preferences.language,
-          fallbackLocale: 'en',
-          messages: customizedMessages
-        })
+        const i18n = setupI18n(customizedMessages, preferences.language)
+
         const i18nPromise = Promise.resolve(i18n)
         return i18nPromise
       } else {
@@ -130,15 +128,7 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
 
         const i18n = preferences
           .load()
-          .then((language) => {
-            const i18n = createI18n({
-              legacy: false,
-              locale: language,
-              fallbackLocale: 'en',
-              messages: customizedMessages
-            })
-            return i18n
-          })
+          .then((language) => setupI18n(customizedMessages, language))
           .catch((error) => {
             const i18n = createI18n({
               legacy: false,

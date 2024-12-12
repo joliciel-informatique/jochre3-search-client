@@ -74,7 +74,7 @@ Description: presents the search bar
           @onEnter="() => emit('newSearch')"
         />
         <p class="control" v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
-          <a class="button is-static is-clickable">
+          <a id="strictSearchCheckboxBtn" class="button is-static is-clickable">
             <label for="strictSearchCheckbox" class="mx-2 is-clickable"
               ><span
                 ><span class="is-hidden-mobile">{{ $t('search.related-word-forms') }}</span>
@@ -95,6 +95,7 @@ Description: presents the search bar
       class="py-2 is-flex is-flex-direction-row is-justify-content-space-between is-hidden-touch"
     >
       <a
+        id="userGuideBtn"
         class="navbar-item"
         href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
         target="_blank"

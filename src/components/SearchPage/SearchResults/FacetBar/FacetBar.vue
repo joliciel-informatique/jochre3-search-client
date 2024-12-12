@@ -10,8 +10,8 @@ Methods: None
 Description: presents the facet bar
 -->
 <template>
-  <!-- <div class="facetColumn column is-2 is-hidden-touch"> -->
   <div
+    id="facetBarToCDesktop"
     class="box table-of-contents is-flex is-flex-direction-column facets menu is-hidden-touch"
     :class="preferences.displayLeftToRight ? 'right' : 'left'"
     role="navigation"
@@ -47,7 +47,7 @@ Description: presents the facet bar
       </template>
       <template #content>
         <div class="is-flex is-flex-direction-column">
-          <div class="columns is-vcentered m-1">
+          <div id="facets-authors-to-display" class="columns is-vcentered m-1">
             <div class="column is-6 is-size-7">
               <span
                 class=""
@@ -96,7 +96,7 @@ Description: presents the facet bar
               </div>
             </div>
           </div>
-          <div class="columns is-vcentered m-1">
+          <div id="facets-sort-authors" class="columns is-vcentered m-1">
             <div class="column is-6 is-size-7">
               <span
                 class=""
@@ -151,18 +151,18 @@ Description: presents the facet bar
             </div>
           </div>
           <div>
-            <span>
-              <p class="pb-3">
-                <input
-                  class="input mb-2"
-                  v-model="filterValue"
-                  type="text"
-                  :placeholder="$t('facets.filter')"
-                />
-                <span class="menu-label p-2" v-if="filterValue !== undefined">
-                  {{ $t('facets.relevant-facets', [filteredFacets?.length]) }}
-                </span>
-              </p>
+            <span id="facets-filter-authors" class="pb-3">
+              <!-- <p class="pb-3"> -->
+              <input
+                class="input mb-2"
+                v-model="filterValue"
+                type="text"
+                :placeholder="$t('facets.filter')"
+              />
+              <span class="menu-label p-2" v-if="filterValue !== undefined">
+                {{ $t('facets.relevant-facets', [filteredFacets?.length]) }}
+              </span>
+              <!-- </p> -->
             </span>
           </div>
         </div>
@@ -185,6 +185,7 @@ Description: presents the facet bar
       <template #footer>
         <div class="columns">
           <span
+            id="collapseFacetBarDesktop"
             class="column footer-icon p-2 is-small has-text-centered is-clickable"
             :class="{ rotate: !showing }"
             @click="toggle()"
