@@ -3,7 +3,7 @@
     v-if="displayOnboardingTour"
     data-test="onboardingTour"
     class="vueOnboardingTour"
-    :class="{ 'fixed z-[9999] h-full w-full': overlay }"
+    :class="{ fixed: overlay }"
   >
     <!-- Overlay Background -->
     <div v-if="overlay" :style="styleOverlay" data-test="overlay" class="overlay"></div>
@@ -14,7 +14,6 @@
       :style="stylePopup"
       :class="[targetElementVisible ? 'opacity-100' : 'opacity-0']"
       class="popupContainer z-[9999] fixed"
-      data-test="popupContainer"
     >
       <!-- Slot for Custom Content -->
       <slot :currentStep="currentStep" :currentStepIndex="currentStepIndex"></slot>
@@ -22,7 +21,7 @@
       <!-- Default Template Content -->
       <div v-if="defaultTemplate" class="card is-flex is-flex-direction-column">
         <div
-          class="card-header is-size-5 p-3 has-text-white is-flex is-flex-direction-row is-justify-content-space-between"
+          class="card-header is-size-5 p-3 has-text-white is-flex is-flex-direction-row is-justify-content-space-between is-align-items-center"
         >
           <!-- Chevron (Arrow Pointer) -->
           <!-- <span class="absolute" :class="styleChevron">
@@ -33,27 +32,18 @@
           </span> -->
 
           <!-- Step Tag (Optional) -->
-          <div
-            v-if="currentStep?.tag"
-            class="is-small font-medium text-gray-500 uppercase tracking-wider"
-          >
+          <div v-if="currentStep?.tag" class="is-small font-medium">
             {{ currentStep.tag }}
           </div>
 
           <!-- Step Title -->
-          <div
-            v-if="currentStep?.title"
-            class="stepTitle is-large font-semibold text-gray-900"
-            data-test="stepTitle"
-          >
+          <div v-if="currentStep?.title" class="is-large font-semibold">
             {{ currentStep.title }}
           </div>
           <!-- Close Icon -->
-          <span
-            class="closeIcon absolute top-4 right-4 is-clickable w-5 h-5 fill-gray-500 hover:fill-gray-700 transition-colors"
-            @click="endTour"
-            ><font-awesome-icon icon="xmark-circle" size="xl"
-          /></span>
+          <button class="absolute is-clickable" @click="endTour">
+            <font-awesome-icon icon="xmark-circle" size="xl" />
+          </button>
         </div>
 
         <div class="card-content">
@@ -89,8 +79,8 @@
             <span v-if="isNextStepEnabled" class="ml-auto is-clickable" @click="goNextStep"
               ><font-awesome-icon color="white" icon="circle-arrow-right" size="xl"
             /></span>
-            <span v-else @click="endTour">
-              {{ props.labelTerminate }}
+            <span class="ml-auto is-clickable" v-else @click="endTour">
+              <font-awesome-icon color="white" icon="xmark-circle" size="xl" />
             </span>
           </div>
         </div>
