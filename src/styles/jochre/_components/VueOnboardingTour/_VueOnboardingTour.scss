@@ -10,3 +10,17 @@
   z-index: 2394810928340912483901283409214831209348102934812094381209483109283449356713478512048301924756237450982175234;
   max-width: min-content;
 }
+.overlay {
+  position: absolute;
+  box-shadow:
+    inset 0px 0px 10px 0px rgba(255, 255, 255, 1),
+    0px 0px 0px 9999px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  z-index: 9999;
+}
+
+.disabled {
+  svg {
+    color: gray;
+  }
+}
