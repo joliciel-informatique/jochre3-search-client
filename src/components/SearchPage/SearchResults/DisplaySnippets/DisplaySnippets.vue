@@ -74,13 +74,12 @@ import { sha1 } from 'object-hash'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import SingleSnippet from '../DisplaySnippets/SingleSnippet/SingleSnippet.vue'
-
-import VueOnboardingTour from '@/_components/VueOnboardingTour/VueOnboardingTour.vue'
-import { tourUponSearch } from '@/assets/tours'
-const tourUponSearchRef = ref(null)
+import { useSearchStore } from '@/stores/SearchStore'
 
 const preferences = usePreferencesStore()
 const { displayPerBook } = storeToRefs(preferences)
+
+const { isLoading } = storeToRefs(useSearchStore())
 
 const imageModal = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
@@ -89,7 +88,6 @@ const selectedEntryIdx = defineModel<number>('selectedEntryIdx', { default: 0 })
 const searchResults = defineModel<SearchResult[]>('searchResults')
 const query = defineModel<string>('query')
 const strict = defineModel<boolean>('strict')
-const isLoading = defineModel('isLoading')
 
 // How many snippets for each volume are in view upon scroll only if shown in continuous list
 const scrolling = () => {

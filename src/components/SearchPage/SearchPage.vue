@@ -11,7 +11,6 @@
             v-model:has-advanced-search-criteria="hasAdvancedSearchCriteria"
             v-model:query="query"
             v-model:strict="strict"
-            v-model:is-loading="isLoading"
           />
         </div>
         <UserOptions
@@ -101,7 +100,6 @@
         v-model:word-modal="wordModal"
         v-model:selected-entry-idx="selectedEntryIdx"
         v-model:search-results="searchResults"
-        v-model:is-loading="isLoading"
         v-model:query="query"
         v-model:strict="strict"
       />
@@ -137,12 +135,7 @@
     </div>
 
     <!-- Not loading, no search, no results -->
-    <IndexSize
-      v-else
-      v-model:is-loading="isLoading"
-      v-model:notification="notification"
-      v-model:total-hits="totalHits"
-    />
+    <IndexSize v-else v-model:notification="notification" v-model:total-hits="totalHits" />
   </main>
   <footer
     id="footer"
@@ -194,14 +187,12 @@ const UserOptions = defineAsyncComponent(
 // Import interfaces
 import { type SearchResult, type AggregationBin } from '@/assets/interfacesExternals'
 
-// This is better kept in Pinia or something similar
-import { hasSearch } from '@/assets/appState'
-
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useSearchStore } from '@/stores/SearchStore'
 
 const searchStore = useSearchStore()
-const { page } = storeToRefs(searchStore)
+const { page, hasSearch, isLoading } = storeToRefs(searchStore)
+
 const preferences = usePreferencesStore()
 
 const { initializeMedia } = preferences
@@ -290,7 +281,6 @@ const excludeFromSearch = ref(false)
 const authorList = ref<Array<AggregationBin>>([])
 
 const strict = ref(false)
-const isLoading = ref(false)
 
 const title = ref('')
 const fromYear = ref()

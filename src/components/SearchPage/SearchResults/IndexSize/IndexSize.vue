@@ -4,7 +4,7 @@ Children: None
 Siblings: None
 
 Props: searchResults
-Variables: indexSize (number), isBusy (imported), hasSearch (imported)
+Variables: indexSize (number)
 Methods: fetchData
 
 Description: presents the current indexed number of books
@@ -24,10 +24,13 @@ Description: presents the current indexed number of books
 <script setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue'
 import { fetchData } from '@/assets/fetchMethods'
+import { useSearchStore } from '@/stores/SearchStore'
+import { storeToRefs } from 'pinia'
 
 const indexSize = ref(0)
-const isLoading: Ref = defineModel('isLoading')
 const notification: Ref = defineModel('notification')
+
+const { isLoading } = storeToRefs(useSearchStore())
 
 onMounted(() => {
   fetchData('size', 'get', undefined, 'json')

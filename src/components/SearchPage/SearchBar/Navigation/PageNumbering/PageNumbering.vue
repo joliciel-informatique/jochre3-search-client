@@ -4,7 +4,7 @@ Children: None
 Siblings: None
 
 Props: search, page, totalHits
-Variables: lastPage (computed), isBusy (boolean, imported), hasSearch (boolean, imported)
+Variables: lastPage (computed)
 Methods: gotoPage (local)
 
 Description: calculates and presents page numbers
@@ -19,7 +19,7 @@ Description: calculates and presents page numbers
       role="navigation"
       aria-label="pagination"
       tabindex="2"
-      v-if="totalHits > 0 && !isBusy && hasSearch"
+      v-if="totalHits > 0 && hasSearch"
     >
       <div>
         <button
@@ -128,7 +128,7 @@ Description: calculates and presents page numbers
     role="navigation"
     aria-label="pagination"
     tabindex="2"
-    v-if="totalHits > 0 && !isBusy && hasSearch"
+    v-if="totalHits > 0 && hasSearch"
   >
     <ul class="pagination-list is-flex-wrap-nowrap">
       <li v-if="(page <= lastPage && page > 1) || (lastPage <= 5 && page > 1)">
@@ -242,12 +242,11 @@ Description: calculates and presents page numbers
 <script setup lang="ts">
 import { computed, ref, watch, type Ref } from 'vue'
 import { preferences } from '@/assets/fetchMethods'
-import { isBusy, hasSearch } from '@/assets/appState'
 import { useSearchStore } from '@/stores/SearchStore'
 import { storeToRefs } from 'pinia'
 
 const searchStore = useSearchStore()
-const { page } = storeToRefs(searchStore)
+const { page, hasSearch } = storeToRefs(searchStore)
 const emit = defineEmits(['newPage'])
 
 const atTop = ref(true)

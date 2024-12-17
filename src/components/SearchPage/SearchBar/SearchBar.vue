@@ -133,14 +133,16 @@ Description: presents the search bar
 <script setup lang="ts">
 import { type Ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { useSearchStore } from '@/stores/SearchStore'
+import { storeToRefs } from 'pinia'
 
 const preferences = usePreferencesStore()
+const { isLoading } = storeToRefs(useSearchStore())
 
 const hasAdvancedSearchCriteria = defineModel('hasAdvancedSearchCriteria')
 
 const query: Ref = defineModel('query')
 const strict: Ref = defineModel('strict')
-const isLoading = defineModel('isLoading')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
