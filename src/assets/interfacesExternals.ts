@@ -88,22 +88,30 @@ export interface HighlightedDocument {
 }
 
 export interface Tour {
-  tourId: string | number
-  defaultTemplate?: boolean
-  overlay?: boolean
-  startEvent?: string
-  scrollableContainerSelector?: string
-  cookieStorage?: boolean
-  endDate?: Date
-  labelTerminate?: string
-  steps: TourStep[]
-}
-
-export interface TourStep {
-  target: string
+  // tourId: string | number
+  // defaultTemplate?: boolean
+  // overlay?: boolean
+  position: string
+  group: string | number
+  // startEvent?: string
+  // scrollableContainerSelector?: string
+  // cookieStorage?: boolean
+  // endDate?: Date
+  // labelTerminate?: string
+  // popupPosition?: string
+  id: string
   title: string
   description: string
   tag?: string
-  beforeScript?: () => void
-  afterScript?: () => void
+  // beforeScript?: () => void
+  // afterScript?: () => void
+}
+
+export interface UserPreferences {
+  language?: string
+  resultsPerPage?: number
+  displayPerBook?: boolean
+  authorFacetCount?: number
+  facetSortBy?: string
+  tours: string[]
 }
