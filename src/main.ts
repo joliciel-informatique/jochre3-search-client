@@ -11,6 +11,9 @@ import directives from './directives/'
 import Vue3TouchEvents, { type Vue3TouchEventsOptions } from 'vue3-touch-events'
 import cookieConsentConfig from './assets/cookieConsentConfig'
 
+import { useTourStore } from '@/stores/TourStore'
+// const { loadTours } = useTourStore()
+
 import { setupI18n } from './config/i18n'
 
 import en from './i18n/locales/en.json'
@@ -29,6 +32,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import SimpleKeyboard from './_components/SimpleKeyboard/SimpleKeyboard.vue'
+
 library.add(fas) // Adding all FAS icons
 
 const messages = {
@@ -102,6 +106,10 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
 
         const i18n = setupI18n(customizedMessages, preferences.language)
 
+        const tourStore = useTourStore()
+        const { loadTours } = tourStore
+        loadTours()
+
         const i18nPromise = Promise.resolve(i18n)
         return i18nPromise
       } else {
@@ -128,7 +136,15 @@ fetch(import.meta.env.BASE_URL + `conf/config.json?date=${Date.now()}`)
 
         const i18n = preferences
           .load()
-          .then((language) => setupI18n(customizedMessages, language))
+          .then((language) => {
+            const i18n = setupI18n(customizedMessages, language)
+
+            const tourStore = useTourStore()
+            const { loadTours } = tourStore
+            loadTours()
+
+            return i18n
+          })
           .catch((error) => {
             const i18n = createI18n({
               legacy: false,
