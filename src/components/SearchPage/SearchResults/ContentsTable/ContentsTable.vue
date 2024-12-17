@@ -104,12 +104,6 @@
     class="toc-drawer menu box p-2"
     v-show="openMobileSearchResultsToc"
   >
-    <!-- <p
-      class="menu-label is-size-5 label p-2 is-flex is-flex-direction-row is-justify-content-space-between"
-    >
-      {{ $t('toc.contents-table-header') }}
-      <font-awesome-icon icon="gear" @click="preferences.show = true" />
-    </p> -->
     <p class="menu-label label pt-4 has-text-centered">
       {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
     </p>
@@ -130,7 +124,7 @@
       </li>
     </ul>
   </aside>
-  <aside class="toc-drawer menu box p-2" v-show="openMobileFacets">
+  <aside v-if="!isDesktop" class="toc-drawer menu box p-2" v-show="openMobileFacets">
     <FacetBar
       @newSearch="emit('newSearch')"
       v-model:facets="facets"
@@ -140,27 +134,35 @@
 </template>
 <script setup lang="ts">
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import { computed, defineAsyncComponent, nextTick, ref, watch, type Ref } from 'vue'
+import { computed, defineAsyncComponent, nextTick, onMounted, ref, watch, type Ref } from 'vue'
 import { useTemplateRefsList } from '@vueuse/core'
 
 import type { SearchResult } from '@/assets/interfacesExternals'
 import { useSearchStore } from '@/stores/SearchStore'
 import { storeToRefs } from 'pinia'
 
-const SingleResult = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResult.vue')
-)
-const PageNumbering = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue')
-)
-const FacetBar = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue')
-)
+import SingleResult from '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResult.vue'
+
+import PageNumbering from '@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue'
+
+import FacetBar from '@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue'
+import { useTourStore } from '@/stores/TourStore'
+
+// const SingleResult = defineAsyncComponent(
+//   () => import('@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResult.vue')
+// )
+// const PageNumbering = defineAsyncComponent(
+//   () => import('@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue')
+// )
+// const FacetBar = defineAsyncComponent(
+//   () => import('@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue')
+// )
 
 const searchStore = useSearchStore()
 const { page } = storeToRefs(searchStore)
 
 const preferences = usePreferencesStore()
+const { isDesktop } = storeToRefs(preferences)
 
 const searchResults = defineModel<Array<SearchResult>>('searchResults')
 const imageModal: Ref = defineModel('imageModal')

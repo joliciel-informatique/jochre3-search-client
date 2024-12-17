@@ -49,7 +49,7 @@
       <div class="is-hidden-touch">
         <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
       </div>
-      <div class="is-hidden-desktop">
+      <div v-if="!isDesktop" class="is-hidden-desktop">
         <ContentsTable
           v-model:search-results="searchResults"
           v-model:image-modal="imageModal"
@@ -76,7 +76,7 @@
       v-if="hasSearch && searchResults?.length"
       class="is-flex is-flex-direction-row is-justify-content-space-between"
     >
-      <div class="is-hidden-touch">
+      <div v-if="isDesktop" class="is-hidden-touch">
         <ContentsTable
           v-model:search-results="searchResults"
           v-model:image-modal="imageModal"
@@ -194,7 +194,7 @@ const searchStore = useSearchStore()
 const { page, hasSearch, isLoading } = storeToRefs(searchStore)
 
 const preferences = usePreferencesStore()
-
+const { show, isDesktop, authorFacetCount } = storeToRefs(preferences)
 const { initializeMedia } = preferences
 
 const { show } = storeToRefs(preferences)
