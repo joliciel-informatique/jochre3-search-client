@@ -1,25 +1,18 @@
 <template>
-  <div
-    v-if="displayOnboardingTour"
-    data-test="onboardingTour"
-    class="vueOnboardingTour"
-    :class="{ fixed: overlay }"
-  >
+  <div v-if="currentStep" v-show="displayTour" class="vueOnboardingTour fixed">
     <!-- Overlay Background -->
-    <div v-if="overlay" :style="styleOverlay" data-test="overlay" class="overlay"></div>
+    <div :style="overlayStyle" class="overlay"></div>
 
     <!-- Popup Container -->
     <div
-      ref="popup"
-      :style="stylePopup"
-      :class="[targetElementVisible ? 'opacity-100' : 'opacity-0']"
-      class="popupContainer z-[9999] fixed"
+      id="popupContainer"
+      ref="popupContainer"
+      class="popupContainer"
+      :style="popupStyle"
+      :data-id="currentStep?.id"
     >
-      <!-- Slot for Custom Content -->
-      <slot :currentStep="currentStep" :currentStepIndex="currentStepIndex"></slot>
-
       <!-- Default Template Content -->
-      <div v-if="defaultTemplate" class="card is-flex is-flex-direction-column">
+      <div class="card is-flex is-flex-direction-column">
         <div
           class="card-header is-size-5 p-3 has-text-white is-flex is-flex-direction-row is-justify-content-space-between is-align-items-center"
         >
@@ -40,6 +33,7 @@
           <div v-if="currentStep?.title" class="is-large font-semibold">
             {{ currentStep.title }}
           </div>
+
           <!-- Close Icon -->
           <button class="absolute is-clickable" @click="endTour">
             <font-awesome-icon icon="xmark-circle" size="xl" />
@@ -57,26 +51,32 @@
           <!-- Navigation and Control -->
           <div class="is-flex is-justify-items-space-between p-4">
             <!-- Previous Step Icon -->
-            <span v-if="isPreviousStepEnabled" class="mr-auto is-clickable" @click="goPreviousStep"
-              ><font-awesome-icon color="white" icon="circle-arrow-left" size="xl"
-            /></span>
+            <span
+              :class="!completedSteps?.length ? 'disabled' : ''"
+              class="mr-auto is-clickable"
+              @click="prevStep"
+            >
+              <font-awesome-icon color="white" icon="circle-arrow-left" size="xl" />
+            </span>
 
             <!-- Step Indicators (Dots) -->
             <div class="is-flex is-flex-grow-1 is-justify-content-center">
               <span
-                v-for="(_, idx) in steps.length"
+                v-for="(step, idx) in [...completedSteps, ...remainingSteps]"
                 :key="`dot_step_${idx}`"
                 class="mx-1"
-                @click="setStep(idx)"
-                ><font-awesome-icon
+                :id="`dot_step_${idx}`"
+              >
+                <font-awesome-icon
                   color="white"
-                  :icon="idx === currentStepIndex ? 'dot-circle' : 'circle'"
                   size="xl"
-              /></span>
+                  :icon="step.id === currentStep.id ? 'dot-circle' : 'circle'"
+                />
+              </span>
             </div>
 
             <!-- Next Step Icon / End Tour -->
-            <span v-if="isNextStepEnabled" class="ml-auto is-clickable" @click="goNextStep"
+            <span v-if="remainingSteps.length > 1" class="ml-auto is-clickable" @click="nextStep"
               ><font-awesome-icon color="white" icon="circle-arrow-right" size="xl"
             /></span>
             <span class="ml-auto is-clickable" v-else @click="endTour">
@@ -90,405 +90,303 @@
 </template>
 
 <script setup lang="ts">
-import { type MaybeElement, useElementBounding } from '@vueuse/core'
-import { ref, onMounted, watch, computed, nextTick, onUnmounted, type Ref } from 'vue'
-import { useCookies } from '@vueuse/integrations/useCookies'
+// import { type MaybeElement, useElementBounding } from '@vueuse/core'
+import { ref, watch, computed, onMounted, type Ref } from 'vue'
 import type { Tour } from '@/assets/interfacesExternals'
+import { storeToRefs } from 'pinia'
+import { useTourStore } from '@/stores/TourStore'
 
-const props = withDefaults(defineProps<Tour>(), {
-  overlay: true,
-  cookieStorage: false,
-  defaultTemplate: true,
-  startEvent: undefined,
-  endDate: undefined,
-  scrollableContainerSelector: undefined,
-  labelTerminate: 'close'
-})
+const tourStore = useTourStore()
+const { completedSteps, remainingSteps, displayTour } = storeToRefs(tourStore)
+const { checkDOM } = tourStore
+// const remainingSteps = ref<Array<Tour>>([])
 
-const displayTour = ref(false)
-const currentStepIndex = ref(0)
-const stylePopup = ref({})
-const styleOverlay = ref({})
-const popupPosition = ref('left')
-const popup: Ref<HTMLDivElement | null> = ref(null)
-const cookies = useCookies()
+// const displayTour = ref(false)
 
-const emits = defineEmits(['startTour', 'endTour'])
+// let domObserverTarget: MutationObserver
+// let domObserverScrollable: MutationObserver
 
-let domObserverTarget: MutationObserver
-let domObserverScrollable: MutationObserver
-
+// Binding the target element
 const targetElement: Ref<Element | null> = ref(null)
-const scrollableContainerElement: Ref<Element | null> = ref(null)
+// const popupElement: Ref<Element | null> = ref(null)
+// const targetElementBound = computed(() => useElementBounding(targetElement.value as MaybeElement))
+// const popupElementBound = computed(() => useElementBounding(popupElement.value as MaybeElement))
+// const scrollableContainerElement: Ref<Element | null> = ref(null)
 
-/** COMPUTED */
-const currentStep = computed(() =>
-  props.steps?.length > 0 ? props.steps[currentStepIndex.value] : undefined
-)
+const currentStep = ref<Tour | undefined>(undefined)
+const popupContainer = ref()
 
-const targetElementBound = computed(() => useElementBounding(targetElement.value as MaybeElement))
+const targetElementPosition = ref()
+const containerPosition = ref({ height: 0, width: 0 })
 
-const scrollableContainerBound = computed(
-  () =>
-    scrollableContainerElement.value &&
-    useElementBounding(scrollableContainerElement.value as MaybeElement)
-)
-
-const targetElementVisible = computed(() => {
-  return (
-    targetElementBound.value &&
-    ((targetElementBound.value.top.value >= 0 &&
-      targetElementBound.value.top.value <= window.innerHeight) ||
-      (targetElementBound.value.bottom.value >= 0 &&
-        targetElementBound.value.bottom.value <= window.innerHeight) ||
-      (targetElementBound.value.bottom.value >= window.innerHeight &&
-        targetElementBound.value.top.value <= 0)) &&
-    ((targetElementBound.value.left.value >= 0 &&
-      targetElementBound.value.left.value <= window.innerWidth) ||
-      (targetElementBound.value.right.value >= 0 &&
-        targetElementBound.value.right.value <= window.innerWidth) ||
-      (targetElementBound.value.right.value >= window.innerWidth &&
-        targetElementBound.value.left.value <= 0))
-  )
-})
-
-const styleChevron = computed(() => {
-  switch (popupPosition.value) {
-    case 'left':
-      return '-right-2 top-3'
-    case 'right':
-      return '-left-2 top-3'
-    case 'top':
-      return 'left-3 -bottom-2'
-    case 'bottom':
-      return 'left-3 -top-2'
-    default:
-      return '-right-2 top-3'
+// Computed styles
+const overlayStyle = computed(() => {
+  return {
+    width: `${(targetElementPosition.value.width ?? 0) + 24}px`,
+    height: `${(targetElementPosition.value.height ?? 0) + 24}px`,
+    top: `${(targetElementPosition.value.top ?? 0) - 12}px`,
+    left: `${(targetElementPosition.value.left ?? 0) - 12}px`
   }
 })
 
-const isNextStepEnabled = computed(() => currentStepIndex.value < props.steps?.length - 1)
-
-const isPreviousStepEnabled = computed(() => currentStepIndex.value > 0)
-
-const displayOnboardingTour = computed(
-  () => displayTour.value && props.steps && props.steps.length > 0 && targetElement.value
-)
-
-// const displayOnboardingTour = ref(true)
-
-/** METHODS */
-const updateStylePopupLeftRight = (left: number, targetTop: number, popupPos: DOMRect) => {
-  let top
-  if (targetTop + popupPos.height > window.innerHeight) {
-    top = window.innerHeight - popupPos.height
-  } else if (targetTop <= 0) {
-    top = 0
-  } else {
-    top = targetTop
-  }
-  stylePopup.value = {
-    top: `${top}px`,
-    left: `${left}px`
-  }
-}
-
-const getStyles = () => {
-  const targetElPos =
-    currentStep.value?.target &&
-    document.querySelector(currentStep.value?.target)?.getBoundingClientRect()
-  const popupPos = popup.value?.getBoundingClientRect()
-
-  if (targetElPos && popupPos) {
-    const {
-      top: targetTop,
-      left: targetLeft,
-      bottom: targetBottom,
-      right: targetRight,
-      width: targetWidth,
-      height: targetHeight
-    } = targetElPos
-
-    styleOverlay.value = {
-      position: 'fixed',
-      width: `${targetWidth + 24}px`,
-      // 'max-width': '20vw',
-      height: `${targetHeight + 24}px`,
-      top: `${targetTop - 12}px`,
-      left: `${targetLeft - 12}px`,
-      // right: `${targetRight + 12}px`,
-      boxShadow:
-        'inset 0px 0px 10px 0px rgba(255, 255, 255, 1), 0px 0px 0px 9999px rgba(0, 0, 0, 0.5)',
-      userEvent: 'none',
-      borderRadius: '10px',
-      zIndex: 9999
-    }
-
-    // stylePopup.value = {
-    //   top: `${targetTop - popupPos.height - 40}px`,
-    //   left: `${targetLeft}px`,
-    //   width:
-    //     targetLeft + popupPos.width >= window.innerWidth - 10
-    //       ? `${window.innerWidth - targetLeft - 10}px`
-    //       : 'auto',
-    //   'max-width': '20vw'
-    // }
-    if (targetLeft - popupPos.width - 40 > 0) {
-      //LEFT
-      updateStylePopupLeftRight(targetLeft - popupPos.width - 40, targetTop, popupPos)
-      popupPosition.value = 'left'
-    } else if (targetRight + popupPos.width + 40 < window.innerWidth) {
-      //RIGHT
-      updateStylePopupLeftRight(targetRight + 40, targetTop, popupPos)
-      popupPosition.value = 'right'
-    } else if (targetTop - popupPos.height - 40 > 0) {
-      //TOP
-      stylePopup.value = {
-        top: `${targetTop - popupPos.height - 40}px`,
-        left: `${targetLeft}px`,
-        width:
-          targetLeft + popupPos.width >= window.innerWidth - 10
-            ? `${window.innerWidth - targetLeft - 10}px`
-            : 'auto',
-        'max-width': '20vw'
-      }
-      popupPosition.value = 'top'
-    } else {
-      //BOTTOM
-      stylePopup.value = {
-        top:
-          targetBottom + popupPos.height + 40 < window.innerHeight
-            ? `${targetBottom + 40}px`
-            : `${window.innerHeight - popupPos.height}px`,
-        left: `${targetLeft}px`,
-        width:
-          targetLeft + popupPos.width >= window.innerWidth - 10
-            ? `${window.innerWidth - targetLeft - 10}px`
-            : 'auto'
-      }
-      popupPosition.value = 'bottom'
-    }
-  }
-}
-
-const goNextStep = () => {
-  if (currentStepIndex.value < props.steps?.length - 1) currentStepIndex.value += 1
-}
-
-const goPreviousStep = () => {
-  if (currentStepIndex.value > 0) currentStepIndex.value -= 1
-}
-
-const setStep = (index: number) => {
-  if (index >= 0 && index <= props.steps?.length) currentStepIndex.value = index
-}
-
-const validateStartTour = () => {
-  if (props.endDate) {
-    if (new Date() <= props.endDate) {
-      return !(props.cookieStorage && cookies.get(`vue_onboarding_tour_${props.tourId}`))
-    } else {
-      return false
-    }
-  } else {
-    return !(props.cookieStorage && cookies.get(`vue_onboarding_tour_${props.tourId}`))
-  }
-}
+const popupStyle = ref({
+  top: '',
+  left: '',
+  bottom: '',
+  height: '',
+  maxWidth: '20vw',
+  width:
+    (targetElementPosition.value && targetElementPosition.value.left) ??
+    0 + containerPosition.value.width >= window.innerWidth - 10
+      ? `${window.innerWidth - targetElementPosition.value.left - 10}px`
+      : 'auto'
+})
 
 const startTour = () => {
-  if (validateStartTour()) {
-    displayTour.value = true
-    emits('startTour')
-  }
+  checkDOM()
+  if (remainingSteps.value.length) nextStep()
 }
 
-const endTour = () => {
-  if (props.cookieStorage) {
-    const options = {
-      expires: props.endDate
-        ? props.endDate
-        : (() => {
-            const date = new Date()
-
-            date.setDate(date.getDate() + 365)
-
-            return date
-          })()
-    }
-    cookies.set(`vue_onboarding_tour_${props.tourId}`, true, options)
-  }
-  displayTour.value = false
-  currentStepIndex.value = 0
-  stylePopup.value = {}
-  styleOverlay.value = {}
-  targetElement.value = null
-  emits('endTour')
+const nextStep = () => {
+  if (currentStep.value) completedSteps.value.push(remainingSteps.value.shift())
+  currentStep.value = remainingSteps.value.length === 0 ? undefined : remainingSteps.value[0]
 }
 
-const checkAutoScroll = () => {
-  if (currentStep.value?.target) {
-    const { top: targetTop, left: targetLeft } =
-      document.querySelector(currentStep.value?.target)?.getBoundingClientRect() ?? {}
-    const popupPos = popup.value?.getBoundingClientRect()
-    if (
-      targetTop &&
-      targetLeft &&
-      popupPos &&
-      (targetTop < 0 ||
-        targetTop > window.innerHeight ||
-        targetLeft < 0 ||
-        targetLeft > window.innerWidth)
-    ) {
-      const top =
-        targetTop < 0 || targetTop > window.innerHeight
-          ? targetTop - popupPos.height - 60
-          : undefined
-      const left = targetLeft < 0 || targetLeft > window.innerWidth ? targetLeft : undefined
-      if (scrollableContainerElement.value) {
-        scrollableContainerElement.value.scrollBy({
-          left:
-            left && scrollableContainerBound.value?.left
-              ? left - scrollableContainerBound.value?.left?.value
-              : undefined,
-          top:
-            top && scrollableContainerBound.value?.left
-              ? top - scrollableContainerBound.value?.left?.value
-              : undefined,
-          behavior: 'smooth'
-        })
-      } else {
-        window.scrollBy({
-          left: left,
-          top: top,
-          behavior: 'smooth'
-        })
+const prevStep = () => {
+  remainingSteps.value.unshift(completedSteps.value.pop())
+  currentStep.value = remainingSteps.value[0]
+}
+
+const endTour = () => (displayTour.value = false)
+
+const getStyles = () => {
+  setTimeout(() => {
+    if (currentStep.value) {
+      targetElement.value = document.querySelector(currentStep.value.id)
+      if (targetElement.value) {
+        targetElementPosition.value = targetElement.value?.getBoundingClientRect()
+        currentStep.value.position = setPopupPosition()
+        if (currentStep.value.position === 'left') positionPopupLeft()
+        if (currentStep.value.position === 'right') positionPopupRight()
+        if (currentStep.value.position === 'above') positionPopupTop()
+        if (currentStep.value.position === 'below') positionPopupBelow()
       }
     }
-  }
+  }, 50)
 }
 
-const getTargetElement = () => {
-  if (currentStep.value?.target) {
-    //Add observer to wait for dom generation if element not directly in DOM
-    if (document.querySelector(currentStep.value?.target)) {
-      targetElement.value = document.querySelector(currentStep.value?.target)
-    } else {
-      const targetNode = document.body
-      const config = { childList: true, subtree: true }
-      domObserverTarget = new MutationObserver((mutationsList) => {
-        for (const mutation of mutationsList) {
-          if (mutation.type === 'childList') {
-            const externalElement =
-              currentStep.value?.target && document.querySelector(currentStep.value?.target)
-            if (externalElement) {
-              targetElement.value = externalElement
-              domObserverTarget.disconnect()
-            }
-          }
-        }
-      })
-
-      domObserverTarget.observe(targetNode, config) // Start observing
-    }
-  }
+// Helper methods to determine popup position
+const setPopupPosition = () => {
+  if (currentStep.value?.position) return currentStep.value.position
+  // if (targetLeft - container.width - 40 > 0) return 'left'
+  // if (targetRight + container.width + 40 < window.innerWidth) return 'right'
+  // if (targetTop - container.height - 40 > 0) return 'top'
+  return 'below' // Default to bottom placement if all else fails
 }
 
-const getScrollableContainerElement = () => {
-  if (props.scrollableContainerSelector) {
-    //Add observer to wait for dom generation if element not directly in DOM
-    if (document.querySelector(props.scrollableContainerSelector)) {
-      scrollableContainerElement.value = document.querySelector(props.scrollableContainerSelector)
-    } else {
-      const targetNode = document.body
-      const config = { childList: true, subtree: true }
-      domObserverScrollable = new MutationObserver((mutationsList) => {
-        for (const mutation of mutationsList) {
-          if (mutation.type === 'childList') {
-            const externalElement =
-              props.scrollableContainerSelector &&
-              document.querySelector(props.scrollableContainerSelector)
-            if (externalElement) {
-              scrollableContainerElement.value = externalElement
-              domObserverScrollable.disconnect()
-            }
-          }
-        }
-      })
-
-      domObserverScrollable.observe(targetNode, config) // Start observing
-    }
-  }
+const positionPopupLeft = () => {
+  const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+  popupStyle.value.top = `${targetElementPosition.value.top}px`
+  popupStyle.value.left = `${targetElementPosition.value.left - (vw / 100) * 20 - 20}px`
 }
 
-const resizeEventListener = () => {
-  if (displayOnboardingTour.value) {
-    getStyles()
-
-    checkAutoScroll()
-  }
+const positionPopupRight = () => {
+  popupStyle.value.top = `${targetElementPosition.value.top}px`
+  popupStyle.value.left = `${targetElementPosition.value.width + targetElementPosition.value.left + 20}px`
 }
 
-const scrollEventListener = () => {
-  if (displayOnboardingTour.value) {
-    getStyles()
-  }
+const positionPopupTop = () => {
+  popupStyle.value.bottom = `${targetElementPosition.value.top - targetElementPosition.value.height}px`
+  popupStyle.value.left = `${targetElementPosition.value.left}px`
 }
 
-defineExpose({ startTour, endTour, goNextStep, goPreviousStep, setStep })
+const positionPopupBelow = () => {
+  popupStyle.value.top = `${targetElementPosition.value.top + targetElementPosition.value.height + 20}px`
+  popupStyle.value.left = `${targetElementPosition.value.left}px`
+}
+
+// const scrollableContainerBound = computed(
+//   () =>
+//     scrollableContainerElement.value &&
+//     useElementBounding(scrollableContainerElement.value as MaybeElement)
+// )
+
+/** METHODS */
+// const checkAutoScroll = () => {
+//   if (currentStep.value?.target) {
+//     const { top: targetTop, left: targetLeft } =
+//       document.querySelector(currentStep.value?.target)?.getBoundingClientRect() ?? {}
+//     const popupPos = popup.value?.getBoundingClientRect()
+//     if (
+//       targetTop &&
+//       targetLeft &&
+//       popupPos &&
+//       (targetTop < 0 ||
+//         targetTop > window.innerHeight ||
+//         targetLeft < 0 ||
+//         targetLeft > window.innerWidth)
+//     ) {
+//       const top =
+//         targetTop < 0 || targetTop > window.innerHeight
+//           ? targetTop - popupPos.height - 60
+//           : undefined
+//       const left = targetLeft < 0 || targetLeft > window.innerWidth ? targetLeft : undefined
+//       if (scrollableContainerElement.value) {
+//         scrollableContainerElement.value.scrollBy({
+//           left:
+//             left && scrollableContainerBound.value?.left
+//               ? left - scrollableContainerBound.value?.left?.value
+//               : undefined,
+//           top:
+//             top && scrollableContainerBound.value?.left
+//               ? top - scrollableContainerBound.value?.left?.value
+//               : undefined,
+//           behavior: 'smooth'
+//         })
+//       } else {
+//         window.scrollBy({
+//           left: left,
+//           top: top,
+//           behavior: 'smooth'
+//         })
+//       }
+//     }
+//   }
+// }
+
+// const getTargetElement = () => {
+// if (currentStep.value && currentStep.value.id) {
+// Element may or may not be in DOM, and may not yet be shown or fully loaded
+// Add observer to wait for dom generation if element not directly in DOM
+// console.log(remainingSteps.value, currentStep.value.id)
+// if (document.querySelector(currentStep.value?.id)) {
+// targetElement.value = document.querySelector(currentStep.value?.id)
+// console.log(targetElement.value)
+// } else {
+//   console.log('not in dom')
+//   const targetNode = document.body
+//   const config = { childList: true, subtree: true }
+//   domObserverTarget = new MutationObserver((mutationsList) => {
+//     for (const mutation of mutationsList) {
+//       if (mutation.type === 'childList') {
+//         const externalElement =
+//           currentStep.value?.id && document.querySelector(currentStep.value?.id)
+//         if (externalElement) {
+//           targetElement.value = externalElement
+//           domObserverTarget.disconnect()
+//         }
+//       }
+//     }
+//   })
+
+//   domObserverTarget.observe(targetNode, config) // Start observing
+// }
+// }
+// }
+
+// const getScrollableContainerElement = () => {
+//   if (tour.value && typeof tour.value === 'object') {
+//     if (tour.value.scrollableContainerSelector) {
+//       //Add observer to wait for dom generation if element not directly in DOM
+//       if (document.querySelector(tour.value.scrollableContainerSelector)) {
+//         scrollableContainerElement.value = document.querySelector(
+//           tour.value.scrollableContainerSelector
+//         )
+//       } else {
+//         const targetNode = document.body
+//         const config = { childList: true, subtree: true }
+//         domObserverScrollable = new MutationObserver((mutationsList) => {
+//           for (const mutation of mutationsList) {
+//             if (
+//               mutation.type === 'childList' &&
+//               tour.value &&
+//               typeof tour.value === 'object' &&
+//               tour.value.scrollableContainerSelector
+//             ) {
+//               const externalElement =
+//                 tour.value.scrollableContainerSelector &&
+//                 document.querySelector(tour.value.scrollableContainerSelector)
+//               if (externalElement) {
+//                 scrollableContainerElement.value = externalElement
+//                 domObserverScrollable.disconnect()
+//               }
+//             }
+//           }
+//         })
+
+//         domObserverScrollable.observe(targetNode, config) // Start observing
+//       }
+//     }
+//   }
+// }
+
+// const resizeEventListener = () => {
+//   if (displayOnboardingTour.value) {
+//     getStyles()
+
+//     checkAutoScroll()
+//   }
+// }
+
+// const scrollEventListener = () => {
+//   if (displayOnboardingTour.value) {
+//     getStyles()
+//   }
+// }
 
 /** LIFECYCLE */
+// onMounted(() => {
+// if (tour.value && typeof tour.value === 'object') {
+// getStyles()
+// nextTick(() => getStyles())
+// window.addEventListener('resize', resizeEventListener)
+// window.addEventListener('scroll', scrollEventListener)
+// console.log(currentStep.value)
+// if (currentStep.value?.startEvent)
+// window.addEventListener(currentStep.value.startEvent, startTour)
+// getTargetElement()
+// getScrollableContainerElement()
+// }
+// })
+
+// onUnmounted(() => {
+// window.removeEventListener('resize', resizeEventListener)
+// window.removeEventListener('scroll', scrollEventListener)
+// if (tour.value && typeof tour.value === 'object') {
+//   if (currentStep.value?.startEvent)
+//     window.removeEventListener(currentStep.value.startEvent, startTour)
+// }
+//   if (domObserverTarget) {
+//     domObserverTarget.disconnect() // Clean up when component is destroyed
+//   }
+//   if (domObserverScrollable) {
+//     domObserverScrollable.disconnect() // Clean up when component is destroyed
+//   }
+// })
+
+const keyListeners = (e: KeyboardEvent) => {
+  if (e.key === 'Escape') displayTour.value = false
+  if (e.key === 'ArrowLeft') prevStep()
+  if (e.key === 'ArrowRight') nextStep()
+}
+
 onMounted(() => {
-  console.log(props)
-  nextTick(() => getStyles())
-  window.addEventListener('resize', resizeEventListener)
-  window.addEventListener('scroll', scrollEventListener)
-  if (props.startEvent) window.addEventListener(props.startEvent, startTour)
-  getTargetElement()
-  getScrollableContainerElement()
+  window.addEventListener('keyup', keyListeners, true)
+  displayTour.value = true // Trigger startTour in watch
 })
 
-onUnmounted(() => {
-  window.removeEventListener('resize', resizeEventListener)
-  window.removeEventListener('scroll', scrollEventListener)
-  if (props.startEvent) window.removeEventListener(props.startEvent, startTour)
-  if (domObserverTarget) {
-    domObserverTarget.disconnect() // Clean up when component is destroyed
-  }
-  if (domObserverScrollable) {
-    domObserverScrollable.disconnect() // Clean up when component is destroyed
+watch(currentStep, () => getStyles())
+watch(displayTour, (newV) => {
+  if (newV) {
+    console.log('starting tour')
+    startTour()
   }
 })
 
-/** WATCH */
-watch(
-  [targetElementBound, scrollableContainerBound, displayTour],
-  () => {
-    if (displayTour.value) {
-      nextTick(() => {
-        getStyles()
-      })
-    }
-  },
-  { deep: true }
-)
-
-watch([currentStepIndex, displayTour], () => {
-  if (displayTour.value) {
-    if (currentStep.value?.beforeScript) {
-      currentStep.value?.beforeScript()
-    }
-    getTargetElement()
-    if (currentStep.value?.afterScript) {
-      currentStep.value?.afterScript()
-    }
-  }
-})
-
-watch(targetElement, () => {
-  if (displayTour.value) {
-    nextTick(() => {
-      checkAutoScroll()
-    })
+watch(currentStep, (newV) => {
+  if (!newV) {
+    console.log('ending tour')
+    endTour()
   }
 })
 </script>

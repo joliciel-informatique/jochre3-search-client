@@ -1,5 +1,5 @@
 <template>
-  <VueOnboardingTour v-bind="tour" ref="onboardingTourPoppin" />
+  <VueOnboardingTour />
   <header id="topbar" class="is-flex is-flex-direction-column-reverse">
     <nav class="is-flex is-flex-direction-column navbar" id="navbar" role="navigation">
       <div class="navbar-brand is-flex is-flex-direction-row is-justify-content-space-between">
@@ -189,6 +189,7 @@ import { type SearchResult, type AggregationBin } from '@/assets/interfacesExter
 
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useSearchStore } from '@/stores/SearchStore'
+import { storeToRefs } from 'pinia'
 
 const searchStore = useSearchStore()
 const { page, hasSearch, isLoading } = storeToRefs(searchStore)
@@ -196,75 +197,6 @@ const { page, hasSearch, isLoading } = storeToRefs(searchStore)
 const preferences = usePreferencesStore()
 const { show, isDesktop, authorFacetCount } = storeToRefs(preferences)
 const { initializeMedia } = preferences
-
-const { show } = storeToRefs(preferences)
-
-const onboardingTourPoppin = ref(null)
-
-import { storeToRefs } from 'pinia'
-
-import { getTour } from '@/assets/tours'
-
-const tour = ref(getTour('upon-load'))
-
-// import { useI18n } from 'vue-i18n'
-// const { tm } = useI18n({ useScope: 'global' })
-
-// Translate tour content
-// const tour = { ...tourUponLoad }
-// tour.steps = tourUponLoad.steps.map((step, idx) => {
-//   return {
-//     target: step.target,
-//     title: tm(`tours.upon-load.step-${idx}.title`),
-//     description: tm(`tours.upon-load.step-${idx}.description`),
-//     tag: step.tag
-//   }
-// })
-// console.log(tourUponLoad.value)
-
-// t()
-
-// const tourUponLoad = {
-//   tourId: 'tourUponLoad',
-//   overlay: true,
-//   defaultTemplate: true,
-//   steps: [
-//     {
-//       target: '#query',
-//       title: t('tours.upon-load.step-1.title'),
-//       // title: 'Welcome to the new JOCHRE interface',
-//       description:
-//         'Start your journey into Yiddish literature by entering a search term here. You can use Yiddish and Latin characters.',
-//       tag: 'New!'
-//     },
-//     {
-//       target: '#query-keyboard-btn',
-//       title: 'Yiddish onscreen keyboard',
-//       description:
-//         'If you do not have a Yiddish keyboard configuration set up, simply use our onscreen Yiddish keyboard!'
-//     },
-//     {
-//       target: '#strictSearchCheckboxBtn',
-//       title: 'Strict search',
-//       description:
-//         'JOCHRE comes with many features to restrict or expand your search. For example, checking this box excludes any lemmata (derived verb forms) from the search results.'
-//     },
-//     {
-//       target: '#advancedSearchBtn',
-//       title: 'Advanced search',
-//       description:
-//         'You can search by specific aspects within the metadata too such as author names, dates and publisher information.'
-//     },
-//     {
-//       target: '#userGuideBtn',
-//       title: 'User guide',
-//       description:
-//         "Note that you can also use special characters in the search bar to format your query. For example, '\"Schvarts\"' (with quotation marks) will not yield the same results as 'Schvarts' without quotation marks. Visit the user guide for a full explanation of your search options!"
-//     }
-//   ]
-// }
-
-const { authorFacetCount } = storeToRefs(preferences)
 
 const query = ref('')
 // const selectedEntry = ref<SearchResult>()
@@ -303,13 +235,6 @@ const openNavBarMobileMenu = ref(false)
 const facets = ref<Array<AggregationBin>>([])
 
 onMounted(() => {
-  if (onboardingTourPoppin.value) {
-    console.log(tour.value)
-    if (tour.value) {
-      const tourRef = onboardingTourPoppin.value as any
-      tourRef.startTour()
-    }
-  }
   window.addEventListener('click', (e: MouseEvent | TouchEvent) => {
     if (openNavBarMobileMenu.value) {
       const navbarMobile = document.getElementById('navbar-mobile')
