@@ -66,11 +66,19 @@ Description: presents OCR record metadata
 </template>
 
 <script setup lang="ts">
-import SingleResultItem from '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
+import { defineAsyncComponent } from 'vue'
 import { sha1 } from 'object-hash'
-import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
-import { usePreferencesStore } from '@/stores/PreferencesStore'
 import type { SearchResult } from '@/assets/interfacesExternals'
+
+const SingleResultItem = defineAsyncComponent(
+  () =>
+    import(
+      '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
+    )
+)
+const AccordionCard = defineAsyncComponent(
+  () => import('@/_components/AccordionCard/AccordionCard.vue')
+)
 
 const { result, bookIndex, pageNumberOffset } = defineProps([
   'result',
@@ -78,13 +86,12 @@ const { result, bookIndex, pageNumberOffset } = defineProps([
   'pageNumberOffset'
 ])
 
-const preferences = usePreferencesStore()
-const fields = ['titleEnglish', 'author', 'authorEnglish', 'publicationYear', 'publisher']
-
 const metadataModal = defineModel('metadataModal')
 const showing = defineModel<boolean>('showing', { default: true })
 const selectedEntry = defineModel<SearchResult>('selectedEntry')
 const selectedEntryIdx = defineModel<number>('selectedEntryIdx')
+
+const fields = ['titleEnglish', 'author', 'authorEnglish', 'publicationYear', 'publisher']
 
 const toggle = () => (showing.value = !showing.value)
 

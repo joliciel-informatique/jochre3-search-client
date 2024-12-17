@@ -1,29 +1,24 @@
 <template>
-  <header
-    id="topbar"
-    class="is-flex is-flex-direction-column-reverse"
+  <div
     :class="{
       'rtl-align': !preferences.displayLeftToRight
     }"
   >
-    <PreferencesSetup />
-    <HeaderPage />
-    <nav class="is-flex is-flex-direction-column navbar" id="navbar" role="navigation">
-      <div class="navbar-brand is-flex is-flex-direction-row is-justify-content-space-between">
-        <UserOptions />
-      </div>
-    </nav>
-  </header>
-  <main
-    class="hero is-widescreen"
-    :class="{
-      'rtl-align': !preferences.displayLeftToRight
-    }"
-  >
-    <TranscribedText />
-    <Preferences v-model:notification="notification" />
-    <Notification v-model:notification="notification" />
-  </main>
+    <header id="topbar" class="is-flex is-flex-direction-column-reverse">
+      <PreferencesSetup />
+      <HeaderPage />
+      <nav class="is-flex is-flex-direction-column navbar" id="navbar" role="navigation">
+        <div class="navbar-brand is-flex is-flex-direction-row is-justify-content-space-between">
+          <UserOptions />
+        </div>
+      </nav>
+    </header>
+    <main class="hero is-widescreen">
+      <TranscribedText v-model:notification="notification" />
+      <Notification v-model:notification="notification" />
+      <Preferences v-model:notification="notification" />
+    </main>
+  </div>
 </template>
 
 <script setup lang="ts">

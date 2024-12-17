@@ -1,14 +1,20 @@
 <template>
-  <header
-    id="topbar"
-    class="is-flex is-flex-direction-column-reverse"
-    :class="{
-      'rtl-align': !preferences.displayLeftToRight
-    }"
-  >
+  <header id="topbar" class="is-flex is-flex-direction-column-reverse">
     <nav class="is-flex is-flex-direction-column navbar" id="navbar" role="navigation">
       <div class="navbar-brand is-flex is-flex-direction-row is-justify-content-space-between">
-        <div class="navbar-item is-flex is-flex-direction-row is-flex-grow-5 is-flex-shrink-1">
+        <div
+          v-if="searchResults.length"
+          class="navbar-item logo is-flex is-flex-direction-row is-align-items-start is-flex-grow-1 is-flex-shrink-1"
+          :class="isMobile ? 'px-2' : ''"
+        >
+          <a href="/">
+            <img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')" />
+          </a>
+        </div>
+        <div
+          class="navbar-item is-flex is-flex-direction-row is-flex-grow-4 is-flex-shrink-2"
+          :class="isMobile ? 'px-2' : ''"
+        >
           <SearchBar
             @newSearch="newSearch"
             @resetSearchResults="resetSearchResults"
@@ -53,12 +59,11 @@
         v-model:exclude-from-search="excludeFromSearch"
       />
       <div class="is-hidden-touch">
-        <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" v-model:page="page" />
+        <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
       </div>
       <div class="is-hidden-desktop">
         <ContentsTable
           v-model:search-results="searchResults"
-          v-model:page="page"
           v-model:image-modal="imageModal"
           v-model:metadata-modal="metadataModal"
           v-model:notification="notification"
@@ -69,15 +74,15 @@
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
           v-model:facets="facets"
-          @new-page="newPage"
           @reset-search-results="resetSearchResults"
           @new-search="newSearch"
+          @new-page="newPage"
         />
       </div>
     </nav>
     <HeaderPage />
   </header>
-  <main :class="preferences.displayLeftToRight ? '' : 'rtl-align'">
+  <main>
     <!-- Contents table on desktop -->
     <div
       v-if="hasSearch && searchResults?.length"
@@ -86,7 +91,6 @@
       <div class="is-hidden-touch">
         <ContentsTable
           v-model:search-results="searchResults"
-          v-model:page="page"
           v-model:image-modal="imageModal"
           v-model:metadata-modal="metadataModal"
           v-model:notification="notification"
@@ -97,7 +101,6 @@
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
           v-model:facets="facets"
-          @new-page="newPage"
           @reset-search-results="resetSearchResults"
           @new-search="newSearch"
         />
@@ -164,30 +167,49 @@
   </footer>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, defineExpose, type Ref, watch } from 'vue'
+import { defineAsyncComponent, onMounted, ref, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchData } from '../../assets/fetchMethods'
 
 // Import Child components
-import SearchBar from './SearchBar/SearchBar.vue'
-import AdvancedSearch from './SearchBar/AdvancedSearch/AdvancedSearch.vue'
-import ContentsTable from './SearchResults/ContentsTable/ContentsTable.vue'
-import DisplaySnippets from './SearchResults/DisplaySnippets/DisplaySnippets.vue'
-import PageNumbering from './SearchBar/Navigation/PageNumbering/PageNumbering.vue'
-import FacetBar from './SearchResults/FacetBar/FacetBar.vue'
-import IndexSize from './SearchResults/IndexSize/IndexSize.vue'
-import HeaderPage from '../HeaderPage/HeaderPage.vue'
-import UserOptions from './UserOptions/UserOptions.vue'
-import FooterPage from '../FooterPage/FooterPage.vue'
+const SearchBar = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchBar/SearchBar.vue')
+)
+const AdvancedSearch = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchBar/AdvancedSearch/AdvancedSearch.vue')
+)
+const PageNumbering = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue')
+)
+const ContentsTable = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchResults/ContentsTable/ContentsTable.vue')
+)
+const DisplaySnippets = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchResults/DisplaySnippets/DisplaySnippets.vue')
+)
+const FacetBar = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue')
+)
+const IndexSize = defineAsyncComponent(
+  () => import('@/components/SearchPage/SearchResults/IndexSize/IndexSize.vue')
+)
+const HeaderPage = defineAsyncComponent(() => import('@/components/HeaderPage/HeaderPage.vue'))
+const FooterPage = defineAsyncComponent(() => import('@/components/FooterPage/FooterPage.vue'))
+const UserOptions = defineAsyncComponent(
+  () => import('@/components/SearchPage/UserOptions/UserOptions.vue')
+)
 
 // Import interfaces
-import { type SearchResult, type AggregationBin } from '../../assets/interfacesExternals'
+import { type SearchResult, type AggregationBin } from '@/assets/interfacesExternals'
 
 // This is better kept in Pinia or something similar
-import { hasSearch } from '../../assets/appState'
+import { hasSearch } from '@/assets/appState'
 
-import { usePreferencesStore } from '../../stores/PreferencesStore'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { useSearchStore } from '@/stores/SearchStore'
 
+const searchStore = useSearchStore()
+const { page } = storeToRefs(searchStore)
 const preferences = usePreferencesStore()
 
 const { initializeMedia } = preferences
@@ -196,14 +218,13 @@ const { show } = storeToRefs(preferences)
 
 import { storeToRefs } from 'pinia'
 
-const { authorFacetCount } = storeToRefs(preferences)
+const { authorFacetCount, isMobile } = storeToRefs(preferences)
 
 const query = ref('')
 // const selectedEntry = ref<SearchResult>()
 const selectedEntryIdx = ref(0)
 const searchResults = ref<Array<SearchResult>>([])
 const totalHits = ref()
-const page = ref(1)
 const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
@@ -294,16 +315,12 @@ onMounted(() => {
         return { label: authorName, count: 10, active: false }
       })
 
-    runSearch()
+    runSearch(false)
   })
 })
 
 const newPage = () => runSearch()
 const newSearch = () => (page.value = 1) && runSearch()
-
-const runSearch = () => {
-  search()
-}
 
 const defineSearchParams = () => {
   return Object.assign(
@@ -343,7 +360,7 @@ const resetSearchResults = () => {
   hasAdvancedSearchCriteria.value = false
   showAdvancedSearchPanel.value = false
 
-  window.history.replaceState({}, document.title, '/')
+  history.pushState({}, document.title, '/')
 }
 
 watch(searchResults, (newV) => {
@@ -356,7 +373,7 @@ watch(searchResults, (newV) => {
 })
 
 watch(excludeFromSearch, () => (authorInclude.value = !excludeFromSearch.value))
-watch(resultsPerPage, () => search())
+watch(resultsPerPage, () => runSearch(false))
 watch(authorFacetCount, () => searchFacets())
 
 // Close all other panels on Mobile
@@ -438,7 +455,7 @@ const searchFacets = async () => {
   )
 }
 
-const search = async () => {
+const runSearch = async (addHistory: boolean = true) => {
   isLoading.value = true
 
   const activeFacets = facets.value.filter((facet) => facet.active).map((facet) => facet.label)
@@ -491,7 +508,7 @@ const search = async () => {
   searchParams.append('row-padding', '2')
   searchParams.append('physical-newlines', 'false')
 
-  if (!hasActiveFacets) {
+  if (!hasActiveFacets && addHistory) {
     const urlParams = new URLSearchParams({ ...Object.fromEntries(searchParams) })
     urlParams.delete('authors')
     urlParams.delete('author-include')

@@ -31,10 +31,7 @@ Description: display single metadata item
 </template>
 
 <script setup lang="ts">
-import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { type Ref } from 'vue'
-
-const preferences = usePreferencesStore()
 
 const field: Ref = defineModel('field')
 const value: Ref = defineModel('value')
