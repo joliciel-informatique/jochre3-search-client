@@ -149,40 +149,56 @@
   </footer>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, onMounted, ref, defineExpose, type Ref, watch } from 'vue'
+import {
+  // defineAsyncComponent,
+  onMounted,
+  ref,
+  defineExpose,
+  type Ref,
+  watch
+} from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchData } from '../../assets/fetchMethods'
 import VueOnboardingTour from '@/_components/VueOnboardingTour/VueOnboardingTour.vue'
 
 // Import Child components
-const SearchBar = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchBar/SearchBar.vue')
-)
-const AdvancedSearch = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchBar/AdvancedSearch/AdvancedSearch.vue')
-)
-const PageNumbering = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue')
-)
-const ContentsTable = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchResults/ContentsTable/ContentsTable.vue')
-)
-const DisplaySnippets = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchResults/DisplaySnippets/DisplaySnippets.vue')
-)
-// import ContentsTable from '@/components/SearchPage/SearchResults/ContentsTable/ContentsTable.vue'
-// import DisplaySnippets from '@/components/SearchPage/SearchResults/DisplaySnippets/DisplaySnippets.vue'
-const FacetBar = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue')
-)
-const IndexSize = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchResults/IndexSize/IndexSize.vue')
-)
-const HeaderPage = defineAsyncComponent(() => import('@/components/HeaderPage/HeaderPage.vue'))
-const FooterPage = defineAsyncComponent(() => import('@/components/FooterPage/FooterPage.vue'))
-const UserOptions = defineAsyncComponent(
-  () => import('@/components/SearchPage/UserOptions/UserOptions.vue')
-)
+// const SearchBar = defineAsyncComponent(
+//   () => import('@/components/SearchPage/SearchBar/SearchBar.vue')
+// )
+// const AdvancedSearch = defineAsyncComponent(
+//   () => import('@/components/SearchPage/SearchBar/AdvancedSearch/AdvancedSearch.vue')
+// )
+// const PageNumbering = defineAsyncComponent(
+//   () => import('@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue')
+// )
+// const ContentsTable = defineAsyncComponent(
+//   () => import('@/components/SearchPage/SearchResults/ContentsTable/ContentsTable.vue')
+// )
+// const DisplaySnippets = defineAsyncComponent(
+//   () => import('@/components/SearchPage/SearchResults/DisplaySnippets/DisplaySnippets.vue')
+// )
+
+import SearchBar from '@/components/SearchPage/SearchBar/SearchBar.vue'
+import AdvancedSearch from '@/components/SearchPage/SearchBar/AdvancedSearch/AdvancedSearch.vue'
+import PageNumbering from '@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue'
+import ContentsTable from '@/components/SearchPage/SearchResults/ContentsTable/ContentsTable.vue'
+import DisplaySnippets from '@/components/SearchPage/SearchResults/DisplaySnippets/DisplaySnippets.vue'
+import FacetBar from '@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue'
+import IndexSize from '@/components/SearchPage/SearchResults/IndexSize/IndexSize.vue'
+import HeaderPage from '@/components/HeaderPage/HeaderPage.vue'
+import FooterPage from '@/components/FooterPage/FooterPage.vue'
+import UserOptions from '@/components/SearchPage/UserOptions/UserOptions.vue'
+// const FacetBar = defineAsyncComponent(
+//   () => import('@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue')
+// )
+// const IndexSize = defineAsyncComponent(
+//   () => import('@/components/SearchPage/SearchResults/IndexSize/IndexSize.vue')
+// )
+// const HeaderPage = defineAsyncComponent(() => import('@/components/HeaderPage/HeaderPage.vue'))
+// const FooterPage = defineAsyncComponent(() => import('@/components/FooterPage/FooterPage.vue'))
+// const UserOptions = defineAsyncComponent(
+//   () => import('@/components/SearchPage/UserOptions/UserOptions.vue')
+// )
 
 // Import interfaces
 import { type SearchResult, type AggregationBin } from '@/assets/interfacesExternals'
@@ -199,8 +215,7 @@ const { show, isDesktop, authorFacetCount } = storeToRefs(preferences)
 const { initializeMedia } = preferences
 
 const query = ref('')
-// const selectedEntry = ref<SearchResult>()
-const selectedEntryIdx = ref(0)
+const selectedEntryIdx = ref()
 const searchResults = ref<Array<SearchResult>>([])
 const totalHits = ref()
 const imageModal: Ref = defineModel('imageModal')
@@ -518,7 +533,6 @@ const runSearch = async (addHistory: boolean = true) => {
             console.log(`Setting ${totalCount} results`)
             searchResults.value = results
             selectedEntryIdx.value = 0
-            // selectedEntry.value = results[selectedEntryIdx.value]
             totalHits.value = totalCount
 
             if (!hasActiveFacets) {

@@ -66,19 +66,21 @@ Description: presents OCR record metadata
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
+// import { defineAsyncComponent } from 'vue'
 import { sha1 } from 'object-hash'
 import type { SearchResult } from '@/assets/interfacesExternals'
+import SingleResultItem from '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
+import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
 
-const SingleResultItem = defineAsyncComponent(
-  () =>
-    import(
-      '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
-    )
-)
-const AccordionCard = defineAsyncComponent(
-  () => import('@/_components/AccordionCard/AccordionCard.vue')
-)
+// const SingleResultItem = defineAsyncComponent(
+//   () =>
+//     import(
+//       '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
+//     )
+// )
+// const AccordionCard = defineAsyncComponent(
+//   () => import('@/_components/AccordionCard/AccordionCard.vue')
+// )
 
 const { result, bookIndex, pageNumberOffset } = defineProps([
   'result',
