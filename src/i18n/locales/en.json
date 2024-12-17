@@ -149,33 +149,52 @@
     "policy": "Privacy Policy"
   },
   "tours": {
-    "upon-load": {
-      "0": {
-        "target": "#query",
-        "title": "Welcome to the new JOCHRE interface",
-        "description": "Start your journey into Yiddish literature by entering a search term here. You can use Yiddish and Latin characters.",
-        "tag": "New!"
-      },
-      "1": {
-        "target": "#query-keyboard-btn",
-        "title": "Yiddish onscreen keyboard",
-        "description": "If you do not have a Yiddish keyboard configuration set up, simply use our onscreen Yiddish keyboard!"
-      },
-      "2": {
-        "target": "#strictSearchCheckboxBtn",
-        "title": "Strict search",
-        "description": "JOCHRE comes with many features to restrict or expand your search. For example, checking this box excludes any lemmata (derived verb forms) from the search results."
-      },
-      "3": {
-        "target": "#advancedSearchBtn",
-        "title": "Advanced search",
-        "description": "You can search by specific aspects within the metadata too such as author names, dates and publisher information."
-      },
-      "4": {
-        "target": "#userGuideBtn",
-        "title": "User guide",
-        "description": "Note that you can also use special characters in the search bar to format your query. For example, '\"Schvarts\"' (with quotation marks) will not yield the same results as 'Schvarts' without quotation marks. Visit the user guide for a full explanation of your search options!"
-      }
+    "#query": {
+      "group": "when loaded",
+      "title": "Welcome to the new JOCHRE interface",
+      "description": "Start your journey into Yiddish literature by entering a search term here. You can use Yiddish and Latin characters.",
+      "tag": "New!",
+      "position": "below"
+    },
+    "#query-keyboard-btn": {
+      "title": "Yiddish onscreen keyboard",
+      "description": "If you do not have a Yiddish keyboard configuration set up, simply use our onscreen Yiddish keyboard!",
+      "position": "below"
+    },
+    "#strictSearchCheckboxBtn": {
+      "group": "when loaded",
+      "title": "Strict search",
+      "description": "JOCHRE comes with many features to restrict or expand your search. For example, checking this box excludes any lemmata (derived verb forms) from the search results.",
+      "position": "below"
+    },
+    "#advancedSearchBtn": {
+      "group": "when loaded",
+      "title": "Advanced search",
+      "description": "You can search by specific aspects within the metadata too such as author names, dates and publisher information.",
+      "position": "left"
+    },
+    "#userGuideBtn": {
+      "group": "when loaded",
+      "title": "User guide",
+      "description": "Note that you can also use special characters in the search bar to format your query. For example, '\"Schvarts\"' (with quotation marks) will not yield the same results as 'Schvarts' without quotation marks. Visit the user guide for a full explanation of your search options!",
+      "position": "below"
+    },
+    "#searchResultsToCDesktop": {
+      "group": "when results",
+      "title": "The search results panel",
+      "description": "This panel displays the metadata for the first ten of your results. The title and author remain visible, but you can expand and collapse other metadata.",
+      "position": "right"
+    },
+    ".edit-metadata-btn": {
+      "group": "when results",
+      "title": "Edit metadata",
+      "description": "Buttons such as these allow you to edit the metadata for each title in our database. All proposed changes will be reviewed by YBC staff.",
+      "position": "right"
+    },
+    "#snippets": {
+      "title": "Snippets",
+      "description": "This center panel presents the relevant text snippets by the selected title in the left pane. You can see what title the snippets belong to by the green color on the header bar.",
+      "position": "left"
     }
   }
 }
