@@ -36,14 +36,13 @@
 
         <div class="card-footer">
           <!-- Navigation and Control -->
-          <div class="is-flex is-justify-items-space-between p-4">
+          <div class="is-flex is-flex-grow-1 is-justify-items-space-between p-4">
             <!-- Previous Step Icon -->
-            <span
-              :class="!completedSteps?.length ? 'disabled' : ''"
-              class="mr-auto is-clickable"
-              @click="prevStep"
-            >
-              <font-awesome-icon color="white" icon="circle-arrow-left" size="xl" />
+            <span v-if="completedSteps?.length" class="ml-auto is-clickable" @click="prevStep"
+              ><font-awesome-icon color="white" icon="circle-arrow-left"
+            /></span>
+            <span class="ml-auto is-clickable" v-else @click="endTour">
+              <font-awesome-icon color="white" icon="xmark-circle" />
             </span>
 
             <!-- Step Indicators (Dots) -->
@@ -56,7 +55,6 @@
               >
                 <font-awesome-icon
                   color="white"
-                  size="xl"
                   :icon="step?.id === currentStep.id ? 'dot-circle' : 'circle'"
                 />
               </span>
@@ -64,10 +62,10 @@
 
             <!-- Next Step Icon / End Tour -->
             <span v-if="remainingSteps.length > 1" class="ml-auto is-clickable" @click="nextStep"
-              ><font-awesome-icon color="white" icon="circle-arrow-right" size="xl"
+              ><font-awesome-icon color="white" icon="circle-arrow-right"
             /></span>
             <span class="ml-auto is-clickable" v-else @click="endTour">
-              <font-awesome-icon color="white" icon="xmark-circle" size="xl" />
+              <font-awesome-icon color="white" icon="xmark-circle" />
             </span>
           </div>
         </div>
@@ -83,7 +81,7 @@ import { storeToRefs } from 'pinia'
 import { useTourStore } from '@/stores/TourStore'
 
 const tourStore = useTourStore()
-const { tours, remainingSteps, completedSteps, displayTour } = storeToRefs(tourStore)
+const { remainingSteps, completedSteps, displayTour } = storeToRefs(tourStore)
 
 const targetElement: Ref<Element | null> = ref(null)
 
