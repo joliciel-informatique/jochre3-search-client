@@ -206,6 +206,7 @@ import { type SearchResult, type AggregationBin } from '@/assets/interfacesExter
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useSearchStore } from '@/stores/SearchStore'
 import { storeToRefs } from 'pinia'
+import { useTourStore } from '@/stores/TourStore'
 
 const searchStore = useSearchStore()
 const { page, hasSearch, isLoading } = storeToRefs(searchStore)
@@ -213,6 +214,8 @@ const { page, hasSearch, isLoading } = storeToRefs(searchStore)
 const preferences = usePreferencesStore()
 const { show, isDesktop, authorFacetCount } = storeToRefs(preferences)
 const { initializeMedia } = preferences
+
+const { tour } = useTourStore()
 
 const query = ref('')
 const selectedEntryIdx = ref()
@@ -308,6 +311,7 @@ onMounted(() => {
       })
 
     runSearch(false)
+    setTimeout(() => tour('#takeTheTourBtn'), 1)
   })
 })
 

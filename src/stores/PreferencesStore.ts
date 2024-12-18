@@ -3,6 +3,8 @@ import { ref, computed, type Ref } from 'vue'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { fetchData } from '@/assets/fetchMethods'
 import { useCookies } from '@vueuse/integrations/useCookies'
+import { useTourStore } from './TourStore'
+import type { UserPreferences } from '@/assets/interfacesExternals'
 
 export const usePreferencesStore = defineStore('preferences', () => {
   const keycloakStore = useKeycloakStore()
@@ -21,6 +23,12 @@ export const usePreferencesStore = defineStore('preferences', () => {
   const isMobile = ref(false)
   const isDesktop = ref(false)
   const isPortrait = ref(false)
+
+  const tourList = ref()
+
+  const tourStore = useTourStore()
+  const { tourNames } = tourStore
+  // const { tour } = tourStore
 
   // Bulma breakpoints are (https://bulma.io/documentation/start/responsiveness/):
   // - mobile: up to 768px
@@ -79,7 +87,6 @@ export const usePreferencesStore = defineStore('preferences', () => {
 
   // Function called only in onMounted
   const initializeMedia = () => {
-    console.log('resize')
     if (window.matchMedia('(min-width: 1024px)').matches)
       toggleDevicesVariables([isDesktop], [isMobile, isTablet])
     if (window.matchMedia('(min-width: 769px) and (max-width: 1023px)').matches)
@@ -102,7 +109,8 @@ export const usePreferencesStore = defineStore('preferences', () => {
         resultsPerPage: resultsPerPage.value,
         authorFacetCount: authorFacetCount.value,
         displayPerBook: displayPerBook.value,
-        facetSortBy: facetSortBy.value
+        facetSortBy: facetSortBy.value,
+        tours: tourList.value
       })
 
       fetchData('preferences/user', 'post', params)
@@ -122,17 +130,15 @@ export const usePreferencesStore = defineStore('preferences', () => {
       cookies.set('authorFacetCount', authorFacetCount.value)
       cookies.set('displayPerBook', displayPerBook.value)
       cookies.set('facetSortBy', facetSortBy.value)
+      cookies.set('tours', tourList.value)
 
       console.log(`Successfully saved your preferences in a cookie.`)
     }
   }
 
-  interface UserPreferences {
-    language?: string
-    resultsPerPage?: number
-    displayPerBook?: boolean
-    authorFacetCount?: number
-    facetSortBy?: string
+  const resetTours = () => {
+    tourList.value = tourNames
+    save()
   }
 
   const load = async (): Promise<string> => {
@@ -157,6 +163,9 @@ export const usePreferencesStore = defineStore('preferences', () => {
               }
               if (userPreferences.displayPerBook !== undefined) {
                 displayPerBook.value = userPreferences.displayPerBook
+              }
+              if (userPreferences.tours !== undefined) {
+                tourList.value = userPreferences.tours // Just loading tours from tourStore, but should be set to value stored in database
               }
               return language.value
             })
@@ -200,6 +209,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
         const facetSortByCookie = cookies.get('facetSortBy').value as string
         facetSortBy.value = facetSortByCookie
       }
+      if (cookies.get('tours')) tourList.value = cookies.get('tours').value as string[]
     }
   }
 
@@ -220,11 +230,13 @@ export const usePreferencesStore = defineStore('preferences', () => {
     corpusLeftToRight,
     displayPerBook,
     facetSortBy: facetSortBy,
+    tourList,
     save,
     load,
     loadFromCookies,
     toggleDevicesVariables,
     getScreenOrientation,
+    resetTours,
     initializeMedia
   }
 })

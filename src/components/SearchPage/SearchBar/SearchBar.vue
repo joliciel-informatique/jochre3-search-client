@@ -94,18 +94,31 @@ Description: presents the search bar
     <div
       class="py-2 is-flex is-flex-direction-row is-justify-content-space-between is-hidden-touch"
     >
-      <a
-        id="userGuideBtn"
-        class="navbar-item"
-        href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
-        target="_blank"
-        tabindex="0"
-      >
-        <span>
-          <font-awesome-icon icon="book-open" />
-          {{ $t('search.user-guide') }}
-        </span>
-      </a>
+      <span class="is-flex is-flex-direction-row">
+        <a
+          id="userGuideBtn"
+          class="navbar-item"
+          href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
+          target="_blank"
+          tabindex="0"
+        >
+          <span>
+            <font-awesome-icon icon="book-open" />
+          </span>
+          <span>
+            {{ $t('search.user-guide') }}
+          </span>
+        </a>
+        <a
+          class="navbar-item"
+          id="takeTheTourBtn"
+          tabindex="0"
+          @click.prevent="tour('#takeTheTourBtn')"
+        >
+          <span><font-awesome-icon id="takeTheTourIcon" icon="circle-info" /></span>
+          <span>Take the tour</span>
+        </a>
+      </span>
       <a
         id="advancedSearchBtn"
         class="navbar-item has-text-white is-flex-desktop"
@@ -135,6 +148,9 @@ import { type Ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useSearchStore } from '@/stores/SearchStore'
 import { storeToRefs } from 'pinia'
+
+import { useTourStore } from '@/stores/TourStore'
+const { tour } = useTourStore()
 
 const preferences = usePreferencesStore()
 const { isLoading } = storeToRefs(useSearchStore())

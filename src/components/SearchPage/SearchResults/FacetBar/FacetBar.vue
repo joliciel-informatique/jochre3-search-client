@@ -32,6 +32,23 @@ Description: presents the facet bar
             >
               <font-awesome-icon icon="question-circle" />
             </span>
+            <span
+              class="pl-1 is-size-6"
+              v-show="
+                !preferences.displayLeftToRight && preferences.isDesktop && !preferences.isPortrait
+              "
+            >
+              <font-awesome-icon icon="circle-info" />
+            </span>
+            <!-- <span class="pl-1 is-size-6" v-show="preferences.isDesktop && !preferences.isPortrait">
+              <font-awesome-icon icon="book" />
+            </span> -->
+            <!-- <span class="pl-1 is-size-6" v-show="preferences.isDesktop && !preferences.isPortrait">
+              <font-awesome-icon icon="clapperboard" />
+            </span> -->
+            <!-- <span class="pl-1 is-size-6" v-show="preferences.isDesktop && !preferences.isPortrait">
+              <font-awesome-icon icon="circle-play" />
+            </span> -->
             {{ $t('facets.title', [authorFacetCount]) }}
             <span
               class="pl-1 is-size-6"
@@ -40,8 +57,18 @@ Description: presents the facet bar
               "
               v-tooltip:bottom="$t('facets.what-are-facets')"
             >
-              <font-awesome-icon icon="question-circle" /> </span
-          ></span>
+              <font-awesome-icon icon="question-circle" />
+            </span>
+            <span
+              class="pl-1 is-size-6"
+              v-show="
+                preferences.displayLeftToRight && preferences.isDesktop && !preferences.isPortrait
+              "
+            >
+              <font-awesome-icon icon="circle-info" />
+              <!-- <font-awesome-icon icon="clapperboard" /> -->
+            </span>
+          </span>
           <span class="pt-2 is-size-7 is-italic">{{ $t('facets.subtitle') }}</span>
         </p>
       </template>
@@ -206,8 +233,21 @@ Description: presents the facet bar
           v-show="preferences.isDesktop && !preferences.isPortrait"
           v-tooltip:bottom="$t('facets.what-are-facets')"
         >
-          <font-awesome-icon icon="question-circle" /> </span
-      ></span>
+          <font-awesome-icon icon="question-circle" />
+        </span>
+        <span class="pl-1 is-size-6" v-show="preferences.isDesktop && !preferences.isPortrait">
+          <font-awesome-icon icon="circle-info" />
+        </span>
+        <span class="pl-1 is-size-6" v-show="preferences.isDesktop && !preferences.isPortrait">
+          <font-awesome-icon icon="book" />
+        </span>
+        <span class="pl-1 is-size-6" v-show="preferences.isDesktop && !preferences.isPortrait">
+          <font-awesome-icon icon="clapperboard" />
+        </span>
+        <span class="pl-1 is-size-6" v-show="preferences.isDesktop && !preferences.isPortrait">
+          <font-awesome-icon icon="circle-play" />
+        </span>
+      </span>
       <span class="pt-2 is-size-7 is-italic">{{ $t('facets.subtitle') }}</span>
     </p>
     <div class="is-flex is-flex-direction-column">

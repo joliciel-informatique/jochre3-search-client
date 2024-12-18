@@ -50,6 +50,13 @@
             </div>
           </div>
         </div>
+        <div class="columns is-vcentered py-3">
+          <div class="column">
+            <h1 class="label">
+              <button class="button" @click="reTakeTours">Take the tour</button>
+            </h1>
+          </div>
+        </div>
       </div>
     </template>
     <template #footer>
@@ -74,6 +81,15 @@ const preferences = usePreferencesStore()
 const languageToSet = ref<string>(preferences.language)
 
 const { displayPerBook, language } = storeToRefs(preferences)
+const { resetTours } = preferences
+
+const reTakeTours = () => {
+  resetTours()
+  preferences.save()
+  preferences.show = false // Close modal
+  // Clear search
+  // Start first tour
+}
 
 const save = () => {
   if (languageToSet.value != language.value) {

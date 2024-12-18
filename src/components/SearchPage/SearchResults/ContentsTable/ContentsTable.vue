@@ -11,6 +11,10 @@
     <p class="menu-label is-size-5 label">
       {{ $t('toc.contents-table-header') }}
     </p>
+    <button class="button" @click.prevent="tour('#searchResultsTour')">
+      <font-awesome-icon icon="circle-info" />
+    </button>
+
     <p class="menu-label label pt-4">
       {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
     </p>
@@ -147,6 +151,7 @@ import PageNumbering from '@/components/SearchPage/SearchBar/Navigation/PageNumb
 
 import FacetBar from '@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue'
 import { useTourStore } from '@/stores/TourStore'
+const { tour } = useTourStore()
 
 // const SingleResult = defineAsyncComponent(
 //   () => import('@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResult.vue')

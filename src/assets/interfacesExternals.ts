@@ -87,24 +87,24 @@ export interface HighlightedDocument {
   pages: HighlightedPage[]
 }
 
-export interface Tour {
-  // tourId: string | number
-  // defaultTemplate?: boolean
-  // overlay?: boolean
-  position: string
-  group: string | number
-  // startEvent?: string
-  // scrollableContainerSelector?: string
-  // cookieStorage?: boolean
-  // endDate?: Date
-  // labelTerminate?: string
-  // popupPosition?: string
+export interface TourStep {
   id: string
   title: string
   description: string
+  position: string
   tag?: string
-  // beforeScript?: () => void
-  // afterScript?: () => void
+  highlights: [TourStepHighlight]
+}
+
+export interface TourStepHighlight {
+  id: string
+  description: string
+  position: string
+  delay: number
+  type?: string
+  width?: number
+  height?: number
+  showTime?: number
 }
 
 export interface UserPreferences {

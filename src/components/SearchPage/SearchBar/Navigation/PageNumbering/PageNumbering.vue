@@ -121,6 +121,11 @@ Description: calculates and presents page numbers
           {{ $t('pagination.bottom') }}
         </button>
       </div>
+      <div>
+        <button class="pagination-link has-text-white" @click.prevent="tour('#snippetsTour')">
+          <font-awesome-icon icon="circle-info" />
+        </button>
+      </div>
     </nav>
   </div>
   <nav
@@ -244,6 +249,7 @@ import { computed, ref, watch, type Ref } from 'vue'
 import { preferences } from '@/assets/fetchMethods'
 import { useSearchStore } from '@/stores/SearchStore'
 import { storeToRefs } from 'pinia'
+import { useTourStore } from '@/stores/TourStore'
 
 const searchStore = useSearchStore()
 const { page, hasSearch } = storeToRefs(searchStore)
@@ -252,6 +258,8 @@ const emit = defineEmits(['newPage'])
 const atTop = ref(true)
 const totalHits: Ref = defineModel('totalHits')
 const lastPage = computed(() => Math.floor((totalHits.value - 1) / preferences.resultsPerPage) + 1)
+
+const { tour } = useTourStore()
 
 const changePage = (pageNumber: number) => {
   page.value = pageNumber

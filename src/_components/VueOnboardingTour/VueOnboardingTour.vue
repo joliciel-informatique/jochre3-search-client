@@ -2,28 +2,15 @@
   <div v-if="currentStep" v-show="displayTour" class="vueOnboardingTour fixed">
     <!-- Overlay Background -->
     <div :style="overlayStyle" class="overlay"></div>
+    <div :style="overlayHighlightStyle" class="overlay-highlight spinner spinner-1"></div>
 
     <!-- Popup Container -->
-    <div
-      id="popupContainer"
-      ref="popupContainer"
-      class="popupContainer"
-      :style="popupStyle"
-      :data-id="currentStep?.id"
-    >
+    <div id="popupContainer" class="popupContainer" :style="popupStyle" :data-id="currentStep?.id">
       <!-- Default Template Content -->
       <div class="card is-flex is-flex-direction-column">
         <div
           class="card-header is-size-5 p-3 has-text-white is-flex is-flex-direction-row is-justify-content-space-between is-align-items-center"
         >
-          <!-- Chevron (Arrow Pointer) -->
-          <!-- <span class="absolute" :class="styleChevron">
-            <font-awesome-icon icon="chevron-right" v-if="popupPosition === 'left'" />
-            <font-awesome-icon icon="chevron-up" v-if="popupPosition === 'down'" />
-            <font-awesome-icon icon="chevron-down" v-if="popupPosition === 'top'" />
-            <font-awesome-icon icon="chevron-left" v-if="popupPosition === 'right'" />
-          </span> -->
-
           <!-- Step Tag (Optional) -->
           <div v-if="currentStep?.tag" class="is-small font-medium">
             {{ currentStep.tag }}
@@ -70,7 +57,7 @@
                 <font-awesome-icon
                   color="white"
                   size="xl"
-                  :icon="step.id === currentStep.id ? 'dot-circle' : 'circle'"
+                  :icon="step?.id === currentStep.id ? 'dot-circle' : 'circle'"
                 />
               </span>
             </div>
@@ -90,42 +77,33 @@
 </template>
 
 <script setup lang="ts">
-// import { type MaybeElement, useElementBounding } from '@vueuse/core'
 import { ref, watch, computed, onMounted, type Ref } from 'vue'
-import type { Tour } from '@/assets/interfacesExternals'
+import type { TourStep } from '@/assets/interfacesExternals'
 import { storeToRefs } from 'pinia'
 import { useTourStore } from '@/stores/TourStore'
 
 const tourStore = useTourStore()
-const { completedSteps, remainingSteps, displayTour } = storeToRefs(tourStore)
-const { checkDOM } = tourStore
-// const remainingSteps = ref<Array<Tour>>([])
+const { tours, remainingSteps, completedSteps, displayTour } = storeToRefs(tourStore)
 
-// const displayTour = ref(false)
-
-// let domObserverTarget: MutationObserver
-// let domObserverScrollable: MutationObserver
-
-// Binding the target element
 const targetElement: Ref<Element | null> = ref(null)
-// const popupElement: Ref<Element | null> = ref(null)
-// const targetElementBound = computed(() => useElementBounding(targetElement.value as MaybeElement))
-// const popupElementBound = computed(() => useElementBounding(popupElement.value as MaybeElement))
-// const scrollableContainerElement: Ref<Element | null> = ref(null)
 
-const currentStep = ref<Tour | undefined>(undefined)
-const popupContainer = ref()
+const currentStep = ref<TourStep | undefined>(undefined)
 
-const targetElementPosition = ref()
+const targetElementPosition = ref({
+  width: 0,
+  height: 0,
+  top: 0,
+  left: 0
+})
+
 const containerPosition = ref({ height: 0, width: 0 })
 
-// Computed styles
 const overlayStyle = computed(() => {
   return {
-    width: `${(targetElementPosition.value.width ?? 0) + 24}px`,
-    height: `${(targetElementPosition.value.height ?? 0) + 24}px`,
-    top: `${(targetElementPosition.value.top ?? 0) - 12}px`,
-    left: `${(targetElementPosition.value.left ?? 0) - 12}px`
+    width: `${targetElementPosition.value.width + 24}px`,
+    height: `${targetElementPosition.value.height + 24}px`,
+    top: `${targetElementPosition.value.top - 12}px`,
+    left: `${targetElementPosition.value.left - 12}px`
   }
 })
 
@@ -142,14 +120,27 @@ const popupStyle = ref({
       : 'auto'
 })
 
+const overlayHighlightStyle = ref({
+  top: '',
+  left: '',
+  bottom: '',
+  height: '',
+  width:
+    (targetElementPosition.value && targetElementPosition.value.left) ??
+    0 + containerPosition.value.width >= window.innerWidth - 10
+      ? `${window.innerWidth - targetElementPosition.value.left - 10}px`
+      : 'auto',
+  display: 'none'
+})
+
 const startTour = () => {
-  checkDOM()
   if (remainingSteps.value.length) nextStep()
 }
 
 const nextStep = () => {
   if (currentStep.value) completedSteps.value.push(remainingSteps.value.shift())
   currentStep.value = remainingSteps.value.length === 0 ? undefined : remainingSteps.value[0]
+  console.log(tours.value, remainingSteps.value, currentStep.value)
 }
 
 const prevStep = () => {
@@ -157,25 +148,31 @@ const prevStep = () => {
   currentStep.value = remainingSteps.value[0]
 }
 
-const endTour = () => (displayTour.value = false)
-
-const getStyles = () => {
-  setTimeout(() => {
-    if (currentStep.value) {
-      targetElement.value = document.querySelector(currentStep.value.id)
-      if (targetElement.value) {
-        targetElementPosition.value = targetElement.value?.getBoundingClientRect()
-        currentStep.value.position = setPopupPosition()
-        if (currentStep.value.position === 'left') positionPopupLeft()
-        if (currentStep.value.position === 'right') positionPopupRight()
-        if (currentStep.value.position === 'above') positionPopupTop()
-        if (currentStep.value.position === 'below') positionPopupBelow()
-      }
-    }
-  }, 50)
+const endTour = () => {
+  remainingSteps.value = []
+  overlayHighlightStyle.value.display = 'none'
+  displayTour.value = false
 }
 
-// Helper methods to determine popup position
+const getStyles = () => {
+  // const timeOut = setTimeout(() => {
+  if (currentStep.value) {
+    targetElement.value = document.querySelector(currentStep.value.id)
+    if (targetElement.value) {
+      targetElementPosition.value = targetElement.value?.getBoundingClientRect()
+      currentStep.value.position = setPopupPosition()
+      if (currentStep.value.position === 'left') positionPopupLeft()
+      if (currentStep.value.position === 'right') positionPopupRight()
+      if (currentStep.value.position === 'above') positionPopupTop()
+      if (currentStep.value.position === 'below') positionPopupBelow()
+    }
+    setHighlights()
+  }
+  // }, 50)
+  // clearTimeout(timeOut)
+}
+
+// Helper methods to make sure popup does not fall off screen
 const setPopupPosition = () => {
   if (currentStep.value?.position) return currentStep.value.position
   // if (targetLeft - container.width - 40 > 0) return 'left'
@@ -364,29 +361,57 @@ const positionPopupBelow = () => {
 //   }
 // })
 
+const setHighlights = () => {
+  if (currentStep.value && currentStep.value.highlights && currentStep.value.highlights.length) {
+    const highlights = currentStep.value.highlights
+    highlights.map((highlight) => {
+      const timeOut = setTimeout(() => {
+        if (highlight.type === 'circle') {
+          const element = document.querySelector(highlight.id)
+          if (element) {
+            const elementRect = element.getBoundingClientRect()
+
+            const centerOfElementY =
+              elementRect.top -
+              (highlight.height ? highlight.height / 2 : 0) +
+              elementRect.height / 2
+            const centerOfElementX =
+              elementRect.x - (highlight.width ? highlight.width / 2 : 0) + elementRect.width / 2
+
+            overlayHighlightStyle.value.width = `${highlight.width}px`
+            overlayHighlightStyle.value.height = `${highlight.height}px`
+            overlayHighlightStyle.value.top = `${centerOfElementY}px`
+            overlayHighlightStyle.value.left = `${centerOfElementX}px`
+            overlayHighlightStyle.value.display = 'block'
+            if (highlight.description && currentStep.value)
+              currentStep.value.description = highlight.description
+            setTimeout(() => {
+              overlayHighlightStyle.value.display = 'none'
+            }, highlight.showTime ?? 3000)
+          }
+        }
+      }, highlight.delay ?? 3000)
+      clearTimeout(timeOut)
+    })
+  }
+}
+
 const keyListeners = (e: KeyboardEvent) => {
   if (e.key === 'Escape') displayTour.value = false
   if (e.key === 'ArrowLeft') prevStep()
   if (e.key === 'ArrowRight') nextStep()
 }
 
-onMounted(() => {
-  window.addEventListener('keyup', keyListeners, true)
-  displayTour.value = true // Trigger startTour in watch
+onMounted(() => window.addEventListener('keyup', keyListeners, true))
+
+watch(remainingSteps, (newV) => {
+  console.log(newV)
+  if (newV.length) displayTour.value = true
 })
 
-watch(currentStep, () => getStyles())
 watch(displayTour, (newV) => {
-  if (newV) {
-    console.log('starting tour')
-    startTour()
-  }
+  if (newV) startTour()
 })
 
-watch(currentStep, (newV) => {
-  if (!newV) {
-    console.log('ending tour')
-    endTour()
-  }
-})
+watch(currentStep, (newV) => (newV ? getStyles() : endTour()))
 </script>
