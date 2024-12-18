@@ -77,8 +77,8 @@ export const useTourStore = defineStore('tours', () => {
 
   const tour = (tourId: string) => {
     completedSteps.value = []
+    remainingSteps.value = []
     remainingSteps.value = JSON.parse(JSON.stringify(tours.value[tourId]))
-    console.log(tourId, tours.value[tourId], remainingSteps.value)
   }
 
   return {

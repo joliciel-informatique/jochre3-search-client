@@ -8,15 +8,27 @@
     role="navigation"
     tabindex="1"
   >
-    <p class="menu-label is-size-5 label">
+    <p
+      class="menu-label is-size-5 label is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between"
+    >
       {{ $t('toc.contents-table-header') }}
+      <button class="button onBoardingButton" @click.prevent="tour('#searchResultsTour')">
+        <font-awesome-icon icon="circle-info" />
+      </button>
     </p>
-    <button class="button" @click.prevent="tour('#searchResultsTour')">
-      <font-awesome-icon icon="circle-info" />
-    </button>
 
     <p class="menu-label label pt-4">
-      {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
+      <!-- This will need translation in the translation files
+      separate spans are necessary to use the highlighting function in the tour 
+      -->
+      <span>
+        Found
+        <span class="totalHits">{{ totalHits }}</span>
+        books, showing
+        <span class="showingResults">{{ firstResult }}-{{ lastResult }}</span>
+      </span>
+      <!-- </span> -->
+      <!-- {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }} -->
     </p>
     <div class="scroll-list" ref="scrollListDesktop">
       <ul class="menu-list">

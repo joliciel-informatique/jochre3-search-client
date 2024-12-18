@@ -63,6 +63,13 @@ input:-webkit-autofill:active {
   line-height: normal;
 }
 
+.button {
+  &.onBoardingButton {
+    border-radius: 100%;
+    padding: 0.5rem;
+  }
+}
+
 button {
   &.is-small {
     line-height: normal;

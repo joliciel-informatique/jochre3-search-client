@@ -122,7 +122,7 @@ Description: calculates and presents page numbers
         </button>
       </div>
       <div>
-        <button class="pagination-link has-text-white" @click.prevent="tour('#snippetsTour')">
+        <button class="button onBoardingButton" @click.prevent="tour('#snippetsTour')">
           <font-awesome-icon icon="circle-info" />
         </button>
       </div>

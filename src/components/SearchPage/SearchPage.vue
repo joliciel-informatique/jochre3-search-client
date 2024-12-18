@@ -224,15 +224,10 @@ const searchStore = useSearchStore()
 const { page, hasSearch, isLoading } = storeToRefs(searchStore)
 
 const preferences = usePreferencesStore()
-const { show, isDesktop, authorFacetCount } = storeToRefs(preferences)
+const { show, isDesktop, isMobile, authorFacetCount } = storeToRefs(preferences)
 const { initializeMedia } = preferences
 
 const { tour } = useTourStore()
-const { show } = storeToRefs(preferences)
-
-import { storeToRefs } from 'pinia'
-
-const { authorFacetCount, isMobile } = storeToRefs(preferences)
 
 const query = ref('')
 const selectedEntryIdx = ref()
@@ -328,7 +323,7 @@ onMounted(() => {
       })
 
     runSearch(false)
-    setTimeout(() => tour('#takeTheTourBtn'), 1)
+    if (!hasSearch.value) setTimeout(() => tour('#takeTheTourBtn'), 1)
   })
 })
 

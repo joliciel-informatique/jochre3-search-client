@@ -93,18 +93,7 @@ export interface TourStep {
   description: string
   position: string
   tag?: string
-  highlights: [TourStepHighlight]
-}
-
-export interface TourStepHighlight {
-  id: string
-  description: string
-  position: string
-  delay: number
-  type?: string
-  width?: number
-  height?: number
-  showTime?: number
+  highlight: string
 }
 
 export interface UserPreferences {

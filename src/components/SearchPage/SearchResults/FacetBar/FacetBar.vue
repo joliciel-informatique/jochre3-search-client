@@ -65,8 +65,13 @@ Description: presents the facet bar
                 preferences.displayLeftToRight && preferences.isDesktop && !preferences.isPortrait
               "
             >
-              <font-awesome-icon icon="circle-info" />
-              <!-- <font-awesome-icon icon="clapperboard" /> -->
+              <button
+                id="facetTourBtn"
+                class="button onBoardingButton"
+                @click.prevent="tour('#facetTourBtn')"
+              >
+                <font-awesome-icon icon="circle-info" />
+              </button>
             </span>
           </span>
           <span class="pt-2 is-size-7 is-italic">{{ $t('facets.subtitle') }}</span>
@@ -388,10 +393,13 @@ import { insertInSortedArray } from '@/assets/functions'
 import { useI18n } from 'vue-i18n'
 import FilterTag from '@/_components/FilterTag/FilterTag.vue'
 import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
+import { useTourStore } from '@/stores/TourStore'
 // const FilterTag = defineAsyncComponent(() => import('@/_components/FilterTag/FilterTag.vue'))
 // const AccordionCard = defineAsyncComponent(
 //   () => import('@/_components/AccordionCard/AccordionCard.vue')
 // )
+
+const { tour } = useTourStore()
 
 const emit = defineEmits(['newSearch'])
 const preferences = usePreferencesStore()

@@ -79,7 +79,7 @@ Description: presents the search bar
           @onEnter="() => emit('newSearch')"
         />
         <p class="control" v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
-          <a class="button is-static is-clickable">
+          <a id="strictSearchCheckboxBtn" class="button is-static is-clickable">
             <label for="strictSearchCheckbox" class="is-clickable" :class="isMobile ? '' : 'mx-2'"
               ><span
                 ><span class="is-hidden-mobile">{{ $t('search.related-word-forms') }}</span>
@@ -116,12 +116,15 @@ Description: presents the search bar
         </a>
         <a
           class="navbar-item"
-          id="takeTheTourBtn"
-          tabindex="0"
           @click.prevent="tour('#takeTheTourBtn')"
+          tabindex="0"
+          id="takeTheTourBtn"
         >
-          <span><font-awesome-icon id="takeTheTourIcon" icon="circle-info" /></span>
-          <span>Take the tour</span>
+          <button class="button onBoardingButton">
+            <font-awesome-icon id="takeTheTourIcon" icon="circle-info" />
+          </button>
+          <!-- This will need translation -->
+          <span>Take a tour</span>
         </a>
       </span>
       <a

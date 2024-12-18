@@ -133,14 +133,11 @@ const overlayHighlightStyle = ref({
   display: 'none'
 })
 
-const startTour = () => {
-  if (remainingSteps.value.length) nextStep()
-}
+const startTour = () => (remainingSteps.value.length ? nextStep() : endTour())
 
 const nextStep = () => {
   if (currentStep.value) completedSteps.value.push(remainingSteps.value.shift())
   currentStep.value = remainingSteps.value.length === 0 ? undefined : remainingSteps.value[0]
-  console.log(tours.value, remainingSteps.value, currentStep.value)
 }
 
 const prevStep = () => {
@@ -155,7 +152,6 @@ const endTour = () => {
 }
 
 const getStyles = () => {
-  // const timeOut = setTimeout(() => {
   if (currentStep.value) {
     targetElement.value = document.querySelector(currentStep.value.id)
     if (targetElement.value) {
@@ -168,8 +164,6 @@ const getStyles = () => {
     }
     setHighlights()
   }
-  // }, 50)
-  // clearTimeout(timeOut)
 }
 
 // Helper methods to make sure popup does not fall off screen
@@ -362,37 +356,23 @@ const positionPopupBelow = () => {
 // })
 
 const setHighlights = () => {
-  if (currentStep.value && currentStep.value.highlights && currentStep.value.highlights.length) {
-    const highlights = currentStep.value.highlights
-    highlights.map((highlight) => {
-      const timeOut = setTimeout(() => {
-        if (highlight.type === 'circle') {
-          const element = document.querySelector(highlight.id)
-          if (element) {
-            const elementRect = element.getBoundingClientRect()
+  if (currentStep.value && currentStep.value.highlight) {
+    const currentStepHighlight = currentStep.value.highlight
+    const element = document.querySelector(currentStepHighlight)
+    if (element) {
+      const elementRect = element.getBoundingClientRect()
 
-            const centerOfElementY =
-              elementRect.top -
-              (highlight.height ? highlight.height / 2 : 0) +
-              elementRect.height / 2
-            const centerOfElementX =
-              elementRect.x - (highlight.width ? highlight.width / 2 : 0) + elementRect.width / 2
+      const centerOfElementY = elementRect.top - 16 + elementRect.height / 2 // 16 is absolute based on icon
+      const centerOfElementX = elementRect.x - 16 + elementRect.width / 2
 
-            overlayHighlightStyle.value.width = `${highlight.width}px`
-            overlayHighlightStyle.value.height = `${highlight.height}px`
-            overlayHighlightStyle.value.top = `${centerOfElementY}px`
-            overlayHighlightStyle.value.left = `${centerOfElementX}px`
-            overlayHighlightStyle.value.display = 'block'
-            if (highlight.description && currentStep.value)
-              currentStep.value.description = highlight.description
-            setTimeout(() => {
-              overlayHighlightStyle.value.display = 'none'
-            }, highlight.showTime ?? 3000)
-          }
-        }
-      }, highlight.delay ?? 3000)
-      clearTimeout(timeOut)
-    })
+      overlayHighlightStyle.value.width = `16px`
+      overlayHighlightStyle.value.height = `16px`
+      overlayHighlightStyle.value.top = `${centerOfElementY}px`
+      overlayHighlightStyle.value.left = `${centerOfElementX}px`
+      overlayHighlightStyle.value.display = 'block'
+    }
+  } else {
+    overlayHighlightStyle.value.display = 'none'
   }
 }
 
@@ -404,14 +384,8 @@ const keyListeners = (e: KeyboardEvent) => {
 
 onMounted(() => window.addEventListener('keyup', keyListeners, true))
 
-watch(remainingSteps, (newV) => {
-  console.log(newV)
-  if (newV.length) displayTour.value = true
-})
+watch(remainingSteps, (newV) => (displayTour.value = newV.length ? true : false))
 
-watch(displayTour, (newV) => {
-  if (newV) startTour()
-})
-
-watch(currentStep, (newV) => (newV ? getStyles() : endTour()))
+watch(displayTour, (newV) => (newV ? startTour() : endTour()))
+watch(currentStep, (newV) => (newV ? getStyles() : (remainingSteps.value = [])), { deep: true })
 </script>
