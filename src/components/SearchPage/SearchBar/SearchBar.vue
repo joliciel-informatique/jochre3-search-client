@@ -10,7 +10,10 @@ Methods: None
 Description: presents the search bar
 -->
 <template>
-  <div id="searchBar" class="container is-max-desktop has-text-white has-text-weight-semibold">
+  <div
+    id="searchBar"
+    class="container is-align-content-space-between is-max-desktop has-text-white has-text-weight-semibold"
+  >
     <div class="is-flex is-flex-direction-row is-flex-grow-1">
       <div class="is-flex is-flex-direction-row is-flex-grow-1 pb-0 mb-0 field has-addons">
         <p class="control">
@@ -29,6 +32,7 @@ Description: presents the search bar
             id="query"
             type="text"
             class="input is-normal is-rounded"
+            :class="isMobile ? 'px-2' : ''"
             lang="yi"
             v-model="query"
             @keyup.enter="emit('newSearch')"
@@ -52,7 +56,7 @@ Description: presents the search bar
             aria-label="reset"
             @click="emit('resetSearchResults')"
             @keyup.enter="emit('resetSearchResults')"
-            v-if="!isLoading && query"
+            v-if="!isLoading && query && !isMobile"
           >
             <font-awesome-icon icon="circle-xmark" />
           </span>
@@ -61,6 +65,7 @@ Description: presents the search bar
         <p class="control" tabindex="0">
           <button
             class="button is-clickable"
+            :class="isMobile ? 'px-2' : ''"
             @click.prevent="emit('newSearch')"
             :alt="$t('search.start-search')"
             :title="$t('search.start-search')"
@@ -74,11 +79,11 @@ Description: presents the search bar
           @onEnter="() => emit('newSearch')"
         />
         <p class="control" v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
-          <a id="strictSearchCheckboxBtn" class="button is-static is-clickable">
-            <label for="strictSearchCheckbox" class="mx-2 is-clickable"
+          <a class="button is-static is-clickable">
+            <label for="strictSearchCheckbox" class="is-clickable" :class="isMobile ? '' : 'mx-2'"
               ><span
                 ><span class="is-hidden-mobile">{{ $t('search.related-word-forms') }}</span>
-                <span class="px-2"
+                <span :class="isMobile ? '' : 'px-2'"
                   ><input
                     id="strictSearchCheckbox"
                     type="checkbox"
@@ -156,6 +161,8 @@ const preferences = usePreferencesStore()
 const { isLoading } = storeToRefs(useSearchStore())
 
 const hasAdvancedSearchCriteria = defineModel('hasAdvancedSearchCriteria')
+
+const { isMobile } = storeToRefs(usePreferencesStore())
 
 const query: Ref = defineModel('query')
 const strict: Ref = defineModel('strict')

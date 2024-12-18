@@ -6,7 +6,12 @@
     @click="toggleKeyboard"
     tabindex="1"
   >
-    <button class="button is-clickable" :alt="$t('search.keyboard')" :title="$t('search.keyboard')">
+    <button
+      class="button is-clickable"
+      :class="isMobile ? 'px-3' : ''"
+      :alt="$t('search.keyboard')"
+      :title="$t('search.keyboard')"
+    >
       <font-awesome-icon icon="keyboard" />
     </button>
   </p>

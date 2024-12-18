@@ -173,28 +173,19 @@
 .navbar-link {
   border-radius: 0.5em;
   gap: 0.25rem;
+  // --bulma-navbar-item-img-max-height: 17vh;
 }
 
-// main {
-// min-height: 41vh;
-// overflow-y: auto;
-// }
-
-// #topbar {
-//   top: 0px;
-//   position: sticky;
-//   z-index: 43;
-//   background-color: $background-color-1;
-//   height: 20vh;
-//   // max-height: 40vh;
-// }
-
-.logo img {
-  // position: absolute;
-  // left: 1vmin;
-  // top: 1vmin;
-  // height: 18vmin;
-  // z-index: 19028340912430918243184093823;
+.logo {
+  flex: 1 1 auto;
+  a {
+    img {
+      height: auto;
+      width: auto;
+      max-height: 7vh;
+      vertical-align: -webkit-baseline-middle;
+    }
+  }
 }
 
 main {
