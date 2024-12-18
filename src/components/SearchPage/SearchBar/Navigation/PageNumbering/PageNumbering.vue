@@ -250,7 +250,7 @@ const searchStore = useSearchStore()
 const { page } = storeToRefs(searchStore)
 const emit = defineEmits(['newPage'])
 
-const atTop = ref(true)
+const atTop = ref()
 const totalHits: Ref = defineModel('totalHits')
 const lastPage = computed(() => Math.floor((totalHits.value - 1) / preferences.resultsPerPage) + 1)
 
