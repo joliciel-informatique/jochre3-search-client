@@ -37,48 +37,16 @@ export const useTourStore = defineStore('tours', () => {
     }
   }
 
-  // Check the DOM for visible elements
-  // Tour with most visible elements will run
-  // Arrays of tour elements in translation files need to match logical order of DOM elements
-  // const checkDOM = () => {
-
-  // if (toursFromTranslationFiles.value) {
-  // console.log(toursFromTranslationFiles.value)
-  // console.log(completedTours.value)
-  //   const completedTourIds = completedTours.value.map((tourElement: Tour) => tourElement.id)
-  //   // Convert VueMessageType to Tour
-  //   tours.value = toursFromTranslationFiles.value.map((tour) =>
-  //     Object.entries(tour).map<Tour>(([key, value]) =>
-  //       completedTourIds.includes(key)
-  //         ? undefined
-  //         : Object.assign(value, {
-  //             id: key,
-  //             inDOM: document.querySelector(key) ? true : false
-  //           })
-  //     )
-  //   )
-  //   console.log(tours.value)
-  //   // Find array with most inDOM values
-  //   const check = tours.value.map((tour) => {
-  //     if (!tour) return 0
-  //     const c =
-  //       (100 / tour.filter((tourElement) => tourElement?.inDOM === true).length) * tour.length
-  //     return isFinite(c) ? c : 0
-  //   })
-  //   console.log(check)
-  //   if (check) {
-  //     const maxValIdx = check.indexOf(Math.max(...check))
-  //     remainingSteps.value = tours.value[maxValIdx]
-  //     console.log('\n| Remaining:', remainingSteps.value.length, remainingSteps.value)
-  //     completedTours.value = []
-  //   }
-  // }
-  // }
-
   const tour = (tourId: string) => {
     completedSteps.value = []
     remainingSteps.value = []
     remainingSteps.value = JSON.parse(JSON.stringify(tours.value[tourId]))
+    remainingSteps.value = remainingSteps.value
+      .map((step) => {
+        if (!step) return undefined
+        return document.querySelector(step.id) ? step : undefined
+      })
+      .filter((x) => x)
   }
 
   return {

@@ -45,6 +45,7 @@
       <div class="menu is-pulled-right panel">
         <div class="is-hidden-desktop">
           <a
+            id="userGuideMobileBtn"
             class="panel-block"
             href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
             target="_blank"
@@ -54,7 +55,11 @@
               {{ $t('search.user-guide') }}
             </span>
           </a>
-          <a class="panel-block" @click.prevent="showAdvancedSearchPanel = true">
+          <a
+            id="advancedSearchMobileBtn"
+            class="panel-block"
+            @click.prevent="showAdvancedSearchPanel = true"
+          >
             <font-awesome-icon
               class="panel-icon"
               :icon="
@@ -70,6 +75,18 @@
             </span>
           </a>
           <a
+            id="takeTheTourMobileBtn"
+            class="panel-block"
+            @click.prevent="tour('#takeTheTourMobileBtn')"
+          >
+            <font-awesome-icon
+              id="takeTheTourMobileIcon"
+              class="panel-icon"
+              icon="circle-info"
+            /><span>Take the tour</span>
+          </a>
+          <a
+            id="preferencesMobileBtn"
             class="panel-block"
             @click.prevent="preferences.show = true"
             :title="$t('header.preferences')"
@@ -100,12 +117,15 @@
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { useTourStore } from '@/stores/TourStore'
 const keycloak = useKeycloakStore().keycloak
 const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
 const preferences = usePreferencesStore()
 const hasAdvancedSearchCriteria = ref(false)
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
 const openNavBarMobileMenu = defineModel('openNavBarMobileMenu')
+
+const { tour } = useTourStore()
 
 const signout = () => keycloak?.logout()
 

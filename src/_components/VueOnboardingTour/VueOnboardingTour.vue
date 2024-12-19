@@ -5,7 +5,13 @@
     <div :style="overlayHighlightStyle" class="overlay-highlight spinner spinner-1"></div>
 
     <!-- Popup Container -->
-    <div id="popupContainer" class="popupContainer" :style="popupStyle" :data-id="currentStep?.id">
+    <div
+      v-show="showPopup"
+      id="popupContainer"
+      class="popupContainer"
+      :style="popupStyle"
+      :data-id="currentStep?.id"
+    >
       <!-- Default Template Content -->
       <div class="card is-flex is-flex-direction-column">
         <div
@@ -55,7 +61,7 @@
               >
                 <font-awesome-icon
                   color="white"
-                  :icon="step?.id === currentStep.id ? 'dot-circle' : 'circle'"
+                  :icon="step?.id === currentStep?.id ? 'dot-circle' : 'circle'"
                 />
               </span>
             </div>
@@ -79,6 +85,8 @@ import { ref, watch, computed, onMounted, type Ref } from 'vue'
 import type { TourStep } from '@/assets/interfacesExternals'
 import { storeToRefs } from 'pinia'
 import { useTourStore } from '@/stores/TourStore'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+const { isMobile, displayLeftToRight } = storeToRefs(usePreferencesStore())
 
 const tourStore = useTourStore()
 const { remainingSteps, completedSteps, displayTour } = storeToRefs(tourStore)
@@ -87,12 +95,27 @@ const targetElement: Ref<Element | null> = ref(null)
 
 const currentStep = ref<TourStep | undefined>(undefined)
 
+const vw = ref(Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0))
+
+// const popupContainer = ref({
+//   bottom: 0,
+//   height: 0,
+//   left: 0,
+//   right: 0,
+//   top: 0,
+//   width: 0,
+//   x: 0,
+//   y: 0
+// })
+
 const targetElementPosition = ref({
   width: 0,
   height: 0,
   top: 0,
   left: 0
 })
+
+const showPopup = ref(false)
 
 const containerPosition = ref({ height: 0, width: 0 })
 
@@ -105,18 +128,21 @@ const overlayStyle = computed(() => {
   }
 })
 
-const popupStyle = ref({
-  top: '',
+const clearPopupStyle = () => ({
+  top: `${targetElementPosition.value.top + targetElementPosition.value.height / 2}px`,
   left: '',
+  right: '',
   bottom: '',
   height: '',
-  maxWidth: '20vw',
-  width:
-    (targetElementPosition.value && targetElementPosition.value.left) ??
-    0 + containerPosition.value.width >= window.innerWidth - 10
-      ? `${window.innerWidth - targetElementPosition.value.left - 10}px`
-      : 'auto'
+  maxWidth: isMobile ? '' : '20vw',
+  width: 'auto'
+  // (targetElementPosition.value && targetElementPosition.value.left) ??
+  // 0 + containerPosition.value.width >= window.innerWidth - 10
+  //   ? `${window.innerWidth - targetElementPosition.value.left - 10}px`
+  //   : 'auto'
 })
+
+const popupStyle = ref()
 
 const overlayHighlightStyle = ref({
   top: '',
@@ -134,65 +160,147 @@ const overlayHighlightStyle = ref({
 const startTour = () => (remainingSteps.value.length ? nextStep() : endTour())
 
 const nextStep = () => {
+  showPopup.value = false
   if (currentStep.value) completedSteps.value.push(remainingSteps.value.shift())
   currentStep.value = remainingSteps.value.length === 0 ? undefined : remainingSteps.value[0]
 }
 
 const prevStep = () => {
+  showPopup.value = false
   remainingSteps.value.unshift(completedSteps.value.pop())
   currentStep.value = remainingSteps.value[0]
 }
 
 const endTour = () => {
+  showPopup.value = false
   remainingSteps.value = []
   overlayHighlightStyle.value.display = 'none'
   displayTour.value = false
 }
 
+// Order of assigning position and alignment matters!
 const getStyles = () => {
   if (currentStep.value) {
     targetElement.value = document.querySelector(currentStep.value.id)
+    // if (document.defaultView && document.defaultView.getComputedStyle)
     if (targetElement.value) {
+      // console.log(targetElement.value.computedStyleMap().get('opacity'))
       targetElementPosition.value = targetElement.value?.getBoundingClientRect()
-      currentStep.value.position = setPopupPosition()
-      if (currentStep.value.position === 'left') positionPopupLeft()
-      if (currentStep.value.position === 'right') positionPopupRight()
-      if (currentStep.value.position === 'above') positionPopupTop()
-      if (currentStep.value.position === 'below') positionPopupBelow()
+      setPopupPosition()
+
+      if (!currentStep.value.align) {
+        // console.log('no alignment, setting maxwidth')
+        popupStyle.value.maxWidth = overlayStyle.value.width
+      } else {
+        if (currentStep.value.align.includes('right')) alignPopupRight()
+        if (currentStep.value.align.includes('middle')) alignPopupMiddle()
+        if (currentStep.value.align.includes('left')) alignPopupLeft()
+      }
+      setHighlights()
+    } else {
+      // Element not in DOM; remove from remainingSteps and move on
+      nextStep()
     }
-    setHighlights()
   }
 }
 
-// Helper methods to make sure popup does not fall off screen
 const setPopupPosition = () => {
-  if (currentStep.value?.position) return currentStep.value.position
-  // if (targetLeft - container.width - 40 > 0) return 'left'
-  // if (targetRight + container.width + 40 < window.innerWidth) return 'right'
-  // if (targetTop - container.height - 40 > 0) return 'top'
-  return 'below' // Default to bottom placement if all else fails
+  popupStyle.value = clearPopupStyle()
+  if (currentStep.value) {
+    // const element = document.querySelector('.popupContainer')
+    if (currentStep.value.position) {
+      const position = currentStep.value.position
+      // const popupRect = element.getBoundingClientRect()
+      // console.log(element, popupRect.left, window.innerWidth)
+
+      const valid = { left: false, right: false, bottom: false, top: false }
+      valid.left = popupStyle.value.left > 0
+      valid.right = popupStyle.value.left + popupStyle.value.width < window.innerWidth
+      valid.top = popupStyle.value.top > 0
+      valid.bottom = popupStyle.value.top + popupStyle.value.height < window.innerHeight
+
+      if (position.includes('left') && valid.left) positionPopupLeft()
+      if (position.includes('right') && valid.right) positionPopupRight()
+      if (position.includes('top') && valid.top) positionPopupTop()
+      if (position.includes('bottom') && valid.bottom) positionPopupBottom()
+    }
+  }
 }
 
 const positionPopupLeft = () => {
-  const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
-  popupStyle.value.top = `${targetElementPosition.value.top}px`
-  popupStyle.value.left = `${targetElementPosition.value.left - (vw / 100) * 20 - 20}px`
+  console.log('positioning left')
+  popupStyle.value.left = overlayStyle.value.left
 }
 
 const positionPopupRight = () => {
-  popupStyle.value.top = `${targetElementPosition.value.top}px`
-  popupStyle.value.left = `${targetElementPosition.value.width + targetElementPosition.value.left + 20}px`
+  console.log('positioning right')
+  // popupStyle.value.top = overlayStyle.value.top
+  // popupStyle.value.right = `${parseInt(overlayStyle.value.left) + parseInt(overlayStyle.value.width)}px`
+  // popupStyle.value.width =
+  popupStyle.value.left = `${parseInt(overlayStyle.value.left) + parseInt(overlayStyle.value.width)}px`
 }
 
 const positionPopupTop = () => {
-  popupStyle.value.bottom = `${targetElementPosition.value.top - targetElementPosition.value.height}px`
-  popupStyle.value.left = `${targetElementPosition.value.left}px`
+  console.log('positioning top')
+  popupStyle.value.top = overlayStyle.value.top
+  // popupStyle.value.bottom = `${parseInt(overlayStyle.value.top) - parseInt(overlayStyle.value.height)}px`
 }
 
-const positionPopupBelow = () => {
-  popupStyle.value.top = `${targetElementPosition.value.top + targetElementPosition.value.height + 20}px`
-  popupStyle.value.left = `${targetElementPosition.value.left}px`
+const positionPopupBottom = () => {
+  console.log('positioning bottom')
+  popupStyle.value.top = `${parseInt(overlayStyle.value.top) + parseInt(overlayStyle.value.height)}px`
 }
+
+const alignPopupRight = () => {
+  console.log('aligning right')
+  popupStyle.value.maxWidth = overlayStyle.value.width
+  // popupStyle.value.left = overlayStyle.value.left <
+  // popupStyle.value.maxWidth = overlayStyle.value.width
+  // Assign popupStyle.value.left to overlayStyle.value.left
+  // Find most right point of overlayStyle as limit: overlayStyle.value.width + overlayStyle.value.left
+  // Check popupStyle.value.left + overlayStyle.value.width < right point
+  // If so popupStyle.value.width = popupStyle.value.left + overlayStyle.value.width
+  // Else popupStyle.value.width = overlayStyle.value.width + overlayStyle.value.left
+  const limit = parseInt(overlayStyle.value.width) + parseInt(overlayStyle.value.left)
+  console.log(limit, popupStyle.value.left, overlayStyle.value.width)
+  if (parseInt(popupStyle.value.left) + parseInt(overlayStyle.value.width) > limit) {
+    popupStyle.value.width = `${parseInt(popupStyle.value.left) + parseInt(overlayStyle.value.width)}px`
+  } else {
+    popupStyle.value.width = `${parseInt(overlayStyle.value.width) + parseInt(overlayStyle.value.left)}px`
+  }
+
+  // popupStyle.value.width =
+  //   parseInt(overlayStyle.value.width) >
+  //   parseInt(popupStyle.value.right) - parseInt(overlayStyle.value.left)
+  //     ? `${parseInt(popupStyle.value.right) - parseInt(overlayStyle.value.left)}px`
+  //     : popupStyle.value.right
+}
+
+const alignPopupMiddle = () => {
+  console.log('aligning middle')
+  const cont = document.querySelector('.popupContainer')
+  console.log(cont?.getBoundingClientRect())
+  popupStyle.value.width = `${parseInt(overlayStyle.value.width) / 2}px`
+}
+const alignPopupLeft = () => {
+  popupStyle.value.right = `${vw.value - (parseInt(overlayStyle.value.left) + parseInt(overlayStyle.value.width) / 2)}px`
+  console.log(
+    'aligning left',
+    parseInt(overlayStyle.value.width) >
+      parseInt(popupStyle.value.right) - parseInt(overlayStyle.value.left),
+    parseInt(overlayStyle.value.width),
+    parseInt(popupStyle.value.right) - parseInt(overlayStyle.value.left),
+    parseInt(overlayStyle.value.left)
+  )
+  popupStyle.value.width =
+    parseInt(overlayStyle.value.width) >
+    parseInt(popupStyle.value.right) - parseInt(overlayStyle.value.left)
+      ? `${parseInt(popupStyle.value.right) - parseInt(overlayStyle.value.left)}px`
+      : popupStyle.value.right
+}
+
+// Helper methods to make sure popup does not fall off screen
+// PopupContainer aligns ltr/rtl on element
 
 // const scrollableContainerBound = computed(
 //   () =>
@@ -372,6 +480,7 @@ const setHighlights = () => {
   } else {
     overlayHighlightStyle.value.display = 'none'
   }
+  showPopup.value = true
 }
 
 const keyListeners = (e: KeyboardEvent) => {

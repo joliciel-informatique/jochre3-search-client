@@ -139,5 +139,160 @@
     "credits": "",
     "credits-column-2": "",
     "privacy": "<a href=\"privacy.html\" class=\"link-white\">פּאָליטיק פֿון דאַטנשיץ</a>"
+  },
+  "tours": {
+    "#takeTheTourBtn": [
+      {
+        "id": "#query",
+        "title": "YI__Welcome to the new JOCHRE interface",
+        "description": "YI__Start your journey into Yiddish literature by entering a search term here. You can use Yiddish and Latin characters.",
+        "tag": "New!",
+        "position": "bottom"
+      },
+      {
+        "id": "#query-keyboard-btn",
+        "title": "YI__Yiddish onscreen keyboard",
+        "description": "YI__If you do not have a Yiddish keyboard configuration set up, simply use our onscreen Yiddish keyboard!",
+        "position": "bottom"
+      },
+      {
+        "id": "#strictSearchCheckboxBtn",
+        "title": "YI__Strict search",
+        "description": "YI__JOCHRE comes with many features to restrict or expand your search. For example, checking this box excludes any lemmata (derived verb forms) from the search results.",
+        "position": "bottom"
+      },
+      {
+        "id": "#advancedSearchBtn",
+        "title": "YI__Advanced search",
+        "description": "YI__You can search by specific aspects within the metadata too such as author names, dates and publisher information.",
+        "position": "left"
+      },
+      {
+        "id": "#userGuideBtn",
+        "title": "YI__User guide",
+        "description": "YI__Note that you can also use special characters in the search bar to format your query. For example, '\"Schvarts\"' (with quotation marks) will not yield the same results as 'Schvarts' without quotation marks. Visit the user guide for a full explanation of your search options!",
+        "position": "bottom"
+      },
+      {
+        "id": "#takeTheTourBtn",
+        "title": "YI__Take the tour",
+        "description": "YI__You can start this tour at any time by pressing this button.\n\nLook for this icon to start other tours!",
+        "position": "bottom",
+        "highlight": "#takeTheTourIcon"
+      }
+    ],
+    "#searchResultsTour": [
+      {
+        "id": "#searchResultsToCDesktop",
+        "title": "YI__The search results panel",
+        "description": "YI__This panel displays metadata for the first ten of your results.",
+        "position": "right"
+      },
+      {
+        "id": ".totalHits",
+        "title": "YI__Total",
+        "description": "YI__This is the total number of books relevant to your query",
+        "position": "bottom",
+        "highlight": ".totalHits"
+      },
+      {
+        "id": ".showingResults",
+        "title": "YI__Total",
+        "description": "YI__And everything on your screen relates only to ten results at a time",
+        "position": "bottom",
+        "highlight": ".showingResults"
+      },
+      {
+        "id": ".edit-metadata-btn",
+        "title": "YI__Edit buttons",
+        "description": "YI__Buttons such as these allow you to edit the metadata for each title in our database. All proposed changes will be reviewed by YBC staff.",
+        "position": "right",
+        "highlight": ".edit-metadata-btn"
+      }
+    ],
+    "#snippetsTour": [
+      {
+        "id": ".pagination",
+        "title": "YI__Navigation",
+        "description": "YI__These buttons allow you to request a new set of search results in the search results panel and snippet display.",
+        "position": "bottom"
+      },
+      {
+        "id": "#snippets",
+        "title": "YI__Snippets",
+        "description": "YI__This center panel presents the relevant text snippets by the selected title in the left pane. You can see what title the snippets belong to by the green color on the header bar.",
+        "position": "left"
+      },
+      {
+        "id": ".selected-snippet",
+        "title": "YI__Snippet header",
+        "description": "YI__Each snippet header presents important information such as the page number, the title and author of the book",
+        "position": "bottom"
+      },
+      {
+        "id": ".open-page-btn",
+        "title": "YI__Page",
+        "description": "YI__This button will take you directly to the page on the YBC website.",
+        "position": "bottom"
+      },
+      {
+        "id": ".open-transcription-btn",
+        "title": "YI__Transcription",
+        "description": "YI__This button will open the entire automatically transcribed text in a new window.",
+        "position": "bottom"
+      },
+      {
+        "id": ".load-original-image-button",
+        "title": "YI__Click to load original image",
+        "description": "YI__Click this image to load the digital copy of the original scan used in the OCR process.",
+        "position": "top",
+        "highlight": ".load-original-image-button"
+      },
+      {
+        "id": ".highlight",
+        "title": "YI__Text correction",
+        "description": "YI__Double-click any word to propose corrections. As with edits to metadata, YBC staff will review your suggested change.",
+        "position": "bottom"
+      }
+    ],
+    "#facetTourBtn": [
+      {
+        "id": "#facetBarToCDesktop",
+        "title": "YI__Author filters",
+        "description": "YI__Explore your search beyond your results! This is a selection of most common author names associated with your search results.",
+        "position": "left"
+      },
+      {
+        "id": ".filterTag",
+        "title": "YI__Author filters",
+        "description": "YI__Select any to view just their works across the entire corpus outside of your search results. Deselect them to return to your original search results.",
+        "position": "left"
+      },
+      {
+        "id": "#facets-authors-to-display",
+        "title": "YI__Author filters",
+        "description": "YI__This updates how many relevant authors are retrieved",
+        "position": "left"
+      },
+      {
+        "id": "#facets-sort-authors",
+        "title": "YI__Author filters",
+        "description": "YI__And this sorts them by name, or those that you have selected, but always by the most hits across the corpus.",
+        "position": "left"
+      },
+      {
+        "id": "#facets-filter-authors",
+        "title": "YI__Author filters",
+        "description": "YI__You can also search for a specific author in the list bottom. Note: this does not search the database.",
+        "position": "bottom"
+      },
+      {
+        "id": "#collapseFacetBarDesktop",
+        "title": "YI__Author filters",
+        "description": "YI__Feel free to collapse this panel if you don\t use it!",
+        "position": "top",
+        "highlight": "#collapseFacetBarDesktop"
+      }
+    ]
   }
 }

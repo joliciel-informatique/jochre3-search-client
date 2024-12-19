@@ -155,38 +155,75 @@
         "title": "Welcome to the new JOCHRE interface",
         "description": "Start your journey into Yiddish literature by entering a search term here. You can use Yiddish and Latin characters.",
         "tag": "New!",
-        "position": "below"
+        "position": "bottom-left",
+        "align": "middle"
       },
       {
         "id": "#query-keyboard-btn",
         "title": "Yiddish onscreen keyboard",
         "description": "If you do not have a Yiddish keyboard configuration set up, simply use our onscreen Yiddish keyboard!",
-        "position": "below"
+        "position": "bottom-right",
+        "align": "middle"
       },
       {
         "id": "#strictSearchCheckboxBtn",
         "title": "Strict search",
         "description": "JOCHRE comes with many features to restrict or expand your search. For example, checking this box excludes any lemmata (derived verb forms) from the search results.",
-        "position": "below"
+        "position": "bottom-right"
       },
       {
         "id": "#advancedSearchBtn",
         "title": "Advanced search",
         "description": "You can search by specific aspects within the metadata too such as author names, dates and publisher information.",
-        "position": "left"
+        "position": "bottom-left"
       },
       {
         "id": "#userGuideBtn",
         "title": "User guide",
         "description": "Note that you can also use special characters in the search bar to format your query. For example, '\"Schvarts\"' (with quotation marks) will not yield the same results as 'Schvarts' without quotation marks. Visit the user guide for a full explanation of your search options!",
-        "position": "below"
+        "position": "bottom-right"
       },
       {
         "id": "#takeTheTourBtn",
         "title": "Take the tour",
-        "description": "You can start this tour at any time by pressing this button.\n\nLook for this icon to start other tours!",
-        "position": "below",
+        "description": "You can start this tour at any time by pressing this button. Look for this icon to start other tours!",
+        "position": "right",
         "highlight": "#takeTheTourIcon"
+      },
+      {
+        "id": ".navbar-burger",
+        "title": "More options",
+        "description": "You have more options in the dropdown here, including another tour!",
+        "position": "bottom-left",
+        "highlight": ".navbar-burger"
+      }
+    ],
+    "#takeTheTourMobileBtn": [
+      {
+        "id": "#userGuideMobileBtn",
+        "title": "User guide",
+        "description": "The user guide provides a full explanation of your options in the search bar!",
+        "position": "bottom-right",
+        "highlight": "#query"
+      },
+      {
+        "id": "#advancedSearchMobileBtn",
+        "title": "Advanced search",
+        "description": "You can search by specific aspects within the metadata too such as author names, dates and publisher information.",
+        "position": "bottom-left"
+      },
+      {
+        "id": "#takeTheTourMobileBtn",
+        "title": "Take the tour",
+        "description": "Look for this icon to start a tour!",
+        "position": "right",
+        "highlight": "#takeTheTourMobileIcon"
+      },
+      {
+        "id": "#preferencesMobileBtn",
+        "title": "Preferences",
+        "description": "JOCHRE keeps track of your settings, but you may set a few other preferences here.",
+        "position": "bottom"
       }
     ],
     "#searchResultsTour": [
@@ -200,14 +237,14 @@
         "id": ".totalHits",
         "title": "Total",
         "description": "This is the total number of books relevant to your query",
-        "position": "below",
+        "position": "bottom",
         "highlight": ".totalHits"
       },
       {
         "id": ".showingResults",
         "title": "Total",
         "description": "And everything on your screen relates only to ten results at a time",
-        "position": "below",
+        "position": "bottom",
         "highlight": ".showingResults"
       },
       {
@@ -223,7 +260,7 @@
         "id": ".pagination",
         "title": "Navigation",
         "description": "These buttons allow you to request a new set of search results in the search results panel and snippet display.",
-        "position": "below"
+        "position": "bottom"
       },
       {
         "id": "#snippets",
@@ -235,31 +272,32 @@
         "id": ".selected-snippet",
         "title": "Snippet header",
         "description": "Each snippet header presents important information such as the page number, the title and author of the book",
-        "position": "below"
+        "position": "bottom"
       },
       {
         "id": ".open-page-btn",
         "title": "Page",
         "description": "This button will take you directly to the page on the YBC website.",
-        "position": "below"
+        "position": "bottom"
       },
       {
         "id": ".open-transcription-btn",
         "title": "Transcription",
         "description": "This button will open the entire automatically transcribed text in a new window.",
-        "position": "below"
+        "position": "bottom"
       },
       {
         "id": ".load-original-image-button",
         "title": "Click to load original image",
         "description": "Click this image to load the digital copy of the original scan used in the OCR process.",
-        "position": "above",
+        "position": "top",
         "highlight": ".load-original-image-button"
       },
       {
         "id": ".highlight",
         "title": "Text correction",
-        "description": "Double-click any word to propose corrections. As with edits to metadata, YBC staff will review your suggested change."
+        "description": "Double-click any word to propose corrections. As with edits to metadata, YBC staff will review your suggested change.",
+        "position": "bottom"
       }
     ],
     "#facetTourBtn": [
@@ -290,14 +328,14 @@
       {
         "id": "#facets-filter-authors",
         "title": "Author filters",
-        "description": "You can also search for a specific author in the list below. Note: this does not search the database.",
-        "position": "below"
+        "description": "You can also search for a specific author in the list bottom. Note: this does not search the database.",
+        "position": "bottom"
       },
       {
         "id": "#collapseFacetBarDesktop",
         "title": "Author filters",
         "description": "Feel free to collapse this panel if you don\t use it!",
-        "position": "above",
+        "position": "top",
         "highlight": "#collapseFacetBarDesktop"
       }
     ]

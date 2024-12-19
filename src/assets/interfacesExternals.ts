@@ -91,9 +91,10 @@ export interface TourStep {
   id: string
   title: string
   description: string
-  position: string
   tag?: string
-  highlight: string
+  highlight?: string
+  position?: string
+  align?: string
 }
 
 export interface UserPreferences {

@@ -97,6 +97,7 @@ Description: presents the search bar
       </div>
     </div>
     <div
+      v-if="isDesktop || isTablet"
       class="py-2 is-flex is-flex-direction-row is-justify-content-space-between is-hidden-touch"
     >
       <span class="is-flex is-flex-direction-row">
@@ -165,7 +166,7 @@ const { isLoading } = storeToRefs(useSearchStore())
 
 const hasAdvancedSearchCriteria = defineModel('hasAdvancedSearchCriteria')
 
-const { isMobile } = storeToRefs(usePreferencesStore())
+const { isMobile, isDesktop, isTablet } = storeToRefs(usePreferencesStore())
 
 const query: Ref = defineModel('query')
 const strict: Ref = defineModel('strict')
