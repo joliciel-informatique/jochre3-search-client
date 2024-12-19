@@ -79,11 +79,9 @@
             class="panel-block"
             @click.prevent="tour('#takeTheTourMobileBtn')"
           >
-            <font-awesome-icon
-              id="takeTheTourMobileIcon"
-              class="panel-icon"
-              icon="circle-info"
-            /><span>Take the tour</span>
+            <font-awesome-icon id="takeTheTourMobileIcon" class="panel-icon" icon="circle-info" />
+            <!-- This will need translation in the internationalization file -->
+            <span>Take the tour</span>
           </a>
           <a
             id="preferencesMobileBtn"

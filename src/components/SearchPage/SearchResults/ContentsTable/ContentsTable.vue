@@ -72,6 +72,7 @@
   >
     <a
       class="button toc-index-btn has-background-info has-text-white"
+      id="mobileToCBtn"
       @click.prevent="openMobileSearchResultsToc = !openMobileSearchResultsToc"
       ><font-awesome-icon
         icon="list"
@@ -81,11 +82,13 @@
     /></a>
     <a
       class="button toc-index-btn has-background-info has-text-white"
+      id="mobileFacetsBtn"
       @click.prevent="openMobileFacets = !openMobileFacets"
       ><font-awesome-icon icon="users" size="lg" class="m-2"
     /></a>
     <a
       class="button toc-metadata-btn has-background-info has-text-white"
+      id="mobileMetadataBtn"
       @click.prevent="openMobileMetadataPanel = !openMobileMetadataPanel"
     >
       <span class="m-1 ml-2 pt-1" :class="{ 'rtl-align': preferences.needsRightToLeft }">
@@ -96,6 +99,14 @@
           }})
         </span>
       </span>
+    </a>
+    <a
+      id="takeTheTourMobileBtn"
+      class="button toc-index-btn has-background-info has-text-white"
+      @click.prevent="tour('#searchResultsMobileTour')"
+    >
+      <font-awesome-icon id="takeTheTourMobileIcon" icon="circle-info" />
+      <!-- This will need translation in the internationalization file -->
     </a>
     <PageNumbering @newPage="emit('newPage')" v-model:totalHits="totalHits" />
   </div>

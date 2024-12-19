@@ -203,8 +203,7 @@
         "id": "#userGuideMobileBtn",
         "title": "User guide",
         "description": "The user guide provides a full explanation of your options in the search bar!",
-        "position": "bottom-right",
-        "highlight": "#query"
+        "position": "bottom-left"
       },
       {
         "id": "#advancedSearchMobileBtn",
@@ -216,7 +215,7 @@
         "id": "#takeTheTourMobileBtn",
         "title": "Take the tour",
         "description": "Look for this icon to start a tour!",
-        "position": "right",
+        "position": "below-right",
         "highlight": "#takeTheTourMobileIcon"
       },
       {
@@ -253,6 +252,66 @@
         "description": "Buttons such as these allow you to edit the metadata for each title in our database. All proposed changes will be reviewed by YBC staff.",
         "position": "right",
         "highlight": ".edit-metadata-btn"
+      }
+    ],
+    "#searchResultsMobileTour": [
+      {
+        "id": "#mobileToCBtn",
+        "title": "The search results panel",
+        "description": "This button opens your search results",
+        "position": "right",
+        "highlight": "#mobileToCBtn"
+      },
+      {
+        "id": "#mobileFacetsBtn",
+        "title": "Total",
+        "description": "This button opens your facets",
+        "position": "bottom",
+        "highlight": "#mobileFacetsBtn"
+      },
+      {
+        "id": "#mobileMetadataBtn",
+        "title": "Metadata",
+        "description": "This button opens the metadata for the book currently being viewed",
+        "position": "bottom",
+        "highlight": "#mobileMetadataBtn"
+      },
+      {
+        "id": "#snippets",
+        "title": "Snippets",
+        "description": "This center panel presents the relevant text snippets by the selected title in the left pane. You can see what title the snippets belong to by the green color on the header bar.",
+        "position": "left"
+      },
+      {
+        "id": ".selected-snippet",
+        "title": "Snippet header",
+        "description": "Each snippet header presents important information such as the page number, the title and author of the book",
+        "position": "bottom"
+      },
+      {
+        "id": ".open-page-btn",
+        "title": "Page",
+        "description": "This button will take you directly to the page on the YBC website.",
+        "position": "bottom"
+      },
+      {
+        "id": ".open-transcription-btn",
+        "title": "Transcription",
+        "description": "This button will open the entire automatically transcribed text in a new window.",
+        "position": "bottom"
+      },
+      {
+        "id": ".load-original-image-button",
+        "title": "Click to load original image",
+        "description": "Click this image to load the digital copy of the original scan used in the OCR process.",
+        "position": "top",
+        "highlight": ".load-original-image-button"
+      },
+      {
+        "id": ".highlight",
+        "title": "Text correction",
+        "description": "Double-click any word to propose corrections. As with edits to metadata, YBC staff will review your suggested change.",
+        "position": "bottom"
       }
     ],
     "#snippetsTour": [
