@@ -181,18 +181,6 @@ Description: presents the facet bar
           </span>
         </div>
       </template>
-
-      <template #footer>
-        <div class="columns">
-          <span
-            class="column footer-icon p-2 is-small has-text-centered is-clickable"
-            :class="{ rotate: !showing }"
-            @click="toggle()"
-          >
-            <font-awesome-icon icon="circle-chevron-up" size="lg" />
-          </span>
-        </div>
-      </template>
     </AccordionCard>
   </div>
 

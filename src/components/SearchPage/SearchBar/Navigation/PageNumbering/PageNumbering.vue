@@ -240,7 +240,7 @@ Description: calculates and presents page numbers
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, type Ref } from 'vue'
+import { computed, onMounted, ref, watch, type Ref } from 'vue'
 import { preferences } from '@/assets/fetchMethods'
 import { isBusy, hasSearch } from '@/assets/appState'
 import { useSearchStore } from '@/stores/SearchStore'
@@ -250,7 +250,7 @@ const searchStore = useSearchStore()
 const { page } = storeToRefs(searchStore)
 const emit = defineEmits(['newPage'])
 
-const atTop = ref(true)
+const atTop = ref()
 const totalHits: Ref = defineModel('totalHits')
 const lastPage = computed(() => Math.floor((totalHits.value - 1) / preferences.resultsPerPage) + 1)
 
@@ -259,9 +259,20 @@ const changePage = (pageNumber: number) => {
   emit('newPage')
 }
 
-watch(atTop, (newV) => {
+onMounted(() => {
   const snippetDiv = document.getElementById('snippets')
   if (snippetDiv) {
+    snippetDiv.addEventListener('scroll', () => {
+      if (snippetDiv.scrollTop !== 0) atTop.value = undefined
+      if (snippetDiv.scrollTop !== snippetDiv.scrollHeight - snippetDiv.offsetHeight)
+        atTop.value = undefined
+    })
+  }
+})
+
+watch(atTop, (newV) => {
+  const snippetDiv = document.getElementById('snippets')
+  if (snippetDiv && newV !== undefined) {
     newV
       ? snippetDiv.scrollTo({ top: 0, behavior: 'instant' })
       : snippetDiv.scrollTo({ top: snippetDiv.scrollHeight, behavior: 'instant' })
