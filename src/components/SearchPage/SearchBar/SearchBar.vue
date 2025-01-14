@@ -99,12 +99,7 @@ Description: presents the search bar
     <div
       class="py-2 is-flex is-flex-direction-row is-justify-content-space-between is-hidden-touch"
     >
-      <a
-        class="navbar-item"
-        href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
-        target="_blank"
-        tabindex="0"
-      >
+      <a class="navbar-item" :href="$t('search.help-url')" target="_blank" tabindex="0">
         <span>
           <font-awesome-icon icon="book-open" />
           {{ $t('search.user-guide') }}

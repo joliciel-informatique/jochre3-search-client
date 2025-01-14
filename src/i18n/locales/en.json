@@ -5,6 +5,7 @@
     "description": "Search text content of documents OCR'd using Jochre3."
   },
   "search": {
+    "help-url": "https://gitlab.com/jochre/jochre3-search-client/-/wikis/Jochre-Yiddish-Search-Help",
     "about": "Full-text search engine.",
     "index-size": "Index size: {0} books.",
     "query": "Please enter a search term",
