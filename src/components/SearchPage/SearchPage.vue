@@ -134,7 +134,7 @@
 
     <!-- Not loading, with query, but no results -->
     <div
-      v-else-if="query.length && !isLoading && !searchResults?.length"
+      v-else-if="!isLoading && hasSearch && !searchResults?.length"
       class="m-5 has-text-centered"
     >
       <h1
@@ -302,18 +302,31 @@ onMounted(() => {
     if (route.query['query']) query.value = (route.query['query'] as string).trim()
     if (route.query['strict']) strict.value = route.query['strict'] === 'true'
     if (route.query['page']) page.value = Number(route.query['page'])
-    if (route.query['authorInclude'])
-      authorInclude.value = route.query['authorInclude'] as unknown as boolean
+    if (route.query['author-include'])
+      authorInclude.value = route.query['author-include'] as unknown as boolean
     if (route.query['title']) title.value = (route.query['title'] as string).trim()
     if (route.query['from-year'])
       fromYear.value = Number((route.query['from-year'] as string).trim())
     if (route.query['to-year']) toYear.value = Number((route.query['to-year'] as string).trim())
-    if (route.query['doc-refs']) docRefs.value = (route.query['doc-refs'] as string).trim()
+    if (route.query['doc-refs']) {
+      if (Array.isArray(route.query['doc-refs'])) {
+        docRefs.value = (route.query['doc-refs'] as string[]).join(', ')
+      } else {
+        docRefs.value = (route.query['doc-refs'] as string).trim()
+      }
+    }
     if (route.query['sort']) sortBy.value = (route.query['sort'] as string).trim()
-    if (route.query['authors'] && Array.isArray(route.query['authors']))
-      authorList.value = (route.query['authors'] as string[]).map((authorName) => {
-        return { label: authorName, count: 10, active: false }
-      })
+    if (route.query['authors']) {
+      if (Array.isArray(route.query['authors'])) {
+        authorList.value = (route.query['authors'] as string[]).map((authorName) => {
+          return { label: authorName, count: 10, active: false }
+        })
+      } else {
+        authorList.value = [
+          { label: (route.query['authors'] as string).trim(), count: 10, active: false }
+        ]
+      }
+    }
 
     runSearch(false)
   })
@@ -514,6 +527,10 @@ const runSearch = async (addHistory: boolean = true) => {
     urlParams.delete('author-include')
     authorList.value.forEach((author) => urlParams.append('authors', author.label))
     urlParams.append('author-include', authorInclude.value.toString())
+
+    urlParams.delete('doc-refs')
+    if (docRefs.value)
+      docRefs.value.split(/\W+/).forEach((docRef) => urlParams.append('doc-refs', docRef))
 
     const url = route.path + '?' + urlParams.toString()
     history.pushState({}, '', url)
