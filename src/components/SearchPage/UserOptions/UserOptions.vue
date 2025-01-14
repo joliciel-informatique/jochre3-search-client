@@ -44,11 +44,7 @@
     >
       <div class="menu is-pulled-right panel">
         <div class="is-hidden-desktop">
-          <a
-            class="panel-block"
-            href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
-            target="_blank"
-          >
+          <a class="panel-block" :href="$t('search.help-url')" target="_blank">
             <font-awesome-icon class="panel-icon" icon="book-open" />
             <span>
               {{ $t('search.user-guide') }}
