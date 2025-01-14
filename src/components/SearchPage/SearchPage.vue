@@ -169,7 +169,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, onMounted, ref, defineExpose, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { fetchData } from '../../assets/fetchMethods'
+import { authenticated, fetchData } from '@/assets/fetchMethods'
 
 // Import Child components
 const SearchBar = defineAsyncComponent(
@@ -544,7 +544,8 @@ const runSearch = async (addHistory: boolean = true) => {
 
   params.value = searchParams
 
-  return fetchData('search', 'get', searchParams)
+  const searchUrl = authenticated ? 'search-with-auth' : 'search'
+  return fetchData(searchUrl, 'get', searchParams)
     .then((response) => {
       if (response.status === 200) {
         return response.json().then(({ results, totalCount }) => {
