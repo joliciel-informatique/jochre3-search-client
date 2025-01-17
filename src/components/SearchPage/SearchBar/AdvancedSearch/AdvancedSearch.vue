@@ -34,14 +34,14 @@ Description: the advanced search toolbox
                     'is-left': preferences.displayLeftToRight,
                     'is-right': !preferences.displayLeftToRight
                   }"
-                  v-tooltip:bottom.tooltip="$t('search.excludeAuthors')"
+                  v-tooltip:bottom.tooltip="$t('search.includeAuthors')"
                 >
                   <input
                     type="checkbox"
                     class="is-clickable"
                     name="findAuthorCheckbox"
                     :disabled="disabled"
-                    @click="excludeAuthors"
+                    v-model="includeAuthors"
                     tabindex="0"
                   />
                 </span>
@@ -206,7 +206,7 @@ const toYear = defineModel('toYear')
 const docRefs = defineModel('docRefs')
 const sortBy = defineModel('sortBy')
 const facets: Ref = defineModel('facets')
-const excludeFromSearch = defineModel('excludeFromSearch')
+const includeAuthors = defineModel('includeAuthors', { default: true })
 const disabled = computed(
   () => facets.value.filter((facet: { active: string }) => (facet.active ? facet : null)).length
 )
@@ -219,8 +219,6 @@ const closeOnEscape = (e: KeyboardEvent) => {
 onMounted(() => {
   window.addEventListener('keyup', closeOnEscape, true)
 })
-
-const excludeAuthors = () => (excludeFromSearch.value = !excludeFromSearch.value)
 
 const runSearch = () => emit('newSearch')
 </script>
