@@ -13,7 +13,7 @@
     "search-button": "Search",
     "advanced-search": "Advanced search",
     "user-guide": "User guide",
-    "excludeAuthors": "Checking this box will exclude selected authors from the query",
+    "includeAuthors": "Unchecking this box will exclude selected authors from the query",
     "related-word-forms": "Strict",
     "related-word-forms-tooltip": "Checking this box will exclude related word forms (of the same stem/lemma) in search results (e.g. 'eat, 'eaten', 'ate')",
     "keyboard": "Open Yiddish on-screen keyboard",

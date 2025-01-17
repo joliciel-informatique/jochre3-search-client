@@ -56,7 +56,7 @@
         v-model:doc-refs="docRefs"
         v-model:sort-by="sortBy"
         v-model:facets="facets"
-        v-model:exclude-from-search="excludeFromSearch"
+        v-model:include-authors="includeAuthors"
       />
       <div class="is-hidden-touch">
         <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
@@ -230,8 +230,7 @@ const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
 const notification: Ref = defineModel('notification')
 
-const authorInclude = ref(true)
-const excludeFromSearch = ref(false)
+const includeAuthors = ref(true)
 const authorList = ref<Array<AggregationBin>>([])
 
 const strict = ref(false)
@@ -302,8 +301,11 @@ onMounted(() => {
     if (route.query['query']) query.value = (route.query['query'] as string).trim()
     if (route.query['strict']) strict.value = route.query['strict'] === 'true'
     if (route.query['page']) page.value = Number(route.query['page'])
-    if (route.query['author-include'])
-      authorInclude.value = route.query['author-include'] as unknown as boolean
+    if (route.query['author-include']) {
+      includeAuthors.value = route.query['author-include'] as unknown as boolean
+    } else {
+      includeAuthors.value = true
+    }
     if (route.query['title']) title.value = (route.query['title'] as string).trim()
     if (route.query['from-year'])
       fromYear.value = Number((route.query['from-year'] as string).trim())
@@ -385,7 +387,6 @@ watch(searchResults, (newV) => {
   }
 })
 
-watch(excludeFromSearch, () => (authorInclude.value = !excludeFromSearch.value))
 watch(resultsPerPage, () => runSearch(false))
 watch(authorFacetCount, () => searchFacets())
 
@@ -507,7 +508,7 @@ const runSearch = async (addHistory: boolean = true) => {
   const searchParams = new URLSearchParams(defineSearchParams())
 
   authorsToSearch.forEach((author) => searchParams.append('authors', author))
-  if (addAuthorInclude) searchParams.append('author-include', authorInclude.value.toString())
+  if (addAuthorInclude) searchParams.append('author-include', includeAuthors.value.toString())
   if (docRefs.value)
     docRefs.value.split(/\W+/).forEach((docRef) => searchParams.append('doc-refs', docRef))
 
@@ -526,7 +527,7 @@ const runSearch = async (addHistory: boolean = true) => {
     urlParams.delete('authors')
     urlParams.delete('author-include')
     authorList.value.forEach((author) => urlParams.append('authors', author.label))
-    urlParams.append('author-include', authorInclude.value.toString())
+    urlParams.append('author-include', includeAuthors.value.toString())
 
     urlParams.delete('doc-refs')
     if (docRefs.value)
