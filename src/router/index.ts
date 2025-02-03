@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import TextView from '../views/TextView.vue'
-import UndoView from '../views/UndoView.vue'
+import HomeView from '@/views/HomeView.vue'
+import TextView from '@/views/TextView.vue'
+import UndoView from '@/views/UndoView.vue'
+import UnauthorizedView from '@/views/UnauthorizedView.vue'
+import StatsView from '@/views/StatsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +17,16 @@ const router = createRouter({
       path: '/undo/:id',
       name: 'undo-view',
       component: UndoView
+    },
+    {
+      path: '/unauthorized',
+      name: 'unauthorized-view',
+      component: UnauthorizedView
+    },
+    {
+      path: '/stats',
+      name: 'stats-view',
+      component: StatsView
     },
     {
       path: '/',
