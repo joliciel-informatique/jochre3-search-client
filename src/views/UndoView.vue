@@ -1,32 +1,21 @@
 <template>
-  <main
-    class="hero is-widescreen"
-    :class="{
-      'rtl-align': !preferences.displayLeftToRight
-    }"
-  >
+  <main class="hero is-widescreen">
     <HeaderPage />
-    <div
-      :class="{ 'ltr-align': preferences.needsLeftToRight, english: preferences.needsLeftToRight }"
-    >
+    <div class="p-3 m-3">
       <p v-if="responseCode == 200">Metadata correction {{ route.params.id }} undone.</p>
-      <p v-if="responseCode != 200">An error occurred.</p>
-      <p v-if="responseCode == 404">Metadata correction {{ route.params.id }} not found.</p>
+      <p v-else-if="responseCode == 404">Metadata correction {{ route.params.id }} not found.</p>
+      <p v-else>An error occurred (Response code {{ responseCode }}).</p>
     </div>
   </main>
-  <FooterPage />
 </template>
 
 <script setup lang="ts">
 import { defineAsyncComponent, onMounted, ref } from 'vue'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
-import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { fetchData } from '@/assets/fetchMethods'
 
 const HeaderPage = defineAsyncComponent(() => import('@/components/HeaderPage/HeaderPage.vue'))
-const FooterPage = defineAsyncComponent(() => import('@/components/FooterPage/FooterPage.vue'))
 
-const preferences = usePreferencesStore()
 const route = useRoute()
 
 const responseCode = ref<number>()
@@ -53,6 +42,7 @@ async function undoCorrection(metadataCorrectionId: number): Promise<void> {
       } else {
         console.error(`Undo failed. Response: ${res.status}`)
       }
+      responseCode.value = res.status
     })
     .catch((error) => {
       console.error(error)
