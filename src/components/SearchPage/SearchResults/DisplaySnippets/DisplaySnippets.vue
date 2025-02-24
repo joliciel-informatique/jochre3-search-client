@@ -12,15 +12,16 @@ Description: controls text snippets from the OCR text
 <template>
   <div
     class="is-flex is-justify-content-center bla"
-    :class="
+    :class="[
       preferences.isMobile || preferences.isTablet || preferences.isPortrait
         ? `on-mobile`
-        : `on-desktop`
-    "
+        : `on-desktop`,
+      interfaceStyle == 'old' ? 'snippetsOld' : ''
+    ]"
     tabindex="-1"
     v-if="!isLoading && searchResults?.length"
   >
-    <ul id="snippets">
+    <ul id="snippets" v-if="interfaceStyle == 'new'">
       <li v-for="(result, bookIndex) of searchResults" :key="sha1(result)">
         <hr
           :bookindex="bookIndex"
@@ -60,6 +61,45 @@ Description: controls text snippets from the OCR text
         </ul>
       </li>
     </ul>
+    <ul id="snippets" v-else>
+      <li v-for="result of searchResults" :key="sha1(result)">
+        <SingleResult
+          v-model:image-modal="imageModal"
+          v-model:word-modal="wordModal"
+          v-model:metadata-modal="metadataModal"
+          v-model:notification="notification"
+          :result="result"
+        />
+        <ul
+          class="p-2 pt-4 snippets-on"
+          :class="
+            preferences.isMobile || preferences.isTablet || preferences.isPortrait
+              ? `mobile is-hidden-desktop`
+              : `desktop is-hidden-touch`
+          "
+          v-show="
+            displayPerBook ||
+            (!displayPerBook && searchResults[selectedEntryIdx]?.docRef === result.docRef)
+          "
+        >
+          <SingleSnippet
+            v-for="(snippet, index) in result.snippets"
+            :key="sha1(snippet)"
+            :docRef="result.docRef"
+            :snippetIndex="index"
+            :snippet="snippet"
+            :url="result.metadata.url"
+            :query="query"
+            :strict="strict"
+            :title="result.metadata.title"
+            :author="result.metadata.author"
+            v-model:image-modal="imageModal"
+            v-model:word-modal="wordModal"
+            v-model:notification="notification"
+          />
+        </ul>
+      </li>
+    </ul>
   </div>
   <div v-else>
     <h1>{{ $t('results.loading') }}</h1>
@@ -73,12 +113,14 @@ import { sha1 } from 'object-hash'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import SingleSnippet from '../DisplaySnippets/SingleSnippet/SingleSnippet.vue'
+import SingleResult from '../ContentsTable/SingleResult/SingleResult.vue'
 
 const preferences = usePreferencesStore()
-const { displayPerBook } = storeToRefs(preferences)
+const { displayPerBook, interfaceStyle } = storeToRefs(preferences)
 
 const imageModal = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
+const metadataModal = defineModel('metadataModal')
 const notification = defineModel('notification')
 const selectedEntryIdx = defineModel<number>('selectedEntryIdx', { default: 0 })
 const searchResults = defineModel<SearchResult[]>('searchResults')

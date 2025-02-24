@@ -88,7 +88,7 @@
       v-if="hasSearch && searchResults?.length"
       class="is-flex is-flex-direction-row is-justify-content-space-between"
     >
-      <div class="is-hidden-touch">
+      <div class="is-hidden-touch" v-if="interfaceStyle == 'new'">
         <ContentsTable
           v-model:search-results="searchResults"
           v-model:image-modal="imageModal"
@@ -110,6 +110,7 @@
         v-model:image-modal="imageModal"
         v-model:notification="notification"
         v-model:word-modal="wordModal"
+        v-model:metadata-modal="metadataModal"
         v-model:selected-entry-idx="selectedEntryIdx"
         v-model:search-results="searchResults"
         v-model:is-loading="isLoading"
@@ -214,7 +215,7 @@ const preferences = usePreferencesStore()
 
 const { initializeMedia } = preferences
 
-const { show } = storeToRefs(preferences)
+const { show, interfaceStyle } = storeToRefs(preferences)
 
 import { storeToRefs } from 'pinia'
 

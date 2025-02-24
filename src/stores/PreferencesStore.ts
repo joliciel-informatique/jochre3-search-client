@@ -11,6 +11,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
   const show = ref(false)
   const storePreferencesInCookie = ref(true)
   const language = ref('yi')
+  const interfaceStyle = ref('old')
   const resultsPerPage = ref(10)
   const authorFacetCount = ref(10)
   const corpusLanguage = ref('yi')
@@ -207,6 +208,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
     show,
     storePreferencesInCookie,
     language,
+    interfaceStyle,
     resultsPerPage,
     authorFacetCount,
     corpusLanguage,
