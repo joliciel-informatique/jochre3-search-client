@@ -74,6 +74,9 @@
   "preferences": {
     "title": "אײַערע פּרעפֿערענצן",
     "general-heading": "אַלגעמײנע פּרעפֿערענצן",
+    "interface-style": "YI__Interface style",
+    "old-interface-style": "YI__Old",
+    "new-interface-style": "YI__New",
     "language": "פּרעזענטיר־שפּראַך",
     "snippets-heading": "װי צו װײַזן פֿראַגמענטן",
     "snippets-per-book": "נאָר אײן בוך מיט אַ מאָל",
