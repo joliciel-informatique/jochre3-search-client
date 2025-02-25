@@ -10,7 +10,7 @@ Methods: fixMetaData (imported)
 Description: presents OCR record metadata
 -->
 <template>
-  <div v-if="result" :docRef="result.docRef" :id="result.docRef" class="metadata mt-2">
+  <div v-if="result" :docRef="result.docRef" :id="result.docRef" class="metadata m-2">
     <AccordionCard
       :id="result.docRef"
       :showing="

@@ -73,7 +73,7 @@ Description: controls text snippets from the OCR text
           :page-number-offset="pageNumberOffset"
         />
         <ul
-          class="p-2 pt-4 snippets-on"
+          class="p-5 pt-4 snippets-on"
           :class="
             preferences.isMobile || preferences.isTablet || preferences.isPortrait
               ? `mobile is-hidden-desktop`
