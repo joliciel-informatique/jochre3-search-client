@@ -14,8 +14,8 @@
                 <div class="column is-4 control">
                   <span class="select is-fullwidth">
                     <select name="setToLanguageSelect" v-model="interfaceStyleToSet">
-                      <option value="old">Old</option>
-                      <option value="new">New</option>
+                      <option value="old">{{ $t('preferences.old-interface-style') }}</option>
+                      <option value="new">{{ $t('preferences.new-interface-style') }}</option>
                     </select>
                   </span>
                 </div>

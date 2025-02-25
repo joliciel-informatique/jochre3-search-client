@@ -80,6 +80,8 @@
     "title": "Update preferences",
     "general-heading": "General",
     "interface-style": "Interface style",
+    "old-interface-style": "Old",
+    "new-interface-style": "New",
     "language": "Interface language",
     "snippets-heading": "Snippet display",
     "snippets-per-book": "One book at a time",
