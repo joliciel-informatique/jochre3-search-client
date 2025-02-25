@@ -86,7 +86,12 @@
     <!-- Contents table on desktop -->
     <div
       v-if="hasSearch && searchResults?.length"
-      class="is-flex is-flex-direction-row is-justify-content-space-between"
+      class="is-flex is-flex-direction-row"
+      :class="[
+        isMobile && interfaceStyle == 'old'
+          ? 'is-justify-content-center'
+          : 'is-justify-content-space-between'
+      ]"
     >
       <div class="is-hidden-touch" v-if="interfaceStyle == 'new'">
         <ContentsTable
