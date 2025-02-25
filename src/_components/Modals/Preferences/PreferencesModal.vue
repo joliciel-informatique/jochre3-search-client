@@ -10,6 +10,17 @@
             <h1 class="label">{{ $t('preferences.general-heading') }}</h1>
             <div class="is-flex is-flex-direction-column m-2">
               <div class="columns is-vcentered is-10 pb-2">
+                <span class="column is-4 px-2">{{ $t('preferences.interface-style') }}</span>
+                <div class="column is-4 control">
+                  <span class="select is-fullwidth">
+                    <select name="setToLanguageSelect" v-model="interfaceStyleToSet">
+                      <option value="old">Old</option>
+                      <option value="new">New</option>
+                    </select>
+                  </span>
+                </div>
+              </div>
+              <div class="columns is-vcentered is-10 pb-2">
                 <span class="column is-4 px-2">{{ $t('preferences.language') }}</span>
                 <div class="column is-4 control">
                   <span class="select is-fullwidth">
@@ -71,6 +82,7 @@ const i18n = useI18n()
 
 const notification = defineModel('notification')
 const preferences = usePreferencesStore()
+const interfaceStyleToSet = ref<string>(preferences.interfaceStyle)
 const languageToSet = ref<string>(preferences.language)
 
 const { displayPerBook, language } = storeToRefs(preferences)

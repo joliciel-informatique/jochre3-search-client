@@ -11,6 +11,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
   const show = ref(false)
   const storePreferencesInCookie = ref(true)
   const language = ref('yi')
+  const interfaceStyle = ref('old')
   const resultsPerPage = ref(10)
   const authorFacetCount = ref(10)
   const corpusLanguage = ref('yi')
@@ -99,6 +100,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
     if (authenticated) {
       const params = JSON.stringify({
         language: language.value,
+        interfaceStyle: interfaceStyle.value,
         resultsPerPage: resultsPerPage.value,
         authorFacetCount: authorFacetCount.value,
         displayPerBook: displayPerBook.value,
@@ -118,6 +120,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
         })
     } else {
       cookies.set('locale', language.value)
+      cookies.set('interfaceStyle', interfaceStyle.value)
       cookies.set('resultsPerPage', resultsPerPage.value)
       cookies.set('authorFacetCount', authorFacetCount.value)
       cookies.set('displayPerBook', displayPerBook.value)
@@ -129,6 +132,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
 
   interface UserPreferences {
     language?: string
+    interfaceStyle?: string
     resultsPerPage?: number
     displayPerBook?: boolean
     authorFacetCount?: number
@@ -145,6 +149,9 @@ export const usePreferencesStore = defineStore('preferences', () => {
             .then((userPreferences: UserPreferences) => {
               if (userPreferences.language) {
                 language.value = userPreferences.language
+              }
+              if (userPreferences.interfaceStyle) {
+                interfaceStyle.value = userPreferences.interfaceStyle
               }
               if (userPreferences.resultsPerPage) {
                 resultsPerPage.value = userPreferences.resultsPerPage
@@ -184,6 +191,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
         const languageCookie = cookies.get('locale').value as string
         language.value = languageCookie
       }
+      interfaceStyle.value = (cookies.get('interfaceStyle').value as string) ?? 'Old'
       if (cookies.get('resultsPerPage')) {
         const resultsPerPageCookie = cookies.get('resultsPerPage').value as number
         resultsPerPage.value = resultsPerPageCookie
@@ -206,6 +214,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
   return {
     show,
     storePreferencesInCookie,
+    interfaceStyle,
     language,
     resultsPerPage,
     authorFacetCount,
