@@ -216,6 +216,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
     storePreferencesInCookie,
     interfaceStyle,
     language,
+    interfaceStyle,
     resultsPerPage,
     authorFacetCount,
     corpusLanguage,

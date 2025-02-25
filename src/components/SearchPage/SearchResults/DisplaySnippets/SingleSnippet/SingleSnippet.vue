@@ -13,11 +13,23 @@ Description: displays text snippets from the OCR text
   <li :docRef="docRef" class="card snippet mb-4" :bookIndex :snippetIndex>
     <header
       class="card-header"
-      :class="selectedEntryIdx === bookIndex ? 'selected-snippet' : 'snippet'"
+      :class="
+        preferences.interfaceStyle === 'old'
+          ? 'selected-snippet'
+          : preferences.interfaceStyle === 'new' && selectedEntryIdx === bookIndex
+            ? 'selected-snippet'
+            : 'snippet'
+      "
     >
       <p
         class="card-header-title snippet-header"
-        :class="selectedEntryIdx === bookIndex ? '' : 'is-clickable'"
+        :class="
+          preferences.interfaceStyle === 'old'
+            ? ''
+            : preferences.interfaceStyle === 'new' && selectedEntryIdx === bookIndex
+              ? ''
+              : 'is-clickable'
+        "
         @click="selectedEntryIdx = bookIndex"
         tabindex="0"
         :aria-label="`Page ${snippet.page} in ${title} by ${author ?? $t('results.result-unknown-author')}`"
@@ -142,7 +154,7 @@ Description: displays text snippets from the OCR text
 
 <script setup lang="ts">
 import { fetchData } from '@/assets/fetchMethods'
-import { ref, type Ref } from 'vue'
+import { onMounted, ref, type Ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()
@@ -249,4 +261,8 @@ const openTranscribedText = () => {
 }
 
 const openDeepLink = (url: string) => window.open(url, '_blank')
+
+onMounted(() => {
+  console.log(bookIndex, selectedEntryIdx.value)
+})
 </script>

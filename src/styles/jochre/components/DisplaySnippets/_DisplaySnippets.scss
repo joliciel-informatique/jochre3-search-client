@@ -27,6 +27,11 @@
   &.on-mobile {
     width: 100vw;
   }
+
+  &.snippetsOld {
+    width: 80vw;
+  }
+
   > ul {
     scrollbar-width: thin;
     overflow-y: scroll;
