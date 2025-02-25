@@ -11,8 +11,14 @@ Description: presents OCR record metadata
 -->
 <template>
   <div v-if="result" :docRef="result.docRef" :id="result.docRef" class="metadata mt-2">
-    <AccordionCard :id="result.docRef" :showing="showing">
-      <!-- (bookIndex < 0 || bookIndex === selectedEntryIdx) &&  -->
+    <AccordionCard
+      :id="result.docRef"
+      :showing="
+        interfaceStyle == 'new'
+          ? (bookIndex < 0 || bookIndex === selectedEntryIdx) && showing
+          : showing
+      "
+    >
       <template #header>
         <p
           class="pb-2 is-flex is-flex-direction-row is-justify-content-space-between"
