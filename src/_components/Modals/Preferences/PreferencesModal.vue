@@ -85,13 +85,13 @@ const preferences = usePreferencesStore()
 const interfaceStyleToSet = ref<string>(preferences.interfaceStyle)
 const languageToSet = ref<string>(preferences.language)
 
-const { displayPerBook, language } = storeToRefs(preferences)
+const { displayPerBook, language, interfaceStyle } = storeToRefs(preferences)
 
 const save = () => {
-  if (languageToSet.value != language.value) {
-    language.value = languageToSet.value
-    i18n.locale.value = language.value
-  }
+  language.value = languageToSet.value
+  interfaceStyle.value = interfaceStyleToSet.value
+  i18n.locale.value = language.value
+
   preferences.save()
   preferences.show = false
 }

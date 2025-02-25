@@ -11,22 +11,32 @@ Description: presents OCR record metadata
 -->
 <template>
   <div v-if="result" :docRef="result.docRef" :id="result.docRef" class="metadata mt-2">
-    <AccordionCard
-      :id="result.docRef"
-      :showing="(bookIndex < 0 || bookIndex === selectedEntryIdx) && showing"
-    >
+    <AccordionCard :id="result.docRef" :showing="showing">
+      <!-- (bookIndex < 0 || bookIndex === selectedEntryIdx) &&  -->
       <template #header>
-        <p class="pb-2 is-flex is-flex-direction-row is-justify-content-space-between">
-          <span class="is-align-self-flex-start"
-            >{{ (bookIndex < 0 ? selectedEntryIdx : bookIndex) + pageNumberOffset }}|</span
+        <p
+          class="pb-2 is-flex is-flex-direction-row is-justify-content-space-between"
+          :class="
+            interfaceStyle == 'old'
+              ? 'card m-3 p-3 card-header selected-snippet has-text-white'
+              : ''
+          "
+        >
+          <span :class="interfaceStyle == 'old' ? 'is-size-4' : ''">
+            {{ (bookIndex < 0 ? selectedEntryIdx : bookIndex) + pageNumberOffset }}|
+          </span>
+          <span
+            class="is-align-self-flex-start is-flex-grow-1"
+            :class="[
+              interfaceStyle == 'old' ? 'is-size-4' : '',
+              displayLeftToRight ? 'has-text-left' : 'has-text-right'
+            ]"
           >
-          <span class="is-align-self-flex-start is-flex-grow-1 has-text-left"
-            >{{ result.metadata.title ?? result.docRef }} ({{
-              result.metadata.author ?? $t('results.result-unknown-author')
-            }})</span
-          >
+            {{ result.metadata.title ?? result.docRef }}
+            ({{ result.metadata.author ?? $t('results.result-unknown-author') }})
+          </span>
           <span tabindex="3" @click="openMetadataModal" @keyup.enter="openMetadataModal">
-            <span class="icon fa-sm">
+            <span class="icon fa-sm is-clickable">
               <font-awesome-icon icon="pen-to-square" />
             </span>
           </span>
@@ -34,7 +44,10 @@ Description: presents OCR record metadata
       </template>
 
       <template #content>
-        <div class="toc card-content mb-2 is-flex is-flex-direction-column">
+        <div
+          class="toc card-content mb-2 is-flex is-flex-direction-column"
+          :class="interfaceStyle == 'old' ? 'card m-3 p-3' : ''"
+        >
           <SingleResultItem
             v-for="field in fields"
             :key="sha1(field)"
@@ -43,9 +56,23 @@ Description: presents OCR record metadata
             :value="(result.metadata as any)[field] ?? ''"
             v-model:metadata-modal="metadataModal"
           />
+          <div
+            v-if="interfaceStyle == 'old'"
+            class="is-size-7 px-2"
+            :class="displayLeftToRight ? 'has-text-right' : 'has-text-left'"
+            aria-label="document reference"
+            tabindex="3"
+          >
+            <strong>{{ $t('results.document-reference', [result.docRef]) }}</strong>
+          </div>
         </div>
-        <div class="has-text-right is-size-7 px-2" aria-label="document reference" tabindex="3">
-          {{ $t('results.document-reference') }}: <strong>{{ result.docRef }}</strong>
+        <div
+          v-if="interfaceStyle == 'new'"
+          class="has-text-right is-size-7 px-2"
+          aria-label="document reference"
+          tabindex="3"
+        >
+          <strong>{{ $t('results.document-reference', [result.docRef]) }}</strong>
         </div>
       </template>
 
@@ -69,6 +96,9 @@ Description: presents OCR record metadata
 import { defineAsyncComponent } from 'vue'
 import { sha1 } from 'object-hash'
 import type { SearchResult } from '@/assets/interfacesExternals'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { storeToRefs } from 'pinia'
+const { displayLeftToRight, interfaceStyle } = storeToRefs(usePreferencesStore())
 
 const SingleResultItem = defineAsyncComponent(
   () =>

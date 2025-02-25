@@ -261,8 +261,4 @@ const openTranscribedText = () => {
 }
 
 const openDeepLink = (url: string) => window.open(url, '_blank')
-
-onMounted(() => {
-  console.log(bookIndex, selectedEntryIdx.value)
-})
 </script>

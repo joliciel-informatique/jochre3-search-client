@@ -62,13 +62,15 @@ Description: controls text snippets from the OCR text
       </li>
     </ul>
     <ul id="snippets" v-else>
-      <li v-for="result of searchResults" :key="sha1(result)">
+      <li v-for="(result, index) in searchResults" :key="sha1(result)">
         <SingleResult
           v-model:image-modal="imageModal"
           v-model:word-modal="wordModal"
           v-model:metadata-modal="metadataModal"
           v-model:notification="notification"
           :result="result"
+          :book-index="index"
+          :page-number-offset="pageNumberOffset"
         />
         <ul
           class="p-2 pt-4 snippets-on"
@@ -107,13 +109,20 @@ Description: controls text snippets from the OCR text
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUpdated } from 'vue'
+import { computed, onMounted, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { sha1 } from 'object-hash'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import SingleSnippet from '../DisplaySnippets/SingleSnippet/SingleSnippet.vue'
 import SingleResult from '../ContentsTable/SingleResult/SingleResult.vue'
+import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
+import { useSearchStore } from '@/stores/SearchStore'
+
+const searchStore = useSearchStore()
+const { page } = storeToRefs(searchStore)
+
+const pageNumberOffset = computed(() => (page.value - 1) * preferences.resultsPerPage + 1)
 
 const preferences = usePreferencesStore()
 const { displayPerBook, interfaceStyle } = storeToRefs(preferences)

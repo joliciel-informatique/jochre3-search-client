@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed, type Ref } from 'vue'
+import { ref, computed, type Ref, watch } from 'vue'
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { fetchData } from '@/assets/fetchMethods'
 import { useCookies } from '@vueuse/integrations/useCookies'
@@ -107,6 +107,8 @@ export const usePreferencesStore = defineStore('preferences', () => {
         facetSortBy: facetSortBy.value
       })
 
+      console.log(params)
+
       fetchData('preferences/user', 'post', params)
         .then((res) => {
           if (res.status === 200) {
@@ -191,7 +193,10 @@ export const usePreferencesStore = defineStore('preferences', () => {
         const languageCookie = cookies.get('locale').value as string
         language.value = languageCookie
       }
-      interfaceStyle.value = (cookies.get('interfaceStyle').value as string) ?? 'Old'
+      if (cookies.get('interfaceStyle')) {
+        const interfaceCookie = cookies.get('interfaceStyle').value as string
+        language.value = interfaceCookie
+      }
       if (cookies.get('resultsPerPage')) {
         const resultsPerPageCookie = cookies.get('resultsPerPage').value as number
         resultsPerPage.value = resultsPerPageCookie
@@ -214,7 +219,6 @@ export const usePreferencesStore = defineStore('preferences', () => {
   return {
     show,
     storePreferencesInCookie,
-    interfaceStyle,
     language,
     interfaceStyle,
     resultsPerPage,

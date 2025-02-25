@@ -54,6 +54,7 @@
     tabindex="1"
   >
     <a
+      v-if="preferences.interfaceStyle == 'new'"
       class="button toc-index-btn has-background-info has-text-white"
       @click.prevent="openMobileSearchResultsToc = !openMobileSearchResultsToc"
       ><font-awesome-icon
@@ -68,6 +69,7 @@
       ><font-awesome-icon icon="users" size="lg" class="m-2"
     /></a>
     <a
+      v-if="preferences.interfaceStyle == 'new'"
       class="button toc-metadata-btn has-background-info has-text-white"
       @click.prevent="openMobileMetadataPanel = !openMobileMetadataPanel"
     >
