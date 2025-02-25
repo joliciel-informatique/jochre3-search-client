@@ -84,9 +84,7 @@
     </div>
     <div
       class="panel-block box m-3 px-3 is-flex is-flex-direction-column is-justify-content-center"
-      :class="{
-        'rtl-align': preferences.needsRightToLeft
-      }"
+      :class="preferences.displayLeftToRight ? '' : 'rtl-align'"
       role="article"
     >
       <div
