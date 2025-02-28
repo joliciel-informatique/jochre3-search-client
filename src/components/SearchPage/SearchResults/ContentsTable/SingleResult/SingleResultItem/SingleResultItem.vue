@@ -10,23 +10,20 @@ Methods: fixMetaData (imported)
 Description: display single metadata item
 -->
 <template>
-  <div class="is-flex is-flex-direction-column has-text-primary pl-2 pt-2">
-    <span
-      class="is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between has-text-weight-bold"
-      >{{ $t(title) }}
-      <span
-        class="is-flex is-align-self-flex-start icon menu-list-icon is-clickable"
-        aria-labelledby="edit"
-        tabindex="3"
-        @click="openMetadataModal"
-        @keyup.enter="openMetadataModal"
-      >
-        <span class="icon fa-sm"> <font-awesome-icon icon="pen-to-square" /></span
-      ></span>
+  <div class="grid has-text-primary pl-2 pt-2">
+    <span class="cell has-text-weight-bold">{{ $t(title) }} </span>
+    <span class="cell p-2 has-text-primary has-text-left">
+      {{ value }}
     </span>
-    <span class="p-2 has-text-primary has-text-left is-align-self-flex-start is-flex-wrap-wrap">{{
-      value
-    }}</span>
+    <span
+      class="cell icon menu-list-icon is-clickable"
+      aria-labelledby="edit"
+      tabindex="3"
+      @click="openMetadataModal"
+      @keyup.enter="openMetadataModal"
+    >
+      <font-awesome-icon icon="pen-to-square" />
+    </span>
   </div>
 </template>
 
