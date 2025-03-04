@@ -34,7 +34,7 @@
             </div>
           </div>
         </div>
-        <div class="columns is-vcentered py-3">
+        <div class="columns is-vcentered py-3" v-if="interfaceStyle == 'new'">
           <div class="column">
             <h1 class="label">{{ $t('preferences.snippets-heading') }}</h1>
             <div class="is-flex is-flex-direction-row is-align-items-center m-2">
