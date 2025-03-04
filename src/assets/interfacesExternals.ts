@@ -58,15 +58,17 @@ export interface WordText {
   text: string
 }
 
-interface Metadata {
-  title: string
-  author: string
-  titleEnglish: string
-  authorEnglish: string
-  publicationYear: string
-  publisher: string
-  volume: string
-  url: string
+export interface Metadata {
+  [index: string]: string | string[] | undefined
+  title?: string
+  author?: string
+  titleEnglish?: string
+  authorEnglish?: string
+  publicationYear?: string
+  publisher?: string
+  volume?: string
+  url?: string
+  collections?: Array<string>
 }
 
 export interface Highlight {

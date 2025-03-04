@@ -24,7 +24,7 @@ Description: presents OCR record metadata
           class="pb-2 is-flex is-flex-direction-row is-justify-content-space-between"
           :class="
             interfaceStyle == 'old'
-              ? 'card m-3 p-3 card-header selected-snippet has-text-white'
+              ? 'card m-3 p-3 card-header has-background-primary has-text-white'
               : ''
           "
         >
@@ -41,10 +41,14 @@ Description: presents OCR record metadata
             {{ result.metadata.title ?? result.docRef }}
             ({{ result.metadata.author ?? $t('results.result-unknown-author') }})
           </span>
-          <span tabindex="3" @click="openMetadataModal" @keyup.enter="openMetadataModal">
-            <span class="icon fa-sm is-clickable">
-              <font-awesome-icon icon="pen-to-square" />
-            </span>
+          <span
+            class="icon menu-list-icon is-clickable"
+            aria-labelledby="edit"
+            tabindex="3"
+            @click="openMetadataModal"
+            @keyup.enter="openMetadataModal"
+          >
+            <font-awesome-icon icon="pen-to-square" />
           </span>
         </p>
       </template>
@@ -52,7 +56,7 @@ Description: presents OCR record metadata
       <template #content>
         <div
           class="toc card-content mb-2 is-flex is-flex-direction-column"
-          :class="interfaceStyle == 'old' ? 'card m-3 p-3' : ''"
+          :class="interfaceStyle == 'old' ? 'card m-3 p-3 has-background-grey-lighter' : ''"
         >
           <SingleResultItem
             v-for="field in fields"

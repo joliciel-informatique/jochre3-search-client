@@ -10,28 +10,32 @@ Methods: fixMetaData (imported)
 Description: display single metadata item
 -->
 <template>
-  <div class="is-flex is-flex-direction-column has-text-primary pl-2 pt-2">
+  <div class="columns is-vcentered has-text-primary pl-2 pt-2 pr-1">
+    <span class="column is-one-fifth has-text-weight-bold">{{ $t(title) }} </span>
     <span
-      class="is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between has-text-weight-bold"
-      >{{ $t(title) }}
-      <span
-        class="is-flex is-align-self-flex-start icon menu-list-icon is-clickable"
-        aria-labelledby="edit"
-        tabindex="3"
-        @click="openMetadataModal"
-        @keyup.enter="openMetadataModal"
-      >
-        <span class="icon fa-sm"> <font-awesome-icon icon="pen-to-square" /></span
-      ></span>
+      class="column p-2 has-text-primary"
+      :class="language === 'yi' ? 'has-text-right' : 'has-text-left'"
+    >
+      {{ value }}
     </span>
-    <span class="p-2 has-text-primary has-text-left is-align-self-flex-start is-flex-wrap-wrap">{{
-      value
-    }}</span>
+    <span
+      class="column is-flex is-justify-content-end icon menu-list-icon is-clickable"
+      aria-labelledby="edit"
+      tabindex="3"
+      @click="openMetadataModal"
+      @keyup.enter="openMetadataModal"
+    >
+      <font-awesome-icon icon="pen-to-square" />
+    </span>
   </div>
 </template>
 
 <script setup lang="ts">
 import { type Ref } from 'vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { storeToRefs } from 'pinia'
+const preferences = usePreferencesStore()
+const { language } = storeToRefs(preferences)
 
 const field: Ref = defineModel('field')
 const value: Ref = defineModel('value')
