@@ -2,8 +2,7 @@
   <!-- ToC Search Results on desktop -->
   <div
     v-if="searchResults?.length"
-    class="box table-of-contents is-flex is-flex-direction-column search-results menu is-hidden-touch"
-    :class="preferences.displayLeftToRight ? 'left' : 'right'"
+    class="box table-of-contents is-flex is-flex-direction-column search-results menu is-hidden-touch mx-3"
     role="navigation"
     tabindex="1"
   >

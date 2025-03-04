@@ -41,14 +41,13 @@ Description: presents OCR record metadata
             {{ result.metadata.title ?? result.docRef }}
             ({{ result.metadata.author ?? $t('results.result-unknown-author') }})
           </span>
-          <span
-            class="icon menu-list-icon is-clickable"
-            aria-labelledby="edit"
-            tabindex="3"
-            @click="openMetadataModal"
-            @keyup.enter="openMetadataModal"
-          >
-            <font-awesome-icon icon="pen-to-square" />
+          <span class="icon menu-list-icon" aria-labelledby="edit" tabindex="3">
+            <font-awesome-icon
+              class="is-clickable"
+              icon="pen-to-square"
+              @click="openMetadataModal"
+              @keyup.enter="openMetadataModal"
+            />
           </span>
         </p>
       </template>

@@ -1,20 +1,30 @@
 <template>
   <header id="topbar" class="is-flex is-flex-direction-column-reverse">
     <nav class="is-flex is-flex-direction-column navbar" id="navbar" role="navigation">
-      <div class="navbar-brand is-flex is-flex-direction-row is-justify-content-space-between">
+      <div
+        class="is-flex is-flex-direction-column"
+        :class="interfaceStyle == 'new' ? 'navbar-brand' : ''"
+      >
         <div
-          v-if="searchResults.length"
-          class="navbar-item logo is-flex is-flex-direction-row is-align-items-start is-flex-grow-1 is-flex-shrink-1"
+          class="navbar-item is-flex is-flex-direction-row is-place-self-stretch is-align-items-start is-flex-grow-4 is-flex-shrink-2"
           :class="isMobile ? 'px-2' : ''"
         >
-          <a href="/">
+          <!-- <div
+            v-if="searchResults.length"
+            class="navbar-item is-flex is-flex-direction-row is-place-self-stretch is-align-items-start is-flex-grow-4 is-flex-shrink-2"
+            :class="isMobile ? 'px-2' : ''"
+          > -->
+          <a
+            href="/"
+            :class="
+              isMobile && isPortrait
+                ? 'columns is-flex is-flex-direction-column is-align-self-center'
+                : ''
+            "
+            v-if="searchResults.length"
+          >
             <img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')" />
           </a>
-        </div>
-        <div
-          class="navbar-item is-flex is-flex-direction-row is-flex-grow-4 is-flex-shrink-2"
-          :class="isMobile ? 'px-2' : ''"
-        >
           <SearchBar
             @newSearch="newSearch"
             @resetSearchResults="resetSearchResults"
@@ -24,42 +34,47 @@
             v-model:strict="strict"
             v-model:is-loading="isLoading"
           />
-        </div>
-        <UserOptions
-          v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-          v-model:open-nav-bar-mobile-menu="openNavBarMobileMenu"
-        />
-        <div
-          class="navbar-burger is-flex is-flex-grow-1 has-text-white is-hidden-desktop"
-          :class="openNavBarMobileMenu ? 'is-active' : ''"
-          role="button"
-          aria-label="menu"
-          aria-expanded="false"
-          @click="openNavBarMobileMenu = !openNavBarMobileMenu"
-        >
-          <div>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
+          <UserOptions
+            v-if="authenticated"
+            v-model:search-results="searchResults"
+            v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+            v-model:open-nav-bar-mobile-menu="openNavBarMobileMenu"
+          />
+          <div
+            class="navbar-burger is-flex is-flex-grow-1 has-text-white is-hidden-desktop"
+            :class="openNavBarMobileMenu ? 'is-active' : ''"
+            role="button"
+            aria-label="menu"
+            aria-expanded="false"
+            @click="openNavBarMobileMenu = !openNavBarMobileMenu"
+          >
+            <div>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </div>
           </div>
         </div>
-      </div>
-      <AdvancedSearch
-        @newSearch="newSearch"
-        @resetSearchResults="resetSearchResults"
-        v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-        v-model:author-list="authorList"
-        v-model:title="title"
-        v-model:to-year="toYear"
-        v-model:from-year="fromYear"
-        v-model:doc-refs="docRefs"
-        v-model:sort-by="sortBy"
-        v-model:facets="facets"
-        v-model:include-authors="includeAuthors"
-      />
-      <div class="is-hidden-touch">
-        <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
+        <div class="is-hidden-touch">
+          <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
+        </div>
+        <div class="navbar-item is-flex is-flex-direction-column">
+          <AdvancedSearch
+            @newSearch="newSearch"
+            @resetSearchResults="resetSearchResults"
+            v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+            v-model:author-list="authorList"
+            v-model:title="title"
+            v-model:to-year="toYear"
+            v-model:from-year="fromYear"
+            v-model:doc-refs="docRefs"
+            v-model:sort-by="sortBy"
+            v-model:facets="facets"
+            v-model:include-authors="includeAuthors"
+          />
+        </div>
+        <!-- </div> -->
       </div>
       <div class="is-hidden-desktop">
         <ContentsTable
@@ -82,18 +97,14 @@
     </nav>
     <HeaderPage />
   </header>
-  <main>
+  <main :style="preferences.interfaceStyle === 'old' ? 'max-height: 80vh' : ''">
     <!-- Contents table on desktop -->
     <div
-      v-if="hasSearch && searchResults?.length"
-      class="is-flex is-flex-direction-row"
-      :class="[
-        isMobile && interfaceStyle == 'old'
-          ? 'is-justify-content-center'
-          : 'is-justify-content-space-between'
-      ]"
+      v-if="hasSearch && searchResults?.length && interfaceStyle == 'new'"
+      class="is-flex is-flex-direction-row bla"
+      :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
     >
-      <div class="is-hidden-touch" v-if="interfaceStyle == 'new'">
+      <div class="is-hidden-touch">
         <ContentsTable
           v-model:search-results="searchResults"
           v-model:image-modal="imageModal"
@@ -129,6 +140,36 @@
           v-model:open-mobile-facets="openMobileFacets"
         />
       </div>
+    </div>
+    <div
+      v-if="hasSearch && searchResults?.length && interfaceStyle == 'old'"
+      class="is-flex is-flex-direction-row"
+      :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
+    >
+      <!-- Not loading, has query and results -->
+      <DisplaySnippets
+        v-if="!isLoading && searchResults?.length"
+        v-model:image-modal="imageModal"
+        v-model:notification="notification"
+        v-model:word-modal="wordModal"
+        v-model:metadata-modal="metadataModal"
+        v-model:selected-entry-idx="selectedEntryIdx"
+        v-model:search-results="searchResults"
+        v-model:is-loading="isLoading"
+        v-model:query="query"
+        v-model:strict="strict"
+      />
+      <div class="is-hidden-touch">
+        <FacetBar
+          @newSearch="newSearch"
+          v-model:facets="facets"
+          v-model:open-mobile-facets="openMobileFacets"
+        />
+      </div>
+      <!-- </div> -->
+      <!-- <div v-else>
+    <h1>{{ $t('results.loading') }}</h1>
+  </div> -->
     </div>
     <div
       v-else-if="isLoading && hasSearch && !searchResults?.length"
@@ -224,7 +265,7 @@ const { show, interfaceStyle } = storeToRefs(preferences)
 
 import { storeToRefs } from 'pinia'
 
-const { authorFacetCount, isMobile } = storeToRefs(preferences)
+const { authorFacetCount, isMobile, isPortrait } = storeToRefs(preferences)
 
 const query = ref('')
 // const selectedEntry = ref<SearchResult>()
