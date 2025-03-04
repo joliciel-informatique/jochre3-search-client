@@ -10,13 +10,13 @@ Methods: fixMetaData (imported)
 Description: display single metadata item
 -->
 <template>
-  <div class="grid has-text-primary pl-2 pt-2">
-    <span class="cell has-text-weight-bold">{{ $t(title) }} </span>
-    <span class="cell p-2 has-text-primary has-text-left">
+  <div class="columns is-vcentered has-text-primary pl-2 pt-2 pr-1">
+    <span class="column is-one-fifth has-text-weight-bold">{{ $t(title) }} </span>
+    <span class="column p-2 has-text-primary has-text-left">
       {{ value }}
     </span>
     <span
-      class="cell icon menu-list-icon is-clickable"
+      class="column is-flex is-justify-content-end icon menu-list-icon is-clickable"
       aria-labelledby="edit"
       tabindex="3"
       @click="openMetadataModal"
