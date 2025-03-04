@@ -12,7 +12,10 @@ Description: display single metadata item
 <template>
   <div class="columns is-vcentered has-text-primary pl-2 pt-2 pr-1">
     <span class="column is-one-fifth has-text-weight-bold">{{ $t(title) }} </span>
-    <span class="column p-2 has-text-primary has-text-left">
+    <span
+      class="column p-2 has-text-primary"
+      :class="language === 'yi' ? 'has-text-right' : 'has-text-left'"
+    >
       {{ value }}
     </span>
     <span
@@ -29,6 +32,10 @@ Description: display single metadata item
 
 <script setup lang="ts">
 import { type Ref } from 'vue'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { storeToRefs } from 'pinia'
+const preferences = usePreferencesStore()
+const { language } = storeToRefs(preferences)
 
 const field: Ref = defineModel('field')
 const value: Ref = defineModel('value')
