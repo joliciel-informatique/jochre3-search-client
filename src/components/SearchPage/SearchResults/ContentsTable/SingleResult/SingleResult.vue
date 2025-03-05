@@ -28,18 +28,18 @@ Description: presents OCR record metadata
               : ''
           "
         >
-          <span :class="interfaceStyle == 'old' ? 'is-size-4' : ''">
-            {{ (bookIndex < 0 ? selectedEntryIdx : bookIndex) + pageNumberOffset }}|
-          </span>
-          <span
-            class="is-align-self-flex-start is-flex-grow-1"
-            :class="[
-              interfaceStyle == 'old' ? 'is-size-4' : '',
-              displayLeftToRight ? 'has-text-left' : 'has-text-right'
-            ]"
-          >
-            {{ result.metadata.title ?? result.docRef }}
-            ({{ result.metadata.author ?? $t('results.result-unknown-author') }})
+          <span :class="[interfaceStyle == 'old' ? 'is-size-4' : '']">
+            <span>
+              {{ (bookIndex < 0 ? selectedEntryIdx : bookIndex) + pageNumberOffset }}
+            </span>
+            <span class="px-1">|</span>
+            <span
+              class="is-align-self-flex-start is-flex-grow-1"
+              :class="[displayLeftToRight ? 'has-text-left' : 'has-text-right']"
+            >
+              {{ result.metadata.title ?? result.docRef }}
+              ({{ result.metadata.author ?? $t('results.result-unknown-author') }})
+            </span>
           </span>
           <span class="icon menu-list-icon" aria-labelledby="edit" tabindex="3">
             <font-awesome-icon
