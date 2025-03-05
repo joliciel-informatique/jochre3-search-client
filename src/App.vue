@@ -1,5 +1,13 @@
 <template>
-  <RouterView />
+  <div
+    :class="[
+      !preferences.displayLeftToRight ? 'rtl-align' : '',
+      preferences.interfaceStyle == 'old' ? 'scrollBody' : ''
+    ]"
+    :style="preferences.interfaceStyle === 'old' ? 'overflow:auto; max-height:100vh' : ''"
+  >
+    <RouterView />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -12,6 +20,7 @@ import { setLocale } from '@/assets/appState'
 import VueI18n from 'vue-i18n'
 
 const app = getCurrentInstance()
+const preferences = usePreferencesStore()
 const globalProperties = app?.appContext.config.globalProperties
 const i18n: VueI18n.VueI18n | undefined = globalProperties?.$i18n as VueI18n.VueI18n
 const translate: ((key: string) => string) | undefined = globalProperties?.$t

@@ -8,6 +8,7 @@
           : 'is-flex-direction-row is-align-items-center '
       "
       id="panel-heading"
+      style="position: sticky; top: 0"
     >
       <h1
         class="book-title"
