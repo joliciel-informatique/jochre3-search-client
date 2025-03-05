@@ -147,15 +147,19 @@ import type { SearchResult } from '@/assets/interfacesExternals'
 import { useSearchStore } from '@/stores/SearchStore'
 import { storeToRefs } from 'pinia'
 
-const SingleResult = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResult.vue')
-)
-const PageNumbering = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue')
-)
-const FacetBar = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue')
-)
+import SingleResult from '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResult.vue'
+import PageNumbering from '@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue'
+import FacetBar from '@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue'
+
+// const SingleResult = defineAsyncComponent(
+//   () => import('@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResult.vue')
+// )
+// const PageNumbering = defineAsyncComponent(
+//   () => import('@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue')
+// )
+// const FacetBar = defineAsyncComponent(
+//   () => import('@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue')
+// )
 
 const searchStore = useSearchStore()
 const { page } = storeToRefs(searchStore)

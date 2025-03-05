@@ -328,10 +328,12 @@ import type { AggregationBin } from '@/assets/interfacesExternals'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { insertInSortedArray } from '@/assets/functions'
 import { useI18n } from 'vue-i18n'
-const FilterTag = defineAsyncComponent(() => import('@/_components/FilterTag/FilterTag.vue'))
-const AccordionCard = defineAsyncComponent(
-  () => import('@/_components/AccordionCard/AccordionCard.vue')
-)
+import FilterTag from '@/_components/FilterTag/FilterTag.vue'
+import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
+// const FilterTag = defineAsyncComponent(() => import('@/_components/FilterTag/FilterTag.vue'))
+// const AccordionCard = defineAsyncComponent(
+//   () => import('@/_components/AccordionCard/AccordionCard.vue')
+// )
 
 const emit = defineEmits(['newSearch'])
 const preferences = usePreferencesStore()

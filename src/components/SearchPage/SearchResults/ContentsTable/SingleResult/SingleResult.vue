@@ -107,17 +107,19 @@ import { sha1 } from 'object-hash'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { storeToRefs } from 'pinia'
+import SingleResultItem from '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
+import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
 const { displayLeftToRight, interfaceStyle } = storeToRefs(usePreferencesStore())
 
-const SingleResultItem = defineAsyncComponent(
-  () =>
-    import(
-      '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
-    )
-)
-const AccordionCard = defineAsyncComponent(
-  () => import('@/_components/AccordionCard/AccordionCard.vue')
-)
+// const SingleResultItem = defineAsyncComponent(
+//   () =>
+//     import(
+//       '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
+//     )
+// )
+// const AccordionCard = defineAsyncComponent(
+//   () => import('@/_components/AccordionCard/AccordionCard.vue')
+// )
 
 const { result, bookIndex, pageNumberOffset } = defineProps([
   'result',

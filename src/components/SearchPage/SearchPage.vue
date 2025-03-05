@@ -223,24 +223,28 @@ import { useRouter, useRoute } from 'vue-router'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
 
 // Import Child components
+import PageNumbering from '@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue'
+import DisplaySnippets from '@/components/SearchPage/SearchResults/DisplaySnippets/DisplaySnippets.vue'
+import FacetBar from '@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue'
+import ContentsTable from '@/components/SearchPage/SearchResults/ContentsTable/ContentsTable.vue'
+
 const SearchBar = defineAsyncComponent(
   () => import('@/components/SearchPage/SearchBar/SearchBar.vue')
 )
+
 const AdvancedSearch = defineAsyncComponent(
   () => import('@/components/SearchPage/SearchBar/AdvancedSearch/AdvancedSearch.vue')
 )
-const PageNumbering = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue')
-)
-const ContentsTable = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchResults/ContentsTable/ContentsTable.vue')
-)
-const DisplaySnippets = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchResults/DisplaySnippets/DisplaySnippets.vue')
-)
-const FacetBar = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue')
-)
+
+// const ContentsTable = defineAsyncComponent(
+//   () => import('@/components/SearchPage/SearchResults/ContentsTable/ContentsTable.vue')
+// )
+// const DisplaySnippets = defineAsyncComponent(
+//   () => import('@/components/SearchPage/SearchResults/DisplaySnippets/DisplaySnippets.vue')
+// // )
+// const FacetBar = defineAsyncComponent(
+//   () => import('@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue')
+// )
 const IndexSize = defineAsyncComponent(
   () => import('@/components/SearchPage/SearchResults/IndexSize/IndexSize.vue')
 )
