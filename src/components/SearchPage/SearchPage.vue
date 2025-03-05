@@ -6,14 +6,11 @@
         :class="interfaceStyle == 'new' ? 'navbar-brand' : ''"
       >
         <div
-          class="navbar-item is-flex is-flex-direction-row is-place-self-stretch is-align-items-start is-flex-grow-4 is-flex-shrink-2"
-          :class="isMobile ? 'px-2' : ''"
+          class="navbar-item is-flex is-flex-direction-row is-place-self-stretch is-align-items-center"
+          :class="
+            isMobile || preferences.isTablet ? 'is-align-items-center' : 'is-align-items-start'
+          "
         >
-          <!-- <div
-            v-if="searchResults.length"
-            class="navbar-item is-flex is-flex-direction-row is-place-self-stretch is-align-items-start is-flex-grow-4 is-flex-shrink-2"
-            :class="isMobile ? 'px-2' : ''"
-          > -->
           <a
             href="/"
             :class="
@@ -59,7 +56,17 @@
         <div class="is-hidden-touch">
           <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
         </div>
-        <div class="navbar-item is-flex is-flex-direction-column">
+        <div
+          class="navbar-item is-flex is-flex-direction-column"
+          :style="[
+            (preferences.isMobile ||
+              preferences.isTablet ||
+              (preferences.isDesktop && preferences.isPortrait)) &&
+            showAdvancedSearchPanel
+              ? 'top:0;overflow-y:scroll;max-height:92vh;'
+              : ''
+          ]"
+        >
           <AdvancedSearch
             @newSearch="newSearch"
             @resetSearchResults="resetSearchResults"
@@ -78,6 +85,7 @@
       </div>
       <div class="is-hidden-desktop">
         <ContentsTable
+          v-if="hasSearch"
           v-model:search-results="searchResults"
           v-model:image-modal="imageModal"
           v-model:metadata-modal="metadataModal"
@@ -110,7 +118,7 @@
     </div>
 
     <div
-      v-else-if="hasSearch && searchResults?.length && interfaceStyle == 'new'"
+      v-else-if="hasSearch && searchResults && interfaceStyle == 'new'"
       class="is-flex is-flex-direction-row bla"
       :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
     >
@@ -151,14 +159,13 @@
         />
       </div>
     </div>
-    <div v-else-if="hasSearch && searchResults?.length && interfaceStyle == 'old'">
+    <div v-else-if="hasSearch && searchResults && interfaceStyle == 'old'">
       <div
         class="is-flex is-flex-direction-row"
         :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
       >
         <!-- Not loading, has query and results -->
         <DisplaySnippets
-          v-if="!isLoading && searchResults?.length"
           v-model:image-modal="imageModal"
           v-model:notification="notification"
           v-model:word-modal="wordModal"
@@ -176,28 +183,13 @@
             v-model:open-mobile-facets="openMobileFacets"
           />
         </div>
-
-        <!-- </div> -->
-        <!-- <div v-else>
-      <h1>{{ $t('results.loading') }}</h1>
-    </div> -->
       </div>
 
       <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
     </div>
-    <!-- <div
-      v-else-if="hasSearch && !searchResults?.length"
-      class="is-flex is-flex-direction-column has-text-centered pt-5"
-    >
-      <h1>{{ $t('results.loading') }}</h1>
-      <div class="loader-wrapper is-active mt-5">
-        <div class="loader is-loading is-active"></div>
-        <font-awesome-icon icon="book-open" color="grey" size="2xl" />
-      </div>
-    </div> -->
 
     <!-- Not loading, with query, but no results -->
-    <div v-else-if="hasSearch && !searchResults?.length" class="m-5 has-text-centered">
+    <div v-else-if="hasSearch && !searchResults" class="m-5 has-text-centered">
       <h1
         class="column is-flex is-flex-direction-column is-justify-content-center is-align-items-center"
       >
