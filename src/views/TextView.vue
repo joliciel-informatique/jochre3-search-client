@@ -1,5 +1,6 @@
 <template>
   <PreferencesSetup />
+  <HeaderPage />
   <TranscribedText v-model:notification="notification" />
   <Preferences v-model:notification="notification" />
   <Notification v-model:notification="notification" />
