@@ -154,7 +154,7 @@ Description: displays text snippets from the OCR text
 
 <script setup lang="ts">
 import { fetchData } from '@/assets/fetchMethods'
-import { onMounted, ref, type Ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const preferences = usePreferencesStore()

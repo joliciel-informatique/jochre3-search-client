@@ -15,7 +15,7 @@ Description: calculates and presents page numbers
     role="navigation"
   >
     <nav
-      class="pagination p-1"
+      class="pagination"
       role="navigation"
       aria-label="pagination"
       tabindex="2"

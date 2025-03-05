@@ -11,21 +11,25 @@ Description: display single metadata item
 -->
 <template>
   <div class="columns is-vcentered has-text-primary pl-2 pt-2 pr-1">
-    <span class="column is-one-fifth has-text-weight-bold">{{ $t(title) }} </span>
     <span
-      class="column p-2 has-text-primary"
+      class="column has-text-weight-boldis-one-fifth"
+      :class="preferences.interfaceStyle == 'old' ? 'is-one-fifth' : ''"
+    >
+      {{ $t(title) }}
+    </span>
+    <span
+      class="column p-2 has-text-primary is-three-fifth"
       :class="language === 'yi' ? 'has-text-right' : 'has-text-left'"
     >
       {{ value }}
     </span>
-    <span
-      class="column is-flex is-justify-content-end icon menu-list-icon is-clickable"
-      aria-labelledby="edit"
-      tabindex="3"
-      @click="openMetadataModal"
-      @keyup.enter="openMetadataModal"
-    >
-      <font-awesome-icon icon="pen-to-square" />
+    <span class="column is-flex is-justify-content-end" aria-labelledby="edit" tabindex="3">
+      <span class="icon menu-list-icon is-clickable is-one-fifth">
+        <font-awesome-icon
+          icon="pen-to-square"
+          @click="openMetadataModal"
+          @keyup.enter="openMetadataModal"
+      /></span>
     </span>
   </div>
 </template>

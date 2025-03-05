@@ -201,11 +201,15 @@ $menu-nested-list-margin: 1em;
 }
 
 #navbar {
-  top: 0px;
-  position: sticky;
+  // top: 0px;
+  // position: sticky;
   z-index: 43;
   background-color: $background-color-1;
-  max-height: 20vh;
+  // max-height: 20vh;
+}
+
+#snippets {
+  width: 80vw;
 }
 
 .navbar-mobile {

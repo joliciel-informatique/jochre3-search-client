@@ -9,7 +9,7 @@
   top: 2vh;
   background-color: $background-color-1;
   overflow: visible;
-  max-height: 85vh;
+  // max-height: 85vh;
 
   .accordion-card {
     height: -webkit-fill-available;
@@ -27,12 +27,12 @@
 
   &.search-results {
     width: 24vw;
-    height: 76vh;
+    height: 74vh;
   }
 
   &.facets {
     width: 17vw;
-    height: 76vh;
+    // height: 76vh;
   }
 
   .menu-list {

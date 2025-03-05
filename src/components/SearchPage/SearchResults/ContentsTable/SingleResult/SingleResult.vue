@@ -28,27 +28,26 @@ Description: presents OCR record metadata
               : ''
           "
         >
-          <span :class="interfaceStyle == 'old' ? 'is-size-4' : ''">
-            {{ (bookIndex < 0 ? selectedEntryIdx : bookIndex) + pageNumberOffset }}|
+          <span :class="[interfaceStyle == 'old' ? 'is-size-4' : '']">
+            <span>
+              {{ (bookIndex < 0 ? selectedEntryIdx : bookIndex) + pageNumberOffset }}
+            </span>
+            <span class="px-1">|</span>
+            <span
+              class="is-align-self-flex-start is-flex-grow-1"
+              :class="[displayLeftToRight ? 'has-text-left' : 'has-text-right']"
+            >
+              {{ result.metadata.title ?? result.docRef }}
+              ({{ result.metadata.author ?? $t('results.result-unknown-author') }})
+            </span>
           </span>
-          <span
-            class="is-align-self-flex-start is-flex-grow-1"
-            :class="[
-              interfaceStyle == 'old' ? 'is-size-4' : '',
-              displayLeftToRight ? 'has-text-left' : 'has-text-right'
-            ]"
-          >
-            {{ result.metadata.title ?? result.docRef }}
-            ({{ result.metadata.author ?? $t('results.result-unknown-author') }})
-          </span>
-          <span
-            class="icon menu-list-icon is-clickable"
-            aria-labelledby="edit"
-            tabindex="3"
-            @click="openMetadataModal"
-            @keyup.enter="openMetadataModal"
-          >
-            <font-awesome-icon icon="pen-to-square" />
+          <span class="icon menu-list-icon" aria-labelledby="edit" tabindex="3">
+            <font-awesome-icon
+              class="is-clickable"
+              icon="pen-to-square"
+              @click="openMetadataModal"
+              @keyup.enter="openMetadataModal"
+            />
           </span>
         </p>
       </template>
@@ -108,17 +107,19 @@ import { sha1 } from 'object-hash'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { storeToRefs } from 'pinia'
+import SingleResultItem from '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
+import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
 const { displayLeftToRight, interfaceStyle } = storeToRefs(usePreferencesStore())
 
-const SingleResultItem = defineAsyncComponent(
-  () =>
-    import(
-      '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
-    )
-)
-const AccordionCard = defineAsyncComponent(
-  () => import('@/_components/AccordionCard/AccordionCard.vue')
-)
+// const SingleResultItem = defineAsyncComponent(
+//   () =>
+//     import(
+//       '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
+//     )
+// )
+// const AccordionCard = defineAsyncComponent(
+//   () => import('@/_components/AccordionCard/AccordionCard.vue')
+// )
 
 const { result, bookIndex, pageNumberOffset } = defineProps([
   'result',

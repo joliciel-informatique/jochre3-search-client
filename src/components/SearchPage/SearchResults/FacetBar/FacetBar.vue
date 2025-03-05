@@ -12,8 +12,8 @@ Description: presents the facet bar
 <template>
   <!-- <div class="facetColumn column is-2 is-hidden-touch"> -->
   <div
-    class="box table-of-contents is-flex is-flex-direction-column facets menu is-hidden-touch"
-    :class="preferences.displayLeftToRight ? 'right' : 'left'"
+    class="box table-of-contents is-flex is-flex-direction-column facets menu is-hidden-touch mx-3"
+    :style="preferences.interfaceStyle === 'new' ? 'max-height:85vh' : ''"
     role="navigation"
     tabindex="1"
   >
@@ -168,6 +168,7 @@ Description: presents the facet bar
         </div>
         <div
           class="facet-list is-flex is-flex-direction-column is-flex-wrap-nowrap is-align-items-center"
+          :style="preferences.interfaceStyle == 'new' ? 'overflow-y:scroll;max-height:48vh;' : ''"
         >
           <span v-for="facet of filteredFacets" v-bind:key="sha1(facet)">
             <FilterTag
@@ -327,10 +328,12 @@ import type { AggregationBin } from '@/assets/interfacesExternals'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { insertInSortedArray } from '@/assets/functions'
 import { useI18n } from 'vue-i18n'
-const FilterTag = defineAsyncComponent(() => import('@/_components/FilterTag/FilterTag.vue'))
-const AccordionCard = defineAsyncComponent(
-  () => import('@/_components/AccordionCard/AccordionCard.vue')
-)
+import FilterTag from '@/_components/FilterTag/FilterTag.vue'
+import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
+// const FilterTag = defineAsyncComponent(() => import('@/_components/FilterTag/FilterTag.vue'))
+// const AccordionCard = defineAsyncComponent(
+//   () => import('@/_components/AccordionCard/AccordionCard.vue')
+// )
 
 const emit = defineEmits(['newSearch'])
 const preferences = usePreferencesStore()

@@ -12,7 +12,7 @@ Methods: None
 Description: the advanced search toolbox
 -->
 <template>
-  <div class="advancedSearch is-flex is-justify-content-center">
+  <div class="container is-fullhd advancedSearch is-flex is-justify-content-center">
     <div id="advancedSearchPanel" class="body m-3 p-3" v-show="showAdvancedSearchPanel">
       <div class="body-inner container is-max-desktop">
         <span class="columns is-vcentered mt-1 p-1">
