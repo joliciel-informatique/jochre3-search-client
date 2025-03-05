@@ -181,6 +181,10 @@
     >
       <!-- Loading with query, but no results -->
       <h1>{{ $t('results.loading') }}</h1>
+      <div class="loader-wrapper is-active mt-5">
+        <div class="loader is-loading is-active"></div>
+        <font-awesome-icon icon="book-open" color="grey" size="2xl" />
+      </div>
     </div>
 
     <!-- Not loading, with query, but no results -->
