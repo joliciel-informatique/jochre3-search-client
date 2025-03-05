@@ -141,35 +141,40 @@
         />
       </div>
     </div>
-    <div
-      v-if="hasSearch && searchResults?.length && interfaceStyle == 'old'"
-      class="is-flex is-flex-direction-row"
-      :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
-    >
-      <!-- Not loading, has query and results -->
-      <DisplaySnippets
-        v-if="!isLoading && searchResults?.length"
-        v-model:image-modal="imageModal"
-        v-model:notification="notification"
-        v-model:word-modal="wordModal"
-        v-model:metadata-modal="metadataModal"
-        v-model:selected-entry-idx="selectedEntryIdx"
-        v-model:search-results="searchResults"
-        v-model:is-loading="isLoading"
-        v-model:query="query"
-        v-model:strict="strict"
-      />
-      <div class="is-hidden-touch">
-        <FacetBar
-          @newSearch="newSearch"
-          v-model:facets="facets"
-          v-model:open-mobile-facets="openMobileFacets"
+    <div v-if="hasSearch && searchResults?.length && interfaceStyle == 'old'">
+      <div
+        class="is-flex is-flex-direction-row"
+        :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
+      >
+        <!-- Not loading, has query and results -->
+        <DisplaySnippets
+          v-if="!isLoading && searchResults?.length"
+          v-model:image-modal="imageModal"
+          v-model:notification="notification"
+          v-model:word-modal="wordModal"
+          v-model:metadata-modal="metadataModal"
+          v-model:selected-entry-idx="selectedEntryIdx"
+          v-model:search-results="searchResults"
+          v-model:is-loading="isLoading"
+          v-model:query="query"
+          v-model:strict="strict"
         />
+        <div class="is-hidden-touch">
+          <FacetBar
+            @newSearch="newSearch"
+            v-model:facets="facets"
+            v-model:open-mobile-facets="openMobileFacets"
+          />
+        </div>
+
+        <!-- </div> -->
+        <!-- <div v-else>
+      <h1>{{ $t('results.loading') }}</h1>
+    </div> -->
       </div>
-      <!-- </div> -->
-      <!-- <div v-else>
-    <h1>{{ $t('results.loading') }}</h1>
-  </div> -->
+      <div class="is-hidden-touch">
+        <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
+      </div>
     </div>
     <div
       v-else-if="isLoading && hasSearch && !searchResults?.length"
