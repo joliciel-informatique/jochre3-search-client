@@ -102,7 +102,7 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import SingleSnippet from '../DisplaySnippets/SingleSnippet/SingleSnippet.vue'
 import SingleResult from '../ContentsTable/SingleResult/SingleResult.vue'
-import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
+// import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
 import { useSearchStore } from '@/stores/SearchStore'
 
 const searchStore = useSearchStore()
