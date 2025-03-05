@@ -97,7 +97,7 @@
     </nav>
     <HeaderPage />
   </header>
-  <main :style="preferences.interfaceStyle === 'old' ? 'max-height: 80vh' : ''">
+  <main>
     <!-- Contents table on desktop -->
     <div
       v-if="hasSearch && searchResults?.length && interfaceStyle == 'new'"
@@ -172,9 +172,8 @@
       <h1>{{ $t('results.loading') }}</h1>
     </div> -->
       </div>
-      <div class="is-hidden-touch">
-        <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
-      </div>
+
+      <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
     </div>
     <div
       v-else-if="isLoading && hasSearch && !searchResults?.length"

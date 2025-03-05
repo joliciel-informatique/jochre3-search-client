@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[!preferences.displayLeftToRight ? 'rtl-align' : '']"
-    :style="preferences.interfaceStyle === 'old' ? 'overflow:auto' : ''"
+    :style="preferences.interfaceStyle === 'old' ? 'overflow:auto; max-height:100vh' : ''"
   >
     <PreferencesSetup />
     <SearchPage
