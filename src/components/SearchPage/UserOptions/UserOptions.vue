@@ -15,9 +15,12 @@
           <font-awesome-icon icon="user" class="" size="lg" />
         </p>
       </a>
-      <div class="navbar-dropdown" :class="preferences.displayLeftToRight ? 'is-right rtl' : 'ltr'">
+      <div
+        class="navbar-dropdown m-0 p-0"
+        :class="preferences.displayLeftToRight ? 'is-right rtl' : 'ltr'"
+      >
         <a
-          class="navbar-item"
+          class="navbar-item p-3"
           @click.prevent="preferences.show = true"
           :title="$t('header.preferences')"
         >
@@ -25,7 +28,7 @@
           <span>{{ $t('header.preferences') }}</span>
         </a>
 
-        <a class="navbar-item" @click.prevent="signout()" :title="$t('header.logout')">
+        <a class="navbar-item p-3" @click.prevent="signout()" :title="$t('header.logout')">
           <font-awesome-icon icon="right-from-bracket" size="lg" />
           <span>{{ $t('header.logout') }} </span>
         </a>
