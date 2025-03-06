@@ -19,7 +19,17 @@ Description: display single metadata item
     </span>
     <span
       class="column p-2 has-text-primary is-three-fifth"
-      :class="language === 'yi' ? 'has-text-right' : 'has-text-left'"
+      :class="{
+        'has-text-left': preferences.displayLeftToRight,
+        'has-text-right': !preferences.displayLeftToRight,
+        'ltr-no-text-align':
+          preferences.needsLeftToRight &&
+          (field == 'titleEnglish' ||
+            field == 'authorEnglish' ||
+            field == 'publisher' ||
+            field == 'publicationYear'),
+        'rtl-no-text-align': preferences.needsRightToLeft && field == 'author'
+      }"
     >
       {{ value }}
     </span>
@@ -39,7 +49,6 @@ import { type Ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { storeToRefs } from 'pinia'
 const preferences = usePreferencesStore()
-const { language } = storeToRefs(preferences)
 
 const field: Ref = defineModel('field')
 const value: Ref = defineModel('value')

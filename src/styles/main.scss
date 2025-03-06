@@ -104,6 +104,15 @@ button {
   unicode-bidi: bidi-override;
 }
 
+.rtl-no-text-align {
+  direction: rtl;
+}
+
+.ltr-no-text-align {
+  direction: ltr;
+  unicode-bidi: bidi-override;
+}
+
 .link-subtle {
   color: $background-color-4;
 }
