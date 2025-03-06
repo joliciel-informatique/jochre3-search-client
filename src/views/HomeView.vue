@@ -1,16 +1,24 @@
 <template>
-  <PreferencesSetup />
-  <SearchPage
-    v-model:image-modal="imageModal"
-    v-model:word-modal="wordModal"
-    v-model:metadata-modal="metadataModal"
-    v-model:notification="notification"
-  />
-  <Preferences v-model:notification="notification" />
-  <LargeImage v-model:image-modal="imageModal" />
-  <FixWord v-model:word-modal="wordModal" v-model:notification="notification" />
-  <FixMetaData v-model:metadata-modal="metadataModal" v-model:notification="notification" />
-  <Notification v-model:notification="notification" />
+  <div
+    :class="[
+      !preferences.displayLeftToRight ? 'rtl-align' : '',
+      preferences.interfaceStyle == 'old' ? 'scrollBody' : ''
+    ]"
+    :style="preferences.interfaceStyle == 'old' ? 'overflow: auto; max-height: 100vh' : ''"
+  >
+    <PreferencesSetup />
+    <SearchPage
+      v-model:image-modal="imageModal"
+      v-model:word-modal="wordModal"
+      v-model:metadata-modal="metadataModal"
+      v-model:notification="notification"
+    />
+    <Preferences v-model:notification="notification" />
+    <LargeImage v-model:image-modal="imageModal" />
+    <FixWord v-model:word-modal="wordModal" v-model:notification="notification" />
+    <FixMetaData v-model:metadata-modal="metadataModal" v-model:notification="notification" />
+    <Notification v-model:notification="notification" />
+  </div>
 </template>
 
 <script setup lang="ts">

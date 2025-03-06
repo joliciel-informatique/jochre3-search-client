@@ -1,11 +1,5 @@
 <template>
-  <div
-    :class="[
-      !preferences.displayLeftToRight ? 'rtl-align' : '',
-      preferences.interfaceStyle == 'old' ? 'scrollBody' : ''
-    ]"
-    :style="preferences.interfaceStyle === 'old' ? 'overflow:auto; max-height:100vh' : ''"
-  >
+  <div>
     <RouterView />
   </div>
 </template>
