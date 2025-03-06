@@ -27,7 +27,7 @@
         "
       >
         <span class="is-size-6 p-2">
-          {{ $t('navigation.currently-viewing-pages', [pageRangeInView, lastPage]) }}
+          {{ $t('navigation.currently-viewing-pages', [pageInView, lastPage]) }}
         </span>
         <div class="pb-0 mb-0 field has-addons">
           <p class="control">
@@ -38,7 +38,7 @@
               class="input is-small p-2 is-size-6 has-text-centered"
               type="number"
               :min="bookStore.firstIndexedPage"
-              :max="book.pages.length"
+              :max="Math.max(...book.pages.map((p) => p.physicalPageNumber))"
               v-model.lazy="currentPage"
               @change="scrollTo(currentPage)"
               @keyup.enter="scrollTo(currentPage)"
@@ -136,7 +136,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, onUpdated, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { onMounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
@@ -159,7 +159,8 @@ const route = useRoute()
 // Variables required for navigation with component
 const pageNumber = ref()
 const currentPage = ref()
-const pageRangeInView = ref()
+const pageInView = ref()
+
 const lastPage = computed(
   () => book.value?.pages.map((page) => page.physicalPageNumber)[book.value?.pages.length - 1]
 )
@@ -169,11 +170,14 @@ const currentHighlightIdx = ref(0)
 onMounted(async () => {
   router.isReady().then(async () => {
     isLoading.value = true
+
     query.value =
       hasOwn(route.query, 'query') && typeof route.query.query === 'string'
         ? route.query.query.trim()
         : ''
+
     strict.value = hasOwn(route.query, 'strict') && route.query.strict ? true : false
+
     docRef.value =
       hasOwn(route.params, 'docRef') && typeof route.params.docRef === 'string'
         ? route.params.docRef
@@ -186,42 +190,48 @@ onMounted(async () => {
     pageNumber.value = /^[+-]?\d+(\.\d+)?$/.test(route.params.page.toString())
       ? parseInt(route.params.page as string)
       : 1
-    currentPage.value = pageNumber.value
 
     currentHighlightIdx.value = pagesWithHighlights.value.indexOf(pageNumber.value)
 
     // Add ids to all highlights
     const highlights = document.querySelectorAll('.highlight')
-    highlights.forEach((highlight, key) => {
-      highlight.addEventListener('click', () => (currentHighlightIdx.value = key))
-      highlight.id = `highlight-${key}`
+    highlights.forEach((highlight: Element, key: number) => {
+      const h = highlight as HTMLSpanElement
+      h.addEventListener('click', () => (currentHighlightIdx.value = key))
+      h.id = `highlight-${key}`
+      h.dataset.page = `${pagesWithHighlights.value[key]}`
     })
 
     highlight(currentHighlightIdx.value)
+
+    // Add scroll listener to update currently viewing page
+    const app = document.getElementById('app')
+    if (app) {
+      const children = app?.children
+      if (children) {
+        const grandChild = children[0].children[0]
+        if (grandChild) {
+          grandChild.addEventListener('scroll', getPagesInView, false)
+        }
+      }
+    }
+
+    // Scrollcurrent page into view
+    document.getElementById(page.value)?.scrollIntoView()
   })
-
-  document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
-  document.getElementById(page.value)?.scrollIntoView()
 })
 
-onUpdated(() => {
-  getPagesInView()
-  document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
-})
+/** Scroll to the page when the currentPage input value is updated. */
+watch(currentPage, (newV, oldV) => {
+  let idx = getClosestPageIndexWithHighlights(newV)
 
-// If current page is updated
-watch(currentPage, (newV) => {
-  // Set first highlight of new page as active
-  const highLightIdx = pagesWithHighlights.value.indexOf(newV)
-  if (highLightIdx !== -1) {
-    currentHighlightIdx.value = highLightIdx
-  } else {
-    // Set nearest highlight active if no highlights on the page
-    let idx = getClosestPageIndexWithHighlights(newV)
-    const highLightIdx = pagesWithHighlights.value.indexOf(idx)
-    currentHighlightIdx.value = highLightIdx
-  }
-  scrollTo(newV)
+  const idxs = pagesWithHighlights.value.map((e, i) => (e === idx ? i : -1)).filter((x) => x != -1)
+
+  currentHighlightIdx.value =
+    newV - oldV == -1 && idx == currentPage.value ? idxs[idxs.length - 1] : idxs[0]
+
+  // We scroll to the page irrespective of highlights on that page
+  scrollToPage(newV)
 })
 
 // If buttons are pressed
@@ -233,24 +243,41 @@ const getClosestPageIndexWithHighlights = (idx: number) =>
     0
   )
 
+/** Sets highlight to currently active and optionally scrolls page to that highlight
+ * @param highlightIndex (number, required) - Index of highlight to scroll to
+ * @param scroll (boolean, optional) - Scroll page to the highlight
+ */
 const highlight = (highLightIndex: number, scroll: boolean = true) => {
+  console.log(highLightIndex)
   document
     .querySelectorAll('.highlight.active')
     .forEach((highlight) => highlight.classList.remove('active'))
   const highlight = document.getElementById(`highlight-${highLightIndex}`)
-  console.log(highlight)
-  if (highlight) highlight.classList.add('active')
-  if (highlight && scroll) highlight.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  if (highlight) {
+    currentPage.value = highlight.dataset.page
+    highlight.classList.add('active')
+    if (scroll) highlight.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
 }
 
+/**
+ * Sets pageInView to the page that is currently on the screen
+ */
 const getPagesInView = () => {
   const pagesInView = Array.from(document.querySelectorAll('.box.page'))
     .map((page) => (isInViewOfDiv(page) ? parseInt(page.getAttribute('id')!) : null))
     .filter((x) => x)
-
-  if (pagesInView.length) pageRangeInView.value = `${pagesInView[0]}`
+  if (pagesInView.length) pageInView.value = `${pagesInView[0]}`
 }
 
-const scrollTo = (page: number) =>
-  document.getElementById(page.toString())?.scrollIntoView({ behavior: 'smooth' })
+const scrollTo = (page: number) => {
+  const elem = document.getElementById(page.toString())
+  const block = document.getElementsByClassName('panel-block')
+  if (block && elem) {
+    block[0].scrollTo(0, elem.offsetHeight)
+  }
+}
+
+const scrollToPage = (page: number) =>
+  document.getElementById(page.toString())?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 </script>
