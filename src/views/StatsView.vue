@@ -113,8 +113,12 @@ const usageStats = ref<UsageStats>()
 async function runStats() {
   usageStats.value = undefined
   const statsParams = new URLSearchParams()
-  statsParams.append('start-date', startDate.value.toISOString().split('T')[0])
-  statsParams.append('end-date', endDate.value.toISOString().split('T')[0])
+  const sd = startDate.value
+  const utcStartDate = new Date(Date.UTC(sd.getFullYear(), sd.getMonth(), sd.getDate()))
+  const ed = endDate.value
+  const utcEndDate = new Date(Date.UTC(ed.getFullYear(), ed.getMonth(), ed.getDate()))
+  statsParams.append('start-date', utcStartDate.toISOString().split('T')[0])
+  statsParams.append('end-date', utcEndDate.toISOString().split('T')[0])
   statsParams.append('time-unit', timeUnit.value)
   const response = await fetchData('stats/usage', 'get', statsParams)
   if (response && response.ok) {
