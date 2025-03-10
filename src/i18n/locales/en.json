@@ -73,7 +73,7 @@
     "open-transcription": "Open transcription"
   },
   "navigation": {
-    "currently-viewing-pages": "Currently viewing page {0}/{1}",
+    "currently-viewing-pages": "Viewing page {0}/{1}",
     "jump-to": "Jump to page"
   },
   "preferences": {

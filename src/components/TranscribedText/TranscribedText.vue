@@ -3,7 +3,7 @@
     <div
       class="panel-heading is-flex is-justify-content-space-between m-2"
       :class="
-        (isMobile && !isTablet) || (!isMobile && isTablet)
+        isMobile || isTablet || (isDesktop && isPortrait)
           ? 'is-flex-direction-column is-align-items-end'
           : 'is-flex-direction-row is-align-items-center '
       "
@@ -11,7 +11,7 @@
       style="position: sticky; top: 0"
     >
       <h1
-        class="book-title"
+        class="book-title is-flex-shrink-5"
         :class="{
           'rtl-align': preferences.needsRightToLeft
         }"
@@ -19,19 +19,27 @@
         <span>{{ book.title }}</span>
       </h1>
       <div
-        class="is-flex"
+        class="is-flex has-text-right"
         :class="
-          (isMobile && !isTablet) || (!isMobile && isTablet)
+          isMobile || isTablet || (isDesktop && isPortrait)
             ? 'is-flex-direction-column is-align-items-end'
-            : 'is-flex-direction-row is-align-items-center'
+            : 'is-flex-direction-row'
         "
       >
-        <span class="is-size-6 p-2">
+        <label
+          class="p-2 is-align-self-flex-end"
+          style="text-wrap: nowrap"
+          :class="isMobile || isTablet ? 'is-size-7' : 'is-size-6'"
+        >
           {{ $t('navigation.currently-viewing-pages', [pageInView, lastPage]) }}
-        </span>
+        </label>
         <div class="pb-0 mb-0 field has-addons">
           <p class="control">
-            <a class="button is-size-6 is-small is-static">{{ $t('navigation.jump-to') }}</a>
+            <a
+              class="button is-small is-static"
+              :class="isMobile || isTablet ? 'is-size-7' : 'is-size-6'"
+              >{{ $t('navigation.jump-to') }}</a
+            >
           </p>
           <p class="control">
             <input
@@ -150,7 +158,7 @@ const preferences = usePreferencesStore()
 const bookStore = useBookStore()
 const { updateText } = bookStore
 
-const { isMobile, isTablet } = storeToRefs(preferences)
+const { isMobile, isTablet, isDesktop, isPortrait } = storeToRefs(preferences)
 const { book, docRef, page, query, strict, isLoading, pagesWithHighlights } = storeToRefs(bookStore)
 
 const router = useRouter()
