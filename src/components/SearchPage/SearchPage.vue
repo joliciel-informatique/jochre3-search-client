@@ -118,7 +118,7 @@
     </div>
 
     <div
-      v-else-if="hasSearch && searchResults && interfaceStyle == 'new'"
+      v-else-if="hasSearch && searchResults.length && interfaceStyle == 'new'"
       class="is-flex is-flex-direction-row bla"
       :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
     >
@@ -159,7 +159,7 @@
         />
       </div>
     </div>
-    <div v-else-if="hasSearch && searchResults && interfaceStyle == 'old'">
+    <div v-else-if="hasSearch && searchResults.length && interfaceStyle == 'old'">
       <div
         class="is-flex is-flex-direction-row"
         :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
@@ -189,7 +189,7 @@
     </div>
 
     <!-- Not loading, with query, but no results -->
-    <div v-else-if="hasSearch && !searchResults" class="m-5 has-text-centered">
+    <div v-else-if="hasSearch && !searchResults.length" class="m-5 has-text-centered">
       <h1
         class="column is-flex is-flex-direction-column is-justify-content-center is-align-items-center"
       >
