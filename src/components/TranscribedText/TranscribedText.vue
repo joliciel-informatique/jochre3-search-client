@@ -6,14 +6,14 @@
       style="position: sticky; top: 0"
     >
       <h1
-        class="book-title is-flex-shrink-5"
+        class="book-title is-flex-shrink-5 has-text-centered pb-2"
         :class="{
           'rtl-align': preferences.needsRightToLeft
         }"
       >
         <span>{{ book.title }}</span>
       </h1>
-      <label class="p-2 is-size-6">
+      <label class="is-size-6">
         {{ $t('navigation.currently-viewing-pages', [pageInView, lastPage]) }}
       </label>
       <div id="text-options" class="box p-1 is-flex is-flex-direction-column">
@@ -75,13 +75,19 @@
             </p>
           </span>
           <span class="is-flex is-flex-direction-row">
-            <p class="control" @click="textSize++">
-              <button class="button is-small p-4" :disabled="textSize > 7 ? true : false">
+            <p class="control" @click="transcribedTextSize++">
+              <button
+                class="button is-small p-4"
+                :disabled="transcribedTextSize == 7 ? true : false"
+              >
                 <font-awesome-icon class="is-small" icon="text-height" size="xs" />
               </button>
             </p>
-            <p class="control" @click="textSize--">
-              <button class="button is-small p-4" :disabled="textSize < 4 ? true : false">
+            <p class="control" @click="transcribedTextSize--">
+              <button
+                class="button is-small p-4"
+                :disabled="transcribedTextSize == 4 ? true : false"
+              >
                 <font-awesome-icon class="2xs cursor-pointer" icon="text-height" size="sm" />
               </button>
             </p>
@@ -89,7 +95,6 @@
         </div>
       </div>
     </div>
-    <!-- </div> -->
     <div
       class="panel-block box m-3 px-3 is-flex is-flex-direction-column is-justify-content-center"
       :class="preferences.displayLeftToRight ? '' : 'rtl-align'"
@@ -157,17 +162,16 @@ const preferences = usePreferencesStore()
 const bookStore = useBookStore()
 const { updateText } = bookStore
 
-const { isMobile, isTablet, isDesktop, isPortrait } = storeToRefs(preferences)
 const { book, docRef, page, query, strict, isLoading, pagesWithHighlights } = storeToRefs(bookStore)
+const { transcribedTextSize } = storeToRefs(preferences)
+const { save } = preferences
 
 const router = useRouter()
 const route = useRoute()
 
 // Variables required for navigation with component
 const pageNumber = ref()
-// const book = ref()
-const textSize = ref(6)
-const textSizeClass = ref('is-size-6')
+const textSizeClass = computed(() => `is-size-${transcribedTextSize.value}`)
 
 const currentPage = ref()
 const pageInView = ref()
@@ -179,6 +183,7 @@ const lastPage = computed(
 const currentHighlightIdx = ref(0)
 
 onMounted(async () => {
+  console.log(transcribedTextSize.value)
   router.isReady().then(async () => {
     isLoading.value = true
 
@@ -301,73 +306,10 @@ onUpdated(() => {
   document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
 })
 
-const defineSearchParams = () => {
-  return Object.assign(
-    {},
-    query.value?.length ? { query: query.value.trim() } : null,
-    strict.value.toString() !== null ? { strict: strict.value.toString() } : null
-  )
-}
-
-watch(textSize, (newV) => (textSizeClass.value = newV ? `is-size-${newV}` : 'is-size-6'))
-
-// const updateText = () => {
-//   const params = new URLSearchParams(defineSearchParams())
-//   params.append('doc-ref', docRef.value)
-//   params.append('text-as-html', 'true')
-
-//   fetchData('highlighted-text', 'get', params)
-//     .then((res) => res.json())
-//     .then((bookData) => {
-//       const highlightedBook = bookData as HighlightedDocument
-//       if (highlightedBook.pages.length) {
-//         // Find the lowest physical page number
-//         firstIndexedPage.value = Math.min(
-//           ...highlightedBook.pages.map((page) => page.physicalPageNumber)
-//         )
-
-//         // A hacky way to fix incorrect logical page numbers based on most common difference between assigned logical and physical numbers
-//         const overallOffset = highlightedBook.pages.map(
-//           (p) => p.physicalPageNumber - (p.logicalPageNumber ?? 0)
-//         )
-//         const offset = mostFrequentUsingMap(overallOffset)
-//         if (offset) {
-//           highlightedBook.pages.forEach(
-//             (page) => (page.logicalPageNumber = page.physicalPageNumber - offset)
-//           )
-//         }
-
-//         pagesWithHighlights.value = []
-//         highlightedBook.pages.forEach((page) => {
-//           if (page.highlights && page.highlights.length > 0) {
-//             pagesWithHighlights.value.push(page.physicalPageNumber)
-//           }
-//         })
-//       }
-
-//       book.value = highlightedBook
-//     })
-//     .then(() => document.getElementById(`${route.params.page}`)?.scrollIntoView())
-//   isLoading.value = false
-// }
+watch(transcribedTextSize, () => save())
 
 const scrollTo = (page: number) =>
   document.getElementById(page.toString())?.scrollIntoView({ behavior: 'smooth' })
-
-const scrollToPreviousHighlight = () => {
-  getPagesInView()
-  const prevHighlight = pagesWithHighlights.value
-    .slice()
-    .reverse()
-    .find((num) => num < pageInView.value)
-  if (prevHighlight) scrollTo(prevHighlight)
-}
-
-const scrollToNextHighlight = () => {
-  getPagesInView()
-  const nextHighlight = pagesWithHighlights.value.find((num) => num > pageInView.value)
-  if (nextHighlight) scrollTo(nextHighlight)
-}
 
 // When URL is changed manually?
 onBeforeRouteUpdate(async () => updateText())
