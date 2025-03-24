@@ -154,7 +154,7 @@ Description: presents the facet bar
             <span>
               <p class="pb-3">
                 <input
-                  class="input mb-2"
+                  class="input has-text-dark mb-2"
                   v-model="filterValue"
                   type="text"
                   :placeholder="$t('facets.filter')"
@@ -294,7 +294,7 @@ Description: presents the facet bar
       <span>
         <p class="pb-3">
           <input
-            class="input mb-2"
+            class="input has-text-dark mb-2"
             v-model="filterValue"
             type="text"
             :placeholder="$t('facets.filter')"
