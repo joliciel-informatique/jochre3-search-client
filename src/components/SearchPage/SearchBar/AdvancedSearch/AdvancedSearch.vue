@@ -14,14 +14,8 @@ Description: the advanced search toolbox
 <template>
   <div
     class="container is-fullhd advancedSearch is-flex is-justify-content-center"
-    :style="
-      (preferences.isMobile ||
-        preferences.isTablet ||
-        (preferences.isDesktop && preferences.isPortrait)) &&
-      showAdvancedSearchPanel
-        ? 'overflow:auto;height:64vh'
-        : ''
-    "
+    style="overflow: auto; max-height: 64vh"
+    v-if="showAdvancedSearchPanel"
   >
     <div id="advancedSearchPanel" class="body" v-show="showAdvancedSearchPanel">
       <div class="body-inner container is-max-desktop">

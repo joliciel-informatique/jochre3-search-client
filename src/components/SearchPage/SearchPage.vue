@@ -51,14 +51,8 @@
         </div>
         <div
           class="navbar-item is-flex is-flex-direction-column"
-          :style="[
-            (preferences.isMobile ||
-              preferences.isTablet ||
-              (preferences.isDesktop && preferences.isPortrait)) &&
-            showAdvancedSearchPanel
-              ? 'top:0;overflow-y:scroll;max-height:92vh;'
-              : ''
-          ]"
+          style="top: 0; overflow-y: auto; max-height: 92vh"
+          v-if="showAdvancedSearchPanel"
         >
           <AdvancedSearch
             @newSearch="newSearch"
