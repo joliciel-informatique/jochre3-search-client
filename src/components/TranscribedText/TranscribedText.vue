@@ -1,12 +1,7 @@
 <template>
   <div v-if="book" class="transcribed-text panel">
     <div
-      class="panel-heading is-flex is-justify-content-space-between"
-      :class="
-        isMobile || isTablet || (isDesktop && isPortrait)
-          ? 'is-flex-direction-column is-align-items-end'
-          : 'is-flex-direction-row is-align-items-center '
-      "
+      class="panel-heading is-flex-desktop is-justify-content-space-between is-align-items-center has-text-centered p-2"
       id="panel-heading"
       style="position: sticky; top: 0"
     >
@@ -18,14 +13,6 @@
       >
         <span>{{ book.title }}</span>
       </h1>
-      <!-- <div
-        class="is-flex has-text-right"
-        :class="
-          isMobile || isTablet || (isDesktop && isPortrait)
-            ? 'is-flex-direction-column is-align-items-end'
-            : 'is-flex-direction-row'
-        "
-      > -->
       <label class="p-2 is-size-6">
         {{ $t('navigation.currently-viewing-pages', [pageInView, lastPage]) }}
       </label>
@@ -179,7 +166,7 @@ const route = useRoute()
 // Variables required for navigation with component
 const pageNumber = ref()
 // const book = ref()
-const textSize = ref(4)
+const textSize = ref(6)
 const textSizeClass = ref('is-size-6')
 
 const currentPage = ref()
