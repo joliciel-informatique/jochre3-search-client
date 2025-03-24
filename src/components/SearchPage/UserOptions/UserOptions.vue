@@ -5,7 +5,7 @@
     <div
       class="navbar-item is-hoverable is-flex-wrap-wrap is-align-content-start"
       :class="preferences.displayLeftToRight ? 'rtl' : 'ltr'"
-      :style="!searchResults?.length ? 'position:fixed;top:0;right:0' : ''"
+      :style="!searchResults?.length ? 'position:fixed;top:0' : ''"
     >
       <a class="navbar-link" :class="preferences.displayLeftToRight ? 'rtl' : 'ltr'">
         <p
