@@ -31,7 +31,7 @@ Description: presents the search bar
           <input
             id="query"
             type="text"
-            class="input is-normal is-rounded"
+            class="input is-normal is-rounded has-text-dark"
             :class="isMobile ? 'px-2' : ''"
             lang="yi"
             v-model="query"
