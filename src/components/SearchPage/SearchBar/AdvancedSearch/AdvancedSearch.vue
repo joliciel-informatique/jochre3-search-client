@@ -63,7 +63,7 @@ Description: the advanced search toolbox
                 <input
                   id="advanced-search-authors"
                   type="text"
-                  class="input"
+                  class="input has-text-dark"
                   lang="yi"
                   name="findAuthorInput"
                   v-model="authorText"
@@ -96,7 +96,7 @@ Description: the advanced search toolbox
             <p class="control is-expanded">
               <input
                 id="bookTitle"
-                class="input"
+                class="input has-text-dark"
                 type="text"
                 lang="yi"
                 :placeholder="$t('search.title')"
@@ -119,7 +119,7 @@ Description: the advanced search toolbox
             class="column is-flex is-desktop is-flex-grow-2 field has-addons has-addons-left is-horizontal"
           >
             <input
-              class="input"
+              class="input has-text-dark"
               name="documentRefsInput"
               type="text"
               aria-label="document reference numbers"
@@ -139,7 +139,7 @@ Description: the advanced search toolbox
             <input
               id="fromYear"
               aria-labelledby="searchDateFrom"
-              class="input"
+              class="input has-text-dark"
               type="number"
               placeholder="1700"
               v-model="fromYear"
@@ -153,7 +153,7 @@ Description: the advanced search toolbox
           <p class="column control is-2">
             <input
               id="toYear"
-              class="input control"
+              class="input has-text-dark"
               aria-labelledby="searchToYear"
               type="number"
               placeholder="2000"

@@ -19,7 +19,7 @@
               <input
                 :id="`wordCorrectionInput-${textInputId}`"
                 name="wordCorrectionInput"
-                class="input"
+                class="input has-text-dark"
                 :class="{
                   'rtl-align': preferences.needsRightToLeft
                 }"

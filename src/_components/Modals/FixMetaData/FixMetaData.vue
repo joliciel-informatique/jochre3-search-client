@@ -23,7 +23,7 @@
             <input
               :id="metadataModal.field"
               :type="metadataModal.field === 'publicationYear' ? 'number' : 'text'"
-              class="input"
+              class="input has-text-dark"
               :class="{
                 'ltr-align': fieldLeftToRight && preferences.needsLeftToRight,
                 english: fieldLeftToRight && preferences.needsLeftToRight,
@@ -68,7 +68,7 @@
                 <input
                   :id="`new-author-${metadataModal.field}`"
                   type="text"
-                  class="input"
+                  class="input has-text-dark"
                   lang="yi"
                   v-model="authorText"
                   :placeholder="$t('search.authorPlaceholder')"
