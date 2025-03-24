@@ -120,7 +120,7 @@ const scrolling = () => {
     // If else: activate books below the middle of the screen
 
     const snippetsDiv = document.getElementById('snippets')
-    const snippets = Array.from(document.querySelectorAll('.snippets-on li'))
+    const snippets = Array.from(document.querySelectorAll('#snippets li'))
 
     if (snippetsDiv && snippets.length) {
       if (snippetsDiv.scrollTop === 0) {
