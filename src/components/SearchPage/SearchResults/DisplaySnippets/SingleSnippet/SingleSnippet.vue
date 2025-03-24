@@ -52,7 +52,7 @@ Description: displays text snippets from the OCR text
         <span class="icon">
           <font-awesome-icon icon="book-open" size="lg" />
         </span>
-        <span v-if="!preferences.isMobile" class="is-size-7">{{ $t('snippet.open-page') }}</span>
+        <span class="is-hidden-mobile is-size-7">{{ $t('snippet.open-page') }}</span>
       </button>
 
       <!-- View transcribed text -->
@@ -66,9 +66,7 @@ Description: displays text snippets from the OCR text
         <span class="icon">
           <font-awesome-icon icon="file-lines" size="lg" />
         </span>
-        <span v-if="!preferences.isMobile" class="is-size-7">{{
-          $t('snippet.open-transcription')
-        }}</span>
+        <span class="is-hidden-mobile is-size-7">{{ $t('snippet.open-transcription') }}</span>
       </button>
     </header>
     <div class="card-content" :data-docref="docRef" :data-page="snippet.page">
