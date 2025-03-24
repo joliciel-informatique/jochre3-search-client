@@ -33,76 +33,72 @@
         >
           {{ $t('navigation.currently-viewing-pages', [pageInView, lastPage]) }}
         </label>
-        <div class="pb-0 mb-0 field has-addons">
-          <p class="control">
-            <a
-              class="button is-small is-static"
-              :class="isMobile || isTablet ? 'is-size-7' : 'is-size-6'"
-              >{{ $t('navigation.jump-to') }}</a
-            >
-          </p>
-          <p class="control">
-            <input
-              class="input is-small p-2 is-size-6 has-text-centered"
-              type="number"
-              :min="bookStore.firstIndexedPage"
-              :max="Math.max(...book.pages.map((p) => p.physicalPageNumber))"
-              v-model.lazy="currentPage"
-              @change="scrollTo(currentPage)"
-              @keyup.enter="scrollTo(currentPage)"
-            />
-          </p>
-          <p class="control">
-            <button
-              class="button is-small"
-              @click="currentHighlightIdx = 0"
-              :disabled="currentHighlightIdx === 0"
-            >
-              <font-awesome-icon icon="angles-up" />
-            </button>
-          </p>
-          <p class="control">
-            <button
-              class="button is-small"
-              @click="currentHighlightIdx--"
-              :disabled="currentHighlightIdx === 0"
-            >
-              <font-awesome-icon icon="chevron-up" />
-            </button>
-          </p>
-          <p class="control">
-            <button
-              class="button is-small"
-              @click="currentHighlightIdx++"
-              :disabled="currentHighlightIdx === pagesWithHighlights.length - 1"
-            >
-              <font-awesome-icon icon="chevron-down" />
-            </button>
-          </p>
-          <p class="control">
-            <button
-              class="button is-small"
-              @click="currentHighlightIdx = pagesWithHighlights.length - 1"
-              :disabled="currentHighlightIdx === pagesWithHighlights.length - 1"
-            >
-              <font-awesome-icon icon="angles-down" />
-            </button>
-          </p>
-          <div id="text-options" class="text-options box is-flex is-flex-direction-column">
-            <span
-              class="is-flex is-flex-direction-row is-justify-content-space-between is-align-items-end pb-1"
-            >
-              <font-awesome-icon icon="text-height" size="lg" />
-              <font-awesome-icon icon="text-height" size="2xs" />
-            </span>
-            <input
-              class="slider is-fullwidth is-info"
-              step="1"
-              min="3"
-              max="7"
-              type="range"
-              v-model="textSize"
-            />
+        <div id="text-options" class="box is-flex is-flex-direction-column">
+          <div class="pb-0 mb-0 field has-addons">
+            <p class="control">
+              <a
+                class="button is-small is-static"
+                :class="isMobile || isTablet ? 'is-size-7' : 'is-size-6'"
+                >{{ $t('navigation.jump-to') }}</a
+              >
+            </p>
+            <p class="control">
+              <input
+                class="input is-small p-2 is-size-6 has-text-centered"
+                type="number"
+                :min="bookStore.firstIndexedPage"
+                :max="Math.max(...book.pages.map((p) => p.physicalPageNumber))"
+                v-model.lazy="currentPage"
+                @change="scrollTo(currentPage)"
+                @keyup.enter="scrollTo(currentPage)"
+              />
+            </p>
+            <p class="control">
+              <button
+                class="button is-small"
+                @click="currentHighlightIdx = 0"
+                :disabled="currentHighlightIdx === 0"
+              >
+                <font-awesome-icon icon="angles-up" />
+              </button>
+            </p>
+            <p class="control">
+              <button
+                class="button is-small"
+                @click="currentHighlightIdx--"
+                :disabled="currentHighlightIdx === 0"
+              >
+                <font-awesome-icon icon="chevron-up" />
+              </button>
+            </p>
+            <p class="control">
+              <button
+                class="button is-small"
+                @click="currentHighlightIdx++"
+                :disabled="currentHighlightIdx === pagesWithHighlights.length - 1"
+              >
+                <font-awesome-icon icon="chevron-down" />
+              </button>
+            </p>
+            <p class="control">
+              <button
+                class="button is-small"
+                @click="currentHighlightIdx = pagesWithHighlights.length - 1"
+                :disabled="currentHighlightIdx === pagesWithHighlights.length - 1"
+              >
+                <font-awesome-icon icon="angles-down" />
+              </button>
+            </p>
+            <p class="control" @click="textSize++">
+              <button class="button is-small" :disabled="textSize > 7 ? true : false">
+                <font-awesome-icon class="is-small" icon="text-height" size="2xs" />
+              </button>
+            </p>
+            <p class="control" @click="textSize--">
+              <button class="button is-small" :disabled="textSize < 4 ? true : false">
+                <font-awesome-icon class="2xs cursor-pointer" icon="text-height" size="lg" />
+              </button>
+            </p>
           </div>
         </div>
       </div>
