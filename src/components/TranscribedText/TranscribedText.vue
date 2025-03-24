@@ -1,7 +1,7 @@
 <template>
   <div v-if="book" class="transcribed-text panel">
     <div
-      class="panel-heading is-flex is-justify-content-space-between m-2"
+      class="panel-heading is-flex is-justify-content-space-between"
       :class="
         isMobile || isTablet || (isDesktop && isPortrait)
           ? 'is-flex-direction-column is-align-items-end'
@@ -18,29 +18,24 @@
       >
         <span>{{ book.title }}</span>
       </h1>
-      <div
+      <!-- <div
         class="is-flex has-text-right"
         :class="
           isMobile || isTablet || (isDesktop && isPortrait)
             ? 'is-flex-direction-column is-align-items-end'
             : 'is-flex-direction-row'
         "
-      >
-        <label
-          class="p-2 is-align-self-flex-end"
-          style="text-wrap: nowrap"
-          :class="isMobile || isTablet ? 'is-size-7' : 'is-size-6'"
+      > -->
+      <label class="p-2 is-size-6">
+        {{ $t('navigation.currently-viewing-pages', [pageInView, lastPage]) }}
+      </label>
+      <div id="text-options" class="box p-1 is-flex is-flex-direction-column">
+        <div
+          class="pb-0 mb-0 field has-addons is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-center"
         >
-          {{ $t('navigation.currently-viewing-pages', [pageInView, lastPage]) }}
-        </label>
-        <div id="text-options" class="box is-flex is-flex-direction-column">
-          <div class="pb-0 mb-0 field has-addons">
+          <span class="is-flex is-flex-direction-row m-2">
             <p class="control">
-              <a
-                class="button is-small is-static"
-                :class="isMobile || isTablet ? 'is-size-7' : 'is-size-6'"
-                >{{ $t('navigation.jump-to') }}</a
-              >
+              <a class="button is-small is-static is-size-6">{{ $t('navigation.jump-to') }}</a>
             </p>
             <p class="control">
               <input
@@ -53,56 +48,61 @@
                 @keyup.enter="scrollTo(currentPage)"
               />
             </p>
+          </span>
+          <span class="is-flex is-flex-direction-row">
             <p class="control">
               <button
-                class="button is-small"
+                class="button is-small p-4"
                 @click="currentHighlightIdx = 0"
                 :disabled="currentHighlightIdx === 0"
               >
-                <font-awesome-icon icon="angles-up" />
+                <font-awesome-icon icon="angles-up" size="xs" />
               </button>
             </p>
             <p class="control">
               <button
-                class="button is-small"
+                class="button is-small p-4"
                 @click="currentHighlightIdx--"
                 :disabled="currentHighlightIdx === 0"
               >
-                <font-awesome-icon icon="chevron-up" />
+                <font-awesome-icon icon="chevron-up" size="xs" />
               </button>
             </p>
             <p class="control">
               <button
-                class="button is-small"
+                class="button is-small p-4"
                 @click="currentHighlightIdx++"
                 :disabled="currentHighlightIdx === pagesWithHighlights.length - 1"
               >
-                <font-awesome-icon icon="chevron-down" />
+                <font-awesome-icon icon="chevron-down" size="xs" />
               </button>
             </p>
             <p class="control">
               <button
-                class="button is-small"
+                class="button is-small p-4"
                 @click="currentHighlightIdx = pagesWithHighlights.length - 1"
                 :disabled="currentHighlightIdx === pagesWithHighlights.length - 1"
               >
-                <font-awesome-icon icon="angles-down" />
+                <font-awesome-icon icon="angles-down" size="xs" />
               </button>
             </p>
+          </span>
+          <span class="is-flex is-flex-direction-row">
             <p class="control" @click="textSize++">
-              <button class="button is-small" :disabled="textSize > 7 ? true : false">
-                <font-awesome-icon class="is-small" icon="text-height" size="2xs" />
+              <button class="button is-small p-4" :disabled="textSize > 7 ? true : false">
+                <font-awesome-icon class="is-small" icon="text-height" size="xs" />
               </button>
             </p>
             <p class="control" @click="textSize--">
-              <button class="button is-small" :disabled="textSize < 4 ? true : false">
-                <font-awesome-icon class="2xs cursor-pointer" icon="text-height" size="lg" />
+              <button class="button is-small p-4" :disabled="textSize < 4 ? true : false">
+                <font-awesome-icon class="2xs cursor-pointer" icon="text-height" size="sm" />
               </button>
             </p>
-          </div>
+          </span>
         </div>
       </div>
     </div>
+    <!-- </div> -->
     <div
       class="panel-block box m-3 px-3 is-flex is-flex-direction-column is-justify-content-center"
       :class="preferences.displayLeftToRight ? '' : 'rtl-align'"
