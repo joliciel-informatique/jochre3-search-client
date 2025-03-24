@@ -20,12 +20,7 @@ Description: controls text snippets from the OCR text
         class="is-invisible"
       />
       <ul
-        class="p-2 pt-4 snippets-on"
-        :class="
-          preferences.isMobile || preferences.isTablet || preferences.isPortrait
-            ? `mobile is-hidden-desktop`
-            : `desktop is-hidden-touch`
-        "
+        class="p-2 pt-4"
         v-show="
           displayPerBook ||
           (!displayPerBook && searchResults[selectedEntryIdx]?.docRef === result.docRef)
@@ -63,12 +58,7 @@ Description: controls text snippets from the OCR text
         :page-number-offset="pageNumberOffset"
       />
       <ul
-        class="p-5 pt-4 snippets-on"
-        :class="
-          preferences.isMobile || preferences.isTablet || preferences.isPortrait
-            ? `mobile is-hidden-desktop`
-            : `desktop is-hidden-touch`
-        "
+        class="p-5 pt-4"
         v-show="
           displayPerBook ||
           (!displayPerBook && searchResults[selectedEntryIdx]?.docRef === result.docRef)
