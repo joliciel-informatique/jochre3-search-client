@@ -7,17 +7,10 @@
       >
         <div
           class="navbar-item is-flex is-flex-direction-row is-place-self-stretch is-align-items-center"
-          :class="
-            isMobile || preferences.isTablet ? 'is-align-items-center' : 'is-align-items-start'
-          "
         >
           <a
             href="/"
-            :class="
-              isMobile && isPortrait
-                ? 'columns is-flex is-flex-direction-column is-align-self-center'
-                : ''
-            "
+            class="is-flex is-flex-direction-column is-align-self-flex-start is-align-self-flex-stretch"
             v-if="searchResults.length"
           >
             <img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')" />
@@ -119,8 +112,7 @@
 
     <div
       v-else-if="hasSearch && searchResults.length && interfaceStyle == 'new'"
-      class="is-flex is-flex-direction-row bla"
-      :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
+      class="is-flex is-flex-direction-row snippets is-justify-content-center"
     >
       <div class="is-hidden-touch">
         <ContentsTable
@@ -160,10 +152,7 @@
       </div>
     </div>
     <div v-else-if="hasSearch && searchResults.length && interfaceStyle == 'old'">
-      <div
-        class="is-flex is-flex-direction-row"
-        :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
-      >
+      <div class="is-flex is-flex-direction-row is-justify-content-center">
         <!-- Not loading, has query and results -->
         <DisplaySnippets
           v-model:image-modal="imageModal"
@@ -275,7 +264,7 @@ const { show, interfaceStyle } = storeToRefs(preferences)
 
 import { storeToRefs } from 'pinia'
 
-const { authorFacetCount, isMobile, isPortrait } = storeToRefs(preferences)
+const { authorFacetCount } = storeToRefs(preferences)
 
 const query = ref('')
 // const selectedEntry = ref<SearchResult>()
