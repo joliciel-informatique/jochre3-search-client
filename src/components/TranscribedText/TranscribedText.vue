@@ -43,7 +43,7 @@
           </p>
           <p class="control">
             <input
-              class="input is-small p-2 is-size-6 has-text-centered"
+              class="input has-text-dark is-small p-2 is-size-6 has-text-centered"
               type="number"
               :min="bookStore.firstIndexedPage"
               :max="Math.max(...book.pages.map((p) => p.physicalPageNumber))"

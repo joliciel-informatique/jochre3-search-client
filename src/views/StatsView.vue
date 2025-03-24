@@ -23,8 +23,10 @@
           <div class="column is-half"></div>
         </div>
         <div class="columns">
-          <div class="column is-full">
+          <div class="column is-1">
             <label class="label">Time unit:</label>
+          </div>
+          <div class="column is-1">
             <select
               class="control select has-text-centered"
               name="timeUnitSelect"
@@ -34,7 +36,14 @@
               <option>Month</option>
               <option>Year</option>
             </select>
-            &nbsp;
+          </div>
+          <div class="column is-1">
+            <label class="label">Max bins:</label>
+          </div>
+          <div class="column is-1">
+            <input class="control input" type="number" v-model="maxBins" />
+          </div>
+          <div class="column is-8">
             <button
               class="button is-info"
               @click="runStats()"
@@ -45,29 +54,55 @@
             </button>
           </div>
         </div>
-        <div class="table-container">
-          <table class="table is-bordered is-striped" v-show="usageStats">
-            <thead>
-              <tr>
-                <th><div style="width: 100px">Date</div></th>
-                <th><div style="width: 100px">Distinct users</div></th>
-                <th><div style="width: 100px">Queries</div></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="bin of usageStats?.bins" :key="sha1(bin)">
-                <td>
-                  <div style="width: 100px">{{ bin.label }}</div>
-                </td>
-                <td class="has-text-right">
-                  <div style="width: 100px">{{ bin.distinctUsers }}</div>
-                </td>
-                <td class="has-text-right">
-                  <div style="width: 100px">{{ bin.queries }}</div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="columns">
+          <div class="column is-4">
+            <div class="table-container">
+              <table class="table is-bordered is-striped" v-show="usageStats">
+                <thead>
+                  <tr>
+                    <th><div style="width: 100px">Date</div></th>
+                    <th><div style="width: 100px">Distinct users</div></th>
+                    <th><div style="width: 100px">Queries</div></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="bin of usageStats?.bins" :key="sha1(bin)">
+                    <td>
+                      <div style="width: 100px">{{ bin.label }}</div>
+                    </td>
+                    <td class="has-text-right">
+                      <div style="width: 100px">{{ bin.distinctUsers }}</div>
+                    </td>
+                    <td class="has-text-right">
+                      <div style="width: 100px">{{ bin.queries }}</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="column is-8">
+            <div class="table-container">
+              <table class="table is-bordered is-striped" v-show="topUserStats">
+                <thead>
+                  <tr>
+                    <th><div style="width: 300px">Username</div></th>
+                    <th><div style="width: 100px">Queries</div></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="bin of topUserStats?.bins" :key="sha1(bin)">
+                    <td>
+                      <div style="width: 300px">{{ bin.username }}</div>
+                    </td>
+                    <td class="has-text-right">
+                      <div style="width: 100px">{{ bin.queries }}</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </main>
@@ -98,6 +133,7 @@ if (roles.indexOf('stats') < 0) {
 const startDate = ref<Date>(new Date(new Date().getFullYear(), 0, 1))
 const endDate = ref<Date>(new Date())
 const timeUnit = ref<string>('Day')
+const maxBins = ref<number>(50)
 
 interface UsageStatsBin {
   label: string
@@ -110,7 +146,23 @@ interface UsageStats {
 }
 const usageStats = ref<UsageStats>()
 
+interface TopUserStatsBin {
+  username: string
+  queries: number
+}
+
+interface TopUserStats {
+  bins: TopUserStatsBin[]
+}
+
+const topUserStats = ref<TopUserStats>()
+
 async function runStats() {
+  runUsageStats()
+  runTopUserStats()
+}
+
+async function runUsageStats() {
   usageStats.value = undefined
   const statsParams = new URLSearchParams()
   const sd = startDate.value
@@ -123,6 +175,22 @@ async function runStats() {
   const response = await fetchData('stats/usage', 'get', statsParams)
   if (response && response.ok) {
     usageStats.value = await response.json()
+  }
+}
+
+async function runTopUserStats() {
+  topUserStats.value = undefined
+  const statsParams = new URLSearchParams()
+  const sd = startDate.value
+  const utcStartDate = new Date(Date.UTC(sd.getFullYear(), sd.getMonth(), sd.getDate()))
+  const ed = endDate.value
+  const utcEndDate = new Date(Date.UTC(ed.getFullYear(), ed.getMonth(), ed.getDate()))
+  statsParams.append('start-date', utcStartDate.toISOString().split('T')[0])
+  statsParams.append('end-date', utcEndDate.toISOString().split('T')[0])
+  statsParams.append('max-bins', maxBins.value.toString())
+  const response = await fetchData('stats/top-users', 'get', statsParams)
+  if (response && response.ok) {
+    topUserStats.value = await response.json()
   }
 }
 </script>
