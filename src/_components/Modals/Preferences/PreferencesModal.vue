@@ -10,6 +10,17 @@
             <h1 class="label">{{ $t('preferences.general-heading') }}</h1>
             <div class="is-flex is-flex-direction-column m-2">
               <div class="columns is-vcentered is-10 pb-2">
+                <span class="column is-4 px-2">{{ $t('preferences.interface-style') }}</span>
+                <div class="column is-4 control">
+                  <span class="select is-fullwidth">
+                    <select name="setToLanguageSelect" v-model="interfaceStyleToSet">
+                      <option value="old">{{ $t('preferences.old-interface-style') }}</option>
+                      <option value="new">{{ $t('preferences.new-interface-style') }}</option>
+                    </select>
+                  </span>
+                </div>
+              </div>
+              <div class="columns is-vcentered is-10 pb-2">
                 <span class="column is-4 px-2">{{ $t('preferences.language') }}</span>
                 <div class="column is-4 control">
                   <span class="select is-fullwidth">
@@ -23,15 +34,17 @@
             </div>
           </div>
         </div>
-        <div class="columns is-vcentered py-3">
+        <div class="columns is-vcentered py-3" v-if="interfaceStyle == 'new'">
           <div class="column">
             <h1 class="label">{{ $t('preferences.snippets-heading') }}</h1>
-            <div class="is-flex is-flex-direction-row m-2">
+            <div class="is-flex is-flex-direction-row is-align-items-center m-2">
               <!-- the switch needs labels inverted if right-to-left -->
-              <span class="px-2" v-if="preferences.displayLeftToRight">{{
+              <span class="px-4 has-text-centered" v-if="preferences.displayLeftToRight">{{
                 $t('preferences.snippets-per-book')
               }}</span>
-              <span class="px-2" v-else>{{ $t('preferences.snippets-as-list') }}</span>
+              <span class="px-2 has-text-centered" v-else>{{
+                $t('preferences.snippets-as-list')
+              }}</span>
               <div class="control is-expanded">
                 <label
                   class="switch is-rounded is-small"
@@ -51,7 +64,7 @@
       </div>
     </template>
     <template #footer>
-      <button class="button is-link" @click="save($i18n as VueI18n.VueI18n)">
+      <button class="button is-link" @click="save()">
         {{ $t('modal.save') }}
       </button>
     </template>
@@ -63,19 +76,22 @@ import { storeToRefs } from 'pinia'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { ref } from 'vue'
-import VueI18n from 'vue-i18n'
+import { useI18n } from 'vue-i18n'
+
+const i18n = useI18n()
 
 const notification = defineModel('notification')
 const preferences = usePreferencesStore()
+const interfaceStyleToSet = ref<string>(preferences.interfaceStyle)
 const languageToSet = ref<string>(preferences.language)
 
-const { displayPerBook, language } = storeToRefs(preferences)
+const { displayPerBook, language, interfaceStyle } = storeToRefs(preferences)
 
-const save = (i18n: VueI18n.VueI18n) => {
-  if (languageToSet.value != language.value) {
-    language.value = languageToSet.value
-    i18n.locale = language.value
-  }
+const save = () => {
+  language.value = languageToSet.value
+  interfaceStyle.value = interfaceStyleToSet.value
+  i18n.locale.value = language.value
+
   preferences.save()
   preferences.show = false
 }

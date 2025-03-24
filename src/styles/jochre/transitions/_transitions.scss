@@ -9,9 +9,14 @@ according to style policies.
 */
 
 /** AccordionCard Transition Styles */
-.accordion-card .body {
-  overflow: hidden;
-  transition: 250ms ease-in-out;
+.accordion-card {
+  .body {
+    transition: 250ms ease-in-out;
+    // max-height: 60vh;
+    .body-inner {
+      height: 100%;
+    }
+  }
 }
 
 .accordion-card .footer-icon {

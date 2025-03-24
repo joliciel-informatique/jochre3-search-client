@@ -13,9 +13,27 @@ Description: displays text snippets from the OCR text
   <li :docRef="docRef" class="card snippet mb-4" :bookIndex :snippetIndex>
     <header
       class="card-header"
-      :class="selectedEntry.docRef === docRef ? 'selected-snippet' : 'snippet'"
+      :class="
+        preferences.interfaceStyle === 'old'
+          ? 'selected-snippet'
+          : preferences.interfaceStyle === 'new' && selectedEntryIdx === bookIndex
+            ? 'selected-snippet'
+            : 'snippet'
+      "
     >
-      <p class="card-header-title snippet-header">
+      <p
+        class="card-header-title snippet-header"
+        :class="
+          preferences.interfaceStyle === 'old'
+            ? ''
+            : preferences.interfaceStyle === 'new' && selectedEntryIdx === bookIndex
+              ? ''
+              : 'is-clickable'
+        "
+        @click="selectedEntryIdx = bookIndex"
+        tabindex="0"
+        :aria-label="`Page ${snippet.page} in ${title} by ${author ?? $t('results.result-unknown-author')}`"
+      >
         {{ $t('results.page', [snippet.page]) }}&nbsp;•&nbsp;<span
           class="is-size-6 snippet-book-title"
           :class="{ 'rtl-align': preferences.needsRightToLeft }"
@@ -26,10 +44,10 @@ Description: displays text snippets from the OCR text
       <button
         class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column has-text-centered"
         aria-label="view book"
-        v-tooltip:top="$t('results.show-original-page', [snippet.page])"
         v-if="snippet.deepLink"
         @click="openDeepLink(snippet.deepLink)"
         @keyup.enter="openDeepLink(snippet.deepLink)"
+        tabindex="0"
       >
         <span class="icon">
           <font-awesome-icon icon="book-open" size="lg" />
@@ -41,9 +59,9 @@ Description: displays text snippets from the OCR text
       <button
         class="card-header-icon is-large p-1 m-1 is-flex is-flex-direction-column has-text-centered"
         aria-label="view transcription"
-        v-tooltip:top="$t('results.show-text')"
         @click="openTranscribedText()"
         @keyup.enter="openTranscribedText()"
+        tabindex="0"
       >
         <span class="icon">
           <font-awesome-icon icon="file-lines" size="lg" />
@@ -71,9 +89,9 @@ Description: displays text snippets from the OCR text
           v-touch:longtap="openWordModal"
         ></div>
         <div
-          class="load-original-image-button column button is-flex is-align-items-center is-size-7"
+          class="load-original-image-button column button is-flex is-align-items-center is-size-7 p-0"
           :class="imageIsLoading ? 'is-loading' : ''"
-          tabindex="3"
+          tabindex="0"
           :alt="$t('results.click-image-snippet')"
           @click="
             image
@@ -124,9 +142,10 @@ Description: displays text snippets from the OCR text
             rtl: !preferences.corpusLeftToRight
           }"
           v-html="snippet.text"
-          tabindex="3"
+          tabindex="0"
           @dblclick="openWordModal"
           v-touch:longtap="openWordModal"
+          :aria-label="snippet.text"
         ></div>
       </div>
     </div>
@@ -153,7 +172,7 @@ const { snippet, docRef, bookIndex, snippetIndex, query, strict } = defineProps(
 const imageModal: Ref = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const notification = defineModel('notification')
-const selectedEntry: Ref = defineModel('selectedEntry')
+const selectedEntryIdx: Ref = defineModel<number>('selectedEntryIdx', { default: 0 })
 
 const image = ref('')
 const imageIsLoading = ref(false)

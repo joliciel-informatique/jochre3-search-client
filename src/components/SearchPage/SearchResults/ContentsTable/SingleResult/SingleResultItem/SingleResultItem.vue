@@ -10,34 +10,44 @@ Methods: fixMetaData (imported)
 Description: display single metadata item
 -->
 <template>
-  <div class="is-flex is-flex-direction-column has-text-primary pl-2 pt-2">
+  <div class="columns is-vcentered has-text-primary pl-2 pt-2 pr-1">
     <span
-      class="is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between has-text-weight-bold"
-      >{{ $t(title) }}
-      <span
-        class="is-flex is-align-self-flex-start icon menu-list-icon is-clickable"
-        v-tooltip="[
-          preferences.displayLeftToRight ? 'left' : 'right',
-          $t('fix-metadata.edit-button-tooltip')
-        ]"
-        aria-labelledby="edit"
-        tabindex="3"
-        @click="openMetadataModal"
-        @keyup.enter="openMetadataModal"
-      >
-        <span class="icon fa-sm"> <font-awesome-icon icon="pen-to-square" /></span
-      ></span>
+      class="column has-text-weight-boldis-one-fifth"
+      :class="preferences.interfaceStyle == 'old' ? 'is-one-fifth' : ''"
+    >
+      {{ $t(title) }}
     </span>
-    <span class="p-2 has-text-primary has-text-left is-align-self-flex-start is-flex-wrap-wrap">{{
-      value
-    }}</span>
+    <span
+      class="column p-2 has-text-primary is-three-fifth"
+      :class="{
+        'has-text-left': preferences.displayLeftToRight,
+        'has-text-right': !preferences.displayLeftToRight,
+        'ltr-no-text-align':
+          preferences.needsLeftToRight &&
+          (field == 'titleEnglish' ||
+            field == 'authorEnglish' ||
+            field == 'publisher' ||
+            field == 'publicationYear'),
+        'rtl-no-text-align': preferences.needsRightToLeft && field == 'author'
+      }"
+    >
+      {{ value }}
+    </span>
+    <span class="column is-flex is-justify-content-end" aria-labelledby="edit" tabindex="3">
+      <span class="icon menu-list-icon is-clickable is-one-fifth">
+        <font-awesome-icon
+          icon="pen-to-square"
+          @click="openMetadataModal"
+          @keyup.enter="openMetadataModal"
+      /></span>
+    </span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { type Ref } from 'vue'
-
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { storeToRefs } from 'pinia'
 const preferences = usePreferencesStore()
 
 const field: Ref = defineModel('field')

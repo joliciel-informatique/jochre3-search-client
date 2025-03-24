@@ -1,14 +1,18 @@
 <template>
-  <p class="control" :id="`${attachTo}-keyboard-btn`" :key="`${attachTo}-keyboard-btn`">
+  <p
+    class="control"
+    :id="`${attachTo}-keyboard-btn`"
+    :key="`${attachTo}-keyboard-btn`"
+    @click="toggleKeyboard"
+    tabindex="1"
+  >
     <button
       class="button is-clickable"
-      @click="toggleKeyboard"
+      :class="isMobile ? 'px-3' : ''"
       :alt="$t('search.keyboard')"
       :title="$t('search.keyboard')"
     >
-      <span>
-        <font-awesome-icon icon="keyboard" />
-      </span>
+      <font-awesome-icon icon="keyboard" />
     </button>
   </p>
   <div v-show="show" class="keyboardClass has-text-primary is-family-primary">
@@ -16,6 +20,7 @@
       :id="`${attachTo}-keyboard`"
       class="hg-theme-default hg-layout-default"
       :class="`${attachTo}-keyboard-container`"
+      tabindex="0"
     ></div>
   </div>
 </template>
@@ -39,13 +44,23 @@ const emit = defineEmits(['onEnter'])
 
 let keyboard: SimpleKeyboard
 
+const addListenerToBtn = (e: Event) => {
+  if ((e as KeyboardEvent).key === 'Enter' && e.target) {
+    const el = (e.target as HTMLElement).dataset
+    if ('skbtn' in el && el.skbtn) parsePress(el.skbtn)
+  }
+}
+
 const positionKeyboard = () => {
   const parent = document.getElementById(attachTo.value)?.getBoundingClientRect()
   if (parent) {
     const { top, left, width, height } = parent as DOMRect
     const container = document.getElementById(`${attachTo.value}-keyboard`) as HTMLDivElement
+
+    addListeners()
+
     if ((isTablet.value && isMobile.value) || isPortrait.value) {
-      container.setAttribute('style', `top:${top + height}px;width: ${width - 2}px`)
+      container.setAttribute('style', `top:${top + height}px`)
     } else {
       container.setAttribute(
         'style',
@@ -53,6 +68,14 @@ const positionKeyboard = () => {
       )
     }
   }
+}
+
+// Set tabindex on keyboard buttons
+const addListeners = () => {
+  const container = document.getElementById(`${attachTo.value}-keyboard`) as HTMLDivElement
+  const children = container.querySelectorAll('.hg-button')
+  children.forEach((child) => child.setAttribute('tabindex', '0'))
+  children.forEach((child) => child.addEventListener('keyup', addListenerToBtn, true))
 }
 
 const toggleKeyboard = () => (show.value = !show.value)
@@ -67,14 +90,15 @@ const switchLayout = (button: string) => {
   const defaultKeyboard = currentLayout?.includes('mobile') ? currentLayout : 'default'
   const layout = currentLayout === targetLayout ? defaultKeyboard : targetLayout
   keyboard.setOptions({ layoutName: layout })
+  addListeners()
   return true
 }
 
-const onKeyPress = (button: string) => {
+const parsePress = (button: string) => {
   const el = document.getElementById(attachTo.value) as HTMLInputElement // input element
-
   if (!switchLayout(button)) {
     let newVal = ''
+    console.log(button)
     if (button === '{bksp}') {
       newVal = el.value.slice(0, -1)
     } else if (button === '{enter}') {
@@ -90,6 +114,7 @@ const onKeyPress = (button: string) => {
   }
 }
 
+const onKeyPress = (button: string) => parsePress(button)
 const onKeyReleased = () => document.getElementById(attachTo.value)?.focus()
 
 const addEventListeners = () => {

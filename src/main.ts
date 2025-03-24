@@ -16,7 +16,6 @@ import yi from './i18n/locales/yi.json'
 import keycloakParams from './security/keycloak.json'
 import { mergeDeep } from './assets/deepMerge'
 
-import SearchPage from './components/SearchPage/SearchPage.vue'
 import { fetchData, setURL, setToken } from './assets/fetchMethods'
 
 import './styles/main.scss'
@@ -29,6 +28,10 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import SimpleKeyboard from './_components/SimpleKeyboard/SimpleKeyboard.vue'
 library.add(fas) // Adding all FAS icons
+
+// Add VCalendear as global component
+import { setupCalendar, Calendar, DatePicker } from 'v-calendar'
+import 'v-calendar/style.css'
 
 const messages = {
   en: en,
@@ -46,18 +49,18 @@ app.config.compilerOptions.whitespace = 'preserve'
 
 directives(app)
 
-// Good place for authentication logic: see https://router.vuejs.org/guide/advanced/navigation-guards.html
-// router.beforeEach((to, from, next) => {
-//   if (!authenticated) next('/login')
-//   else next()
-// })
-
 app.use(router)
 app.use(pinia)
 app.use<Vue3TouchEventsOptions>(Vue3TouchEvents, {})
 app.use(CookieConsentVue, cookieConsentConfig)
 
-// app.component('SearchPage', SearchPage)
+// Use plugin defaults (optional)
+app.use(setupCalendar, {})
+
+// Use the components
+app.component('VCalendar', Calendar)
+app.component('VDatePicker', DatePicker)
+
 app.component('author-dropdown', AuthorDropdown)
 app.component('simple-key', SimpleKeyboard)
 app.component('font-awesome-icon', FontAwesomeIcon)

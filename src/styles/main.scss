@@ -12,8 +12,7 @@
 
 html {
   height: 100%;
-  overflow-x: hidden;
-  // overflow-y: hidden;
+  overflow: hidden;
 }
 
 body {
@@ -60,8 +59,18 @@ input:-webkit-autofill:active {
   line-height: $font-size-3;
 }
 
-.button.is-small {
-  line-height: unset;
+.button .is-small {
+  line-height: normal;
+}
+
+button {
+  &.is-small {
+    line-height: normal;
+  }
+}
+
+.pagination-link {
+  line-height: normal;
 }
 
 .control > .button {
@@ -91,6 +100,15 @@ input:-webkit-autofill:active {
 
 .ltr-align {
   text-align: left;
+  direction: ltr;
+  unicode-bidi: bidi-override;
+}
+
+.rtl-no-text-align {
+  direction: rtl;
+}
+
+.ltr-no-text-align {
   direction: ltr;
   unicode-bidi: bidi-override;
 }
@@ -189,6 +207,24 @@ $menu-nested-list-margin: 1em;
 .search-content {
   position: sticky;
   flex: 1 1 auto;
+}
+
+.table.is-scrollable tbody {
+  height: 30vh;
+  overflow-y: scroll;
+  position: absolute;
+}
+
+#navbar {
+  // top: 0px;
+  // position: sticky;
+  z-index: 43;
+  background-color: $background-color-1;
+  // max-height: 20vh;
+}
+
+#snippets {
+  width: 100vw;
 }
 
 .navbar-mobile {

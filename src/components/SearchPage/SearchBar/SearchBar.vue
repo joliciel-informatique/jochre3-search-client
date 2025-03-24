@@ -10,7 +10,10 @@ Methods: None
 Description: presents the search bar
 -->
 <template>
-  <div id="searchBar" class="container is-max-desktop has-text-white has-text-weight-semibold">
+  <div
+    id="searchBar"
+    class="container is-align-content-space-between is-max-desktop has-text-white has-text-weight-semibold"
+  >
     <div class="is-flex is-flex-direction-row is-flex-grow-1">
       <div class="is-flex is-flex-direction-row is-flex-grow-1 pb-0 mb-0 field has-addons">
         <p class="control">
@@ -18,54 +21,58 @@ Description: presents the search bar
             >{{ $t('search.search') }}
           </a>
         </p>
-        <div class="control is-expanded">
-          <p
-            class="control container"
+        <p
+          class="control is-expanded"
+          :class="{
+            'has-icons-left': !preferences.displayLeftToRight,
+            'has-icons-right': preferences.displayLeftToRight
+          }"
+        >
+          <input
+            id="query"
+            type="text"
+            class="input is-normal is-rounded"
+            :class="isMobile ? 'px-2' : ''"
+            lang="yi"
+            v-model="query"
+            @keyup.enter="emit('newSearch')"
+            @change="
+              ({ target }: Event) => {
+                query = (target as HTMLInputElement).value
+                emit('newSearch')
+              }
+            "
+            :placeholder="$t('search.query')"
+            tabindex="0"
+          />
+
+          <span
+            class="icon is-small is-clickable"
             :class="{
-              'has-icons-left': !preferences.displayLeftToRight,
-              'has-icons-right': preferences.displayLeftToRight
+              'is-left': !preferences.displayLeftToRight,
+              'is-right': preferences.displayLeftToRight
             }"
+            tabindex="0"
+            aria-label="reset"
+            @click="emit('resetSearchResults')"
+            @keyup.enter="emit('resetSearchResults')"
+            v-if="!isLoading && query && !isMobile"
           >
-            <input
-              id="query"
-              type="text"
-              class="input is-normal is-rounded"
-              lang="yi"
-              v-model="query"
-              @keyup.enter="emit('newSearch')"
-              @change="
-                ({ target }: Event) => {
-                  query = (target as HTMLInputElement).value
-                  emit('newSearch')
-                }
-              "
-              :placeholder="$t('search.query')"
-            />
-            <span
-              class="icon is-small is-clickable"
-              :class="{
-                'is-left': !preferences.displayLeftToRight,
-                'is-right': preferences.displayLeftToRight
-              }"
-              tabindex="0"
-              aria-label="reset"
-              @click="emit('resetSearchResults')"
-              @keyup.enter="emit('resetSearchResults')"
-              v-if="!isLoading"
-            >
-              <font-awesome-icon icon="circle-xmark" />
-            </span>
-            <span
-              class="icon is-small is-loading"
-              :class="{
-                'is-left': !preferences.displayLeftToRight,
-                'is-right': preferences.displayLeftToRight
-              }"
-              aria-label="hidden"
-              v-else
-            ></span>
-          </p>
-        </div>
+            <font-awesome-icon icon="circle-xmark" />
+          </span>
+          <span class="icon is-small is-loading" aria-label="hidden" v-else></span>
+        </p>
+        <p class="control" tabindex="0">
+          <button
+            class="button is-clickable"
+            :class="isMobile ? 'px-2' : ''"
+            @click.prevent="emit('newSearch')"
+            :alt="$t('search.start-search')"
+            :title="$t('search.start-search')"
+          >
+            <font-awesome-icon icon="magnifying-glass" />
+          </button>
+        </p>
         <simple-key
           attach-to="query"
           v-model:reference="query"
@@ -73,13 +80,14 @@ Description: presents the search bar
         />
         <p class="control" v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
           <a class="button is-static is-clickable">
-            <label for="strictSearchCheckbox" class="mx-2 is-clickable"
+            <label for="strictSearchCheckbox" class="is-clickable" :class="isMobile ? '' : 'mx-2'"
               ><span
                 ><span class="is-hidden-mobile">{{ $t('search.related-word-forms') }}</span>
-                <span class="px-2"
+                <span :class="isMobile ? '' : 'px-2'"
                   ><input
                     id="strictSearchCheckbox"
                     type="checkbox"
+                    tabindex="0"
                     aria-label="strict search"
                     v-model="strict"
                     @change="emit('newSearch')" /></span></span
@@ -88,12 +96,10 @@ Description: presents the search bar
         </p>
       </div>
     </div>
-    <div class="is-flex is-flex-direction-row is-justify-content-space-between is-hidden-touch">
-      <a
-        class="navbar-item has-text-white"
-        href="https://github.com/urieli/jochre/wiki/Jochre-Yiddish-Search-Help"
-        target="_blank"
-      >
+    <div
+      class="py-2 is-flex is-flex-direction-row is-justify-content-space-between is-hidden-touch"
+    >
+      <a class="navbar-item" :href="$t('search.help-url')" target="_blank" tabindex="0">
         <span>
           <font-awesome-icon icon="book-open" />
           {{ $t('search.user-guide') }}
@@ -103,17 +109,22 @@ Description: presents the search bar
         id="advancedSearchBtn"
         class="navbar-item has-text-white is-flex-desktop"
         @click.prevent="showAdvancedSearchPanel = !showAdvancedSearchPanel"
+        @keyup.enter="showAdvancedSearchPanel = !showAdvancedSearchPanel"
+        @keyup.space="showAdvancedSearchPanel = !showAdvancedSearchPanel"
+        tabindex="0"
       >
-        <font-awesome-icon
-          :icon="
-            showAdvancedSearchPanel
-              ? 'magnifying-glass-minus'
-              : hasAdvancedSearchCriteria
-                ? 'sliders'
-                : 'magnifying-glass-plus'
-          "
-        />
-        {{ $t('search.advanced-search') }}
+        <span>
+          <font-awesome-icon
+            :icon="
+              showAdvancedSearchPanel
+                ? 'magnifying-glass-minus'
+                : hasAdvancedSearchCriteria
+                  ? 'sliders'
+                  : 'magnifying-glass-plus'
+            "
+          />
+          {{ $t('search.advanced-search') }}
+        </span>
       </a>
     </div>
   </div>
@@ -121,10 +132,13 @@ Description: presents the search bar
 <script setup lang="ts">
 import { type Ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { storeToRefs } from 'pinia'
 
 const preferences = usePreferencesStore()
 
 const hasAdvancedSearchCriteria = defineModel('hasAdvancedSearchCriteria')
+
+const { isMobile } = storeToRefs(usePreferencesStore())
 
 const query: Ref = defineModel('query')
 const strict: Ref = defineModel('strict')

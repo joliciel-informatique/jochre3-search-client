@@ -1,8 +1,3 @@
-export const isInView = (el: Element) => {
-  const rect = el.getBoundingClientRect()
-  return rect.top >= 0 && rect.bottom <= window.innerHeight
-}
-
 export const isInViewOfDiv = (el: Element) => {
   const { top, bottom, height } = el.getBoundingClientRect()
   return top >= 0 && bottom > height

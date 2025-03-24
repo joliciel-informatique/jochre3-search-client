@@ -1,5 +1,5 @@
 <template>
-  <div class="accordion-card">
+  <div class="accordion-card is-flex is-flex-direction-column is-justify-content-space-between">
     <slot name="header"></slot>
     <Transition
       name="accordion-card"
@@ -8,7 +8,7 @@
       @before-leave="beforeLeave"
       @leave="leave"
     >
-      <div class="body" v-show="showing">
+      <div class="body is-flex-grow-1" v-show="showing">
         <div class="body-inner is-flex is-flex-direction-column">
           <slot name="content"></slot>
         </div>

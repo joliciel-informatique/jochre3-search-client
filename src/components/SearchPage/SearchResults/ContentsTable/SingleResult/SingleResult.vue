@@ -10,48 +10,78 @@ Methods: fixMetaData (imported)
 Description: presents OCR record metadata
 -->
 <template>
-  <div v-if="result" :docRef="result.docRef" :id="result.docRef" class="metadata mt-2">
+  <div v-if="result" :docRef="result.docRef" :id="result.docRef" class="metadata m-2">
     <AccordionCard
       :id="result.docRef"
-      :showing="result.docRef === selectedEntry?.docRef && showing"
+      :showing="
+        interfaceStyle == 'new'
+          ? (bookIndex < 0 || bookIndex === selectedEntryIdx) && showing
+          : showing
+      "
     >
       <template #header>
-        <p class="pb-2 is-flex is-flex-direction-row is-justify-content-space-between">
-          <span class="is-align-self-flex-start">{{ index + pageNumberOffset }}|</span>
-          <span class="is-align-self-flex-start is-flex-grow-1 has-text-left"
-            >{{ result.metadata.title ?? result.docRef }} ({{
-              result.metadata.author ?? $t('results.result-unknown-author')
-            }})</span
-          >
-          <span
-            tabindex="3"
-            @click="openMetadataModal"
-            @keyup.enter="openMetadataModal"
-            v-tooltip="[
-              preferences.displayLeftToRight ? 'left' : 'right',
-              $t('fix-metadata.edit-button-tooltip')
-            ]"
-          >
-            <span class="icon fa-sm">
-              <font-awesome-icon icon="pen-to-square" />
+        <p
+          class="pb-2 is-flex is-flex-direction-row is-justify-content-space-between"
+          :class="
+            interfaceStyle == 'old'
+              ? 'card m-3 p-3 card-header has-background-primary has-text-white'
+              : ''
+          "
+        >
+          <span :class="[interfaceStyle == 'old' ? 'is-size-4' : '']">
+            <span>
+              {{ (bookIndex < 0 ? selectedEntryIdx : bookIndex) + pageNumberOffset }}
             </span>
+            <span class="px-1">|</span>
+            <span
+              class="is-align-self-flex-start is-flex-grow-1"
+              :class="[displayLeftToRight ? 'has-text-left' : 'has-text-right']"
+            >
+              {{ result.metadata.title ?? result.docRef }}
+              ({{ result.metadata.author ?? $t('results.result-unknown-author') }})
+            </span>
+          </span>
+          <span class="icon menu-list-icon" aria-labelledby="edit" tabindex="3">
+            <font-awesome-icon
+              class="is-clickable"
+              icon="pen-to-square"
+              @click="openMetadataModal"
+              @keyup.enter="openMetadataModal"
+            />
           </span>
         </p>
       </template>
 
       <template #content>
-        <div class="toc card-content mb-2 is-flex is-flex-direction-column">
+        <div
+          class="toc card-content mb-2 is-flex is-flex-direction-column"
+          :class="interfaceStyle == 'old' ? 'card m-3 p-3 has-background-grey-lighter' : ''"
+        >
           <SingleResultItem
             v-for="field in fields"
             :key="sha1(field)"
-            v-model:metadata-modal="metadataModal"
             :doc-ref="result.docRef"
             :field="field"
             :value="(result.metadata as any)[field] ?? ''"
+            v-model:metadata-modal="metadataModal"
           />
+          <div
+            v-if="interfaceStyle == 'old'"
+            class="is-size-7 px-2"
+            :class="displayLeftToRight ? 'has-text-right' : 'has-text-left'"
+            aria-label="document reference"
+            tabindex="3"
+          >
+            <strong>{{ $t('results.document-reference', [result.docRef]) }}</strong>
+          </div>
         </div>
-        <div class="has-text-right is-size-7 px-2" aria-label="document reference" tabindex="3">
-          {{ $t('results.document-reference') }}: <strong>{{ result.docRef }}</strong>
+        <div
+          v-if="interfaceStyle == 'new'"
+          class="has-text-right is-size-7 px-2"
+          aria-label="document reference"
+          tabindex="3"
+        >
+          <strong>{{ $t('results.document-reference', [result.docRef]) }}</strong>
         </div>
       </template>
 
@@ -72,29 +102,46 @@ Description: presents OCR record metadata
 </template>
 
 <script setup lang="ts">
-import SingleResultItem from '../../ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
+import { defineAsyncComponent } from 'vue'
 import { sha1 } from 'object-hash'
-import AccordionCard from '../../../../../_components/AccordionCard/AccordionCard.vue'
-import { usePreferencesStore } from '../../../../../stores/PreferencesStore'
-import type { SearchResult } from '../../../../../assets/interfacesExternals'
+import type { SearchResult } from '@/assets/interfacesExternals'
+import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { storeToRefs } from 'pinia'
+import SingleResultItem from '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
+import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
+const { displayLeftToRight, interfaceStyle } = storeToRefs(usePreferencesStore())
 
-const { result, index, pageNumberOffset } = defineProps(['result', 'index', 'pageNumberOffset'])
+// const SingleResultItem = defineAsyncComponent(
+//   () =>
+//     import(
+//       '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
+//     )
+// )
+// const AccordionCard = defineAsyncComponent(
+//   () => import('@/_components/AccordionCard/AccordionCard.vue')
+// )
 
-const preferences = usePreferencesStore()
-const fields = ['titleEnglish', 'author', 'authorEnglish', 'publicationYear', 'publisher']
+const { result, bookIndex, pageNumberOffset } = defineProps([
+  'result',
+  'bookIndex',
+  'pageNumberOffset'
+])
 
 const metadataModal = defineModel('metadataModal')
-const showing = defineModel<boolean>('showing', { default: false })
+const showing = defineModel<boolean>('showing', { default: true })
 const selectedEntry = defineModel<SearchResult>('selectedEntry')
+const selectedEntryIdx = defineModel<number>('selectedEntryIdx')
+
+const fields = ['titleEnglish', 'author', 'authorEnglish', 'publicationYear', 'publisher']
 
 const toggle = () => (showing.value = !showing.value)
 
 const openMetadataModal = () => {
   metadataModal.value = {
     show: true,
-    docRef: selectedEntry.value?.docRef,
+    docRef: result.docRef,
     field: 'title',
-    value: selectedEntry.value?.metadata.title ?? selectedEntry.value?.docRef
+    value: result.metadata.title
   }
 }
 </script>

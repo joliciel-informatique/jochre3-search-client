@@ -37,4 +37,7 @@
 .dropdown-trigger > button {
   border: 0px;
   box-shadow: none;
+  > :first-child {
+    white-space: wrap;
+  }
 }

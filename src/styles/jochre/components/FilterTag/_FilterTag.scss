@@ -4,3 +4,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.button[id^='filterTag-']:focus-within {
+  outline: 2px solid black;
+  border-radius: 3px;
+  z-index: 1002;
+}

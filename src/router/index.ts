@@ -1,25 +1,45 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import TextView from '../views/TextView.vue'
-import UndoView from '../views/UndoView.vue'
+import HomeView from '@/views/HomeView.vue'
+import TextView from '@/views/TextView.vue'
+import UndoView from '@/views/UndoView.vue'
+import UnauthorizedView from '@/views/UnauthorizedView.vue'
+import StatsView from '@/views/StatsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/text/:docRef/page/:page',
+      name: 'transcribed-view',
       component: TextView
     },
     {
       path: '/undo/:id',
+      name: 'undo-view',
       component: UndoView
     },
     {
+      path: '/unauthorized',
+      name: 'unauthorized-view',
+      component: UnauthorizedView
+    },
+    {
+      path: '/stats',
+      name: 'stats-view',
+      component: StatsView
+    },
+    {
       path: '/',
-      name: 'home',
+      name: 'home-view',
       component: HomeView
     }
   ]
+})
+
+// This will prevent navigation to unregistered routes
+router.beforeEach(async (to, from, next) => {
+  const routeNames = router.getRoutes().map((route) => route.name)
+  return to.name && routeNames.includes(to.name) ? next() : next('/')
 })
 
 export default router

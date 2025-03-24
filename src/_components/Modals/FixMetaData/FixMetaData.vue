@@ -38,6 +38,7 @@
             />
           </p>
           <simple-key
+            v-if="metadataModal.field !== 'publicationYear'"
             v-model:attach-to="metadataModal.field"
             v-model:reference="metadataModal.value"
             @onEnter="null"
@@ -80,12 +81,12 @@
               />
             </span>
           </span>
-          <author-dropdown
-            :attach-to="`new-author-${metadataModal.field}`"
-            v-model:author-text="authorText"
-            v-model:author-list="authorList"
-          />
         </span>
+        <author-dropdown
+          :attach-to="`new-author-${metadataModal.field}`"
+          v-model:author-text="authorText"
+          v-model:author-list="authorList"
+        />
       </div>
     </template>
     <template #footer="modalBox">
@@ -101,12 +102,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, type Ref, watch } from 'vue'
+import { ref, computed, type Ref, defineAsyncComponent } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
-import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-const preferences = usePreferencesStore()
 
+const ModalBox = defineAsyncComponent(() => import('@/_components/ModalBox/ModalBox.vue'))
+
+const preferences = usePreferencesStore()
 const metadataModal: Ref = defineModel('metadataModal')
 const notification = defineModel('notification')
 const showFindAuthorDropdown = computed(() => metadataModal.value.field?.includes('author'))
@@ -115,10 +117,6 @@ const authorText = ref('')
 const fieldLeftToRight = computed(() =>
   ['authorEnglish', 'titleEnglish', 'publisher'].includes(metadataModal.value.field)
 )
-
-watch(metadataModal, (newV) => {
-  console.log(newV.field)
-})
 
 const save = (closeFunc: Function) => {
   const authorListValue = authorList.value[0]?.label

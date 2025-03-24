@@ -1,50 +1,48 @@
 # jochre3-search-client
 
-This template should help get you started developing with Vue 3 in Vite.
+Jochre3 OCR search engine web application, built on top of the jochre3-search API.
 
-## Recommended IDE Setup
+Includes:
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- Search bar/search results with highlighted text snippets and highlighted images
+- Author facets
+- Advanced search (to add metadata criteria)
+- Full transcribed text view with search highlights
+- Ability to crowd-source metadata corrections
+- Ability to crowd-source OCR corrections
+- Usage statistics page for administrators
+- Internationalization, with interface in English or Yiddish (right-to-left)
+- Desktop, tablet and mobile friendly
 
-## Type Support for `.vue` Imports in TS
+## Local development
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+To setup the project dependencies
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+To Compile and hot-reload for development
 
 ```sh
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+To type-check, compile and minify for production
 
 ```sh
 npm run build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+## Building and testing a docker image
 
-```sh
-npm run lint
-```
-
-### To build the docker file
+To build the docker file
 
 ```
 docker build -t registry.gitlab.com/jochre/jochre3-search-client:[YOUR-TAG] .
 ```
 
-### To run the docker image
+To run the docker image (after replacing the tag in `docker-compose/docker-compose.yml`)
 
 ```
 docker-compose -f docker-compose/docker-compose.yml up -d
@@ -56,12 +54,19 @@ To take it down again:
 docker-compose -f docker-compose/docker-compose.yml down
 ```
 
-### Customizing
+To push the docker image:
+
+```
+docker login registry.gitlab.com
+docker push registry.gitlab.com/jochre/jochre3-search-client:[YOUR-TAG]
+```
+
+## Customizing
 
 You can customize the search engine by creating the following files in the public folder:
 
-- conf/config.json - this file must override keys in i18n/locales/en.json. See conf/config-sample.json for an example.
+- `conf/config.json` - this file must override keys in `i18n/locales/en.json`. See `conf/config-sample.json` for an example.
   - In particular, you can add a logo to images, and change "en.header.logo" to point at your new logo.
-- privacy.html - you can use privacy-sample.html as an example.
+- `privacy.html` - you can use `privacy-sample.html` as an example.
 
-An example of customization can be found in the docker-compose folder.
+An example of customization can be found in the `docker-compose` folder.

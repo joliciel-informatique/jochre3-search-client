@@ -8,6 +8,7 @@
 @forward './components/HeaderPage/HeaderPage';
 @forward './components/FooterPage/FooterPage';
 @forward './components/SearchBar/SearchBar';
+@forward './components/AdvancedSearch/AdvancedSearch';
 @forward './components/FacetBar/FacetBar';
 @forward './components/ToC/ToC';
 @forward './components/Card/Card';
@@ -22,6 +23,7 @@
 // _Component Styling
 @forward './_components/AccordionCard/AccordionCard';
 @forward './_components/SimpleKeyboard/SimpleKeyboard';
+@forward './_components//ModalBox/ModalBox';
 @forward './_components/Dropdown/Dropdown';
 
 // Directive Styling
@@ -30,6 +32,7 @@
 // Bulma
 @forward 'bulma/sass' with (
   $tablet: 768px,
+  $desktop: 961px + 2 * 32,
 
   // Default theme values
   $primary: $background-color-1,
@@ -69,7 +72,7 @@
   $navbar-tab-active-border-bottom-color: var(--bulma-navbar-tab-active-border-bottom-color),
   $navbar-tab-active-border-bottom-style: var(--bulma-navbar-tab-active-border-bottom-style),
   $navbar-tab-active-border-bottom-width: var(--bulma-navbar-tab-active-border-bottom-width),
-  $navbar-dropdown-background-color: $background-color-2,
+  $navbar-dropdown-background-color: $white,
   $navbar-dropdown-border-l: var(--bulma-navbar-dropdown-border-l),
   $navbar-dropdown-border-color: var(--bulma-navbar-dropdown-border-color),
   $navbar-dropdown-border-style: var(--bulma-navbar-dropdown-border-style),
@@ -85,6 +88,8 @@
   $navbar-bottom-box-shadow-size: var(--bulma-navbar-bottom-box-shadow-size),
   $hr-margin: 0,
   $hr-background-color: $background-color-3,
+
+  $input-placeholder-color: $darkgrey,
 
   $block-spacing: unset,
 
@@ -145,17 +150,55 @@
   --transcription-text-font-size: 0.5em;
 }
 
-main {
-  // min-height: 41vh;
-  overflow-y: auto;
+.navbar {
+  --bulma-navbar-h: 183;
+  --bulma-navbar-s: 43%;
+  --bulma-navbar-l: 36.5%;
+  --bulma-navbar-item-background-l: 37%;
+  --bulma-navbar-item-background-l-delta: 36%;
+  --bulma-navbar-item-color-l: 100%;
+  --bulma-navbar-item-selected-h: 183deg;
+  --bulma-navbar-item-selected-s: 43%;
+  --bulma-navbar-item-selected-l: 36.5%;
+  --bulma-navbar-item-selected-background-l: 50%;
+  --bulma-navbar-item-selected-color-l: 100%;
+  --bulma-navbar-tab-active-background-color: hsl(183deg, 43%, 36.5%);
+  --bulma-navbar-dropdown-arrow: white;
+  --bulma-navbar-dropdown-item-h: 183;
+  --bulma-navbar-dropdown-item-s: 43%;
+  --bulma-navbar-dropdown-item-l: 36.5%;
+  --bulma-navbar-dropdown-item-color-l: 36.5%;
+  --bulma-navbar-divider-background-l: 36.5%;
+  // --bulma-navbar-dropdown-background-color: red;
+  // --bulma-navbar-dropdown-radius: 1em;
 }
 
-#topbar {
-  top: 0px;
+.navbar-item,
+.navbar-link {
+  // border-radius: 0.5em;
+  // --bulma-navbar-item-img-max-height: 17vh;
+}
+
+.logo {
+  flex: 1 1 auto;
+  a {
+    img {
+      height: auto;
+      width: auto;
+      max-height: 7vh;
+      vertical-align: -webkit-baseline-middle;
+    }
+  }
+}
+
+main {
+  max-height: 80vh;
+}
+
+.navbar-brand {
+  top: 0;
   position: sticky;
-  z-index: 43;
-  background-color: $background-color-1;
-  // max-height: 40vh;
+  z-index: 1000;
 }
 
 .pagination {
@@ -176,4 +219,26 @@ main {
     overflow: hidden;
     width: 100px;
   }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bulma-theme-h: 221;
+    --bulma-theme-s: 14%;
+    --bulma-theme-l: 9%;
+    --bulma-button-h: --bulma-theme-h;
+    --bulma-button-s: --bulma-theme-s;
+    --bulma-button-l: --bulma-theme-l;
+    --bulma-body-background-color: white;
+
+    .card-content {
+      background-color: hsl(221, 14%, 9%);
+    }
+  }
+}
+
+[data-theme='dark'],
+.theme-dark {
+  --bulma-body-background-color: white;
+  /* Update CSS variables */
 }

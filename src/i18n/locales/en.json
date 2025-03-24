@@ -5,6 +5,7 @@
     "description": "Search text content of documents OCR'd using Jochre3."
   },
   "search": {
+    "help-url": "https://gitlab.com/jochre/jochre3-search-client/-/wikis/Jochre-Yiddish-Search-Help",
     "about": "Full-text search engine.",
     "index-size": "Index size: {0} books.",
     "query": "Please enter a search term",
@@ -12,20 +13,21 @@
     "search-button": "Search",
     "advanced-search": "Advanced search",
     "user-guide": "User guide",
-    "excludeAuthors": "Checking this box will exclude selected authors from the query",
+    "includeAuthors": "Unchecking this box will exclude selected authors from the query",
     "related-word-forms": "Strict",
     "related-word-forms-tooltip": "Checking this box will exclude related word forms (of the same stem/lemma) in search results (e.g. 'eat, 'eaten', 'ate')",
     "keyboard": "Open Yiddish on-screen keyboard",
-    "field-instructions": "*These fields accept Roman or Yiddish characters.",
+    "start-search": "Search!",
+    "field-instructions": "* All fields accept Roman or Yiddish characters.",
     "author": "Author",
     "authorPlaceholder": "Type author name (case-sensitive)",
     "title": "Book title",
     "date-from": "Published between",
     "date-to": "and",
-    "document-reference": "Document reference(s)",
-    "document-reference-placeholder": "Add document references separated by a comma",
+    "document-reference": "ID number(s)",
+    "document-reference-placeholder": "Add ID numbers separated by a comma",
     "sort-by": "Sort by",
-    "reset": "Clear results",
+    "reset": "Reset search",
     "sort": {
       "score": "score",
       "date-ascending": "year ↑",
@@ -37,7 +39,8 @@
     "contents-table-subheader": "Found {0} books, showing {1}-{2}"
   },
   "facets": {
-    "title": "Filter by author",
+    "title": "Top {0} authors",
+    "subtitle": "relevant to your query",
     "display-number-of-author-facets": "Authors to display",
     "what-are-facets": "These are the authors with the most books matching your search criteria. Click an author name to filter/narrow your search results.",
     "filter": "Filter",
@@ -57,7 +60,7 @@
     "alternate-author": "Author in transcription",
     "publisher": "Publisher",
     "publication-year": "Date",
-    "document-reference": "Document reference: {0}",
+    "document-reference": "ID number: {0}",
     "result-unknown-author": "unknown author",
     "none": "Uh-oh! Your query did not return any results",
     "show-original-page": "Go to book (page {0})",
@@ -70,12 +73,15 @@
     "open-transcription": "Open transcription"
   },
   "navigation": {
-    "currently-viewing-pages": "Currently viewing page {0}/{1}",
+    "currently-viewing-pages": "Viewing page {0}/{1}",
     "jump-to": "Jump to page"
   },
   "preferences": {
     "title": "Update preferences",
     "general-heading": "General",
+    "interface-style": "Interface style",
+    "old-interface-style": "Classic",
+    "new-interface-style": "New",
     "language": "Interface language",
     "snippets-heading": "Snippet display",
     "snippets-per-book": "One book at a time",
@@ -117,7 +123,8 @@
     "prev-match": "<<",
     "next-match": ">>",
     "prev-match-tooltip": "Previous page with matching highlights",
-    "next-match-tooltip": "Next page with matching highlights"
+    "next-match-tooltip": "Next page with matching highlights",
+    "book-not-found": "Uh-oh! We could not find a record for ID '{0}'!"
   },
   "modal": {
     "cancel": "Cancel",
@@ -126,8 +133,8 @@
   "pagination": {
     "next": ">>",
     "previous": "<<",
-    "top": "First result",
-    "bottom": "Last result"
+    "top": "First snippet",
+    "bottom": "Last snippet"
   },
   "header": {
     "logo": "/images/jochreLogo.png",

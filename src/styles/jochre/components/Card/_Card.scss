@@ -46,3 +46,7 @@
 .body .body-inner .toc.card-content {
   border-radius: 0.5em;
 }
+
+.card-header-icon:focus-within {
+  outline: 2px solid black;
+}

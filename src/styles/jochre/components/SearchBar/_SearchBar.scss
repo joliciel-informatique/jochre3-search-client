@@ -11,6 +11,11 @@
 #query {
   border: 0px;
   box-shadow: none;
+
+  @media screen and (max-width: '768px') {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+  }
 }
 
 #query:focus,
