@@ -190,7 +190,7 @@ Description: calculates and presents page numbers
         <a
           @click="page + 1 > lastPage ? null : changePage(page + 1)"
           @keyup.enter="page + 1 > lastPage ? null : changePage(page + 1)"
-          class="pagination-link is-small"
+          class="pagination-link is-small has-text-dark"
           :aria-label="`go to page ${page + 1}`"
           tabindex="2"
           :disabled="page + 1 > lastPage ? true : null"
@@ -201,7 +201,7 @@ Description: calculates and presents page numbers
         <a
           @click="page + 2 > lastPage ? null : changePage(page + 2)"
           @keyup.enter="page + 2 > lastPage ? null : changePage(page + 2)"
-          class="pagination-link is-small"
+          class="pagination-link is-small has-text-dark"
           :aria-label="`go to next page`"
           tabindex="2"
           :disabled="page + 2 > lastPage ? true : null"
@@ -212,7 +212,7 @@ Description: calculates and presents page numbers
         <a
           @click="page + 3 > lastPage ? null : changePage(page + 3)"
           @keyup.enter="page + 3 > lastPage ? null : changePage(page + 3)"
-          class="pagination-link is-small"
+          class="pagination-link is-small has-text-dark"
           :aria-label="`go to next page`"
           tabindex="2"
           :disabled="page + 3 > lastPage ? true : null"
@@ -223,7 +223,7 @@ Description: calculates and presents page numbers
         <a
           @click="lastPage < 5 ? null : changePage(lastPage)"
           @keyup.enter="lastPage < 5 ? null : changePage(lastPage)"
-          class="pagination-link is-small"
+          class="pagination-link is-small has-text-dark"
           :aria-label="`go to lastpage ${lastPage}`"
           tabindex="2"
           :disabled="lastPage < 5 ? true : null"
@@ -231,7 +231,7 @@ Description: calculates and presents page numbers
         >
       </li>
       <li class="ml-auto">
-        <a @click="atTop = !atTop" class="pagination-link is-small m-1">
+        <a @click="atTop = !atTop" class="pagination-link is-small m-1 has-text-dark">
           <font-awesome-icon :icon="atTop ? 'arrow-down-1-9' : 'arrow-up-1-9'" />
         </a>
       </li>

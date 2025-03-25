@@ -47,7 +47,7 @@
       <div class="is-hidden-desktop">
         <a class="panel-block" :href="$t('search.help-url')" target="_blank">
           <font-awesome-icon class="panel-icon" icon="book-open" />
-          <span>
+          <span class="has-text-dark">
             {{ $t('search.user-guide') }}
           </span>
         </a>
@@ -62,7 +62,7 @@
                   : 'magnifying-glass-plus'
             "
           />
-          <span>
+          <span class="has-text-dark">
             {{ $t('search.advanced-search') }}
           </span>
         </a>
@@ -73,11 +73,11 @@
           target="_blank"
         >
           <font-awesome-icon class="panel-icon" icon="gear" size="lg" />
-          <span>{{ $t('header.preferences') }}</span>
+          <span class="has-text-dark">{{ $t('header.preferences') }}</span>
         </a>
         <a class="panel-block" @click.prevent="signout()" :title="$t('header.logout')">
           <font-awesome-icon class="panel-icon" icon="right-from-bracket" size="lg" />
-          <span>
+          <span class="has-text-dark">
             {{ $t('header.logout') }}
           </span>
         </a>
