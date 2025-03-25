@@ -1,93 +1,97 @@
 <template>
   <div v-if="book" class="transcribed-text panel">
     <div
-      class="panel-heading is-flex is-justify-content-space-between m-2"
-      :class="
-        isMobile || isTablet || (isDesktop && isPortrait)
-          ? 'is-flex-direction-column is-align-items-end'
-          : 'is-flex-direction-row is-align-items-center '
-      "
+      class="panel-heading is-flex-desktop is-justify-content-space-between is-align-items-center has-text-centered p-2"
       id="panel-heading"
       style="position: sticky; top: 0"
     >
       <h1
-        class="book-title is-flex-shrink-5"
+        class="book-title is-flex-shrink-5 has-text-centered pb-2"
         :class="{
           'rtl-align': preferences.needsRightToLeft
         }"
       >
         <span>{{ book.title }}</span>
       </h1>
-      <div
-        class="is-flex has-text-right"
-        :class="
-          isMobile || isTablet || (isDesktop && isPortrait)
-            ? 'is-flex-direction-column is-align-items-end'
-            : 'is-flex-direction-row'
-        "
-      >
-        <label
-          class="p-2 is-align-self-flex-end"
-          style="text-wrap: nowrap"
-          :class="isMobile || isTablet ? 'is-size-7' : 'is-size-6'"
+      <label class="is-size-6">
+        {{ $t('navigation.currently-viewing-pages', [pageInView, lastPage]) }}
+      </label>
+      <div id="text-options" class="box p-1 is-flex is-flex-direction-column">
+        <div
+          class="pb-0 mb-0 field has-addons is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-center"
         >
-          {{ $t('navigation.currently-viewing-pages', [pageInView, lastPage]) }}
-        </label>
-        <div class="pb-0 mb-0 field has-addons">
-          <p class="control">
-            <a
-              class="button is-small is-static"
-              :class="isMobile || isTablet ? 'is-size-7' : 'is-size-6'"
-              >{{ $t('navigation.jump-to') }}</a
-            >
-          </p>
-          <p class="control">
-            <input
-              class="input has-text-dark is-small p-2 is-size-6 has-text-centered"
-              type="number"
-              :min="bookStore.firstIndexedPage"
-              :max="Math.max(...book.pages.map((p) => p.physicalPageNumber))"
-              v-model.lazy="currentPage"
-              @change="scrollTo(currentPage)"
-              @keyup.enter="scrollTo(currentPage)"
-            />
-          </p>
-          <p class="control">
-            <button
-              class="button is-small"
-              @click="currentHighlightIdx = 0"
-              :disabled="currentHighlightIdx === 0"
-            >
-              <font-awesome-icon icon="angles-up" />
-            </button>
-          </p>
-          <p class="control">
-            <button
-              class="button is-small"
-              @click="currentHighlightIdx--"
-              :disabled="currentHighlightIdx === 0"
-            >
-              <font-awesome-icon icon="chevron-up" />
-            </button>
-          </p>
-          <p class="control">
-            <button
-              class="button is-small"
-              @click="currentHighlightIdx++"
-              :disabled="currentHighlightIdx === pagesWithHighlights.length - 1"
-            >
-              <font-awesome-icon icon="chevron-down" />
-            </button>
-          </p>
-          <p class="control">
-            <button
-              class="button is-small"
-              @click="currentHighlightIdx = pagesWithHighlights.length - 1"
-              :disabled="currentHighlightIdx === pagesWithHighlights.length - 1"
-            >
-              <font-awesome-icon icon="angles-down" />
-            </button>
-          </p>
+          <span class="is-flex is-flex-direction-row m-2">
+            <p class="control">
+              <a class="button is-small is-static is-size-6">{{ $t('navigation.jump-to') }}</a>
+            </p>
+            <p class="control">
+              <input
+                class="input is-small p-2 is-size-6 has-text-centered"
+                type="number"
+                :min="bookStore.firstIndexedPage"
+                :max="Math.max(...book.pages.map((p) => p.physicalPageNumber))"
+                v-model.lazy="currentPage"
+                @change="scrollTo(currentPage)"
+                @keyup.enter="scrollTo(currentPage)"
+              />
+            </p>
+          </span>
+          <span class="is-flex is-flex-direction-row">
+            <p class="control">
+              <button
+                class="button is-small p-4"
+                @click="currentHighlightIdx = 0"
+                :disabled="currentHighlightIdx === 0"
+              >
+                <font-awesome-icon icon="angles-up" size="xs" />
+              </button>
+            </p>
+            <p class="control">
+              <button
+                class="button is-small p-4"
+                @click="currentHighlightIdx--"
+                :disabled="currentHighlightIdx === 0"
+              >
+                <font-awesome-icon icon="chevron-up" size="xs" />
+              </button>
+            </p>
+            <p class="control">
+              <button
+                class="button is-small p-4"
+                @click="currentHighlightIdx++"
+                :disabled="currentHighlightIdx === pagesWithHighlights.length - 1"
+              >
+                <font-awesome-icon icon="chevron-down" size="xs" />
+              </button>
+            </p>
+            <p class="control">
+              <button
+                class="button is-small p-4"
+                @click="currentHighlightIdx = pagesWithHighlights.length - 1"
+                :disabled="currentHighlightIdx === pagesWithHighlights.length - 1"
+              >
+                <font-awesome-icon icon="angles-down" size="xs" />
+              </button>
+            </p>
+          </span>
+          <span class="is-flex is-flex-direction-row">
+            <p class="control" @click="transcribedTextSize++">
+              <button
+                class="button is-small p-4"
+                :disabled="transcribedTextSize == 7 ? true : false"
+              >
+                <font-awesome-icon class="is-small" icon="text-height" size="xs" />
+              </button>
+            </p>
+            <p class="control" @click="transcribedTextSize--">
+              <button
+                class="button is-small p-4"
+                :disabled="transcribedTextSize == 4 ? true : false"
+              >
+                <font-awesome-icon class="2xs cursor-pointer" icon="text-height" size="sm" />
+              </button>
+            </p>
+          </span>
         </div>
       </div>
     </div>
@@ -115,7 +119,7 @@
               class="is-flex is-flex-direction-column is-flex-wrap-wrap m-2"
               :class="preferences.isMobile ? '' : 'is-align-content-start'"
             >
-              <p class="page-text is-size-6" v-html="page.text"></p>
+              <p class="page-text" :class="textSizeClass" v-html="page.text"></p>
             </div>
           </div>
         </div>
@@ -144,9 +148,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, watch } from 'vue'
+import { computed, onUpdated, watch } from 'vue'
 import { onMounted, ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useBookStore } from '@/stores/BookStore'
 import { isInViewOfDiv } from '@/assets/functions'
@@ -158,14 +162,17 @@ const preferences = usePreferencesStore()
 const bookStore = useBookStore()
 const { updateText } = bookStore
 
-const { isMobile, isTablet, isDesktop, isPortrait } = storeToRefs(preferences)
 const { book, docRef, page, query, strict, isLoading, pagesWithHighlights } = storeToRefs(bookStore)
+const { transcribedTextSize } = storeToRefs(preferences)
+const { save } = preferences
 
 const router = useRouter()
 const route = useRoute()
 
 // Variables required for navigation with component
 const pageNumber = ref()
+const textSizeClass = computed(() => `is-size-${transcribedTextSize.value}`)
+
 const currentPage = ref()
 const pageInView = ref()
 
@@ -176,6 +183,7 @@ const lastPage = computed(
 const currentHighlightIdx = ref(0)
 
 onMounted(async () => {
+  console.log(transcribedTextSize.value)
   router.isReady().then(async () => {
     isLoading.value = true
 
@@ -239,7 +247,7 @@ watch(currentPage, (newV, oldV) => {
     newV - oldV == -1 && idx == currentPage.value ? idxs[idxs.length - 1] : idxs[0]
 
   // We scroll to the page irrespective of highlights on that page
-  scrollToPage(newV)
+  scrollTo(newV)
 })
 
 // If buttons are pressed
@@ -278,14 +286,31 @@ const getPagesInView = () => {
   if (pagesInView.length) pageInView.value = `${pagesInView[0]}`
 }
 
-const scrollTo = (page: number) => {
-  const elem = document.getElementById(page.toString())
-  const block = document.getElementsByClassName('panel-block')
-  if (block && elem) {
-    block[0].scrollTo(0, elem.offsetHeight)
-  }
-}
+onMounted(() => {
+  docRef.value = route.params.docRef as string
+  pageNumber.value = /^[+-]?\d+(\.\d+)?$/.test(route.params.page.toString())
+    ? parseInt(route.params.page as string)
+    : 1
+  currentPage.value = pageNumber.value
 
-const scrollToPage = (page: number) =>
-  document.getElementById(page.toString())?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  router.isReady().then(() => {
+    if (route.query['query']) query.value = (route.query['query'] as string).trim()
+    if (route.query['strict']) strict.value = route.query['strict'] === 'true'
+    updateText()
+    document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
+  })
+})
+
+onUpdated(() => {
+  getPagesInView()
+  document.getElementById('scroll-container')?.addEventListener('scroll', getPagesInView, false)
+})
+
+watch(transcribedTextSize, () => save())
+
+const scrollTo = (page: number) =>
+  document.getElementById(page.toString())?.scrollIntoView({ behavior: 'smooth' })
+
+// When URL is changed manually?
+onBeforeRouteUpdate(async () => updateText())
 </script>
