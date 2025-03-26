@@ -132,7 +132,7 @@
   </aside>
   <aside class="toc-drawer menu box p-2" v-show="openMobileFacets">
     <FacetBar
-      @newSearch="emit('newSearch')"
+      @activeFacetsChanged="emit('activeFacetsChanged')"
       v-model:facets="facets"
       v-model:open-mobile-facets="openMobileFacets"
     />
@@ -203,7 +203,7 @@ const selectEntry = (index: number) => {
     })
 }
 
-const emit = defineEmits(['newPage', 'resetSearchResults', 'newSearch'])
+const emit = defineEmits(['newPage', 'activeFacetsChanged'])
 
 watch(selectedEntryIdx, () => {
   nextTick(() => {
