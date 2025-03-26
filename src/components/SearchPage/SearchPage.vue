@@ -149,6 +149,9 @@
         v-model:is-loading="isLoading"
         v-model:query="query"
         v-model:strict="strict"
+        v-model:totalHits="totalHits"
+        v-model:firstResult="firstResult"
+        v-model:lastResult="lastResult"
       />
       <div class="is-hidden-touch">
         <FacetBar
@@ -160,21 +163,26 @@
     </div>
     <div v-else-if="hasSearch && searchResults.length && interfaceStyle == 'old'">
       <div
-        class="is-flex is-flex-direction-row"
+        class="is-flex is-flex-direction-row is-flex-wrap-nowrap"
         :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
       >
         <!-- Not loading, has query and results -->
-        <DisplaySnippets
-          v-model:image-modal="imageModal"
-          v-model:notification="notification"
-          v-model:word-modal="wordModal"
-          v-model:metadata-modal="metadataModal"
-          v-model:selected-entry-idx="selectedEntryIdx"
-          v-model:search-results="searchResults"
-          v-model:is-loading="isLoading"
-          v-model:query="query"
-          v-model:strict="strict"
-        />
+        <div class="is-flex is-flex-direction-column">
+          <h1 class="ml-2 mr-2 mt-2">
+            {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
+          </h1>
+          <DisplaySnippets
+            v-model:image-modal="imageModal"
+            v-model:notification="notification"
+            v-model:word-modal="wordModal"
+            v-model:metadata-modal="metadataModal"
+            v-model:selected-entry-idx="selectedEntryIdx"
+            v-model:search-results="searchResults"
+            v-model:is-loading="isLoading"
+            v-model:query="query"
+            v-model:strict="strict"
+          />
+        </div>
         <div class="is-hidden-touch">
           <FacetBar
             @active-facets-changed="activeFacetsChanged"
@@ -256,7 +264,7 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useSearchStore } from '@/stores/SearchStore'
 
 const searchStore = useSearchStore()
-const { page } = storeToRefs(searchStore)
+const { page, totalHits, firstResult, lastResult } = storeToRefs(searchStore)
 const preferences = usePreferencesStore()
 
 const { initializeMedia } = preferences
@@ -271,7 +279,6 @@ const query = ref('')
 // const selectedEntry = ref<SearchResult>()
 const selectedEntryIdx = ref(0)
 const searchResults = ref<Array<SearchResult>>([])
-const totalHits = ref()
 const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
