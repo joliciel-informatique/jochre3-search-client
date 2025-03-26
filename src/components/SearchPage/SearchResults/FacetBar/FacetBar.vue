@@ -339,6 +339,7 @@ import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
 const emit = defineEmits(['activeFacetsChanged'])
 const preferences = usePreferencesStore()
 
+const i18n = useI18n()
 const defaultFacetCount = [5, 10, 15, 20]
 const showing = ref(true)
 const authorFacetCount = ref(preferences.authorFacetCount)
@@ -348,10 +349,9 @@ const filteredFacets = ref()
 const filterValue = ref(undefined)
 const dropdownTrigger = ref()
 const dropdownTriggerValue = computed(() => {
-  const { t } = useI18n()
-  if (facetSortBy.value === 'label') return t('facets.by-name')
-  if (facetSortBy.value === 'active') return t('facets.active-facets')
-  return t('facets.most-hits')
+  if (facetSortBy.value === 'label') return i18n.t('facets.by-name')
+  if (facetSortBy.value === 'active') return i18n.t('facets.active-facets')
+  return i18n.t('facets.most-hits')
 })
 const facets: Ref = defineModel<AggregationBin[]>('facets')
 const openMobileFacets = defineModel('openMobileFacets')
@@ -388,6 +388,7 @@ const updateSortOption = (val: string, textValue: string) => {
 
 // Sort facets by option
 const sortBy = (option: string = 'count') => {
+  console.log(`Sorting facets by ${option}`)
   const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
   if (option === 'count') {
     filteredFacets.value = filteredFacets.value.sort(
