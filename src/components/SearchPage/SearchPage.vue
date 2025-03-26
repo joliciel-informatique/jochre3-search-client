@@ -92,7 +92,6 @@
           v-model:notification="notification"
           v-model:word-modal="wordModal"
           v-model:selected-entry-idx="selectedEntryIdx"
-          v-model:total-hits="totalHits"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
@@ -108,7 +107,10 @@
     <!-- Contents table on desktop -->
 
     <!-- Loading -->
-    <div v-if="isLoading" class="is-flex is-flex-direction-column has-text-centered pt-5">
+    <div
+      v-if="isLoading"
+      class="search-results is-flex is-flex-direction-column has-text-centered pt-5"
+    >
       <h1>{{ $t('results.loading') }}</h1>
       <div class="loader-wrapper is-active mt-5">
         <div class="loader is-loading is-active"></div>
@@ -118,7 +120,7 @@
 
     <div
       v-else-if="hasSearch && searchResults.length && interfaceStyle == 'new'"
-      class="is-flex is-flex-direction-row bla"
+      class="search-results is-flex is-flex-direction-row bla"
       :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
     >
       <div class="is-hidden-touch">
@@ -129,7 +131,6 @@
           v-model:notification="notification"
           v-model:word-modal="wordModal"
           v-model:selected-entry-idx="selectedEntryIdx"
-          v-model:total-hits="totalHits"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
@@ -149,9 +150,6 @@
         v-model:is-loading="isLoading"
         v-model:query="query"
         v-model:strict="strict"
-        v-model:totalHits="totalHits"
-        v-model:firstResult="firstResult"
-        v-model:lastResult="lastResult"
       />
       <div class="is-hidden-touch">
         <FacetBar
@@ -161,7 +159,10 @@
         />
       </div>
     </div>
-    <div v-else-if="hasSearch && searchResults.length && interfaceStyle == 'old'">
+    <div
+      class="search-results"
+      v-else-if="hasSearch && searchResults.length && interfaceStyle == 'old'"
+    >
       <div
         class="is-flex is-flex-direction-row is-flex-wrap-nowrap"
         :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
@@ -196,7 +197,10 @@
     </div>
 
     <!-- Not loading, with query, but no results -->
-    <div v-else-if="hasSearch && !searchResults.length" class="m-5 has-text-centered">
+    <div
+      v-else-if="hasSearch && !searchResults.length"
+      class="search-results m-5 has-text-centered"
+    >
       <h1
         class="column is-flex is-flex-direction-column is-justify-content-center is-align-items-center"
       >
@@ -208,12 +212,7 @@
     </div>
 
     <!-- Not loading, no search, no results -->
-    <IndexSize
-      v-else
-      v-model:is-loading="isLoading"
-      v-model:notification="notification"
-      v-model:total-hits="totalHits"
-    />
+    <IndexSize v-else v-model:is-loading="isLoading" v-model:notification="notification" />
   </main>
   <footer
     id="footer"
@@ -223,7 +222,7 @@
       'rtl-align': !preferences.displayLeftToRight
     }"
   >
-    <FooterPage v-model:total-hits="totalHits" />
+    <FooterPage />
   </footer>
 </template>
 <script setup lang="ts">
