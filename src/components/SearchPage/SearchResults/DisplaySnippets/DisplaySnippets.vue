@@ -69,10 +69,6 @@ Description: controls text snippets from the OCR text
             ? `mobile is-hidden-desktop`
             : `desktop is-hidden-touch`
         "
-        v-show="
-          displayPerBook ||
-          (!displayPerBook && searchResults[selectedEntryIdx]?.docRef === result.docRef)
-        "
       >
         <SingleSnippet
           v-for="(snippet, index) in result.snippets"

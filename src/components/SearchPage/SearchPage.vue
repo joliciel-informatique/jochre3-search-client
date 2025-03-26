@@ -97,8 +97,7 @@
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
           v-model:facets="facets"
-          @reset-search-results="resetSearchResults"
-          @new-search="newSearch"
+          @active-facets-changed="activeFacetsChanged"
           @new-page="newPage"
         />
       </div>
@@ -135,8 +134,8 @@
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
           v-model:facets="facets"
-          @reset-search-results="resetSearchResults"
-          @new-search="newSearch"
+          @active-facets-changed="activeFacetsChanged"
+          @new-page="newPage"
         />
       </div>
       <!-- Not loading, has query and results -->
@@ -153,7 +152,7 @@
       />
       <div class="is-hidden-touch">
         <FacetBar
-          @newSearch="newSearch"
+          @active-facets-changed="activeFacetsChanged"
           v-model:facets="facets"
           v-model:open-mobile-facets="openMobileFacets"
         />
@@ -178,7 +177,7 @@
         />
         <div class="is-hidden-touch">
           <FacetBar
-            @newSearch="newSearch"
+            @active-facets-changed="activeFacetsChanged"
             v-model:facets="facets"
             v-model:open-mobile-facets="openMobileFacets"
           />
@@ -220,7 +219,7 @@
   </footer>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, onMounted, ref, defineExpose, type Ref, watch } from 'vue'
+import { defineAsyncComponent, onMounted, ref, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
 
@@ -238,15 +237,6 @@ const AdvancedSearch = defineAsyncComponent(
   () => import('@/components/SearchPage/SearchBar/AdvancedSearch/AdvancedSearch.vue')
 )
 
-// const ContentsTable = defineAsyncComponent(
-//   () => import('@/components/SearchPage/SearchResults/ContentsTable/ContentsTable.vue')
-// )
-// const DisplaySnippets = defineAsyncComponent(
-//   () => import('@/components/SearchPage/SearchResults/DisplaySnippets/DisplaySnippets.vue')
-// // )
-// const FacetBar = defineAsyncComponent(
-//   () => import('@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue')
-// )
 const IndexSize = defineAsyncComponent(
   () => import('@/components/SearchPage/SearchResults/IndexSize/IndexSize.vue')
 )
@@ -392,7 +382,13 @@ onMounted(() => {
 })
 
 const newPage = () => runSearch()
-const newSearch = () => (page.value = 1) && runSearch()
+const newSearch = () => {
+  clearSearchResults()
+  runSearch()
+}
+const activeFacetsChanged = () => {
+  runSearch()
+}
 
 const defineSearchParams = () => {
   return Object.assign(
@@ -513,6 +509,7 @@ const searchFacets = async () => {
     facetParams.append('maxBins', preferences.authorFacetCount.toString())
   return fetchData('aggregate', 'get', facetParams).then((response) =>
     response.json().then((result) => {
+      console.log(`Found ${result.bins.length} author facets`)
       const activeFacets = facets.value
         .map((facet) => (facet.active ? facet.label : null))
         .filter((facet) => facet)
