@@ -140,7 +140,7 @@
 </template>
 <script setup lang="ts">
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import { computed, defineAsyncComponent, nextTick, ref, watch, type Ref } from 'vue'
+import { computed, nextTick, ref, watch, type Ref } from 'vue'
 import { useTemplateRefsList } from '@vueuse/core'
 
 import type { SearchResult } from '@/assets/interfacesExternals'
@@ -151,18 +151,8 @@ import SingleResult from '@/components/SearchPage/SearchResults/ContentsTable/Si
 import PageNumbering from '@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue'
 import FacetBar from '@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue'
 
-// const SingleResult = defineAsyncComponent(
-//   () => import('@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResult.vue')
-// )
-// const PageNumbering = defineAsyncComponent(
-//   () => import('@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue')
-// )
-// const FacetBar = defineAsyncComponent(
-//   () => import('@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue')
-// )
-
 const searchStore = useSearchStore()
-const { page } = storeToRefs(searchStore)
+const { page, totalHits, firstResult, lastResult } = storeToRefs(searchStore)
 
 const preferences = usePreferencesStore()
 
@@ -173,7 +163,6 @@ const metadataModal: Ref = defineModel('metadataModal')
 const notification: Ref = defineModel('notification')
 // const selectedEntry = defineModel<SearchResult>('selectedEntry')
 const selectedEntryIdx = defineModel<number>('selectedEntryIdx', { default: 0 })
-const totalHits = defineModel<number>('totalHits', { default: 0 })
 const facets: Ref = defineModel('facets')
 
 const openMobileSearchResultsToc = defineModel('openMobileSearchResultsToc')
@@ -185,12 +174,6 @@ const pageNumberOffset = computed(() => (page.value - 1) * preferences.resultsPe
 // ContentTable tree is reactive; Vue Refs required to keep synchronous with DOM
 const scrollListDesktop = ref()
 const results = useTemplateRefsList()
-
-const firstResult = computed(() => (page.value - 1) * preferences.resultsPerPage + 1)
-const lastResult = computed(() => {
-  const last = page.value * preferences.resultsPerPage
-  return totalHits.value < last ? totalHits.value : last
-})
 
 const selectEntry = (index: number) => {
   selectedEntryIdx.value = index

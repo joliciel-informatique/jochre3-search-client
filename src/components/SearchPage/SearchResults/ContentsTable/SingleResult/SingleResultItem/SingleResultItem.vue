@@ -10,31 +10,45 @@ Methods: fixMetaData (imported)
 Description: display single metadata item
 -->
 <template>
-  <div class="columns is-vcentered has-text-primary pl-2 pt-2 pr-1">
+  <div
+    class="is-vcentered has-text-primary pl-2 pt-1 pr-2"
+    :class="{
+      'has-text-left': preferences.displayLeftToRight,
+      'has-text-right': !preferences.displayLeftToRight,
+      columns: preferences.interfaceStyle == 'old'
+    }"
+  >
     <span
-      class="column has-text-weight-boldis-one-fifth"
-      :class="preferences.interfaceStyle == 'old' ? 'is-one-fifth' : ''"
-    >
-      {{ $t(title) }}
-    </span>
-    <span
-      class="column p-2 has-text-primary is-three-fifth"
+      class="has-text-weight-bold"
       :class="{
-        'has-text-left': preferences.displayLeftToRight,
-        'has-text-right': !preferences.displayLeftToRight,
-        'ltr-no-text-align':
-          preferences.needsLeftToRight &&
-          (field == 'titleEnglish' ||
-            field == 'authorEnglish' ||
-            field == 'publisher' ||
-            field == 'publicationYear'),
-        'rtl-no-text-align': preferences.needsRightToLeft && field == 'author'
+        column: preferences.interfaceStyle == 'old',
+        'is-one-fifth': preferences.interfaceStyle == 'old'
       }"
     >
-      {{ value }}
+      {{ $t(title) }}:&nbsp;
     </span>
-    <span class="column is-flex is-justify-content-end" aria-labelledby="edit" tabindex="3">
-      <span class="icon menu-list-icon is-clickable is-one-fifth">
+    <span
+      class="has-text-primary"
+      :class="{
+        column: preferences.interfaceStyle == 'old',
+        'is-four-fifth': preferences.interfaceStyle == 'old'
+      }"
+    >
+      <span
+        :class="{
+          'ltr-no-text-align':
+            preferences.needsLeftToRight &&
+            (field == 'titleEnglish' ||
+              field == 'authorEnglish' ||
+              field == 'publisher' ||
+              field == 'publicationYear'),
+          'rtl-no-text-align': preferences.needsRightToLeft && field == 'author'
+        }"
+      >
+        {{ value }}
+      </span>
+      <span class="icon menu-list-icon is-clickable" tabindex="3">
+        &nbsp;&nbsp;&nbsp;
         <font-awesome-icon
           icon="pen-to-square"
           @click="openMetadataModal"

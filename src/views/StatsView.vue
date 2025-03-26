@@ -86,12 +86,16 @@
               <table class="table is-bordered is-striped" v-show="topUserStats">
                 <thead>
                   <tr>
+                    <th><div style="width: 40px">Rank</div></th>
                     <th><div style="width: 300px">Username</div></th>
                     <th><div style="width: 100px">Queries</div></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="bin of topUserStats?.bins" :key="sha1(bin)">
+                  <tr v-for="(bin, index) in topUserStats?.bins" :key="sha1(bin)">
+                    <td class="has-text-right">
+                      <div style="width: 40px">{{ index + 1 }}</div>
+                    </td>
                     <td>
                       <div style="width: 300px">{{ bin.username }}</div>
                     </td>
