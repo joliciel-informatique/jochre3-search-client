@@ -107,12 +107,7 @@
 
     <div
       v-else-if="hasSearch && searchResults.length && interfaceStyle == 'new'"
-<<<<<<< HEAD
-      class="is-flex is-flex-direction-row snippets is-justify-content-center"
-=======
-      class="search-results is-flex is-flex-direction-row bla"
-      :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
->>>>>>> develop
+      class="search-results is-flex is-flex-direction-row snippets is-justify-content-center"
     >
       <div class="is-hidden-touch">
         <ContentsTable
@@ -150,19 +145,11 @@
         />
       </div>
     </div>
-<<<<<<< HEAD
-    <div v-else-if="hasSearch && searchResults.length && interfaceStyle == 'old'">
-      <div class="is-flex is-flex-direction-row is-justify-content-center">
-=======
     <div
       class="search-results"
       v-else-if="hasSearch && searchResults.length && interfaceStyle == 'old'"
     >
-      <div
-        class="is-flex is-flex-direction-row is-flex-wrap-nowrap"
-        :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
-      >
->>>>>>> develop
+      <div class="is-flex is-flex-direction-row is-flex-wrap-nowrap is-justify-content-center">
         <!-- Not loading, has query and results -->
         <div class="is-flex is-flex-direction-column">
           <h1 class="ml-2 mr-2 mt-2">
