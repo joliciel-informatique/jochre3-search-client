@@ -56,13 +56,7 @@ Description: controls text snippets from the OCR text
         :book-index="index"
         :page-number-offset="pageNumberOffset"
       />
-      <ul
-        class="p-5 pt-4"
-        v-show="
-          displayPerBook ||
-          (!displayPerBook && searchResults[selectedEntryIdx]?.docRef === result.docRef)
-        "
-      >
+      <ul class="p-5 pt-4">
         <SingleSnippet
           v-for="(snippet, index) in result.snippets"
           :key="sha1(snippet)"
