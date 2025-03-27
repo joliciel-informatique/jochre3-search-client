@@ -46,7 +46,6 @@ Description: presents OCR record metadata
 
       <template #content>
         <div
-          v-if="interfaceStyle == 'old'"
           class="toc card-content mb-2 is-flex is-flex-direction-column card m-3 p-3 has-background-grey-lighter"
         >
           <div
@@ -58,6 +57,7 @@ Description: presents OCR record metadata
             </span>
             <span
               class="column is-four-fifth has-text-primary is-flex is-flex-direction-row is-align-items-center"
+              :class="{ 'is-justify-content-space-between': interfaceStyle == 'old' }"
             >
               {{ result.metadata.titleEnglish }}
               <EditBtn
@@ -68,15 +68,20 @@ Description: presents OCR record metadata
             </span>
           </div>
           <div
-            class="columns is-vcentered has-text-primary pl-2 pt-1 pr-2"
+            class="columns is-vcentered has-text-primary pl-2 pt-1 pr-2 is-hidden-touch"
             :class="displayLeftToRight ? 'has-text-left' : 'has-text-right'"
           >
             <span class="column is-one-fifth has-text-weight-bold">
               {{ $t('results.author') }}:
             </span>
+
             <span
               class="column is-four-fifth has-text-primary is-flex is-flex-direction-row is-align-items-center"
-              :class="needsRightToLeft ? 'ltr-no-text-align' : 'rtl-no-text-align'"
+              :class="{
+                'is-justify-content-space-between': interfaceStyle == 'old',
+                'rtl-no-text-align': needsRightToLeft,
+                'ltr-no-text-align': needsLeftToRight
+              }"
             >
               {{ result.metadata.author }}
               <EditBtn :result="result" :edit="'author'" v-model:metadata-modal="metadataModal" />
@@ -91,6 +96,33 @@ Description: presents OCR record metadata
             </span>
           </div>
           <div
+            class="columns is-vcentered has-text-primary pl-2 pt-1 pr-2 is-hidden-desktop"
+            :class="displayLeftToRight ? 'has-text-left' : 'has-text-right'"
+          >
+            <span class="column is-one-fifth has-text-weight-bold">
+              {{ $t('results.author') }}:
+            </span>
+
+            <span
+              class="column is-four-fifth has-text-primary is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between"
+              :class="needsRightToLeft ? 'ltr-no-text-align' : 'rtl-no-text-align'"
+            >
+              {{ result.metadata.author }}
+              <EditBtn :result="result" :edit="'author'" v-model:metadata-modal="metadataModal" />
+            </span>
+            <span
+              class="column is-four-fifth has-text-primary is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between"
+              :class="needsRightToLeft ? 'ltr-no-text-align' : 'rtl-no-text-align'"
+            >
+              {{ result.metadata.authorEnglish }}
+              <EditBtn
+                :result="result"
+                :edit="'authorEnglish'"
+                v-model:metadata-modal="metadataModal"
+              />
+            </span>
+          </div>
+          <div
             class="columns is-vcentered has-text-primary pl-2 pt-1 pr-2"
             :class="displayLeftToRight ? 'has-text-left' : 'has-text-right'"
           >
@@ -99,6 +131,7 @@ Description: presents OCR record metadata
             >
             <span
               class="column is-four-fifth has-text-primary is-flex is-flex-direction-row is-align-items-center"
+              :class="{ 'is-justify-content-space-between': interfaceStyle == 'old' }"
             >
               {{ result.metadata.publicationYear }}
               <EditBtn
@@ -117,6 +150,7 @@ Description: presents OCR record metadata
             >
             <span
               class="column is-four-fifth has-text-primary is-flex is-flex-direction-row is-align-items-center"
+              :class="{ 'is-justify-content-space-between': interfaceStyle == 'old' }"
             >
               <span class="is-vcentered">{{ result.metadata.publisher }}</span>
               <EditBtn
@@ -132,11 +166,6 @@ Description: presents OCR record metadata
             aria-label="document reference"
             tabindex="3"
           >
-            <strong>{{ $t('results.document-reference', [result.docRef]) }}</strong>
-          </div>
-        </div>
-        <div v-else>
-          <div class="has-text-right is-size-7 px-2" aria-label="document reference" tabindex="3">
             <strong>{{ $t('results.document-reference', [result.docRef]) }}</strong>
           </div>
         </div>
