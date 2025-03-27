@@ -145,13 +145,10 @@
         />
       </div>
     </div>
-    <div
-      class="search-results"
-      v-else-if="hasSearch && searchResults.length && interfaceStyle == 'old'"
-    >
+    <div v-else-if="hasSearch && searchResults.length && interfaceStyle == 'old'">
       <div class="is-flex is-flex-direction-row is-flex-wrap-nowrap is-justify-content-center">
         <!-- Not loading, has query and results -->
-        <div class="is-flex is-flex-direction-column">
+        <div class="search-results is-flex is-flex-direction-column">
           <h1 class="ml-2 mr-2 mt-2">
             {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
           </h1>
@@ -180,10 +177,7 @@
     </div>
 
     <!-- Not loading, with query, but no results -->
-    <div
-      v-else-if="hasSearch && !searchResults.length"
-      class="search-results m-5 has-text-centered"
-    >
+    <div v-else-if="hasSearch && !searchResults.length" class="m-5 has-text-centered">
       <h1
         class="column is-flex is-flex-direction-column is-justify-content-center is-align-items-center"
       >
