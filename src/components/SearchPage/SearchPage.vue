@@ -177,10 +177,7 @@
     </div>
 
     <!-- Not loading, with query, but no results -->
-    <div
-      v-else-if="hasSearch && !searchResults.length"
-      class="search-results m-5 has-text-centered"
-    >
+    <div v-else-if="hasSearch && !searchResults.length" class="m-5 has-text-centered">
       <h1
         class="column is-flex is-flex-direction-column is-justify-content-center is-align-items-center"
       >
