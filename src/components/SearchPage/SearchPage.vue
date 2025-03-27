@@ -7,17 +7,10 @@
       >
         <div
           class="navbar-item is-flex is-flex-direction-row is-place-self-stretch is-align-items-center"
-          :class="
-            isMobile || preferences.isTablet ? 'is-align-items-center' : 'is-align-items-start'
-          "
         >
           <a
             href="/"
-            :class="
-              isMobile && isPortrait
-                ? 'columns is-flex is-flex-direction-column is-align-self-center'
-                : ''
-            "
+            class="is-flex is-flex-direction-column is-align-self-flex-start is-align-self-flex-stretch"
             v-if="searchResults.length"
           >
             <img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')" />
@@ -58,14 +51,8 @@
         </div>
         <div
           class="navbar-item is-flex is-flex-direction-column"
-          :style="[
-            (preferences.isMobile ||
-              preferences.isTablet ||
-              (preferences.isDesktop && preferences.isPortrait)) &&
-            showAdvancedSearchPanel
-              ? 'top:0;overflow-y:scroll;max-height:92vh;'
-              : ''
-          ]"
+          style="top: 0; overflow-y: auto; max-height: 92vh"
+          v-if="showAdvancedSearchPanel"
         >
           <AdvancedSearch
             @newSearch="newSearch"
@@ -120,8 +107,7 @@
 
     <div
       v-else-if="hasSearch && searchResults.length && interfaceStyle == 'new'"
-      class="search-results is-flex is-flex-direction-row bla"
-      :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
+      class="search-results is-flex is-flex-direction-row snippets is-justify-content-center"
     >
       <div class="is-hidden-touch">
         <ContentsTable
@@ -163,10 +149,7 @@
       class="search-results"
       v-else-if="hasSearch && searchResults.length && interfaceStyle == 'old'"
     >
-      <div
-        class="is-flex is-flex-direction-row is-flex-wrap-nowrap"
-        :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
-      >
+      <div class="is-flex is-flex-direction-row is-flex-wrap-nowrap is-justify-content-center">
         <!-- Not loading, has query and results -->
         <div class="is-flex is-flex-direction-column">
           <h1 class="ml-2 mr-2 mt-2">
@@ -272,7 +255,7 @@ const { show, interfaceStyle } = storeToRefs(preferences)
 
 import { storeToRefs } from 'pinia'
 
-const { authorFacetCount, isMobile, isPortrait } = storeToRefs(preferences)
+const { authorFacetCount } = storeToRefs(preferences)
 
 const query = ref('')
 // const selectedEntry = ref<SearchResult>()

@@ -14,21 +14,10 @@ Description: the advanced search toolbox
 <template>
   <div
     class="container is-fullhd advancedSearch is-flex is-justify-content-center"
-    :style="
-      (preferences.isMobile ||
-        preferences.isTablet ||
-        (preferences.isDesktop && preferences.isPortrait)) &&
-      showAdvancedSearchPanel
-        ? 'overflow:auto;height:64vh'
-        : ''
-    "
+    style="overflow: auto; max-height: 64vh"
+    v-if="showAdvancedSearchPanel"
   >
-    <div
-      id="advancedSearchPanel"
-      class="body"
-      :class="[preferences.isDesktop ? 'm-3 p-3' : '']"
-      v-show="showAdvancedSearchPanel"
-    >
+    <div id="advancedSearchPanel" class="body" v-show="showAdvancedSearchPanel">
       <div class="body-inner container is-max-desktop">
         <span class="columns is-vcentered mt-1 p-1">
           <p class="column is-2 is-flex has-text-white">

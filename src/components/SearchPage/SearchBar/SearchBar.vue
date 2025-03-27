@@ -31,8 +31,7 @@ Description: presents the search bar
           <input
             id="query"
             type="text"
-            class="input is-normal is-rounded has-text-dark"
-            :class="isMobile ? 'px-2' : ''"
+            class="input is-normal is-rounded has-text-dark px-2"
             lang="yi"
             v-model="query"
             @keyup.enter="emit('newSearch')"
@@ -47,7 +46,7 @@ Description: presents the search bar
           />
 
           <span
-            class="icon is-small is-clickable"
+            class="icon is-small is-clickable is-hidden-mobile"
             :class="{
               'is-left': !preferences.displayLeftToRight,
               'is-right': preferences.displayLeftToRight
@@ -56,7 +55,7 @@ Description: presents the search bar
             aria-label="reset"
             @click="emit('resetSearchResults')"
             @keyup.enter="emit('resetSearchResults')"
-            v-if="!isLoading && query && !isMobile"
+            v-if="!isLoading && query"
           >
             <font-awesome-icon icon="circle-xmark" />
           </span>
@@ -64,13 +63,12 @@ Description: presents the search bar
         </p>
         <p class="control" tabindex="0">
           <button
-            class="button is-clickable"
-            :class="isMobile ? 'px-2' : ''"
+            class="button is-clickable px-2"
             @click.prevent="emit('newSearch')"
             :alt="$t('search.start-search')"
             :title="$t('search.start-search')"
           >
-            <font-awesome-icon icon="magnifying-glass" />
+            <font-awesome-icon class="px-2" icon="magnifying-glass" />
           </button>
         </p>
         <simple-key
@@ -80,18 +78,20 @@ Description: presents the search bar
         />
         <p class="control" v-tooltip:bottom.tooltip="$t('search.related-word-forms-tooltip')">
           <a class="button is-static is-clickable">
-            <label for="strictSearchCheckbox" class="is-clickable" :class="isMobile ? '' : 'mx-2'"
-              ><span
-                ><span class="is-hidden-mobile">{{ $t('search.related-word-forms') }}</span>
-                <span :class="isMobile ? '' : 'px-2'"
-                  ><input
-                    id="strictSearchCheckbox"
-                    type="checkbox"
-                    tabindex="0"
-                    aria-label="strict search"
-                    v-model="strict"
-                    @change="emit('newSearch')" /></span></span
-            ></label>
+            <label for="strictSearchCheckbox" class="columns is-clickable">
+              <span class="column is-hidden-mobile mr-2 is-align-items-self-center">{{
+                $t('search.related-word-forms')
+              }}</span>
+              <input
+                id="strictSearchCheckbox"
+                type="checkbox"
+                class="column is-vcentered"
+                tabindex="0"
+                aria-label="strict search"
+                v-model="strict"
+                @change="emit('newSearch')"
+              />
+            </label>
           </a>
         </p>
       </div>
@@ -132,13 +132,10 @@ Description: presents the search bar
 <script setup lang="ts">
 import { type Ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import { storeToRefs } from 'pinia'
 
 const preferences = usePreferencesStore()
 
 const hasAdvancedSearchCriteria = defineModel('hasAdvancedSearchCriteria')
-
-const { isMobile } = storeToRefs(usePreferencesStore())
 
 const query: Ref = defineModel('query')
 const strict: Ref = defineModel('strict')

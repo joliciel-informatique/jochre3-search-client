@@ -7,8 +7,7 @@
     tabindex="1"
   >
     <button
-      class="button is-clickable"
-      :class="isMobile ? 'px-3' : ''"
+      class="button is-clickable px-3"
       :alt="$t('search.keyboard')"
       :title="$t('search.keyboard')"
     >
@@ -157,7 +156,7 @@ watch(show, (newV) => {
 
 window.addEventListener('resize', () => positionKeyboard())
 
-watch([isMobile, isTablet, isPortrait, isDesktop], () => positionKeyboard())
+// watch([isMobile, isTablet, isPortrait, isDesktop], () => positionKeyboard())
 
 onMounted(() => {
   const keyboardLayout = isMobile || isPortrait || isTablet ? keyboardMobile : keyboardYiddish
