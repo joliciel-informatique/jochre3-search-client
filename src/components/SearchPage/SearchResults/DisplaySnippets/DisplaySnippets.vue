@@ -10,7 +10,6 @@ Methods: none
 Description: controls text snippets from the OCR text
 -->
 <template>
-  <!-- <div v-if="!isLoading && searchResults?.length"> -->
   <ul id="snippets" class="scrollBody" v-if="searchResults && interfaceStyle == 'new'">
     <li v-for="(result, bookIndex) of searchResults" :key="sha1(result)">
       <hr

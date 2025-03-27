@@ -79,13 +79,11 @@
           v-model:notification="notification"
           v-model:word-modal="wordModal"
           v-model:selected-entry-idx="selectedEntryIdx"
-          v-model:total-hits="totalHits"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
           v-model:facets="facets"
-          @reset-search-results="resetSearchResults"
-          @new-search="newSearch"
+          @active-facets-changed="activeFacetsChanged"
           @new-page="newPage"
         />
       </div>
@@ -96,7 +94,10 @@
     <!-- Contents table on desktop -->
 
     <!-- Loading -->
-    <div v-if="isLoading" class="is-flex is-flex-direction-column has-text-centered pt-5">
+    <div
+      v-if="isLoading"
+      class="search-results is-flex is-flex-direction-column has-text-centered pt-5"
+    >
       <h1>{{ $t('results.loading') }}</h1>
       <div class="loader-wrapper is-active mt-5">
         <div class="loader is-loading is-active"></div>
@@ -106,7 +107,12 @@
 
     <div
       v-else-if="hasSearch && searchResults.length && interfaceStyle == 'new'"
+<<<<<<< HEAD
       class="is-flex is-flex-direction-row snippets is-justify-content-center"
+=======
+      class="search-results is-flex is-flex-direction-row bla"
+      :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
+>>>>>>> develop
     >
       <div class="is-hidden-touch">
         <ContentsTable
@@ -116,13 +122,12 @@
           v-model:notification="notification"
           v-model:word-modal="wordModal"
           v-model:selected-entry-idx="selectedEntryIdx"
-          v-model:total-hits="totalHits"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
           v-model:facets="facets"
-          @reset-search-results="resetSearchResults"
-          @new-search="newSearch"
+          @active-facets-changed="activeFacetsChanged"
+          @new-page="newPage"
         />
       </div>
       <!-- Not loading, has query and results -->
@@ -139,29 +144,45 @@
       />
       <div class="is-hidden-touch">
         <FacetBar
-          @newSearch="newSearch"
+          @active-facets-changed="activeFacetsChanged"
           v-model:facets="facets"
           v-model:open-mobile-facets="openMobileFacets"
         />
       </div>
     </div>
+<<<<<<< HEAD
     <div v-else-if="hasSearch && searchResults.length && interfaceStyle == 'old'">
       <div class="is-flex is-flex-direction-row is-justify-content-center">
+=======
+    <div
+      class="search-results"
+      v-else-if="hasSearch && searchResults.length && interfaceStyle == 'old'"
+    >
+      <div
+        class="is-flex is-flex-direction-row is-flex-wrap-nowrap"
+        :class="[isMobile ? 'is-justify-content-center' : 'is-justify-content-space-between']"
+      >
+>>>>>>> develop
         <!-- Not loading, has query and results -->
-        <DisplaySnippets
-          v-model:image-modal="imageModal"
-          v-model:notification="notification"
-          v-model:word-modal="wordModal"
-          v-model:metadata-modal="metadataModal"
-          v-model:selected-entry-idx="selectedEntryIdx"
-          v-model:search-results="searchResults"
-          v-model:is-loading="isLoading"
-          v-model:query="query"
-          v-model:strict="strict"
-        />
+        <div class="is-flex is-flex-direction-column">
+          <h1 class="ml-2 mr-2 mt-2">
+            {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
+          </h1>
+          <DisplaySnippets
+            v-model:image-modal="imageModal"
+            v-model:notification="notification"
+            v-model:word-modal="wordModal"
+            v-model:metadata-modal="metadataModal"
+            v-model:selected-entry-idx="selectedEntryIdx"
+            v-model:search-results="searchResults"
+            v-model:is-loading="isLoading"
+            v-model:query="query"
+            v-model:strict="strict"
+          />
+        </div>
         <div class="is-hidden-touch">
           <FacetBar
-            @newSearch="newSearch"
+            @active-facets-changed="activeFacetsChanged"
             v-model:facets="facets"
             v-model:open-mobile-facets="openMobileFacets"
           />
@@ -172,7 +193,10 @@
     </div>
 
     <!-- Not loading, with query, but no results -->
-    <div v-else-if="hasSearch && !searchResults.length" class="m-5 has-text-centered">
+    <div
+      v-else-if="hasSearch && !searchResults.length"
+      class="search-results m-5 has-text-centered"
+    >
       <h1
         class="column is-flex is-flex-direction-column is-justify-content-center is-align-items-center"
       >
@@ -184,12 +208,7 @@
     </div>
 
     <!-- Not loading, no search, no results -->
-    <IndexSize
-      v-else
-      v-model:is-loading="isLoading"
-      v-model:notification="notification"
-      v-model:total-hits="totalHits"
-    />
+    <IndexSize v-else v-model:is-loading="isLoading" v-model:notification="notification" />
   </main>
   <footer
     id="footer"
@@ -199,11 +218,11 @@
       'rtl-align': !preferences.displayLeftToRight
     }"
   >
-    <FooterPage v-model:total-hits="totalHits" />
+    <FooterPage />
   </footer>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, onMounted, ref, defineExpose, type Ref, watch } from 'vue'
+import { defineAsyncComponent, onMounted, ref, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
 
@@ -221,15 +240,6 @@ const AdvancedSearch = defineAsyncComponent(
   () => import('@/components/SearchPage/SearchBar/AdvancedSearch/AdvancedSearch.vue')
 )
 
-// const ContentsTable = defineAsyncComponent(
-//   () => import('@/components/SearchPage/SearchResults/ContentsTable/ContentsTable.vue')
-// )
-// const DisplaySnippets = defineAsyncComponent(
-//   () => import('@/components/SearchPage/SearchResults/DisplaySnippets/DisplaySnippets.vue')
-// // )
-// const FacetBar = defineAsyncComponent(
-//   () => import('@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue')
-// )
 const IndexSize = defineAsyncComponent(
   () => import('@/components/SearchPage/SearchResults/IndexSize/IndexSize.vue')
 )
@@ -249,7 +259,7 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useSearchStore } from '@/stores/SearchStore'
 
 const searchStore = useSearchStore()
-const { page } = storeToRefs(searchStore)
+const { page, totalHits, firstResult, lastResult } = storeToRefs(searchStore)
 const preferences = usePreferencesStore()
 
 const { initializeMedia } = preferences
@@ -264,7 +274,6 @@ const query = ref('')
 // const selectedEntry = ref<SearchResult>()
 const selectedEntryIdx = ref(0)
 const searchResults = ref<Array<SearchResult>>([])
-const totalHits = ref()
 const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
@@ -375,7 +384,13 @@ onMounted(() => {
 })
 
 const newPage = () => runSearch()
-const newSearch = () => (page.value = 1) && runSearch()
+const newSearch = () => {
+  clearSearchResults()
+  runSearch()
+}
+const activeFacetsChanged = () => {
+  runSearch()
+}
 
 const defineSearchParams = () => {
   return Object.assign(
@@ -496,6 +511,7 @@ const searchFacets = async () => {
     facetParams.append('maxBins', preferences.authorFacetCount.toString())
   return fetchData('aggregate', 'get', facetParams).then((response) =>
     response.json().then((result) => {
+      console.log(`Found ${result.bins.length} author facets`)
       const activeFacets = facets.value
         .map((facet) => (facet.active ? facet.label : null))
         .filter((facet) => facet)

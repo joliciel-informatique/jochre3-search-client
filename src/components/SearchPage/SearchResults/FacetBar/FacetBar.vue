@@ -159,6 +159,7 @@ Description: presents the facet bar
           </div>
         </div>
         <div
+          id="facet-list-desktop"
           class="facet-list is-flex is-flex-direction-column is-flex-wrap-nowrap is-align-items-center"
           :style="preferences.interfaceStyle == 'new' ? 'overflow-y:scroll;max-height:48vh;' : ''"
         >
@@ -177,7 +178,11 @@ Description: presents the facet bar
     </AccordionCard>
   </div>
 
-  <div v-show="openMobileFacets" class="menu is-flex is-flex-direction-column is-hidden-desktop">
+  <div
+    id="facet-list-touch"
+    v-show="openMobileFacets"
+    class="menu is-flex is-flex-direction-column is-hidden-desktop"
+  >
     <p class="menu-label is-size-5 label is-flex is-flex-direction-column is-align-items-center">
       <span class="is-flex is-flex-direction-row is-align-items-center"
         >{{ $t('facets.title', [authorFacetCount]) }}
@@ -310,7 +315,7 @@ Description: presents the facet bar
   </div>
 </template>
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref, watch, type Ref } from 'vue'
+import { computed, onMounted, ref, watch, type Ref } from 'vue'
 import { sha1 } from 'object-hash'
 import type { AggregationBin } from '@/assets/interfacesExternals'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
@@ -318,14 +323,11 @@ import { insertInSortedArray } from '@/assets/functions'
 import { useI18n } from 'vue-i18n'
 import FilterTag from '@/_components/FilterTag/FilterTag.vue'
 import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
-// const FilterTag = defineAsyncComponent(() => import('@/_components/FilterTag/FilterTag.vue'))
-// const AccordionCard = defineAsyncComponent(
-//   () => import('@/_components/AccordionCard/AccordionCard.vue')
-// )
 
-const emit = defineEmits(['newSearch'])
+const emit = defineEmits(['activeFacetsChanged'])
 const preferences = usePreferencesStore()
 
+const i18n = useI18n()
 const defaultFacetCount = [5, 10, 15, 20]
 const showing = ref(true)
 const authorFacetCount = ref(preferences.authorFacetCount)
@@ -335,15 +337,18 @@ const filteredFacets = ref()
 const filterValue = ref(undefined)
 const dropdownTrigger = ref()
 const dropdownTriggerValue = computed(() => {
-  const { t } = useI18n()
-  if (facetSortBy.value === 'label') return t('facets.by-name')
-  if (facetSortBy.value === 'active') return t('facets.active-facets')
-  return t('facets.most-hits')
+  if (facetSortBy.value === 'label') return i18n.t('facets.by-name')
+  if (facetSortBy.value === 'active') return i18n.t('facets.active-facets')
+  return i18n.t('facets.most-hits')
 })
 const facets: Ref = defineModel<AggregationBin[]>('facets')
 const openMobileFacets = defineModel('openMobileFacets')
 
 const toggle = () => (showing.value = !showing.value)
+
+onMounted(() => {
+  filteredFacets.value = facets.value
+})
 
 // Set user preferences from dropdown options
 const updateFacetCount = (val: number) => {
@@ -371,6 +376,7 @@ const updateSortOption = (val: string, textValue: string) => {
 
 // Sort facets by option
 const sortBy = (option: string = 'count') => {
+  console.log(`Sorting facets by ${option}`)
   const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
   if (option === 'count') {
     filteredFacets.value = filteredFacets.value.sort(
@@ -400,7 +406,7 @@ const sortBy = (option: string = 'count') => {
 const toggleFacet = (facet: AggregationBin) => {
   facet.active = !facet.active
   sortBy(facetSortBy.value)
-  emit('newSearch')
+  emit('activeFacetsChanged')
 }
 
 // Update sort
@@ -451,7 +457,7 @@ watch(filteredFacets, (newV, oldV) => {
         !oldObj.some((newFacet) => oldFacet.label === newFacet.label) && oldFacet.active === true
     )
 
-    if (missingActiveFacets.length) emit('newSearch')
+    if (missingActiveFacets.length) emit('activeFacetsChanged')
   }
 })
 </script>
