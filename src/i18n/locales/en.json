@@ -62,6 +62,8 @@
     "publication-year": "Date",
     "document-reference": "ID number: {0}",
     "result-unknown-author": "unknown author",
+    "unknown-author-original": "אומבאַקאַנטער מחבר",
+    "unknown-author-transcription": "unknown author",
     "none": "Uh-oh! Your query did not return any results",
     "show-original-page": "Go to book (page {0})",
     "show-text": "View transcribed text",

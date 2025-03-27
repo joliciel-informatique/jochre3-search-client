@@ -28,8 +28,10 @@ Description: presents OCR record metadata
           }"
         >
           <span :class="{ 'is-size-4': interfaceStyle == 'old' }">
-            <span v-if="bookIndex && selectedEntryIdx">
-              {{ (bookIndex < 0 ? selectedEntryIdx : bookIndex) + pageNumberOffset }}
+            <span>
+              {{
+                ((bookIndex || -1) < 0 ? selectedEntryIdx || 0 : bookIndex || 0) + pageNumberOffset
+              }}
             </span>
             <span class="px-1">|</span>
             <span
@@ -49,17 +51,28 @@ Description: presents OCR record metadata
           class="toc card-content mb-2 is-flex is-flex-direction-column card m-3 p-3 has-background-grey-lighter"
         >
           <div
-            class="columns is-vcentered has-text-primary pl-2 pt-1 pr-2"
-            :class="displayLeftToRight ? 'has-text-left' : 'has-text-right'"
+            class="is-vcentered has-text-primary pl-2 pt-1 pr-2"
+            :class="{
+              'has-text-left': displayLeftToRight,
+              'has-text-right': !displayLeftToRight,
+              columns: interfaceStyle == 'old'
+            }"
           >
-            <span class="column is-one-fifth has-text-weight-bold">
+            <span
+              class="has-text-weight-bold"
+              :class="{ 'column is-one-fifth': interfaceStyle == 'old' }"
+            >
               {{ $t('results.alternate-title') }}:
             </span>
             <span
-              class="column is-four-fifth has-text-primary is-flex is-flex-direction-row is-align-items-center"
-              :class="{ 'is-justify-content-space-between': interfaceStyle == 'old' }"
+              class="has-text-primary is-align-items-center"
+              :class="{
+                'column is-four-fifth': interfaceStyle == 'old'
+              }"
             >
-              {{ result.metadata.titleEnglish }}
+              <span :class="{ 'ltr-no-text-align': needsLeftToRight }">
+                {{ result.metadata.titleEnglish }}
+              </span>
               <EditBtn
                 :result="result"
                 :edit="'titleEnglish'"
@@ -68,25 +81,33 @@ Description: presents OCR record metadata
             </span>
           </div>
           <div
-            class="columns is-vcentered has-text-primary pl-2 pt-1 pr-2 is-hidden-touch"
-            :class="displayLeftToRight ? 'has-text-left' : 'has-text-right'"
+            class="is-vcentered has-text-primary pl-2 pt-1 pr-2"
+            :class="{
+              'has-text-left': displayLeftToRight,
+              'has-text-right': !displayLeftToRight,
+              columns: interfaceStyle == 'old'
+            }"
           >
-            <span class="column is-one-fifth has-text-weight-bold">
+            <span
+              class="has-text-weight-bold"
+              :class="{ 'column is-one-fifth': interfaceStyle == 'old' }"
+            >
               {{ $t('results.author') }}:
             </span>
-
             <span
-              class="column is-four-fifth has-text-primary is-flex is-flex-direction-row is-align-items-center"
+              class="has-text-primary"
               :class="{
-                'is-justify-content-space-between': interfaceStyle == 'old',
-                'rtl-no-text-align': needsRightToLeft,
-                'ltr-no-text-align': needsLeftToRight
+                'column is-four-fifth': interfaceStyle == 'old'
               }"
             >
-              {{ result.metadata.author }}
+              <span :class="{ 'rtl-no-text-align': needsRightToLeft }">
+                {{ result.metadata.author ?? $t('results.unknown-author-original') }}
+              </span>
               <EditBtn :result="result" :edit="'author'" v-model:metadata-modal="metadataModal" />
               (
-              {{ result.metadata.authorEnglish }}
+              <span :class="{ 'ltr-no-text-align': needsLeftToRight }">
+                {{ result.metadata.authorEnglish ?? $t('results.unknown-author-transcription') }}
+              </span>
               <EditBtn
                 :result="result"
                 :edit="'authorEnglish'"
@@ -96,44 +117,28 @@ Description: presents OCR record metadata
             </span>
           </div>
           <div
-            class="columns is-vcentered has-text-primary pl-2 pt-1 pr-2 is-hidden-desktop"
-            :class="displayLeftToRight ? 'has-text-left' : 'has-text-right'"
+            class="is-vcentered has-text-primary pl-2 pt-1 pr-2"
+            :class="{
+              'has-text-left': displayLeftToRight,
+              'has-text-right': !displayLeftToRight,
+              columns: interfaceStyle == 'old'
+            }"
           >
-            <span class="column is-one-fifth has-text-weight-bold">
-              {{ $t('results.author') }}:
-            </span>
-
             <span
-              class="column is-four-fifth has-text-primary is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between"
-              :class="needsRightToLeft ? 'ltr-no-text-align' : 'rtl-no-text-align'"
+              class="has-text-weight-bold"
+              :class="{ 'column is-one-fifth': interfaceStyle == 'old' }"
             >
-              {{ result.metadata.author }}
-              <EditBtn :result="result" :edit="'author'" v-model:metadata-modal="metadataModal" />
+              {{ $t('results.publication-year') }}:
             </span>
             <span
-              class="column is-four-fifth has-text-primary is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between"
-              :class="needsRightToLeft ? 'ltr-no-text-align' : 'rtl-no-text-align'"
+              class="has-text-primary"
+              :class="{
+                'column is-four-fifth': interfaceStyle == 'old'
+              }"
             >
-              {{ result.metadata.authorEnglish }}
-              <EditBtn
-                :result="result"
-                :edit="'authorEnglish'"
-                v-model:metadata-modal="metadataModal"
-              />
-            </span>
-          </div>
-          <div
-            class="columns is-vcentered has-text-primary pl-2 pt-1 pr-2"
-            :class="displayLeftToRight ? 'has-text-left' : 'has-text-right'"
-          >
-            <span class="column is-one-fifth has-text-weight-bold">
-              {{ $t('results.publication-year') }}:</span
-            >
-            <span
-              class="column is-four-fifth has-text-primary is-flex is-flex-direction-row is-align-items-center"
-              :class="{ 'is-justify-content-space-between': interfaceStyle == 'old' }"
-            >
-              {{ result.metadata.publicationYear }}
+              <span :class="{ 'ltr-no-text-align': needsLeftToRight }">
+                {{ result.metadata.publicationYear }}
+              </span>
               <EditBtn
                 :result="result"
                 :edit="'publicationYear'"
@@ -142,17 +147,28 @@ Description: presents OCR record metadata
             </span>
           </div>
           <div
-            class="columns is-vcentered has-text-primary pl-2 pt-1 pr-2"
-            :class="displayLeftToRight ? 'has-text-left' : 'has-text-right'"
+            class="is-vcentered has-text-primary pl-2 pt-1 pr-2"
+            :class="{
+              'has-text-left': displayLeftToRight,
+              'has-text-right': !displayLeftToRight,
+              columns: interfaceStyle == 'old'
+            }"
           >
-            <span class="column is-one-fifth has-text-weight-bold">
-              {{ $t('results.publisher') }}:</span
-            >
             <span
-              class="column is-four-fifth has-text-primary is-flex is-flex-direction-row is-align-items-center"
-              :class="{ 'is-justify-content-space-between': interfaceStyle == 'old' }"
+              class="has-text-weight-bold"
+              :class="{ 'column is-one-fifth': interfaceStyle == 'old' }"
             >
-              <span class="is-vcentered">{{ result.metadata.publisher }}</span>
+              {{ $t('results.publisher') }}:
+            </span>
+            <span
+              class="has-text-primary"
+              :class="{
+                'column is-four-fifth': interfaceStyle == 'old'
+              }"
+            >
+              <span class="is-vcentered" :class="{ 'ltr-no-text-align': needsLeftToRight }">{{
+                result.metadata.publisher
+              }}</span>
               <EditBtn
                 :result="result"
                 :edit="'publisher'"
@@ -161,7 +177,7 @@ Description: presents OCR record metadata
             </span>
           </div>
           <div
-            class="is-size-7 px-2"
+            class="is-size-7 pt-2"
             :class="displayLeftToRight ? 'has-text-right' : 'has-text-left'"
             aria-label="document reference"
             tabindex="3"
