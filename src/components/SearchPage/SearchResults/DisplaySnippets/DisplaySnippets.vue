@@ -19,12 +19,7 @@ Description: controls text snippets from the OCR text
         class="is-invisible"
       />
       <ul
-        class="p-2 pt-4 snippets-on"
-        :class="
-          preferences.isMobile || preferences.isTablet || preferences.isPortrait
-            ? `mobile is-hidden-desktop`
-            : `desktop is-hidden-touch`
-        "
+        class="p-2 pt-4"
         v-show="
           displayPerBook ||
           (!displayPerBook && searchResults[selectedEntryIdx]?.docRef === result.docRef)
@@ -62,11 +57,10 @@ Description: controls text snippets from the OCR text
         :page-number-offset="pageNumberOffset"
       />
       <ul
-        class="p-5 pt-4 snippets-on"
-        :class="
-          preferences.isMobile || preferences.isTablet || preferences.isPortrait
-            ? `mobile is-hidden-desktop`
-            : `desktop is-hidden-touch`
+        class="p-5 pt-4"
+        v-show="
+          displayPerBook ||
+          (!displayPerBook && searchResults[selectedEntryIdx]?.docRef === result.docRef)
         "
       >
         <SingleSnippet
@@ -125,7 +119,7 @@ const scrolling = () => {
     // If else: activate books below the middle of the screen
 
     const snippetsDiv = document.getElementById('snippets')
-    const snippets = Array.from(document.querySelectorAll('.snippets-on li'))
+    const snippets = Array.from(document.querySelectorAll('#snippets li'))
 
     if (snippetsDiv && snippets.length) {
       if (snippetsDiv.scrollTop === 0) {
