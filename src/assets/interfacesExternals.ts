@@ -34,6 +34,7 @@ export interface Preferences {
 }
 
 export interface SearchResult {
+  [index: string]: string | Metadata | Snippet[]
   docRef: string
   metadata: Metadata
   snippets: Snippet[]

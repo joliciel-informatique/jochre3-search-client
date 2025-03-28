@@ -22,15 +22,16 @@ Description: presents OCR record metadata
       <template #header>
         <p
           class="pb-2 is-flex is-flex-direction-row is-justify-content-space-between"
-          :class="
-            interfaceStyle == 'old'
-              ? 'card m-3 p-3 card-header has-background-primary has-text-white'
-              : ''
-          "
+          :class="{
+            'card m-3 p-3 card-header has-background-primary has-text-white':
+              interfaceStyle == 'old'
+          }"
         >
-          <span :class="[interfaceStyle == 'old' ? 'is-size-4' : '']">
+          <span :class="{ 'is-size-4': interfaceStyle == 'old' }">
             <span>
-              {{ (bookIndex < 0 ? selectedEntryIdx : bookIndex) + pageNumberOffset }}
+              {{
+                ((bookIndex || -1) < 0 ? selectedEntryIdx || 0 : bookIndex || 0) + pageNumberOffset
+              }}
             </span>
             <span class="px-1">|</span>
             <span
@@ -41,47 +42,148 @@ Description: presents OCR record metadata
               ({{ result.metadata.author ?? $t('results.result-unknown-author') }})
             </span>
           </span>
-          <span class="icon menu-list-icon" aria-labelledby="edit" tabindex="3">
-            <font-awesome-icon
-              class="is-clickable"
-              icon="pen-to-square"
-              @click="openMetadataModal"
-              @keyup.enter="openMetadataModal"
-            />
-          </span>
+          <EditBtn :result="result" :edit="'title'" v-model:metadata-modal="metadataModal" />
         </p>
       </template>
 
       <template #content>
         <div
-          class="toc card-content mb-2 is-flex is-flex-direction-column"
-          :class="interfaceStyle == 'old' ? 'card m-3 p-3 has-background-grey-lighter' : ''"
+          class="toc card-content mb-2 is-flex is-flex-direction-column card m-3 p-3 has-background-grey-lighter"
         >
-          <SingleResultItem
-            v-for="field in fields"
-            :key="sha1(field)"
-            :doc-ref="result.docRef"
-            :field="field"
-            :value="(result.metadata as any)[field] ?? ''"
-            v-model:metadata-modal="metadataModal"
-          />
           <div
-            v-if="interfaceStyle == 'old'"
-            class="is-size-7 px-2"
+            class="is-vcentered has-text-primary pl-2 pt-1 pr-2"
+            :class="{
+              'has-text-left': displayLeftToRight,
+              'has-text-right': !displayLeftToRight,
+              columns: interfaceStyle == 'old'
+            }"
+          >
+            <span
+              class="has-text-weight-bold"
+              :class="{ 'column is-one-fifth': interfaceStyle == 'old' }"
+            >
+              {{ $t('results.alternate-title') }}:
+            </span>
+            <span
+              class="has-text-primary is-align-items-center"
+              :class="{
+                'column is-four-fifth': interfaceStyle == 'old'
+              }"
+            >
+              <span :class="{ 'ltr-no-text-align': needsLeftToRight }">
+                {{ result.metadata.titleEnglish }}
+              </span>
+              <EditBtn
+                :result="result"
+                :edit="'titleEnglish'"
+                v-model:metadata-modal="metadataModal"
+              />
+            </span>
+          </div>
+          <div
+            class="is-vcentered has-text-primary pl-2 pt-1 pr-2"
+            :class="{
+              'has-text-left': displayLeftToRight,
+              'has-text-right': !displayLeftToRight,
+              columns: interfaceStyle == 'old'
+            }"
+          >
+            <span
+              class="has-text-weight-bold"
+              :class="{ 'column is-one-fifth': interfaceStyle == 'old' }"
+            >
+              {{ $t('results.author') }}:
+            </span>
+            <span
+              class="has-text-primary"
+              :class="{
+                'column is-four-fifth': interfaceStyle == 'old'
+              }"
+            >
+              <span :class="{ 'rtl-no-text-align': needsRightToLeft }">
+                {{ result.metadata.author ?? $t('results.unknown-author-original') }}
+              </span>
+              <EditBtn :result="result" :edit="'author'" v-model:metadata-modal="metadataModal" />
+              (
+              <span :class="{ 'ltr-no-text-align': needsLeftToRight }">
+                {{ result.metadata.authorEnglish ?? $t('results.unknown-author-transcription') }}
+              </span>
+              <EditBtn
+                :result="result"
+                :edit="'authorEnglish'"
+                v-model:metadata-modal="metadataModal"
+              />
+              )
+            </span>
+          </div>
+          <div
+            class="is-vcentered has-text-primary pl-2 pt-1 pr-2"
+            :class="{
+              'has-text-left': displayLeftToRight,
+              'has-text-right': !displayLeftToRight,
+              columns: interfaceStyle == 'old'
+            }"
+          >
+            <span
+              class="has-text-weight-bold"
+              :class="{ 'column is-one-fifth': interfaceStyle == 'old' }"
+            >
+              {{ $t('results.publication-year') }}:
+            </span>
+            <span
+              class="has-text-primary"
+              :class="{
+                'column is-four-fifth': interfaceStyle == 'old'
+              }"
+            >
+              <span :class="{ 'ltr-no-text-align': needsLeftToRight }">
+                {{ result.metadata.publicationYear }}
+              </span>
+              <EditBtn
+                :result="result"
+                :edit="'publicationYear'"
+                v-model:metadata-modal="metadataModal"
+              />
+            </span>
+          </div>
+          <div
+            class="is-vcentered has-text-primary pl-2 pt-1 pr-2"
+            :class="{
+              'has-text-left': displayLeftToRight,
+              'has-text-right': !displayLeftToRight,
+              columns: interfaceStyle == 'old'
+            }"
+          >
+            <span
+              class="has-text-weight-bold"
+              :class="{ 'column is-one-fifth': interfaceStyle == 'old' }"
+            >
+              {{ $t('results.publisher') }}:
+            </span>
+            <span
+              class="has-text-primary"
+              :class="{
+                'column is-four-fifth': interfaceStyle == 'old'
+              }"
+            >
+              <span class="is-vcentered" :class="{ 'ltr-no-text-align': needsLeftToRight }">{{
+                result.metadata.publisher
+              }}</span>
+              <EditBtn
+                :result="result"
+                :edit="'publisher'"
+                v-model:metadata-modal="metadataModal"
+              />
+            </span>
+          </div>
+          <div
+            class="is-size-7 pt-2"
             :class="displayLeftToRight ? 'has-text-right' : 'has-text-left'"
             aria-label="document reference"
             tabindex="3"
           >
             <strong>{{ $t('results.document-reference', [result.docRef]) }}</strong>
           </div>
-        </div>
-        <div
-          v-if="interfaceStyle == 'new'"
-          class="has-text-right is-size-7 px-2"
-          aria-label="document reference"
-          tabindex="3"
-        >
-          <strong>{{ $t('results.document-reference', [result.docRef]) }}</strong>
         </div>
       </template>
 
@@ -102,46 +204,25 @@ Description: presents OCR record metadata
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
-import { sha1 } from 'object-hash'
+import { type PropType } from 'vue'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { storeToRefs } from 'pinia'
-import SingleResultItem from '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
 import AccordionCard from '@/_components/AccordionCard/AccordionCard.vue'
-const { displayLeftToRight, interfaceStyle } = storeToRefs(usePreferencesStore())
+import EditBtn from './EditBtn.vue'
+const { displayLeftToRight, interfaceStyle, needsLeftToRight, needsRightToLeft } =
+  storeToRefs(usePreferencesStore())
 
-// const SingleResultItem = defineAsyncComponent(
-//   () =>
-//     import(
-//       '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResultItem/SingleResultItem.vue'
-//     )
-// )
-// const AccordionCard = defineAsyncComponent(
-//   () => import('@/_components/AccordionCard/AccordionCard.vue')
-// )
-
-const { result, bookIndex, pageNumberOffset } = defineProps([
-  'result',
-  'bookIndex',
-  'pageNumberOffset'
-])
+const { result, bookIndex, pageNumberOffset } = defineProps({
+  result: { type: Object as PropType<SearchResult> },
+  bookIndex: { type: Number, default: 0 },
+  pageNumberOffset: { type: Number, default: 0 }
+})
 
 const metadataModal = defineModel('metadataModal')
 const showing = defineModel<boolean>('showing', { default: true })
 const selectedEntry = defineModel<SearchResult>('selectedEntry')
 const selectedEntryIdx = defineModel<number>('selectedEntryIdx')
 
-const fields = ['titleEnglish', 'author', 'authorEnglish', 'publicationYear', 'publisher']
-
 const toggle = () => (showing.value = !showing.value)
-
-const openMetadataModal = () => {
-  metadataModal.value = {
-    show: true,
-    docRef: result.docRef,
-    field: 'title',
-    value: result.metadata.title
-  }
-}
 </script>
