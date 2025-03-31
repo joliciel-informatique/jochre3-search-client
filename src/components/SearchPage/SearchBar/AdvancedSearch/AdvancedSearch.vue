@@ -12,8 +12,12 @@ Methods: None
 Description: the advanced search toolbox
 -->
 <template>
-  <div class="advancedSearch is-flex is-justify-content-center">
-    <div id="advancedSearchPanel" class="body m-3 p-3" v-show="showAdvancedSearchPanel">
+  <div
+    class="container is-fullhd advancedSearch is-flex is-justify-content-center"
+    style="overflow: auto; max-height: 64vh"
+    v-if="showAdvancedSearchPanel"
+  >
+    <div id="advancedSearchPanel" class="body" v-show="showAdvancedSearchPanel">
       <div class="body-inner container is-max-desktop">
         <span class="columns is-vcentered mt-1 p-1">
           <p class="column is-2 is-flex has-text-white">
@@ -48,7 +52,7 @@ Description: the advanced search toolbox
                 <input
                   id="advanced-search-authors"
                   type="text"
-                  class="input"
+                  class="input has-text-dark"
                   lang="yi"
                   name="findAuthorInput"
                   v-model="authorText"
@@ -81,7 +85,7 @@ Description: the advanced search toolbox
             <p class="control is-expanded">
               <input
                 id="bookTitle"
-                class="input"
+                class="input has-text-dark"
                 type="text"
                 lang="yi"
                 :placeholder="$t('search.title')"
@@ -104,7 +108,7 @@ Description: the advanced search toolbox
             class="column is-flex is-desktop is-flex-grow-2 field has-addons has-addons-left is-horizontal"
           >
             <input
-              class="input"
+              class="input has-text-dark"
               name="documentRefsInput"
               type="text"
               aria-label="document reference numbers"
@@ -120,11 +124,11 @@ Description: the advanced search toolbox
           >
             {{ $t('search.date-from') }}
           </p>
-          <p class="column control is-2 has-text-centered">
+          <p class="column control is-2">
             <input
               id="fromYear"
               aria-labelledby="searchDateFrom"
-              class="input"
+              class="input has-text-dark"
               type="number"
               placeholder="1700"
               v-model="fromYear"
@@ -132,13 +136,13 @@ Description: the advanced search toolbox
               max="2000"
             />
           </p>
-          <p class="column has-text-centered has-text-white is-1 mr-1 ml-1" id="searchToYear">
+          <p class="column has-text-white is-1 mr-1 ml-1" id="searchToYear">
             {{ $t('search.date-to') }}
           </p>
-          <p class="column control is-2 has-text-centered">
+          <p class="column control is-2">
             <input
               id="toYear"
-              class="input control"
+              class="input has-text-dark"
               aria-labelledby="searchToYear"
               type="number"
               placeholder="2000"
@@ -147,26 +151,40 @@ Description: the advanced search toolbox
               max="2000"
             />
           </p>
-          <p class="column has-text-right has-text-white is-2 mr-1 ml-1" id="searchSortBy">
+        </span>
+        <span class="columns is-vcentered mt-1 p-1">
+          <p class="column has-text-white is-2 mr-1 ml-1" id="searchSortBy">
             {{ $t('search.sort-by') }}
           </p>
-          <select
-            class="column control select has-text-centered"
-            name="sortBySelect"
-            aria-labelledby="searchSortBy"
-            v-model="sortBy"
+          <span
+            class="column is-flex is-desktop is-flex-grow-2 field has-addons has-addons-left is-horizontal"
           >
-            <option value="Score">{{ $t('search.sort.score') }}</option>
-            <option value="DateAscending">
-              {{ $t('search.sort.date-ascending') }}
-            </option>
-            <option value="DateDescending">
-              {{ $t('search.sort.date-descending') }}
-            </option>
-          </select>
+            <select
+              class="column control select"
+              name="sortBySelect"
+              aria-labelledby="searchSortBy"
+              v-model="sortBy"
+            >
+              <option value="Score">{{ $t('search.sort.score') }}</option>
+              <option value="DateAscending">
+                {{ $t('search.sort.date-ascending') }}
+              </option>
+              <option value="DateDescending">
+                {{ $t('search.sort.date-descending') }}
+              </option>
+            </select>
+          </span>
+          <!-- <span class="columns is-vcentered mt-1 p-1">
+          <p class="column has-text-right has-text-white is-2 mr-1 ml-1" id="searchSortBy">
+            {{ $t('search.sort-by') }}
+          </p> -->
         </span>
-        <p class="has-text-warning">{{ $t('search.field-instructions') }}</p>
-        <div
+        <span class="columns is-vcentered mt-1 p-1">
+          <p class="column has-text-warning mr-1 ml-1">
+            {{ $t('search.field-instructions') }}
+          </p>
+        </span>
+        <span
           class="field has-text-centered p-2 is-flex is-flex-direction-row is-justify-content-space-between"
         >
           <button
@@ -185,7 +203,7 @@ Description: the advanced search toolbox
           >
             {{ $t('search.search-button') }}
           </button>
-        </div>
+        </span>
       </div>
     </div>
   </div>

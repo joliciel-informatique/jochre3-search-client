@@ -1,8 +1,10 @@
 <template>
   <div
-    :class="{
-      'rtl-align': !preferences.displayLeftToRight
-    }"
+    :class="[
+      !preferences.displayLeftToRight ? 'rtl-align' : '',
+      preferences.interfaceStyle == 'old' ? 'scrollBody' : ''
+    ]"
+    :style="preferences.interfaceStyle == 'old' ? 'overflow: auto; max-height: 100vh' : ''"
   >
     <PreferencesSetup />
     <SearchPage

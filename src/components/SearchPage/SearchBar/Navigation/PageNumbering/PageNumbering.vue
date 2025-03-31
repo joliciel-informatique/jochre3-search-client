@@ -15,7 +15,7 @@ Description: calculates and presents page numbers
     role="navigation"
   >
     <nav
-      class="pagination p-1"
+      class="pagination"
       role="navigation"
       aria-label="pagination"
       tabindex="2"
@@ -190,7 +190,7 @@ Description: calculates and presents page numbers
         <a
           @click="page + 1 > lastPage ? null : changePage(page + 1)"
           @keyup.enter="page + 1 > lastPage ? null : changePage(page + 1)"
-          class="pagination-link is-small"
+          class="pagination-link is-small has-text-dark"
           :aria-label="`go to page ${page + 1}`"
           tabindex="2"
           :disabled="page + 1 > lastPage ? true : null"
@@ -201,7 +201,7 @@ Description: calculates and presents page numbers
         <a
           @click="page + 2 > lastPage ? null : changePage(page + 2)"
           @keyup.enter="page + 2 > lastPage ? null : changePage(page + 2)"
-          class="pagination-link is-small"
+          class="pagination-link is-small has-text-dark"
           :aria-label="`go to next page`"
           tabindex="2"
           :disabled="page + 2 > lastPage ? true : null"
@@ -212,7 +212,7 @@ Description: calculates and presents page numbers
         <a
           @click="page + 3 > lastPage ? null : changePage(page + 3)"
           @keyup.enter="page + 3 > lastPage ? null : changePage(page + 3)"
-          class="pagination-link is-small"
+          class="pagination-link is-small has-text-dark"
           :aria-label="`go to next page`"
           tabindex="2"
           :disabled="page + 3 > lastPage ? true : null"
@@ -223,7 +223,7 @@ Description: calculates and presents page numbers
         <a
           @click="lastPage < 5 ? null : changePage(lastPage)"
           @keyup.enter="lastPage < 5 ? null : changePage(lastPage)"
-          class="pagination-link is-small"
+          class="pagination-link is-small has-text-dark"
           :aria-label="`go to lastpage ${lastPage}`"
           tabindex="2"
           :disabled="lastPage < 5 ? true : null"
@@ -231,8 +231,8 @@ Description: calculates and presents page numbers
         >
       </li>
       <li class="ml-auto">
-        <a @click="atTop = !atTop" class="pagination-link is-small m-1">
-          <font-awesome-icon :icon="atTop ? 'arrow-up-1-9' : 'arrow-down-1-9'" />
+        <a @click="atTop = !atTop" class="pagination-link is-small m-1 has-text-dark">
+          <font-awesome-icon :icon="atTop ? 'arrow-down-1-9' : 'arrow-up-1-9'" />
         </a>
       </li>
     </ul>
@@ -240,17 +240,17 @@ Description: calculates and presents page numbers
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch, type Ref } from 'vue'
+import { computed, type Ref } from 'vue'
 import { preferences } from '@/assets/fetchMethods'
 import { isBusy, hasSearch } from '@/assets/appState'
 import { useSearchStore } from '@/stores/SearchStore'
+import { useStateStore } from '@/stores/stateStore'
 import { storeToRefs } from 'pinia'
 
-const searchStore = useSearchStore()
-const { page } = storeToRefs(searchStore)
+const { page } = storeToRefs(useSearchStore())
+const { atTop } = storeToRefs(useStateStore())
 const emit = defineEmits(['newPage'])
 
-const atTop = ref()
 const totalHits: Ref = defineModel('totalHits')
 const lastPage = computed(() => Math.floor((totalHits.value - 1) / preferences.resultsPerPage) + 1)
 
@@ -258,24 +258,4 @@ const changePage = (pageNumber: number) => {
   page.value = pageNumber
   emit('newPage')
 }
-
-onMounted(() => {
-  const snippetDiv = document.getElementById('snippets')
-  if (snippetDiv) {
-    snippetDiv.addEventListener('scroll', () => {
-      if (snippetDiv.scrollTop !== 0) atTop.value = undefined
-      if (snippetDiv.scrollTop !== snippetDiv.scrollHeight - snippetDiv.offsetHeight)
-        atTop.value = undefined
-    })
-  }
-})
-
-watch(atTop, (newV) => {
-  const snippetDiv = document.getElementById('snippets')
-  if (snippetDiv && newV !== undefined) {
-    newV
-      ? snippetDiv.scrollTo({ top: 0, behavior: 'instant' })
-      : snippetDiv.scrollTo({ top: snippetDiv.scrollHeight, behavior: 'instant' })
-  }
-})
 </script>

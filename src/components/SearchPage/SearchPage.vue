@@ -1,20 +1,20 @@
 <template>
   <header id="topbar" class="is-flex is-flex-direction-column-reverse">
     <nav class="is-flex is-flex-direction-column navbar" id="navbar" role="navigation">
-      <div class="navbar-brand is-flex is-flex-direction-row is-justify-content-space-between">
+      <div
+        class="is-flex is-flex-direction-column"
+        :class="interfaceStyle == 'new' ? 'navbar-brand' : ''"
+      >
         <div
-          v-if="searchResults.length"
-          class="navbar-item logo is-flex is-flex-direction-row is-align-items-start is-flex-grow-1 is-flex-shrink-1"
-          :class="isMobile ? 'px-2' : ''"
+          class="navbar-item is-flex is-flex-direction-row is-place-self-stretch is-align-items-center"
         >
-          <a href="/">
+          <a
+            href="/"
+            class="is-flex is-flex-direction-column is-align-self-flex-start is-align-self-flex-stretch"
+            v-if="searchResults.length"
+          >
             <img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')" />
           </a>
-        </div>
-        <div
-          class="navbar-item is-flex is-flex-direction-row is-flex-grow-4 is-flex-shrink-2"
-          :class="isMobile ? 'px-2' : ''"
-        >
           <SearchBar
             @newSearch="newSearch"
             @resetSearchResults="resetSearchResults"
@@ -24,58 +24,66 @@
             v-model:strict="strict"
             v-model:is-loading="isLoading"
           />
-        </div>
-        <UserOptions
-          v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-          v-model:open-nav-bar-mobile-menu="openNavBarMobileMenu"
-        />
-        <div
-          class="navbar-burger is-flex is-flex-grow-1 has-text-white is-hidden-desktop"
-          :class="openNavBarMobileMenu ? 'is-active' : ''"
-          role="button"
-          aria-label="menu"
-          aria-expanded="false"
-          @click="openNavBarMobileMenu = !openNavBarMobileMenu"
-        >
-          <div>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
+          <UserOptions
+            v-if="authenticated"
+            v-model:search-results="searchResults"
+            v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+            v-model:open-nav-bar-mobile-menu="openNavBarMobileMenu"
+          />
+          <div
+            class="navbar-burger is-flex is-flex-grow-1 has-text-white is-hidden-desktop"
+            :class="openNavBarMobileMenu ? 'is-active' : ''"
+            role="button"
+            aria-label="menu"
+            aria-expanded="false"
+            @click="openNavBarMobileMenu = !openNavBarMobileMenu"
+          >
+            <div>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </div>
           </div>
         </div>
-      </div>
-      <AdvancedSearch
-        @newSearch="newSearch"
-        @resetSearchResults="resetSearchResults"
-        v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-        v-model:author-list="authorList"
-        v-model:title="title"
-        v-model:to-year="toYear"
-        v-model:from-year="fromYear"
-        v-model:doc-refs="docRefs"
-        v-model:sort-by="sortBy"
-        v-model:facets="facets"
-        v-model:include-authors="includeAuthors"
-      />
-      <div class="is-hidden-touch">
-        <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
+        <div class="is-hidden-touch">
+          <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
+        </div>
+        <div
+          class="navbar-item is-flex is-flex-direction-column"
+          style="top: 0; overflow-y: auto; max-height: 92vh"
+          v-if="showAdvancedSearchPanel"
+        >
+          <AdvancedSearch
+            @newSearch="newSearch"
+            @resetSearchResults="resetSearchResults"
+            v-model:show-advanced-search-panel="showAdvancedSearchPanel"
+            v-model:author-list="authorList"
+            v-model:title="title"
+            v-model:to-year="toYear"
+            v-model:from-year="fromYear"
+            v-model:doc-refs="docRefs"
+            v-model:sort-by="sortBy"
+            v-model:facets="facets"
+            v-model:include-authors="includeAuthors"
+          />
+        </div>
+        <!-- </div> -->
       </div>
       <div class="is-hidden-desktop">
         <ContentsTable
+          v-if="hasSearch"
           v-model:search-results="searchResults"
           v-model:image-modal="imageModal"
           v-model:metadata-modal="metadataModal"
           v-model:notification="notification"
           v-model:word-modal="wordModal"
           v-model:selected-entry-idx="selectedEntryIdx"
-          v-model:total-hits="totalHits"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
           v-model:facets="facets"
-          @reset-search-results="resetSearchResults"
-          @new-search="newSearch"
+          @active-facets-changed="activeFacetsChanged"
           @new-page="newPage"
         />
       </div>
@@ -84,9 +92,22 @@
   </header>
   <main>
     <!-- Contents table on desktop -->
+
+    <!-- Loading -->
     <div
-      v-if="hasSearch && searchResults?.length"
-      class="is-flex is-flex-direction-row is-justify-content-space-between"
+      v-if="isLoading"
+      class="search-results is-flex is-flex-direction-column has-text-centered pt-5"
+    >
+      <h1>{{ $t('results.loading') }}</h1>
+      <div class="loader-wrapper is-active mt-5">
+        <div class="loader is-loading is-active"></div>
+        <font-awesome-icon icon="book-open" color="grey" size="2xl" />
+      </div>
+    </div>
+
+    <div
+      v-else-if="hasSearch && searchResults.length && interfaceStyle == 'new'"
+      class="search-results is-flex is-flex-direction-row snippets is-justify-content-center"
     >
       <div class="is-hidden-touch">
         <ContentsTable
@@ -96,13 +117,12 @@
           v-model:notification="notification"
           v-model:word-modal="wordModal"
           v-model:selected-entry-idx="selectedEntryIdx"
-          v-model:total-hits="totalHits"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
           v-model:facets="facets"
-          @reset-search-results="resetSearchResults"
-          @new-search="newSearch"
+          @active-facets-changed="activeFacetsChanged"
+          @new-page="newPage"
         />
       </div>
       <!-- Not loading, has query and results -->
@@ -110,6 +130,7 @@
         v-model:image-modal="imageModal"
         v-model:notification="notification"
         v-model:word-modal="wordModal"
+        v-model:metadata-modal="metadataModal"
         v-model:selected-entry-idx="selectedEntryIdx"
         v-model:search-results="searchResults"
         v-model:is-loading="isLoading"
@@ -118,25 +139,45 @@
       />
       <div class="is-hidden-touch">
         <FacetBar
-          @newSearch="newSearch"
+          @active-facets-changed="activeFacetsChanged"
           v-model:facets="facets"
           v-model:open-mobile-facets="openMobileFacets"
         />
       </div>
     </div>
-    <div
-      v-else-if="isLoading && hasSearch && !searchResults?.length"
-      class="is-flex is-flex-direction-column has-text-centered pt-5"
-    >
-      <!-- Loading with query, but no results -->
-      <h1>{{ $t('results.loading') }}</h1>
+    <div v-else-if="hasSearch && searchResults.length && interfaceStyle == 'old'">
+      <div class="is-flex is-flex-direction-row is-flex-wrap-nowrap is-justify-content-center">
+        <!-- Not loading, has query and results -->
+        <div class="search-results is-flex is-flex-direction-column">
+          <h1 class="ml-2 mr-2 mt-2">
+            {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
+          </h1>
+          <DisplaySnippets
+            v-model:image-modal="imageModal"
+            v-model:notification="notification"
+            v-model:word-modal="wordModal"
+            v-model:metadata-modal="metadataModal"
+            v-model:selected-entry-idx="selectedEntryIdx"
+            v-model:search-results="searchResults"
+            v-model:is-loading="isLoading"
+            v-model:query="query"
+            v-model:strict="strict"
+          />
+        </div>
+        <div class="is-hidden-touch">
+          <FacetBar
+            @active-facets-changed="activeFacetsChanged"
+            v-model:facets="facets"
+            v-model:open-mobile-facets="openMobileFacets"
+          />
+        </div>
+      </div>
+
+      <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
     </div>
 
     <!-- Not loading, with query, but no results -->
-    <div
-      v-else-if="!isLoading && hasSearch && !searchResults?.length"
-      class="m-5 has-text-centered"
-    >
+    <div v-else-if="hasSearch && !searchResults.length" class="m-5 has-text-centered">
       <h1
         class="column is-flex is-flex-direction-column is-justify-content-center is-align-items-center"
       >
@@ -148,12 +189,7 @@
     </div>
 
     <!-- Not loading, no search, no results -->
-    <IndexSize
-      v-else
-      v-model:is-loading="isLoading"
-      v-model:notification="notification"
-      v-model:total-hits="totalHits"
-    />
+    <IndexSize v-else v-model:is-loading="isLoading" v-model:notification="notification" />
   </main>
   <footer
     id="footer"
@@ -163,33 +199,28 @@
       'rtl-align': !preferences.displayLeftToRight
     }"
   >
-    <FooterPage v-model:total-hits="totalHits" />
+    <FooterPage />
   </footer>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, onMounted, ref, defineExpose, type Ref, watch } from 'vue'
+import { defineAsyncComponent, onMounted, ref, type Ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
 
 // Import Child components
+import PageNumbering from '@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue'
+import DisplaySnippets from '@/components/SearchPage/SearchResults/DisplaySnippets/DisplaySnippets.vue'
+import FacetBar from '@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue'
+import ContentsTable from '@/components/SearchPage/SearchResults/ContentsTable/ContentsTable.vue'
+
 const SearchBar = defineAsyncComponent(
   () => import('@/components/SearchPage/SearchBar/SearchBar.vue')
 )
+
 const AdvancedSearch = defineAsyncComponent(
   () => import('@/components/SearchPage/SearchBar/AdvancedSearch/AdvancedSearch.vue')
 )
-const PageNumbering = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue')
-)
-const ContentsTable = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchResults/ContentsTable/ContentsTable.vue')
-)
-const DisplaySnippets = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchResults/DisplaySnippets/DisplaySnippets.vue')
-)
-const FacetBar = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue')
-)
+
 const IndexSize = defineAsyncComponent(
   () => import('@/components/SearchPage/SearchResults/IndexSize/IndexSize.vue')
 )
@@ -209,22 +240,21 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useSearchStore } from '@/stores/SearchStore'
 
 const searchStore = useSearchStore()
-const { page } = storeToRefs(searchStore)
+const { page, totalHits, firstResult, lastResult } = storeToRefs(searchStore)
 const preferences = usePreferencesStore()
 
 const { initializeMedia } = preferences
 
-const { show } = storeToRefs(preferences)
+const { show, interfaceStyle } = storeToRefs(preferences)
 
 import { storeToRefs } from 'pinia'
 
-const { authorFacetCount, isMobile } = storeToRefs(preferences)
+const { authorFacetCount } = storeToRefs(preferences)
 
 const query = ref('')
 // const selectedEntry = ref<SearchResult>()
 const selectedEntryIdx = ref(0)
 const searchResults = ref<Array<SearchResult>>([])
-const totalHits = ref()
 const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
@@ -335,7 +365,13 @@ onMounted(() => {
 })
 
 const newPage = () => runSearch()
-const newSearch = () => (page.value = 1) && runSearch()
+const newSearch = () => {
+  clearSearchResults()
+  runSearch()
+}
+const activeFacetsChanged = () => {
+  runSearch()
+}
 
 const defineSearchParams = () => {
   return Object.assign(
@@ -456,6 +492,7 @@ const searchFacets = async () => {
     facetParams.append('maxBins', preferences.authorFacetCount.toString())
   return fetchData('aggregate', 'get', facetParams).then((response) =>
     response.json().then((result) => {
+      console.log(`Found ${result.bins.length} author facets`)
       const activeFacets = facets.value
         .map((facet) => (facet.active ? facet.label : null))
         .filter((facet) => facet)
@@ -621,9 +658,9 @@ const runSearch = async (addHistory: boolean = true) => {
     })
 }
 
-defineExpose({
-  newSearch,
-  newPage,
-  resetSearchResults
-})
+// defineExpose({
+//   newSearch,
+//   newPage,
+//   resetSearchResults
+// })
 </script>

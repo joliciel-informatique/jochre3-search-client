@@ -11,11 +11,14 @@ export const usePreferencesStore = defineStore('preferences', () => {
   const show = ref(false)
   const storePreferencesInCookie = ref(true)
   const language = ref('yi')
+  const interfaceStyle = ref('old')
   const resultsPerPage = ref(10)
   const authorFacetCount = ref(10)
   const corpusLanguage = ref('yi')
   const displayPerBook = ref(false)
   const facetSortBy = ref('hits')
+
+  const transcribedTextSize = ref(6)
 
   const isTablet = ref(false)
   const isMobile = ref(false)
@@ -51,7 +54,8 @@ export const usePreferencesStore = defineStore('preferences', () => {
     'resultsPerPage',
     'authorFacetCount',
     'displayPerBook',
-    'facetSortBy'
+    'facetSortBy',
+    'transcribedTextSize'
   ])
 
   const getScreenOrientation = (event: Event | null = null) => {
@@ -99,11 +103,15 @@ export const usePreferencesStore = defineStore('preferences', () => {
     if (authenticated) {
       const params = JSON.stringify({
         language: language.value,
+        interfaceStyle: interfaceStyle.value,
         resultsPerPage: resultsPerPage.value,
         authorFacetCount: authorFacetCount.value,
         displayPerBook: displayPerBook.value,
-        facetSortBy: facetSortBy.value
+        facetSortBy: facetSortBy.value,
+        transcribedTextSize: transcribedTextSize.value
       })
+
+      console.log(params)
 
       fetchData('preferences/user', 'post', params)
         .then((res) => {
@@ -118,10 +126,12 @@ export const usePreferencesStore = defineStore('preferences', () => {
         })
     } else {
       cookies.set('locale', language.value)
+      cookies.set('interfaceStyle', interfaceStyle.value)
       cookies.set('resultsPerPage', resultsPerPage.value)
       cookies.set('authorFacetCount', authorFacetCount.value)
       cookies.set('displayPerBook', displayPerBook.value)
       cookies.set('facetSortBy', facetSortBy.value)
+      cookies.set('transcribedTextSize', transcribedTextSize.value)
 
       console.log(`Successfully saved your preferences in a cookie.`)
     }
@@ -129,10 +139,12 @@ export const usePreferencesStore = defineStore('preferences', () => {
 
   interface UserPreferences {
     language?: string
+    interfaceStyle?: string
     resultsPerPage?: number
     displayPerBook?: boolean
     authorFacetCount?: number
     facetSortBy?: string
+    transcribedTextSize?: number
   }
 
   const load = async (): Promise<string> => {
@@ -143,21 +155,25 @@ export const usePreferencesStore = defineStore('preferences', () => {
           return res
             .json()
             .then((userPreferences: UserPreferences) => {
-              if (userPreferences.language) {
-                language.value = userPreferences.language
-              }
-              if (userPreferences.resultsPerPage) {
+              if (userPreferences.language) language.value = userPreferences.language
+
+              if (userPreferences.interfaceStyle)
+                interfaceStyle.value = userPreferences.interfaceStyle
+
+              if (userPreferences.resultsPerPage)
                 resultsPerPage.value = userPreferences.resultsPerPage
-              }
-              if (userPreferences.authorFacetCount) {
+
+              if (userPreferences.authorFacetCount)
                 authorFacetCount.value = userPreferences.authorFacetCount
-              }
-              if (userPreferences.facetSortBy) {
-                facetSortBy.value = userPreferences.facetSortBy
-              }
-              if (userPreferences.displayPerBook !== undefined) {
+
+              if (userPreferences.facetSortBy) facetSortBy.value = userPreferences.facetSortBy
+
+              if (userPreferences.displayPerBook)
                 displayPerBook.value = userPreferences.displayPerBook
-              }
+
+              if (userPreferences.transcribedTextSize)
+                transcribedTextSize.value = userPreferences.transcribedTextSize
+
               return language.value
             })
             .catch((error) => {
@@ -180,26 +196,24 @@ export const usePreferencesStore = defineStore('preferences', () => {
 
     if (!authenticated) {
       console.log(`Not authenticated. Getting preferences from cookie.`)
-      if (cookies.get('locale')) {
-        const languageCookie = cookies.get('locale').value as string
-        language.value = languageCookie
-      }
-      if (cookies.get('resultsPerPage')) {
-        const resultsPerPageCookie = cookies.get('resultsPerPage').value as number
-        resultsPerPage.value = resultsPerPageCookie
-      }
-      if (cookies.get('displayPerBook')) {
-        const displayPerBookCookie = cookies.get('displayPerBook').value as boolean
-        displayPerBook.value = displayPerBookCookie
-      }
-      if (cookies.get('authorFacetCount')) {
-        const authorFacetCountCookie = cookies.get('authorFacetCount').value as number
-        authorFacetCount.value = authorFacetCountCookie
-      }
-      if (cookies.get('facetSortBy')) {
-        const facetSortByCookie = cookies.get('facetSortBy').value as string
-        facetSortBy.value = facetSortByCookie
-      }
+      if (cookies.get('locale')) language.value = cookies.get('locale').value as string
+
+      if (cookies.get('interfaceStyle'))
+        language.value = cookies.get('interfaceStyle').value as string
+
+      if (cookies.get('resultsPerPage'))
+        resultsPerPage.value = cookies.get('resultsPerPage').value as number
+
+      if (cookies.get('displayPerBook'))
+        displayPerBook.value = cookies.get('displayPerBook').value as boolean
+
+      if (cookies.get('authorFacetCount'))
+        authorFacetCount.value = cookies.get('authorFacetCount').value as number
+
+      if (cookies.get('facetSortBy')) facetSortBy.value = cookies.get('facetSortBy').value as string
+
+      if (cookies.get('transcribedTextSize'))
+        transcribedTextSize.value = cookies.get('transcribedTextSize').value as number
     }
   }
 
@@ -207,9 +221,11 @@ export const usePreferencesStore = defineStore('preferences', () => {
     show,
     storePreferencesInCookie,
     language,
+    interfaceStyle,
     resultsPerPage,
     authorFacetCount,
     corpusLanguage,
+    transcribedTextSize,
     displayLeftToRight,
     needsLeftToRight,
     needsRightToLeft,

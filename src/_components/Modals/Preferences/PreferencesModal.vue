@@ -10,6 +10,17 @@
             <h1 class="label">{{ $t('preferences.general-heading') }}</h1>
             <div class="is-flex is-flex-direction-column m-2">
               <div class="columns is-vcentered is-10 pb-2">
+                <span class="column is-4 px-2">{{ $t('preferences.interface-style') }}</span>
+                <div class="column is-4 control">
+                  <span class="select is-fullwidth">
+                    <select name="setToLanguageSelect" v-model="interfaceStyleToSet">
+                      <option value="old">{{ $t('preferences.old-interface-style') }}</option>
+                      <option value="new">{{ $t('preferences.new-interface-style') }}</option>
+                    </select>
+                  </span>
+                </div>
+              </div>
+              <div class="columns is-vcentered is-10 pb-2">
                 <span class="column is-4 px-2">{{ $t('preferences.language') }}</span>
                 <div class="column is-4 control">
                   <span class="select is-fullwidth">
@@ -23,7 +34,7 @@
             </div>
           </div>
         </div>
-        <div class="columns is-vcentered py-3">
+        <div class="columns is-vcentered py-3" v-if="interfaceStyle == 'new'">
           <div class="column">
             <h1 class="label">{{ $t('preferences.snippets-heading') }}</h1>
             <div class="is-flex is-flex-direction-row is-align-items-center m-2">
@@ -71,15 +82,16 @@ const i18n = useI18n()
 
 const notification = defineModel('notification')
 const preferences = usePreferencesStore()
+const interfaceStyleToSet = ref<string>(preferences.interfaceStyle)
 const languageToSet = ref<string>(preferences.language)
 
-const { displayPerBook, language } = storeToRefs(preferences)
+const { displayPerBook, language, interfaceStyle } = storeToRefs(preferences)
 
 const save = () => {
-  if (languageToSet.value != language.value) {
-    language.value = languageToSet.value
-    i18n.locale.value = language.value
-  }
+  language.value = languageToSet.value
+  interfaceStyle.value = interfaceStyleToSet.value
+  i18n.locale.value = language.value
+
   preferences.save()
   preferences.show = false
 }

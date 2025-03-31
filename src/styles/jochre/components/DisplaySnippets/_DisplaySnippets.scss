@@ -1,17 +1,6 @@
 @use '../../../custom/Custom' as *;
 
-.snippets-on {
-  position: relative;
-  // // left: 0.5vw;
-  // &.desktop {
-  //   // width: 50vw;
-  // }
-  // &.mobile {
-  //   // width: 96vw;
-  // }
-}
-
-.bla {
+.snippets {
   justify-items: center;
   position: relative;
   top: 2vh;
@@ -27,6 +16,11 @@
   &.on-mobile {
     width: 100vw;
   }
+
+  &.snippetsOld {
+    width: 80vw;
+  }
+
   > ul {
     scrollbar-width: thin;
     overflow-y: scroll;

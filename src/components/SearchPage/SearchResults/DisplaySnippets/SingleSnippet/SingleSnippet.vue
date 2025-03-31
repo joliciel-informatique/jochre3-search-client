@@ -13,11 +13,23 @@ Description: displays text snippets from the OCR text
   <li :docRef="docRef" class="card snippet mb-4" :bookIndex :snippetIndex>
     <header
       class="card-header"
-      :class="selectedEntryIdx === bookIndex ? 'selected-snippet' : 'snippet'"
+      :class="
+        preferences.interfaceStyle === 'old'
+          ? 'selected-snippet'
+          : preferences.interfaceStyle === 'new' && selectedEntryIdx === bookIndex
+            ? 'selected-snippet'
+            : 'snippet'
+      "
     >
       <p
         class="card-header-title snippet-header"
-        :class="selectedEntryIdx === bookIndex ? '' : 'is-clickable'"
+        :class="
+          preferences.interfaceStyle === 'old'
+            ? ''
+            : preferences.interfaceStyle === 'new' && selectedEntryIdx === bookIndex
+              ? ''
+              : 'is-clickable'
+        "
         @click="selectedEntryIdx = bookIndex"
         tabindex="0"
         :aria-label="`Page ${snippet.page} in ${title} by ${author ?? $t('results.result-unknown-author')}`"
@@ -40,7 +52,7 @@ Description: displays text snippets from the OCR text
         <span class="icon">
           <font-awesome-icon icon="book-open" size="lg" />
         </span>
-        <span v-if="!preferences.isMobile" class="is-size-7">{{ $t('snippet.open-page') }}</span>
+        <span class="is-hidden-mobile is-size-7">{{ $t('snippet.open-page') }}</span>
       </button>
 
       <!-- View transcribed text -->
@@ -54,9 +66,7 @@ Description: displays text snippets from the OCR text
         <span class="icon">
           <font-awesome-icon icon="file-lines" size="lg" />
         </span>
-        <span v-if="!preferences.isMobile" class="is-size-7">{{
-          $t('snippet.open-transcription')
-        }}</span>
+        <span class="is-hidden-mobile is-size-7">{{ $t('snippet.open-transcription') }}</span>
       </button>
     </header>
     <div class="card-content" :data-docref="docRef" :data-page="snippet.page">
@@ -77,7 +87,7 @@ Description: displays text snippets from the OCR text
           v-touch:longtap="openWordModal"
         ></div>
         <div
-          class="load-original-image-button column button is-flex is-align-items-center is-size-7"
+          class="load-original-image-button column button is-flex is-align-items-center is-size-7 p-0"
           :class="imageIsLoading ? 'is-loading' : ''"
           tabindex="0"
           :alt="$t('results.click-image-snippet')"

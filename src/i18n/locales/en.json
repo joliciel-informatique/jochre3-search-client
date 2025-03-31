@@ -18,7 +18,7 @@
     "related-word-forms-tooltip": "Checking this box will exclude related word forms (of the same stem/lemma) in search results (e.g. 'eat, 'eaten', 'ate')",
     "keyboard": "Open Yiddish on-screen keyboard",
     "start-search": "Search!",
-    "field-instructions": "*These fields accept Roman or Yiddish characters.",
+    "field-instructions": "* All fields accept Roman or Yiddish characters.",
     "author": "Author",
     "authorPlaceholder": "Type author name (case-sensitive)",
     "title": "Book title",
@@ -54,7 +54,7 @@
   "results": {
     "loading": "Retrieving search results...",
     "click-image-snippet": "Click to load original image",
-    "alternate-title": "Title in transcription",
+    "alternate-title": "Title (transcription)",
     "volume": "Volume",
     "author": "Author",
     "alternate-author": "Author in transcription",
@@ -62,6 +62,8 @@
     "publication-year": "Date",
     "document-reference": "ID number: {0}",
     "result-unknown-author": "unknown author",
+    "unknown-author-original": "אומבאַקאַנטער מחבר",
+    "unknown-author-transcription": "unknown author",
     "none": "Uh-oh! Your query did not return any results",
     "show-original-page": "Go to book (page {0})",
     "show-text": "View transcribed text",
@@ -73,12 +75,15 @@
     "open-transcription": "Open transcription"
   },
   "navigation": {
-    "currently-viewing-pages": "Currently viewing page {0}/{1}",
+    "currently-viewing-pages": "Viewing page {0}/{1}",
     "jump-to": "Jump to page"
   },
   "preferences": {
     "title": "Update preferences",
     "general-heading": "General",
+    "interface-style": "Interface style",
+    "old-interface-style": "Classic",
+    "new-interface-style": "New",
     "language": "Interface language",
     "snippets-heading": "Snippet display",
     "snippets-per-book": "One book at a time",

@@ -10,75 +10,94 @@ Methods: none
 Description: controls text snippets from the OCR text
 -->
 <template>
-  <div
-    class="is-flex is-justify-content-center bla"
-    :class="
-      preferences.isMobile || preferences.isTablet || preferences.isPortrait
-        ? `on-mobile`
-        : `on-desktop`
-    "
-    tabindex="-1"
-    v-if="!isLoading && searchResults?.length"
-  >
-    <ul id="snippets">
-      <li v-for="(result, bookIndex) of searchResults" :key="sha1(result)">
-        <hr
-          :bookindex="bookIndex"
-          :id="`hr-${bookIndex}`"
-          v-if="displayPerBook"
-          class="is-invisible"
+  <ul id="snippets" class="scrollBody" v-if="searchResults && interfaceStyle == 'new'">
+    <li v-for="(result, bookIndex) of searchResults" :key="sha1(result)">
+      <hr
+        :bookindex="bookIndex"
+        :id="`hr-${bookIndex}`"
+        v-if="displayPerBook"
+        class="is-invisible"
+      />
+      <ul
+        class="p-2 pt-4"
+        v-show="
+          displayPerBook ||
+          (!displayPerBook && searchResults[selectedEntryIdx]?.docRef === result.docRef)
+        "
+      >
+        <SingleSnippet
+          v-for="(snippet, index) in result.snippets"
+          :key="sha1(snippet)"
+          :docRef="result.docRef"
+          :bookIndex="bookIndex"
+          :snippetIndex="index"
+          :snippet="snippet"
+          :url="result.metadata.url"
+          :query="query"
+          :strict="strict"
+          :title="result.metadata.title"
+          :author="result.metadata.author"
+          v-model:image-modal="imageModal"
+          v-model:word-modal="wordModal"
+          v-model:notification="notification"
+          v-model:selected-entry-idx="selectedEntryIdx"
         />
-        <ul
-          class="p-2 pt-4 snippets-on"
-          :class="
-            preferences.isMobile || preferences.isTablet || preferences.isPortrait
-              ? `mobile is-hidden-desktop`
-              : `desktop is-hidden-touch`
-          "
-          v-show="
-            displayPerBook ||
-            (!displayPerBook && searchResults[selectedEntryIdx]?.docRef === result.docRef)
-          "
-        >
-          <SingleSnippet
-            v-for="(snippet, index) in result.snippets"
-            :key="sha1(snippet)"
-            :docRef="result.docRef"
-            :bookIndex="bookIndex"
-            :snippetIndex="index"
-            :snippet="snippet"
-            :url="result.metadata.url"
-            :query="query"
-            :strict="strict"
-            :title="result.metadata.title"
-            :author="result.metadata.author"
-            v-model:image-modal="imageModal"
-            v-model:word-modal="wordModal"
-            v-model:notification="notification"
-            v-model:selected-entry-idx="selectedEntryIdx"
-          />
-        </ul>
-      </li>
-    </ul>
-  </div>
-  <div v-else>
-    <h1>{{ $t('results.loading') }}</h1>
-  </div>
+      </ul>
+    </li>
+  </ul>
+  <ul id="snippets" v-else-if="searchResults && interfaceStyle == 'old'">
+    <li v-for="(result, index) in searchResults" :key="sha1(result)">
+      <SingleResult
+        v-model:image-modal="imageModal"
+        v-model:word-modal="wordModal"
+        v-model:metadata-modal="metadataModal"
+        v-model:notification="notification"
+        :result="result"
+        :book-index="index"
+        :page-number-offset="pageNumberOffset"
+      />
+      <ul class="p-5 pt-4">
+        <SingleSnippet
+          v-for="(snippet, index) in result.snippets"
+          :key="sha1(snippet)"
+          :docRef="result.docRef"
+          :snippetIndex="index"
+          :snippet="snippet"
+          :url="result.metadata.url"
+          :query="query"
+          :strict="strict"
+          :title="result.metadata.title"
+          :author="result.metadata.author"
+          v-model:image-modal="imageModal"
+          v-model:word-modal="wordModal"
+          v-model:notification="notification"
+        />
+      </ul>
+    </li>
+  </ul>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUpdated } from 'vue'
+import { computed, onMounted, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { sha1 } from 'object-hash'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import type { SearchResult } from '@/assets/interfacesExternals'
 import SingleSnippet from '../DisplaySnippets/SingleSnippet/SingleSnippet.vue'
+import SingleResult from '../ContentsTable/SingleResult/SingleResult.vue'
+import { useSearchStore } from '@/stores/SearchStore'
+
+const searchStore = useSearchStore()
+const { page } = storeToRefs(searchStore)
+
+const pageNumberOffset = computed(() => (page.value - 1) * preferences.resultsPerPage + 1)
 
 const preferences = usePreferencesStore()
-const { displayPerBook } = storeToRefs(preferences)
+const { displayPerBook, interfaceStyle } = storeToRefs(preferences)
 
 const imageModal = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
+const metadataModal = defineModel('metadataModal')
 const notification = defineModel('notification')
 const selectedEntryIdx = defineModel<number>('selectedEntryIdx', { default: 0 })
 const searchResults = defineModel<SearchResult[]>('searchResults')
@@ -94,7 +113,7 @@ const scrolling = () => {
     // If else: activate books below the middle of the screen
 
     const snippetsDiv = document.getElementById('snippets')
-    const snippets = Array.from(document.querySelectorAll('.snippets-on li'))
+    const snippets = Array.from(document.querySelectorAll('#snippets li'))
 
     if (snippetsDiv && snippets.length) {
       if (snippetsDiv.scrollTop === 0) {

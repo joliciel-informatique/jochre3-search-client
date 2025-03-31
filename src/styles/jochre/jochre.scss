@@ -32,6 +32,7 @@
 // Bulma
 @forward 'bulma/sass' with (
   $tablet: 768px,
+  $desktop: 961px + 2 * 32,
 
   // Default theme values
   $primary: $background-color-1,
@@ -88,6 +89,7 @@
   $hr-margin: 0,
   $hr-background-color: $background-color-3,
 
+  $input-placeholder-color: hsl(0, 0%, 71%),
   $block-spacing: unset,
 
   // Modal Component
@@ -166,11 +168,13 @@
   --bulma-navbar-dropdown-item-l: 36.5%;
   --bulma-navbar-dropdown-item-color-l: 36.5%;
   --bulma-navbar-divider-background-l: 36.5%;
+  // --bulma-navbar-dropdown-background-color: red;
+  // --bulma-navbar-dropdown-radius: 1em;
 }
 
 .navbar-item,
 .navbar-link {
-  border-radius: 0.5em;
+  // border-radius: 0.5em;
   // --bulma-navbar-item-img-max-height: 17vh;
 }
 
@@ -214,4 +218,26 @@ main {
     overflow: hidden;
     width: 100px;
   }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bulma-theme-h: 221;
+    --bulma-theme-s: 14%;
+    --bulma-theme-l: 9%;
+    --bulma-button-h: --bulma-theme-h;
+    --bulma-button-s: --bulma-theme-s;
+    --bulma-button-l: --bulma-theme-l;
+    --bulma-body-background-color: white;
+
+    .card-content {
+      background-color: hsl(221, 14%, 9%);
+    }
+  }
+}
+
+[data-theme='dark'],
+.theme-dark {
+  --bulma-body-background-color: white;
+  /* Update CSS variables */
 }

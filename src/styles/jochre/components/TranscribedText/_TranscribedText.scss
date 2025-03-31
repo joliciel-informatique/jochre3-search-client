@@ -1,10 +1,10 @@
 @use '../../../custom/Custom' as *;
 
-.transcribed-text {
-  .panel-block {
-    max-height: 63vh;
-  }
-}
+// .transcribed-text {
+// .panel-block {
+// max-height: 63vh;
+// }
+// }
 
 // Loader style
 .loader-wrapper {
@@ -38,8 +38,8 @@
 }
 
 .scroll-container {
-  width: 100%;
-  overflow-y: scroll;
+  // width: 100%;
+  // overflow-y: scroll;
 }
 
 .book-title {
@@ -98,4 +98,9 @@
   .subtitle {
     font-size: 10px;
   }
+}
+
+.text-options {
+  position: fixed;
+  right: 2vw;
 }

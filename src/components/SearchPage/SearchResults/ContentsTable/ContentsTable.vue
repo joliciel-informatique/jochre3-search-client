@@ -2,8 +2,7 @@
   <!-- ToC Search Results on desktop -->
   <div
     v-if="searchResults?.length"
-    class="box table-of-contents is-flex is-flex-direction-column search-results menu is-hidden-touch"
-    :class="preferences.displayLeftToRight ? 'left' : 'right'"
+    class="box table-of-contents is-flex is-flex-direction-column search-results menu is-hidden-touch mx-3"
     role="navigation"
     tabindex="1"
   >
@@ -54,6 +53,7 @@
     tabindex="1"
   >
     <a
+      v-if="preferences.interfaceStyle == 'new'"
       class="button toc-index-btn has-background-info has-text-white"
       @click.prevent="openMobileSearchResultsToc = !openMobileSearchResultsToc"
       ><font-awesome-icon
@@ -68,6 +68,7 @@
       ><font-awesome-icon icon="users" size="lg" class="m-2"
     /></a>
     <a
+      v-if="preferences.interfaceStyle == 'new'"
       class="button toc-metadata-btn has-background-info has-text-white"
       @click.prevent="openMobileMetadataPanel = !openMobileMetadataPanel"
     >
@@ -131,7 +132,7 @@
   </aside>
   <aside class="toc-drawer menu box p-2" v-show="openMobileFacets">
     <FacetBar
-      @newSearch="emit('newSearch')"
+      @activeFacetsChanged="emit('activeFacetsChanged')"
       v-model:facets="facets"
       v-model:open-mobile-facets="openMobileFacets"
     />
@@ -139,25 +140,19 @@
 </template>
 <script setup lang="ts">
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import { computed, defineAsyncComponent, nextTick, ref, watch, type Ref } from 'vue'
+import { computed, nextTick, ref, watch, type Ref } from 'vue'
 import { useTemplateRefsList } from '@vueuse/core'
 
 import type { SearchResult } from '@/assets/interfacesExternals'
 import { useSearchStore } from '@/stores/SearchStore'
 import { storeToRefs } from 'pinia'
 
-const SingleResult = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResult.vue')
-)
-const PageNumbering = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue')
-)
-const FacetBar = defineAsyncComponent(
-  () => import('@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue')
-)
+import SingleResult from '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResult.vue'
+import PageNumbering from '@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue'
+import FacetBar from '@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue'
 
 const searchStore = useSearchStore()
-const { page } = storeToRefs(searchStore)
+const { page, totalHits, firstResult, lastResult } = storeToRefs(searchStore)
 
 const preferences = usePreferencesStore()
 
@@ -168,7 +163,6 @@ const metadataModal: Ref = defineModel('metadataModal')
 const notification: Ref = defineModel('notification')
 // const selectedEntry = defineModel<SearchResult>('selectedEntry')
 const selectedEntryIdx = defineModel<number>('selectedEntryIdx', { default: 0 })
-const totalHits = defineModel<number>('totalHits', { default: 0 })
 const facets: Ref = defineModel('facets')
 
 const openMobileSearchResultsToc = defineModel('openMobileSearchResultsToc')
@@ -181,12 +175,6 @@ const pageNumberOffset = computed(() => (page.value - 1) * preferences.resultsPe
 const scrollListDesktop = ref()
 const results = useTemplateRefsList()
 
-const firstResult = computed(() => (page.value - 1) * preferences.resultsPerPage + 1)
-const lastResult = computed(() => {
-  const last = page.value * preferences.resultsPerPage
-  return totalHits.value < last ? totalHits.value : last
-})
-
 const selectEntry = (index: number) => {
   selectedEntryIdx.value = index
   const navBarHeight = document.getElementById('topbar')?.getBoundingClientRect().height
@@ -198,7 +186,7 @@ const selectEntry = (index: number) => {
     })
 }
 
-const emit = defineEmits(['newPage', 'resetSearchResults', 'newSearch'])
+const emit = defineEmits(['newPage', 'activeFacetsChanged'])
 
 watch(selectedEntryIdx, () => {
   nextTick(() => {

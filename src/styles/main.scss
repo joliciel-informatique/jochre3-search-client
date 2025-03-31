@@ -104,6 +104,15 @@ button {
   unicode-bidi: bidi-override;
 }
 
+.rtl-no-text-align {
+  direction: rtl;
+}
+
+.ltr-no-text-align {
+  direction: ltr;
+  unicode-bidi: bidi-override;
+}
+
 .link-subtle {
   color: $background-color-4;
 }
@@ -200,12 +209,26 @@ $menu-nested-list-margin: 1em;
   flex: 1 1 auto;
 }
 
+.table.is-scrollable tbody {
+  height: 30vh;
+  overflow-y: scroll;
+  position: absolute;
+}
+
+.search-results {
+  width: 100vw;
+}
+
 #navbar {
-  top: 0px;
-  position: sticky;
+  // top: 0px;
+  // position: sticky;
   z-index: 43;
   background-color: $background-color-1;
-  max-height: 20vh;
+  // max-height: 20vh;
+}
+
+#snippets {
+  //width: 100vw;
 }
 
 .navbar-mobile {

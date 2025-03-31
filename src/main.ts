@@ -29,6 +29,10 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import SimpleKeyboard from './_components/SimpleKeyboard/SimpleKeyboard.vue'
 library.add(fas) // Adding all FAS icons
 
+// Add VCalendear as global component
+import { setupCalendar, Calendar, DatePicker } from 'v-calendar'
+import 'v-calendar/style.css'
+
 const messages = {
   en: en,
   yi: yi
@@ -49,6 +53,13 @@ app.use(router)
 app.use(pinia)
 app.use<Vue3TouchEventsOptions>(Vue3TouchEvents, {})
 app.use(CookieConsentVue, cookieConsentConfig)
+
+// Use plugin defaults (optional)
+app.use(setupCalendar, {})
+
+// Use the components
+app.component('VCalendar', Calendar)
+app.component('VDatePicker', DatePicker)
 
 app.component('author-dropdown', AuthorDropdown)
 app.component('simple-key', SimpleKeyboard)
