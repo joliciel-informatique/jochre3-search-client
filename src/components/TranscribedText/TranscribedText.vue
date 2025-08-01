@@ -117,7 +117,11 @@
             </span>
             <div
               class="is-flex is-flex-direction-column is-flex-wrap-wrap m-2"
-              :class="preferences.isMobile ? '' : 'is-align-content-start'"
+              :class="{
+                'is-align-content-start': preferences.isMobile,
+                'rtl-align': preferences.needsRightToLeft,
+                rtl: preferences.needsRightToLeft
+              }"
             >
               <p class="page-text" :class="textSizeClass" v-html="page.text"></p>
             </div>
