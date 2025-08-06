@@ -535,7 +535,11 @@ const runSearch = async (addHistory: boolean = true) => {
     docRefs.value.length > 0 ||
     (sortBy.value.length > 0 && sortBy.value != 'Score')
 
-  showAdvancedSearchPanel.value = false
+  if (route.query['show-advanced']) {
+    showAdvancedSearchPanel.value = route.query['show-advanced'] === 'true'
+  } else {
+    showAdvancedSearchPanel.value = false
+  }
 
   if (!hasSearch.value) {
     isLoading.value = false
