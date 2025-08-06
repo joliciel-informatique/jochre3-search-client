@@ -25,7 +25,7 @@
     "date-from": "Published between",
     "date-to": "and",
     "document-reference": "ID number(s)",
-    "document-reference-placeholder": "Add ID numbers separated by a comma",
+    "document-reference-placeholder": "Add ID numbers separated by a space",
     "sort-by": "Sort by",
     "reset": "Reset search",
     "sort": {
