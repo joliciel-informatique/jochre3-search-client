@@ -176,6 +176,23 @@
       <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
     </div>
 
+    <!-- Not loading, with query, but error -->
+    <div v-else-if="hasSearch && searchError" class="m-5 has-text-centered">
+      <h1
+        class="column is-flex is-flex-direction-column is-justify-content-center is-align-items-center has-background-danger"
+      >
+        <div class="has-text-weight-bold">
+          {{ $t('results.error') }} : {{ $t(`errors.${searchError.code}.title`) }}
+        </div>
+        <div class="is-size-6">
+          {{ $t(`errors.${searchError.code}.message`, [searchError.message]) }}
+        </div>
+      </h1>
+      <div class="is-flex is-justify-content-center is-align-items-center no-results-image m-6">
+        <font-awesome-icon icon="ban" size="2xl" />
+      </div>
+    </div>
+
     <!-- Not loading, with query, but no results -->
     <div v-else-if="hasSearch && !searchResults.length" class="m-5 has-text-centered">
       <h1
@@ -231,7 +248,11 @@ const UserOptions = defineAsyncComponent(
 )
 
 // Import interfaces
-import { type SearchResult, type AggregationBin } from '@/assets/interfacesExternals'
+import {
+  type SearchResult,
+  type AggregationBin,
+  type SearchError
+} from '@/assets/interfacesExternals'
 
 // This is better kept in Pinia or something similar
 import { hasSearch } from '@/assets/appState'
@@ -255,6 +276,7 @@ const query = ref('')
 // const selectedEntry = ref<SearchResult>()
 const selectedEntryIdx = ref(0)
 const searchResults = ref<Array<SearchResult>>([])
+const searchError = ref<SearchError | null>()
 const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
@@ -512,6 +534,7 @@ const searchFacets = async () => {
 
 const runSearch = async (addHistory: boolean = true) => {
   isLoading.value = true
+  searchError.value = null
 
   const activeFacets = facets.value.filter((facet) => facet.active).map((facet) => facet.label)
   const hasActiveFacets = activeFacets.length > 0
@@ -627,6 +650,16 @@ const runSearch = async (addHistory: boolean = true) => {
             clearSearchResults()
           }
           return true
+        })
+      } else if (response.status === 400) {
+        return response.json().then((error: SearchError) => {
+          console.error(`Bad request ${response.status}: ${error.code} - ${error.message}`)
+          searchError.value = error
+          clearSearchResults()
+          q?.parentElement?.classList.remove('is-loading')
+          q?.removeAttribute('disabled')
+          isLoading.value = false
+          return false
         })
       } else {
         return response.json().then((json) => {

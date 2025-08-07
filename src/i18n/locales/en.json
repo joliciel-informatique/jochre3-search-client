@@ -34,6 +34,16 @@
       "date-descending": "year ↓"
     }
   },
+  "errors": {
+    "UnparsableQuery": {
+      "title": "Unable to parse query",
+      "message": "{0}"
+    },
+    "QueryTooComplex": {
+      "title": "Query too complex",
+      "message": "If your query contains a wildcard, try adding more letters before or after the wildcard."
+    }
+  },
   "toc": {
     "contents-table-header": "Search results",
     "contents-table-subheader": "Found {0} books, showing {1}-{2}"
@@ -68,7 +78,8 @@
     "show-original-page": "Go to book (page {0})",
     "show-text": "View transcribed text",
     "word-fix-instructions": "(Double-click on a word to make an OCR correction)",
-    "page": "Page {0}"
+    "page": "Page {0}",
+    "error": "An error occurred"
   },
   "snippet": {
     "open-page": "Open page",

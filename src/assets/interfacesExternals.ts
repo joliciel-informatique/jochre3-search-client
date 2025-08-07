@@ -88,3 +88,8 @@ export interface HighlightedDocument {
   title: string
   pages: HighlightedPage[]
 }
+
+export interface SearchError {
+  code: string
+  message: string
+}
