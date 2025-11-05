@@ -97,14 +97,15 @@
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import { type SearchResult } from '@/assets/interfacesExternals'
+import { useSearchStore } from '@/stores/SearchStore'
+import { storeToRefs } from 'pinia'
 const keycloak = useKeycloakStore().keycloak
 const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
 const preferences = usePreferencesStore()
 const hasAdvancedSearchCriteria = ref(false)
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
 const openNavBarMobileMenu = defineModel('openNavBarMobileMenu')
-const searchResults = defineModel<Array<SearchResult>>('searchResults')
+const { searchResults } = storeToRefs(useSearchStore())
 
 const signout = () => keycloak?.logout()
 

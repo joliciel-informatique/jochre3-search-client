@@ -142,8 +142,6 @@
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { computed, nextTick, ref, watch, type Ref } from 'vue'
 import { useTemplateRefsList } from '@vueuse/core'
-
-import type { SearchResult } from '@/assets/interfacesExternals'
 import { useSearchStore } from '@/stores/SearchStore'
 import { storeToRefs } from 'pinia'
 
@@ -152,11 +150,10 @@ import PageNumbering from '@/components/SearchPage/SearchBar/Navigation/PageNumb
 import FacetBar from '@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue'
 
 const searchStore = useSearchStore()
-const { page, totalHits, firstResult, lastResult } = storeToRefs(searchStore)
+const { page, searchResults, totalHits, firstResult, lastResult } = storeToRefs(searchStore)
 
 const preferences = usePreferencesStore()
 
-const searchResults = defineModel<Array<SearchResult>>('searchResults')
 const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')

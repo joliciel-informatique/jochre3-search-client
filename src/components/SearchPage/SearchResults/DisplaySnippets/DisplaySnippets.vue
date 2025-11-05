@@ -82,13 +82,12 @@ import { computed, onMounted, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { sha1 } from 'object-hash'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import type { SearchResult } from '@/assets/interfacesExternals'
 import SingleSnippet from '../DisplaySnippets/SingleSnippet/SingleSnippet.vue'
 import SingleResult from '../ContentsTable/SingleResult/SingleResult.vue'
 import { useSearchStore } from '@/stores/SearchStore'
 
 const searchStore = useSearchStore()
-const { page } = storeToRefs(searchStore)
+const { page, searchResults } = storeToRefs(searchStore)
 
 const pageNumberOffset = computed(() => (page.value - 1) * preferences.resultsPerPage + 1)
 
@@ -100,7 +99,6 @@ const wordModal = defineModel('wordModal')
 const metadataModal = defineModel('metadataModal')
 const notification = defineModel('notification')
 const selectedEntryIdx = defineModel<number>('selectedEntryIdx', { default: 0 })
-const searchResults = defineModel<SearchResult[]>('searchResults')
 const query = defineModel<string>('query')
 const strict = defineModel<boolean>('strict')
 const isLoading = defineModel('isLoading')

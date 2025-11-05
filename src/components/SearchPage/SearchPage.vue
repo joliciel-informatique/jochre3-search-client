@@ -26,7 +26,6 @@
           />
           <UserOptions
             v-if="authenticated"
-            v-model:search-results="searchResults"
             v-model:show-advanced-search-panel="showAdvancedSearchPanel"
             v-model:open-nav-bar-mobile-menu="openNavBarMobileMenu"
           />
@@ -73,7 +72,6 @@
       <div class="is-hidden-desktop">
         <ContentsTable
           v-if="hasSearch"
-          v-model:search-results="searchResults"
           v-model:image-modal="imageModal"
           v-model:metadata-modal="metadataModal"
           v-model:notification="notification"
@@ -111,7 +109,6 @@
     >
       <div class="is-hidden-touch">
         <ContentsTable
-          v-model:search-results="searchResults"
           v-model:image-modal="imageModal"
           v-model:metadata-modal="metadataModal"
           v-model:notification="notification"
@@ -132,7 +129,6 @@
         v-model:word-modal="wordModal"
         v-model:metadata-modal="metadataModal"
         v-model:selected-entry-idx="selectedEntryIdx"
-        v-model:search-results="searchResults"
         v-model:is-loading="isLoading"
         v-model:query="query"
         v-model:strict="strict"
@@ -158,7 +154,6 @@
             v-model:word-modal="wordModal"
             v-model:metadata-modal="metadataModal"
             v-model:selected-entry-idx="selectedEntryIdx"
-            v-model:search-results="searchResults"
             v-model:is-loading="isLoading"
             v-model:query="query"
             v-model:strict="strict"
@@ -248,11 +243,7 @@ const UserOptions = defineAsyncComponent(
 )
 
 // Import interfaces
-import {
-  type SearchResult,
-  type AggregationBin,
-  type SearchError
-} from '@/assets/interfacesExternals'
+import { type AggregationBin, type SearchError } from '@/assets/interfacesExternals'
 
 // This is better kept in Pinia or something similar
 import { hasSearch } from '@/assets/appState'
@@ -261,7 +252,7 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useSearchStore } from '@/stores/SearchStore'
 
 const searchStore = useSearchStore()
-const { page, totalHits, firstResult, lastResult } = storeToRefs(searchStore)
+const { page, searchResults, totalHits, firstResult, lastResult } = storeToRefs(searchStore)
 const preferences = usePreferencesStore()
 
 const { initializeMedia } = preferences
@@ -273,9 +264,8 @@ import { storeToRefs } from 'pinia'
 const { authorFacetCount } = storeToRefs(preferences)
 
 const query = ref('')
-// const selectedEntry = ref<SearchResult>()
+
 const selectedEntryIdx = ref(0)
-const searchResults = ref<Array<SearchResult>>([])
 const searchError = ref<SearchError | null>()
 const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
