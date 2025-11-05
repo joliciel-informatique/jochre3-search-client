@@ -20,8 +20,6 @@
             @resetSearchResults="resetSearchResults"
             v-model:show-advanced-search-panel="showAdvancedSearchPanel"
             v-model:has-advanced-search-criteria="hasAdvancedSearchCriteria"
-            v-model:query="query"
-            v-model:strict="strict"
             v-model:is-loading="isLoading"
           />
           <UserOptions
@@ -130,8 +128,6 @@
         v-model:metadata-modal="metadataModal"
         v-model:selected-entry-idx="selectedEntryIdx"
         v-model:is-loading="isLoading"
-        v-model:query="query"
-        v-model:strict="strict"
       />
       <div class="is-hidden-touch">
         <FacetBar
@@ -155,8 +151,6 @@
             v-model:metadata-modal="metadataModal"
             v-model:selected-entry-idx="selectedEntryIdx"
             v-model:is-loading="isLoading"
-            v-model:query="query"
-            v-model:strict="strict"
           />
         </div>
         <div class="is-hidden-touch">
@@ -252,7 +246,8 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useSearchStore } from '@/stores/SearchStore'
 
 const searchStore = useSearchStore()
-const { page, searchResults, totalHits, firstResult, lastResult } = storeToRefs(searchStore)
+const { query, strict, page, searchResults, totalHits, firstResult, lastResult } =
+  storeToRefs(searchStore)
 const preferences = usePreferencesStore()
 
 const { initializeMedia } = preferences
@@ -262,8 +257,6 @@ const { show, interfaceStyle } = storeToRefs(preferences)
 import { storeToRefs } from 'pinia'
 
 const { authorFacetCount } = storeToRefs(preferences)
-
-const query = ref('')
 
 const selectedEntryIdx = ref(0)
 const searchError = ref<SearchError | null>()
@@ -275,7 +268,6 @@ const notification: Ref = defineModel('notification')
 const includeAuthors = ref(true)
 const authorList = ref<Array<AggregationBin>>([])
 
-const strict = ref(false)
 const isLoading = ref(false)
 
 const title = ref('')

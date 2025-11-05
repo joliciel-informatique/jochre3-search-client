@@ -3,14 +3,14 @@ import { defineStore } from 'pinia'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 // Import interfaces
-import {
-  type SearchResult,
-  type AggregationBin,
-  type SearchError
-} from '@/assets/interfacesExternals'
+import { type SearchResult } from '@/assets/interfacesExternals'
 
 export const useSearchStore = defineStore('search', () => {
   const preferences = usePreferencesStore()
+
+  const query = ref<string>('')
+  const strict = ref<boolean>(false)
+
   const page = ref<number>(1)
   const searchResults = ref<Array<SearchResult>>([])
 
@@ -26,5 +26,5 @@ export const useSearchStore = defineStore('search', () => {
     () => Math.floor((totalHits.value - 1) / preferences.resultsPerPage) + 1
   )
 
-  return { page, searchResults, totalHits, firstResult, lastResult, lastPage }
+  return { query, strict, page, searchResults, totalHits, firstResult, lastResult, lastPage }
 })

@@ -153,20 +153,21 @@ Description: displays text snippets from the OCR text
 <script setup lang="ts">
 import { fetchData } from '@/assets/fetchMethods'
 import { ref, type Ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { useSearchStore } from '@/stores/SearchStore'
 
 const preferences = usePreferencesStore()
 
-const { snippet, docRef, bookIndex, snippetIndex, query, strict } = defineProps([
+const { snippet, docRef, bookIndex, snippetIndex } = defineProps([
   'snippet',
   'docRef',
   'bookIndex',
-  'snippetIndex',
-  'query',
-  'strict',
-  'title',
-  'author'
+  'snippetIndex'
 ])
+
+const searchStore = useSearchStore()
+const { query, strict } = storeToRefs(searchStore)
 const imageModal: Ref = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
 const notification = defineModel('notification')
