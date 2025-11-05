@@ -47,7 +47,7 @@
           </div>
         </div>
         <div class="is-hidden-touch">
-          <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
+          <PageNumbering @newPage="newPage()" />
         </div>
         <div
           class="navbar-item is-flex is-flex-direction-column"
@@ -173,7 +173,7 @@
         </div>
       </div>
 
-      <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
+      <PageNumbering @newPage="newPage()" />
     </div>
 
     <!-- Not loading, with query, but error -->

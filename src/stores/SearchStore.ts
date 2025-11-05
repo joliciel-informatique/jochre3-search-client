@@ -13,5 +13,9 @@ export const useSearchStore = defineStore('search', () => {
     return totalHits.value < last ? totalHits.value : last
   })
 
-  return { page, totalHits, firstResult, lastResult }
+  const lastPage = computed(
+    () => Math.floor((totalHits.value - 1) / preferences.resultsPerPage) + 1
+  )
+
+  return { page, totalHits, firstResult, lastResult, lastPage }
 })
