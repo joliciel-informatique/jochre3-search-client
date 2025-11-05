@@ -20,7 +20,6 @@
             @resetSearchResults="resetSearchResults"
             v-model:show-advanced-search-panel="showAdvancedSearchPanel"
             v-model:has-advanced-search-criteria="hasAdvancedSearchCriteria"
-            v-model:is-loading="isLoading"
           />
           <UserOptions
             v-if="authenticated"
@@ -55,14 +54,7 @@
             @newSearch="newSearch"
             @resetSearchResults="resetSearchResults"
             v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-            v-model:author-list="authorList"
-            v-model:title="title"
-            v-model:to-year="toYear"
-            v-model:from-year="fromYear"
-            v-model:doc-refs="docRefs"
-            v-model:sort-by="sortBy"
             v-model:facets="facets"
-            v-model:include-authors="includeAuthors"
           />
         </div>
         <!-- </div> -->
@@ -127,7 +119,6 @@
         v-model:word-modal="wordModal"
         v-model:metadata-modal="metadataModal"
         v-model:selected-entry-idx="selectedEntryIdx"
-        v-model:is-loading="isLoading"
       />
       <div class="is-hidden-touch">
         <FacetBar
@@ -150,7 +141,6 @@
             v-model:word-modal="wordModal"
             v-model:metadata-modal="metadataModal"
             v-model:selected-entry-idx="selectedEntryIdx"
-            v-model:is-loading="isLoading"
           />
         </div>
         <div class="is-hidden-touch">
@@ -246,8 +236,23 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useSearchStore } from '@/stores/SearchStore'
 
 const searchStore = useSearchStore()
-const { query, strict, page, searchResults, totalHits, firstResult, lastResult } =
-  storeToRefs(searchStore)
+const {
+  query,
+  strict,
+  title,
+  fromYear,
+  toYear,
+  docRefs,
+  sortBy,
+  includeAuthors,
+  authorList,
+  isLoading,
+  page,
+  searchResults,
+  totalHits,
+  firstResult,
+  lastResult
+} = storeToRefs(searchStore)
 const preferences = usePreferencesStore()
 
 const { initializeMedia } = preferences
@@ -265,16 +270,6 @@ const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
 const notification: Ref = defineModel('notification')
 
-const includeAuthors = ref(true)
-const authorList = ref<Array<AggregationBin>>([])
-
-const isLoading = ref(false)
-
-const title = ref('')
-const fromYear = ref()
-const toYear = ref()
-const docRefs = ref('')
-const sortBy = ref('Score')
 const resultsPerPage = ref(10)
 
 // Startup variables: may move to App.vue or HomeView.vue

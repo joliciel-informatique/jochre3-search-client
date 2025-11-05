@@ -83,7 +83,7 @@ import SingleResult from '../ContentsTable/SingleResult/SingleResult.vue'
 import { useSearchStore } from '@/stores/SearchStore'
 
 const searchStore = useSearchStore()
-const { query, strict, page, searchResults } = storeToRefs(searchStore)
+const { page, searchResults } = storeToRefs(searchStore)
 
 const pageNumberOffset = computed(() => (page.value - 1) * preferences.resultsPerPage + 1)
 
@@ -95,7 +95,6 @@ const wordModal = defineModel('wordModal')
 const metadataModal = defineModel('metadataModal')
 const notification = defineModel('notification')
 const selectedEntryIdx = defineModel<number>('selectedEntryIdx', { default: 0 })
-const isLoading = defineModel('isLoading')
 
 // How many snippets for each volume are in view upon scroll only if shown in continuous list
 const scrolling = () => {

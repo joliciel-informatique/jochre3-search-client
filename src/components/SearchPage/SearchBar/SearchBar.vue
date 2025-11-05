@@ -138,9 +138,8 @@ const preferences = usePreferencesStore()
 
 const hasAdvancedSearchCriteria = defineModel('hasAdvancedSearchCriteria')
 
-const { query, strict } = storeToRefs(useSearchStore())
+const { query, strict, isLoading } = storeToRefs(useSearchStore())
 
-const isLoading = defineModel('isLoading')
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])

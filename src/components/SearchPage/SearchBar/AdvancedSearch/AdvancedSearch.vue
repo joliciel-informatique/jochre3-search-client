@@ -211,20 +211,19 @@ Description: the advanced search toolbox
 <script setup lang="ts">
 import { computed, onMounted, ref, type Ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { storeToRefs } from 'pinia'
+import { useSearchStore } from '@/stores/SearchStore'
 const preferences = usePreferencesStore()
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 
+const searchStore = useSearchStore()
+const { title, fromYear, toYear, docRefs, sortBy, includeAuthors, authorList } =
+  storeToRefs(searchStore)
+
 const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
-const authorList = defineModel<Array<{ label: string; count: number }>>('authorList')
 const authorText = ref('')
-const title = defineModel('title')
-const fromYear = defineModel('fromYear')
-const toYear = defineModel('toYear')
-const docRefs = defineModel('docRefs')
-const sortBy = defineModel('sortBy')
 const facets: Ref = defineModel('facets')
-const includeAuthors = defineModel('includeAuthors', { default: true })
 const disabled = computed(
   () => facets.value.filter((facet: { active: string }) => (facet.active ? facet : null)).length
 )
