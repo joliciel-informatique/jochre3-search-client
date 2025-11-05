@@ -35,6 +35,10 @@ export const useSearchStore = defineStore('search', () => {
     () => Math.floor((totalHits.value - 1) / preferences.resultsPerPage) + 1
   )
 
+  const selectedEntryIdx = ref<number>(0)
+  const hasAdvancedSearchCriteria = ref<boolean>(false)
+  const showAdvancedSearchPanel = ref<boolean>(false)
+
   return {
     query,
     strict,
@@ -51,6 +55,9 @@ export const useSearchStore = defineStore('search', () => {
     totalHits,
     firstResult,
     lastResult,
-    lastPage
+    lastPage,
+    selectedEntryIdx,
+    hasAdvancedSearchCriteria,
+    showAdvancedSearchPanel
   }
 })

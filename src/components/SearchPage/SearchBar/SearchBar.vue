@@ -136,11 +136,8 @@ import { storeToRefs } from 'pinia'
 
 const preferences = usePreferencesStore()
 
-const hasAdvancedSearchCriteria = defineModel('hasAdvancedSearchCriteria')
-
-const { query, strict, isLoading } = storeToRefs(useSearchStore())
-
-const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
+const { query, strict, isLoading, hasAdvancedSearchCriteria, showAdvancedSearchPanel } =
+  storeToRefs(useSearchStore())
 
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 </script>

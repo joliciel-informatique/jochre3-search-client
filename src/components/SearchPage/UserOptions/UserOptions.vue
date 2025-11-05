@@ -103,9 +103,8 @@ const keycloak = useKeycloakStore().keycloak
 const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
 const preferences = usePreferencesStore()
 const hasAdvancedSearchCriteria = ref(false)
-const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
 const openNavBarMobileMenu = defineModel('openNavBarMobileMenu')
-const { searchResults } = storeToRefs(useSearchStore())
+const { searchResults, showAdvancedSearchPanel } = storeToRefs(useSearchStore())
 
 const signout = () => keycloak?.logout()
 

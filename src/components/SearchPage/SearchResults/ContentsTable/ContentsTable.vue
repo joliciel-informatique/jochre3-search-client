@@ -150,7 +150,8 @@ import PageNumbering from '@/components/SearchPage/SearchBar/Navigation/PageNumb
 import FacetBar from '@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue'
 
 const searchStore = useSearchStore()
-const { page, searchResults, totalHits, firstResult, lastResult } = storeToRefs(searchStore)
+const { page, searchResults, totalHits, firstResult, lastResult, selectedEntryIdx } =
+  storeToRefs(searchStore)
 
 const preferences = usePreferencesStore()
 
@@ -158,8 +159,6 @@ const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
 const notification: Ref = defineModel('notification')
-// const selectedEntry = defineModel<SearchResult>('selectedEntry')
-const selectedEntryIdx = defineModel<number>('selectedEntryIdx', { default: 0 })
 const facets: Ref = defineModel('facets')
 
 const openMobileSearchResultsToc = defineModel('openMobileSearchResultsToc')

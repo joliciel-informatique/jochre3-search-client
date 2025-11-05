@@ -218,10 +218,17 @@ const preferences = usePreferencesStore()
 const emit = defineEmits(['newSearch', 'resetSearchResults'])
 
 const searchStore = useSearchStore()
-const { title, fromYear, toYear, docRefs, sortBy, includeAuthors, authorList } =
-  storeToRefs(searchStore)
+const {
+  title,
+  fromYear,
+  toYear,
+  docRefs,
+  sortBy,
+  includeAuthors,
+  authorList,
+  showAdvancedSearchPanel
+} = storeToRefs(searchStore)
 
-const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
 const authorText = ref('')
 const facets: Ref = defineModel('facets')
 const disabled = computed(

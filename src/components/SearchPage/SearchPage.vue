@@ -15,15 +15,9 @@
           >
             <img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')" />
           </a>
-          <SearchBar
-            @newSearch="newSearch"
-            @resetSearchResults="resetSearchResults"
-            v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-            v-model:has-advanced-search-criteria="hasAdvancedSearchCriteria"
-          />
+          <SearchBar @newSearch="newSearch" @resetSearchResults="resetSearchResults" />
           <UserOptions
             v-if="authenticated"
-            v-model:show-advanced-search-panel="showAdvancedSearchPanel"
             v-model:open-nav-bar-mobile-menu="openNavBarMobileMenu"
           />
           <div
@@ -53,7 +47,6 @@
           <AdvancedSearch
             @newSearch="newSearch"
             @resetSearchResults="resetSearchResults"
-            v-model:show-advanced-search-panel="showAdvancedSearchPanel"
             v-model:facets="facets"
           />
         </div>
@@ -66,7 +59,6 @@
           v-model:metadata-modal="metadataModal"
           v-model:notification="notification"
           v-model:word-modal="wordModal"
-          v-model:selected-entry-idx="selectedEntryIdx"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
@@ -103,7 +95,6 @@
           v-model:metadata-modal="metadataModal"
           v-model:notification="notification"
           v-model:word-modal="wordModal"
-          v-model:selected-entry-idx="selectedEntryIdx"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
@@ -118,7 +109,6 @@
         v-model:notification="notification"
         v-model:word-modal="wordModal"
         v-model:metadata-modal="metadataModal"
-        v-model:selected-entry-idx="selectedEntryIdx"
       />
       <div class="is-hidden-touch">
         <FacetBar
@@ -140,7 +130,6 @@
             v-model:notification="notification"
             v-model:word-modal="wordModal"
             v-model:metadata-modal="metadataModal"
-            v-model:selected-entry-idx="selectedEntryIdx"
           />
         </div>
         <div class="is-hidden-touch">
@@ -251,7 +240,10 @@ const {
   searchResults,
   totalHits,
   firstResult,
-  lastResult
+  lastResult,
+  selectedEntryIdx,
+  hasAdvancedSearchCriteria,
+  showAdvancedSearchPanel
 } = storeToRefs(searchStore)
 const preferences = usePreferencesStore()
 
@@ -263,7 +255,6 @@ import { storeToRefs } from 'pinia'
 
 const { authorFacetCount } = storeToRefs(preferences)
 
-const selectedEntryIdx = ref(0)
 const searchError = ref<SearchError | null>()
 const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
@@ -276,8 +267,6 @@ const resultsPerPage = ref(10)
 const router = useRouter()
 const route = useRoute()
 
-const hasAdvancedSearchCriteria = ref(false)
-const showAdvancedSearchPanel = ref(false)
 const openMobileSearchResultsToc = ref(false)
 const openMobileMetadataPanel = ref(false)
 const openMobileFacets = ref(false)
