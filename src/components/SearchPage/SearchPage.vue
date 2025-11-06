@@ -206,6 +206,7 @@ import { hasSearch } from '@/assets/appState'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useSearchStore } from '@/stores/SearchStore'
 import { useModalStore } from '@/stores/ModalStore'
+import { storeToRefs } from 'pinia'
 
 const searchStore = useSearchStore()
 const {
@@ -232,11 +233,7 @@ const preferences = usePreferencesStore()
 
 const { initializeMedia } = preferences
 
-const { show, interfaceStyle } = storeToRefs(preferences)
-
-import { storeToRefs } from 'pinia'
-
-const { authorFacetCount } = storeToRefs(preferences)
+const { interfaceStyle, authorFacetCount } = storeToRefs(preferences)
 
 const searchError = ref<SearchError | null>()
 
@@ -440,7 +437,7 @@ watch(openNavBarMobileMenu, (newV) => {
   }
 })
 
-watch(show, (newV) => {
+watch(showPreferencesModal, (newV) => {
   if (newV) {
     showAdvancedSearchPanel.value = false
     openMobileSearchResultsToc.value = false

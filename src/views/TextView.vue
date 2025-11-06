@@ -15,7 +15,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import HeaderPage from '@/components/HeaderPage/HeaderPage.vue'
 import TranscribedText from '@/components/TranscribedText/TranscribedText.vue'
 import Notification from '@/_components/Notifications/AppNotification/AppNotification.vue'

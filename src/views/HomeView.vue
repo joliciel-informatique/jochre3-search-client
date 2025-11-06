@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineAsyncComponent } from 'vue'
+import { defineAsyncComponent } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const SearchPage = defineAsyncComponent(() => import('@/components/SearchPage/SearchPage.vue'))
