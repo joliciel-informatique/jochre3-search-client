@@ -1,10 +1,10 @@
 <template>
   <Transition>
     <div
-      class="notification-overlay"
-      :class="notification.show ? 'is-active' : ''"
+      class="notification-overlay corner-notification"
+      :class="showNotification ? 'is-active' : ''"
       role="alert"
-      v-show="notification.show"
+      v-show="showNotification"
     >
       <div class="card m-3">
         <header
@@ -18,7 +18,7 @@
           <button
             class="card-header-icon"
             aria-label="dismiss"
-            @click="() => (notification.show = !notification.show)"
+            @click="() => (showNotification = !showNotification)"
           >
             <span>
               <font-awesome-icon icon="circle-xmark" class="has-text-white" />
@@ -35,14 +35,20 @@
   </Transition>
 </template>
 <script setup lang="ts">
-import { watch, type Ref } from 'vue'
+import { watch, ref } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { useModalStore } from '@/stores/ModalStore'
+import { storeToRefs } from 'pinia'
 
-const notification: Ref = defineModel('notification')
+const modalStore = useModalStore()
+const { notification } = storeToRefs(modalStore)
+const showNotification = ref<boolean>(false)
 
-watch(notification, () =>
-  setTimeout(() => (notification.value.show = false), notification.value.delay)
-)
+watch(notification, (newNotif, oldNotif) => {
+  console.log(`Notification changed, message: ${newNotif.msg}`)
+  showNotification.value = newNotif.msg.length > 0
+  setTimeout(() => (showNotification.value = false), newNotif.delay)
+})
 </script>
 <style scoped>
 .v-enter-active,

@@ -31,16 +31,12 @@
 </template>
 <script setup lang="ts">
 import { type Ref } from 'vue'
-import { usePreferencesStore } from '@/stores/PreferencesStore'
-const preferences = usePreferencesStore()
 
 const data: Ref = defineModel('data')
-const notification: Ref = defineModel('notification')
 const authorList: Ref = defineModel('authorList')
 
 const close = () => {
   if (data.value) data.value.show = false
-  if (notification.value) notification.value.show = false
   authorList.value = []
 }
 </script>

@@ -24,10 +24,16 @@ Description: presents the current indexed number of books
 <script setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue'
 import { fetchData } from '@/assets/fetchMethods'
+import { useModalStore } from '@/stores/ModalStore'
+import { useSearchStore } from '@/stores/SearchStore'
+import { storeToRefs } from 'pinia'
 
+const modalStore = useModalStore()
+const { notification } = storeToRefs(modalStore)
 const indexSize = ref(0)
-const isLoading: Ref = defineModel('isLoading')
-const notification: Ref = defineModel('notification')
+
+const searchStore = useSearchStore()
+const { isLoading } = storeToRefs(searchStore)
 
 onMounted(() => {
   fetchData('size', 'get', undefined, 'json')
@@ -39,7 +45,6 @@ onMounted(() => {
     )
     .catch((error: any) => {
       notification.value = {
-        show: true,
         error: true,
         delay: 4000,
         msg: `Failed to retrieve index: ${error.message}`

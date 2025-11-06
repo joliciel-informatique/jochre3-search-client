@@ -1,9 +1,5 @@
 <template>
-  <ModalBox
-    v-model:data="metadataModal"
-    v-model:notification="notification"
-    v-model:author-list="authorList"
-  >
+  <ModalBox v-model:data="metadataModal" v-model:author-list="authorList">
     <template #header>
       <p class="modal-card-title">
         {{ $t('fix-metadata.title', [$t(`fix-metadata.field-type.${metadataModal.field}`)]) }}
@@ -105,12 +101,16 @@
 import { ref, computed, type Ref, defineAsyncComponent } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { useModalStore } from '@/stores/ModalStore'
+import { storeToRefs } from 'pinia'
+
+const modalStore = useModalStore()
+const { notification } = storeToRefs(modalStore)
 
 const ModalBox = defineAsyncComponent(() => import('@/_components/ModalBox/ModalBox.vue'))
 
 const preferences = usePreferencesStore()
 const metadataModal: Ref = defineModel('metadataModal')
-const notification = defineModel('notification')
 const showFindAuthorDropdown = computed(() => metadataModal.value.field?.includes('author'))
 const authorList: Ref = ref<Array<{ label: string; count: number }>>([])
 const authorText = ref('')
@@ -136,14 +136,12 @@ const save = (closeFunc: Function) => {
     .then((res) => {
       if (res.status === 200) {
         notification.value = {
-          show: true,
           error: false,
           delay: 2000,
           msg: 'Thanks, we will review your suggestion!'
         }
       } else {
         notification.value = {
-          show: true,
           error: true,
           delay: 4000,
           msg: `Something went wrong: ${res.status}: ${res.statusText}. Try again and if the error persists, contact us!`
@@ -153,7 +151,6 @@ const save = (closeFunc: Function) => {
     })
     .catch((error) => {
       notification.value = {
-        show: true,
         error: true,
         delay: 4000,
         msg: `Something went wrong: ${error}. Try again and if the error persists, contact us!`

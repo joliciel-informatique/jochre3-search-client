@@ -77,10 +77,13 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useModalStore } from '@/stores/ModalStore'
+
+const modalStore = useModalStore()
+const { notification } = storeToRefs(modalStore)
 
 const i18n = useI18n()
 
-const notification = defineModel('notification')
 const preferences = usePreferencesStore()
 const interfaceStyleToSet = ref<string>(preferences.interfaceStyle)
 const languageToSet = ref<string>(preferences.language)

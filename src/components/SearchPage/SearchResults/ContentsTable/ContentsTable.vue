@@ -32,7 +32,6 @@
               v-model:image-modal="imageModal"
               v-model:word-modal="wordModal"
               v-model:metadata-modal="metadataModal"
-              v-model:notification="notification"
               v-model:selectedEntryIdx="selectedEntryIdx"
               :result="result"
               :book-index="bookIndex"
@@ -81,7 +80,7 @@
         </span>
       </span>
     </a>
-    <PageNumbering @newPage="emit('newPage')" v-model:totalHits="totalHits" />
+    <PageNumbering @newPage="emit('newPage')" />
   </div>
   <aside
     v-if="searchResults?.length"
@@ -92,7 +91,6 @@
       v-model:image-modal="imageModal"
       v-model:word-modal="wordModal"
       v-model:metadata-modal="metadataModal"
-      v-model:notification="notification"
       v-model:selected-entry-idx="selectedEntryIdx"
       :result="searchResults[selectedEntryIdx]"
       :book-index="-1"
@@ -144,6 +142,7 @@ import { computed, nextTick, ref, watch, type Ref } from 'vue'
 import { useTemplateRefsList } from '@vueuse/core'
 import { useSearchStore } from '@/stores/SearchStore'
 import { storeToRefs } from 'pinia'
+import { useModalStore } from '@/stores/ModalStore'
 
 import SingleResult from '@/components/SearchPage/SearchResults/ContentsTable/SingleResult/SingleResult.vue'
 import PageNumbering from '@/components/SearchPage/SearchBar/Navigation/PageNumbering/PageNumbering.vue'
@@ -155,10 +154,12 @@ const { page, searchResults, totalHits, firstResult, lastResult, selectedEntryId
 
 const preferences = usePreferencesStore()
 
+const modalStore = useModalStore()
+const { notification } = storeToRefs(modalStore)
+
 const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
-const notification: Ref = defineModel('notification')
 const facets: Ref = defineModel('facets')
 
 const openMobileSearchResultsToc = defineModel('openMobileSearchResultsToc')

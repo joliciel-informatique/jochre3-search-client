@@ -156,21 +156,26 @@ import { ref, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useSearchStore } from '@/stores/SearchStore'
+import { useModalStore } from '@/stores/ModalStore'
 
 const preferences = usePreferencesStore()
 
-const { snippet, docRef, bookIndex, snippetIndex } = defineProps([
+const { snippet, docRef, bookIndex, snippetIndex, title, author } = defineProps([
   'snippet',
   'docRef',
   'bookIndex',
-  'snippetIndex'
+  'snippetIndex',
+  'title',
+  'author'
 ])
 
 const searchStore = useSearchStore()
 const { query, strict } = storeToRefs(searchStore)
+
+const modalStore = useModalStore()
+const { notification } = storeToRefs(modalStore)
 const imageModal: Ref = defineModel('imageModal')
 const wordModal = defineModel('wordModal')
-const notification = defineModel('notification')
 const selectedEntryIdx: Ref = defineModel<number>('selectedEntryIdx', { default: 0 })
 
 const image = ref('')
@@ -221,7 +226,6 @@ const toggleImageSnippet = async () => {
   const response = await fetchData('image-snippet', 'get', params, 'image/png', 'arraybuffer')
   if (response.status !== 200) {
     notification.value = {
-      show: true,
       error: true,
       delay: 4000,
       msg: 'Something went wrong! Contact us if the error persists!'

@@ -1,5 +1,5 @@
 <template>
-  <ModalBox v-model:data="wordModal" v-model:notification="notification">
+  <ModalBox v-model:data="wordModal">
     <template #header>
       <p class="modal-card-title">{{ $t('fix-word.title') }}</p>
     </template>
@@ -55,13 +55,16 @@
 import { computed, defineAsyncComponent, onBeforeUpdate, ref, type Ref } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { useModalStore } from '@/stores/ModalStore'
+import { storeToRefs } from 'pinia'
 
+const modalStore = useModalStore()
+const { notification } = storeToRefs(modalStore)
 const preferences = usePreferencesStore()
 
 const ModalBox = defineAsyncComponent(() => import('@/_components/ModalBox/ModalBox.vue'))
 
 const wordModal: Ref = defineModel('wordModal')
-const notification: Ref = defineModel('notification')
 const wordImage = ref('')
 const wordLoading = ref(false)
 const wordSuggestion = ref('')
@@ -90,7 +93,6 @@ const loadWordImage = async (params: URLSearchParams) => {
   const response = await fetchData('word-image', 'get', params, 'image/png', 'arraybuffer')
   if (response.status !== 200) {
     notification.value = {
-      show: true,
       error: true,
       delay: 4000,
       msg: 'Something went wrong! Contact us if this error persists!'
@@ -111,7 +113,6 @@ const loadWordText = async (params: URLSearchParams) => {
   const response = await fetchData('word-text', 'get', params, 'application/json')
   if (response.status !== 200) {
     notification.value = {
-      show: true,
       error: true,
       delay: 4000,
       msg: 'Sodmething went wrong! Contact us if the error persists!'
@@ -131,14 +132,12 @@ const save = (closeFunc: Function) => {
     .then((res) => {
       if (res.status === 200) {
         notification.value = {
-          show: true,
           error: false,
           delay: 4000,
           msg: 'Thanks for your correction! The JOCHRE crew will review this suggestion.'
         }
       } else {
         notification.value = {
-          show: true,
           error: true,
           delay: 4000,
           msg: 'Something went wrong! Contact us if this error persists!'
@@ -148,7 +147,6 @@ const save = (closeFunc: Function) => {
     })
     .catch((error) => {
       notification.value = {
-        show: true,
         error: true,
         delay: 4000,
         msg: `Something went wrong: ${error}! Contact us if this error persists!`

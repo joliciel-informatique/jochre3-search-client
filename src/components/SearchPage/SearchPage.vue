@@ -57,7 +57,6 @@
           v-if="hasSearch"
           v-model:image-modal="imageModal"
           v-model:metadata-modal="metadataModal"
-          v-model:notification="notification"
           v-model:word-modal="wordModal"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
@@ -93,7 +92,6 @@
         <ContentsTable
           v-model:image-modal="imageModal"
           v-model:metadata-modal="metadataModal"
-          v-model:notification="notification"
           v-model:word-modal="wordModal"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
@@ -106,7 +104,6 @@
       <!-- Not loading, has query and results -->
       <DisplaySnippets
         v-model:image-modal="imageModal"
-        v-model:notification="notification"
         v-model:word-modal="wordModal"
         v-model:metadata-modal="metadataModal"
       />
@@ -127,7 +124,6 @@
           </h1>
           <DisplaySnippets
             v-model:image-modal="imageModal"
-            v-model:notification="notification"
             v-model:word-modal="wordModal"
             v-model:metadata-modal="metadataModal"
           />
@@ -174,7 +170,7 @@
     </div>
 
     <!-- Not loading, no search, no results -->
-    <IndexSize v-else v-model:is-loading="isLoading" v-model:notification="notification" />
+    <IndexSize v-else />
   </main>
   <footer
     id="footer"
@@ -223,6 +219,7 @@ import { hasSearch } from '@/assets/appState'
 
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useSearchStore } from '@/stores/SearchStore'
+import { useModalStore } from '@/stores/ModalStore'
 
 const searchStore = useSearchStore()
 const {
@@ -256,10 +253,12 @@ import { storeToRefs } from 'pinia'
 const { authorFacetCount } = storeToRefs(preferences)
 
 const searchError = ref<SearchError | null>()
+
+const modalStore = useModalStore()
+const { notification } = storeToRefs(modalStore)
 const imageModal: Ref = defineModel('imageModal')
 const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
-const notification: Ref = defineModel('notification')
 
 const resultsPerPage = ref(10)
 
@@ -358,6 +357,7 @@ onMounted(() => {
 
 const newPage = () => runSearch()
 const newSearch = () => {
+  //notification.value = { error: false, delay: 4000, msg: 'Running search...' }
   clearSearchResults()
   runSearch()
 }
@@ -604,7 +604,6 @@ const runSearch = async (addHistory: boolean = true) => {
                 .catch((error) => {
                   console.error(`Error fetching facets: ${error}`)
                   notification.value = {
-                    show: true,
                     error: true,
                     delay: 4000,
                     msg: `Error: ${error}`
@@ -633,7 +632,6 @@ const runSearch = async (addHistory: boolean = true) => {
           console.error(`Response status ${response.status}: ${error}`)
           clearSearchResults()
           notification.value = {
-            show: true,
             error: true,
             delay: 4000,
             msg: `Error: ${error}`
@@ -649,7 +647,6 @@ const runSearch = async (addHistory: boolean = true) => {
       console.error(`Error running search: ${error}`)
       clearSearchResults()
       notification.value = {
-        show: true,
         error: true,
         delay: 4000,
         msg: `Error: ${error}`

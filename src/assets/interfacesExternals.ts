@@ -93,3 +93,9 @@ export interface SearchError {
   code: string
   message: string
 }
+
+export interface Notification {
+  error: boolean
+  delay: number
+  msg: string
+}
