@@ -111,3 +111,8 @@ export interface FixMetadataModalData {
   field: string
   value?: string
 }
+
+export interface ImageModalData {
+  title: string
+  data: string // base64 image data string
+}

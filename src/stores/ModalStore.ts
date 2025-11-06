@@ -5,7 +5,8 @@ import { defineStore } from 'pinia'
 import {
   type NotificationData,
   type FixWordModalData,
-  type FixMetadataModalData
+  type FixMetadataModalData,
+  type ImageModalData
 } from '@/assets/interfacesExternals'
 
 export const useModalStore = defineStore('modalStore', () => {
@@ -23,11 +24,20 @@ export const useModalStore = defineStore('modalStore', () => {
 
   const showFixMetadataModal = ref<boolean>(false)
 
+  const imageModalData = ref<ImageModalData>({
+    title: '',
+    data: ''
+  })
+
+  const showImageModal = ref<boolean>(false)
+
   return {
     notification,
     fixWordModalData,
     showFixWordModal,
     fixMetadataModalData,
-    showFixMetadataModal
+    showFixMetadataModal,
+    imageModalData,
+    showImageModal
   }
 })

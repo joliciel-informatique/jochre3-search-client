@@ -55,7 +55,6 @@
       <div class="is-hidden-desktop">
         <ContentsTable
           v-if="hasSearch"
-          v-model:image-modal="imageModal"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
@@ -88,7 +87,6 @@
     >
       <div class="is-hidden-touch">
         <ContentsTable
-          v-model:image-modal="imageModal"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
@@ -98,7 +96,7 @@
         />
       </div>
       <!-- Not loading, has query and results -->
-      <DisplaySnippets v-model:image-modal="imageModal" />
+      <DisplaySnippets />
       <div class="is-hidden-touch">
         <FacetBar
           @active-facets-changed="activeFacetsChanged"
@@ -114,7 +112,7 @@
           <h1 class="ml-2 mr-2 mt-2">
             {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
           </h1>
-          <DisplaySnippets v-model:image-modal="imageModal" />
+          <DisplaySnippets />
         </div>
         <div class="is-hidden-touch">
           <FacetBar
@@ -244,7 +242,6 @@ const searchError = ref<SearchError | null>()
 
 const modalStore = useModalStore()
 const { notification } = storeToRefs(modalStore)
-const imageModal: Ref = defineModel('imageModal')
 
 const resultsPerPage = ref(10)
 

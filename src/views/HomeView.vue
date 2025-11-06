@@ -7,9 +7,9 @@
     :style="preferences.interfaceStyle == 'old' ? 'overflow: auto; max-height: 100vh' : ''"
   >
     <PreferencesSetup />
-    <SearchPage v-model:image-modal="imageModal" />
+    <SearchPage />
     <Preferences />
-    <LargeImage v-model:image-modal="imageModal" />
+    <LargeImage />
     <FixWord />
     <FixMetaData />
     <Notification />
@@ -39,7 +39,4 @@ const Preferences = defineAsyncComponent(
 )
 
 const preferences = usePreferencesStore()
-
-// Props for modal boxes
-const imageModal = ref({})
 </script>

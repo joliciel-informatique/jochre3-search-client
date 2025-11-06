@@ -176,8 +176,8 @@ const searchStore = useSearchStore()
 const { query, strict } = storeToRefs(searchStore)
 
 const modalStore = useModalStore()
-const { notification, fixWordModalData, showFixWordModal } = storeToRefs(modalStore)
-const imageModal: Ref = defineModel('imageModal')
+const { notification, fixWordModalData, showFixWordModal, imageModalData, showImageModal } =
+  storeToRefs(modalStore)
 const selectedEntryIdx: Ref = defineModel<number>('selectedEntryIdx', { default: 0 })
 
 const image = ref('')
@@ -247,20 +247,21 @@ const toggleImageSnippet = async () => {
 }
 
 const openImageModal = (title: string) => {
-  imageModal.value = {
-    show: true,
+  imageModalData.value = {
     title: title,
-    data: image.value ? image.value : null
+    data: image.value ? image.value : ''
   }
+
+  showImageModal.value = true
 }
 
 const openTranscribedText = () => {
   const textParams = new URLSearchParams()
   if (query) {
-    textParams.append('query', query)
+    textParams.append('query', query.value)
   }
   if (strict) {
-    textParams.append('strict', strict)
+    textParams.append('strict', strict.value.toString())
   }
   const url = `/text/${docRef}/page/${snippet.page}/?` + textParams.toString()
   openDeepLink(url)
