@@ -240,19 +240,14 @@ Description: calculates and presents page numbers
 </template>
 
 <script setup lang="ts">
-import { computed, type Ref } from 'vue'
-import { preferences } from '@/assets/fetchMethods'
 import { isBusy, hasSearch } from '@/assets/appState'
 import { useSearchStore } from '@/stores/SearchStore'
 import { useStateStore } from '@/stores/stateStore'
 import { storeToRefs } from 'pinia'
 
-const { page } = storeToRefs(useSearchStore())
+const { page, totalHits, lastPage } = storeToRefs(useSearchStore())
 const { atTop } = storeToRefs(useStateStore())
 const emit = defineEmits(['newPage'])
-
-const totalHits: Ref = defineModel('totalHits')
-const lastPage = computed(() => Math.floor((totalHits.value - 1) / preferences.resultsPerPage) + 1)
 
 const changePage = (pageNumber: number) => {
   page.value = pageNumber

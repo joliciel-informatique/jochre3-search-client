@@ -33,13 +33,8 @@ Description: controls text snippets from the OCR text
           :snippetIndex="index"
           :snippet="snippet"
           :url="result.metadata.url"
-          :query="query"
-          :strict="strict"
           :title="result.metadata.title"
           :author="result.metadata.author"
-          v-model:image-modal="imageModal"
-          v-model:word-modal="wordModal"
-          v-model:notification="notification"
           v-model:selected-entry-idx="selectedEntryIdx"
         />
       </ul>
@@ -47,15 +42,7 @@ Description: controls text snippets from the OCR text
   </ul>
   <ul id="snippets" v-else-if="searchResults && interfaceStyle == 'old'">
     <li v-for="(result, index) in searchResults" :key="sha1(result)">
-      <SingleResult
-        v-model:image-modal="imageModal"
-        v-model:word-modal="wordModal"
-        v-model:metadata-modal="metadataModal"
-        v-model:notification="notification"
-        :result="result"
-        :book-index="index"
-        :page-number-offset="pageNumberOffset"
-      />
+      <SingleResult :result="result" :book-index="index" :page-number-offset="pageNumberOffset" />
       <ul class="p-5 pt-4">
         <SingleSnippet
           v-for="(snippet, index) in result.snippets"
@@ -64,13 +51,8 @@ Description: controls text snippets from the OCR text
           :snippetIndex="index"
           :snippet="snippet"
           :url="result.metadata.url"
-          :query="query"
-          :strict="strict"
           :title="result.metadata.title"
           :author="result.metadata.author"
-          v-model:image-modal="imageModal"
-          v-model:word-modal="wordModal"
-          v-model:notification="notification"
         />
       </ul>
     </li>
@@ -82,28 +64,17 @@ import { computed, onMounted, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { sha1 } from 'object-hash'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import type { SearchResult } from '@/assets/interfacesExternals'
 import SingleSnippet from '../DisplaySnippets/SingleSnippet/SingleSnippet.vue'
 import SingleResult from '../ContentsTable/SingleResult/SingleResult.vue'
 import { useSearchStore } from '@/stores/SearchStore'
 
 const searchStore = useSearchStore()
-const { page } = storeToRefs(searchStore)
+const { page, searchResults, selectedEntryIdx } = storeToRefs(searchStore)
 
 const pageNumberOffset = computed(() => (page.value - 1) * preferences.resultsPerPage + 1)
 
 const preferences = usePreferencesStore()
 const { displayPerBook, interfaceStyle } = storeToRefs(preferences)
-
-const imageModal = defineModel('imageModal')
-const wordModal = defineModel('wordModal')
-const metadataModal = defineModel('metadataModal')
-const notification = defineModel('notification')
-const selectedEntryIdx = defineModel<number>('selectedEntryIdx', { default: 0 })
-const searchResults = defineModel<SearchResult[]>('searchResults')
-const query = defineModel<string>('query')
-const strict = defineModel<boolean>('strict')
-const isLoading = defineModel('isLoading')
 
 // How many snippets for each volume are in view upon scroll only if shown in continuous list
 const scrolling = () => {

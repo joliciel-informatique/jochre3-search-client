@@ -7,22 +7,17 @@
     :style="preferences.interfaceStyle == 'old' ? 'overflow: auto; max-height: 100vh' : ''"
   >
     <PreferencesSetup />
-    <SearchPage
-      v-model:image-modal="imageModal"
-      v-model:word-modal="wordModal"
-      v-model:metadata-modal="metadataModal"
-      v-model:notification="notification"
-    />
-    <Preferences v-model:notification="notification" />
-    <LargeImage v-model:image-modal="imageModal" />
-    <FixWord v-model:word-modal="wordModal" v-model:notification="notification" />
-    <FixMetaData v-model:metadata-modal="metadataModal" v-model:notification="notification" />
-    <Notification v-model:notification="notification" />
+    <SearchPage />
+    <Preferences />
+    <LargeImage />
+    <FixWord />
+    <FixMetaData />
+    <Notification />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, defineAsyncComponent } from 'vue'
+import { defineAsyncComponent } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 
 const SearchPage = defineAsyncComponent(() => import('@/components/SearchPage/SearchPage.vue'))
@@ -44,10 +39,4 @@ const Preferences = defineAsyncComponent(
 )
 
 const preferences = usePreferencesStore()
-
-// Props for modal boxes
-const imageModal = ref({})
-const metadataModal = ref({ field: 'author' })
-const wordModal = ref({})
-const notification = ref({})
 </script>

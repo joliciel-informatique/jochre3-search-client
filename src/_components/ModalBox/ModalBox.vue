@@ -4,23 +4,23 @@
       class="modal"
       role="dialog"
       :class="{
-        'is-active': data.show
+        'is-active': show
       }"
-      v-show="data.show"
+      v-show="show"
     >
-      <div class="modal-background" @click="close"></div>
+      <div class="modal-background" @click="closeFunc"></div>
       <div class="modal-content">
         <header class="modal-card-head">
           <slot name="header"></slot>
-          <button class="delete" aria-label="Close modal" @click="close"></button>
+          <button class="delete" aria-label="Close modal" @click="closeFunc"></button>
         </header>
         <section class="modal-card-body">
           <slot name="body"></slot>
         </section>
         <footer class="modal-card-foot">
           <div class="buttons">
-            <slot name="footer" :closeFunction="close"></slot>
-            <button class="button is-link is-light" @click="close">
+            <slot name="footer" :closeFunction="closeFunc"></slot>
+            <button class="button is-link is-light" @click="closeFunc">
               {{ $t('modal.cancel') }}
             </button>
           </div>
@@ -31,18 +31,9 @@
 </template>
 <script setup lang="ts">
 import { type Ref } from 'vue'
-import { usePreferencesStore } from '@/stores/PreferencesStore'
-const preferences = usePreferencesStore()
 
-const data: Ref = defineModel('data')
-const notification: Ref = defineModel('notification')
-const authorList: Ref = defineModel('authorList')
-
-const close = () => {
-  if (data.value) data.value.show = false
-  if (notification.value) notification.value.show = false
-  authorList.value = []
-}
+const show: Ref = defineModel('show')
+const closeFunc: Ref = defineModel('closeFunc')
 </script>
 <style lang="css" scoped>
 .fade-enter-active,
