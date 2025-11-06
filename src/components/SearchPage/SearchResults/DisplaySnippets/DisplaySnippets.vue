@@ -36,7 +36,6 @@ Description: controls text snippets from the OCR text
           :title="result.metadata.title"
           :author="result.metadata.author"
           v-model:image-modal="imageModal"
-          v-model:word-modal="wordModal"
           v-model:selected-entry-idx="selectedEntryIdx"
         />
       </ul>
@@ -46,7 +45,6 @@ Description: controls text snippets from the OCR text
     <li v-for="(result, index) in searchResults" :key="sha1(result)">
       <SingleResult
         v-model:image-modal="imageModal"
-        v-model:word-modal="wordModal"
         v-model:metadata-modal="metadataModal"
         :result="result"
         :book-index="index"
@@ -63,7 +61,6 @@ Description: controls text snippets from the OCR text
           :title="result.metadata.title"
           :author="result.metadata.author"
           v-model:image-modal="imageModal"
-          v-model:word-modal="wordModal"
         />
       </ul>
     </li>
@@ -88,7 +85,6 @@ const preferences = usePreferencesStore()
 const { displayPerBook, interfaceStyle } = storeToRefs(preferences)
 
 const imageModal = defineModel('imageModal')
-const wordModal = defineModel('wordModal')
 const metadataModal = defineModel('metadataModal')
 
 // How many snippets for each volume are in view upon scroll only if shown in continuous list

@@ -57,7 +57,6 @@
           v-if="hasSearch"
           v-model:image-modal="imageModal"
           v-model:metadata-modal="metadataModal"
-          v-model:word-modal="wordModal"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
@@ -92,7 +91,6 @@
         <ContentsTable
           v-model:image-modal="imageModal"
           v-model:metadata-modal="metadataModal"
-          v-model:word-modal="wordModal"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
@@ -102,11 +100,7 @@
         />
       </div>
       <!-- Not loading, has query and results -->
-      <DisplaySnippets
-        v-model:image-modal="imageModal"
-        v-model:word-modal="wordModal"
-        v-model:metadata-modal="metadataModal"
-      />
+      <DisplaySnippets v-model:image-modal="imageModal" v-model:metadata-modal="metadataModal" />
       <div class="is-hidden-touch">
         <FacetBar
           @active-facets-changed="activeFacetsChanged"
@@ -124,7 +118,6 @@
           </h1>
           <DisplaySnippets
             v-model:image-modal="imageModal"
-            v-model:word-modal="wordModal"
             v-model:metadata-modal="metadataModal"
           />
         </div>
@@ -257,7 +250,6 @@ const searchError = ref<SearchError | null>()
 const modalStore = useModalStore()
 const { notification } = storeToRefs(modalStore)
 const imageModal: Ref = defineModel('imageModal')
-const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
 
 const resultsPerPage = ref(10)

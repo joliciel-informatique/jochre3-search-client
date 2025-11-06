@@ -1,5 +1,5 @@
 <template>
-  <ModalBox v-model:data="imageModal">
+  <ModalBox v-model:show="imageModal.show" v-model:close-func="close">
     <template #header>
       <p class="modal-card-title">{{ imageModal.title }}</p>
     </template>
@@ -17,4 +17,5 @@ import { defineAsyncComponent, type Ref } from 'vue'
 const ModalBox = defineAsyncComponent(() => import('@/_components/ModalBox/ModalBox.vue'))
 
 const imageModal: Ref = defineModel('imageModal')
+const close = () => {}
 </script>

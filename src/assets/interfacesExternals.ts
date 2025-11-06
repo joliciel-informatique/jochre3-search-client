@@ -94,8 +94,14 @@ export interface SearchError {
   message: string
 }
 
-export interface Notification {
+export interface NotificationData {
   error: boolean
   delay: number
   msg: string
+}
+
+export interface FixWordModalData {
+  docRef: string
+  selection: Selection
+  globalOffset: number
 }

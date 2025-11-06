@@ -1,5 +1,5 @@
 <template>
-  <ModalBox v-model:data="metadataModal" v-model:author-list="authorList">
+  <ModalBox v-model:show="metadataModal.show" v-model:close-func="close">
     <template #header>
       <p class="modal-card-title">
         {{ $t('fix-metadata.title', [$t(`fix-metadata.field-type.${metadataModal.field}`)]) }}
@@ -85,12 +85,8 @@
         />
       </div>
     </template>
-    <template #footer="modalBox">
-      <button
-        class="button is-link"
-        :disabled="!authenticated"
-        @click="save(modalBox.closeFunction)"
-      >
+    <template #footer>
+      <button class="button is-link" :disabled="!authenticated" @click="save">
         {{ $t('modal.save') }}
       </button>
     </template>
@@ -118,7 +114,11 @@ const fieldLeftToRight = computed(() =>
   ['authorEnglish', 'titleEnglish', 'publisher'].includes(metadataModal.value.field)
 )
 
-const save = (closeFunc: Function) => {
+const close = () => {
+  authorList.value = []
+}
+
+const save = () => {
   const authorListValue = authorList.value[0]?.label
 
   const newValue = authorListValue ? authorListValue : metadataModal.value.value
@@ -147,7 +147,7 @@ const save = (closeFunc: Function) => {
           msg: `Something went wrong: ${res.status}: ${res.statusText}. Try again and if the error persists, contact us!`
         }
       }
-      closeFunc()
+      close()
     })
     .catch((error) => {
       notification.value = {
@@ -155,7 +155,7 @@ const save = (closeFunc: Function) => {
         delay: 4000,
         msg: `Something went wrong: ${error}. Try again and if the error persists, contact us!`
       }
-      closeFunc()
+      close()
     })
 }
 

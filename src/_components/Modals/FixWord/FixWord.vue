@@ -1,5 +1,5 @@
 <template>
-  <ModalBox v-model:data="wordModal">
+  <ModalBox v-model:show="showFixWordModal" v-model:close-func="close">
     <template #header>
       <p class="modal-card-title">{{ $t('fix-word.title') }}</p>
     </template>
@@ -39,12 +39,8 @@
         <div class="p-2 has-text-danger">{{ $t('fix-word.warning') }}</div>
       </div>
     </template>
-    <template #footer="modalBox">
-      <button
-        class="button is-link"
-        :disabled="!authenticated"
-        @click="save(modalBox.closeFunction)"
-      >
+    <template #footer>
+      <button class="button is-link" :disabled="!authenticated" @click="save()">
         {{ $t('modal.save') }}
       </button>
     </template>
@@ -59,26 +55,27 @@ import { useModalStore } from '@/stores/ModalStore'
 import { storeToRefs } from 'pinia'
 
 const modalStore = useModalStore()
-const { notification } = storeToRefs(modalStore)
+const { notification, fixWordModalData, showFixWordModal } = storeToRefs(modalStore)
 const preferences = usePreferencesStore()
 
 const ModalBox = defineAsyncComponent(() => import('@/_components/ModalBox/ModalBox.vue'))
 
-const wordModal: Ref = defineModel('wordModal')
 const wordImage = ref('')
 const wordLoading = ref(false)
 const wordSuggestion = ref('')
-const wordOffset = computed(() =>
-  wordModal.value.globalOffset
-    ? wordModal.value?.globalOffset + wordModal.value.selection.anchorOffset
-    : null
+const wordOffset = computed<number>(() =>
+  fixWordModalData.value
+    ? fixWordModalData.value.globalOffset + fixWordModalData.value.selection.anchorOffset
+    : 0
 )
-const textInputId = computed(() => `${wordModal.value.docRef}-${wordOffset.value}`)
+const textInputId = computed<string>(() =>
+  fixWordModalData.value ? `${fixWordModalData.value.docRef}-${wordOffset.value}` : ''
+)
 
 onBeforeUpdate(async () => {
-  if (wordModal.value.docRef && wordModal.value.selection) {
+  if (fixWordModalData.value) {
     const params: URLSearchParams = new URLSearchParams({
-      'doc-ref': wordModal.value.docRef,
+      'doc-ref': fixWordModalData.value.docRef,
       'word-offset': wordOffset.value.toString()
     })
 
@@ -122,36 +119,43 @@ const loadWordText = async (params: URLSearchParams) => {
   }
 }
 
-const save = (closeFunc: Function) => {
-  const data = JSON.stringify({
-    docRef: wordModal.value.docRef,
-    offset: wordOffset.value,
-    suggestion: wordSuggestion.value
-  })
-  fetchData('suggest-word', 'post', data, 'application/json')
-    .then((res) => {
-      if (res.status === 200) {
-        notification.value = {
-          error: false,
-          delay: 4000,
-          msg: 'Thanks for your correction! The JOCHRE crew will review this suggestion.'
+const close = () => {
+  showFixWordModal.value = false
+  fixWordModalData.value = null
+}
+
+const save = () => {
+  if (fixWordModalData.value) {
+    const data = JSON.stringify({
+      docRef: fixWordModalData.value.docRef,
+      offset: wordOffset.value,
+      suggestion: wordSuggestion.value
+    })
+    fetchData('suggest-word', 'post', data, 'application/json')
+      .then((res) => {
+        if (res.status === 200) {
+          notification.value = {
+            error: false,
+            delay: 4000,
+            msg: 'Thanks for your correction! The JOCHRE crew will review this suggestion.'
+          }
+        } else {
+          notification.value = {
+            error: true,
+            delay: 4000,
+            msg: 'Something went wrong! Contact us if this error persists!'
+          }
         }
-      } else {
+        close()
+      })
+      .catch((error) => {
         notification.value = {
           error: true,
           delay: 4000,
-          msg: 'Something went wrong! Contact us if this error persists!'
+          msg: `Something went wrong: ${error}! Contact us if this error persists!`
         }
-      }
-      closeFunc()
-    })
-    .catch((error) => {
-      notification.value = {
-        error: true,
-        delay: 4000,
-        msg: `Something went wrong: ${error}! Contact us if this error persists!`
-      }
-      closeFunc()
-    })
+        close()
+      })
+  }
 }
 </script>

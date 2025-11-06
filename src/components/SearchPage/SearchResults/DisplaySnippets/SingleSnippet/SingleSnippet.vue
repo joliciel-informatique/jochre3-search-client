@@ -157,25 +157,27 @@ import { storeToRefs } from 'pinia'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useSearchStore } from '@/stores/SearchStore'
 import { useModalStore } from '@/stores/ModalStore'
+import type { Snippet } from '@/assets/interfacesExternals'
 
 const preferences = usePreferencesStore()
 
-const { snippet, docRef, bookIndex, snippetIndex, title, author } = defineProps([
-  'snippet',
-  'docRef',
-  'bookIndex',
-  'snippetIndex',
-  'title',
-  'author'
-])
+interface Props {
+  snippet: Snippet
+  docRef: string
+  bookIndex?: number
+  snippetIndex: number
+  title?: string
+  author?: string
+}
+
+const { snippet, docRef, bookIndex, snippetIndex, title, author } = defineProps<Props>()
 
 const searchStore = useSearchStore()
 const { query, strict } = storeToRefs(searchStore)
 
 const modalStore = useModalStore()
-const { notification } = storeToRefs(modalStore)
+const { notification, fixWordModalData, showFixWordModal } = storeToRefs(modalStore)
 const imageModal: Ref = defineModel('imageModal')
-const wordModal = defineModel('wordModal')
 const selectedEntryIdx: Ref = defineModel<number>('selectedEntryIdx', { default: 0 })
 
 const image = ref('')
@@ -200,12 +202,13 @@ const openWordModal = () => {
       const globalOffsetStr = parentSpan.getAttribute('offset') ?? '0'
       const globalOffset = parseInt(globalOffsetStr)
 
-      wordModal.value = {
-        show: true,
+      fixWordModalData.value = {
         docRef: docRef,
         selection: selection,
         globalOffset: globalOffset
       }
+
+      showFixWordModal.value = true
     }
   }
 }

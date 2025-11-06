@@ -45,7 +45,6 @@ const { notification } = storeToRefs(modalStore)
 const showNotification = ref<boolean>(false)
 
 watch(notification, (newNotif, oldNotif) => {
-  console.log(`Notification changed, message: ${newNotif.msg}`)
   showNotification.value = newNotif.msg.length > 0
   setTimeout(() => (showNotification.value = false), newNotif.delay)
 })

@@ -30,7 +30,6 @@
           >
             <SingleResult
               v-model:image-modal="imageModal"
-              v-model:word-modal="wordModal"
               v-model:metadata-modal="metadataModal"
               v-model:selectedEntryIdx="selectedEntryIdx"
               :result="result"
@@ -89,7 +88,6 @@
   >
     <SingleResult
       v-model:image-modal="imageModal"
-      v-model:word-modal="wordModal"
       v-model:metadata-modal="metadataModal"
       v-model:selected-entry-idx="selectedEntryIdx"
       :result="searchResults[selectedEntryIdx]"
@@ -154,11 +152,7 @@ const { page, searchResults, totalHits, firstResult, lastResult, selectedEntryId
 
 const preferences = usePreferencesStore()
 
-const modalStore = useModalStore()
-const { notification } = storeToRefs(modalStore)
-
 const imageModal: Ref = defineModel('imageModal')
-const wordModal: Ref = defineModel('wordModal')
 const metadataModal: Ref = defineModel('metadataModal')
 const facets: Ref = defineModel('facets')
 
