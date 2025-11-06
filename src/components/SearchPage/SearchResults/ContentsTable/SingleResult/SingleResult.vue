@@ -42,7 +42,7 @@ Description: presents OCR record metadata
               ({{ result.metadata.author ?? $t('results.result-unknown-author') }})
             </span>
           </span>
-          <EditBtn :result="result" :edit="'title'" v-model:metadata-modal="metadataModal" />
+          <EditBtn :result="result" :edit="'title'" />
         </p>
       </template>
 
@@ -73,11 +73,7 @@ Description: presents OCR record metadata
               <span :class="{ 'ltr-no-text-align': needsLeftToRight }">
                 {{ result.metadata.titleEnglish }}
               </span>
-              <EditBtn
-                :result="result"
-                :edit="'titleEnglish'"
-                v-model:metadata-modal="metadataModal"
-              />
+              <EditBtn :result="result" :edit="'titleEnglish'" />
             </span>
           </div>
           <div
@@ -103,16 +99,12 @@ Description: presents OCR record metadata
               <span :class="{ 'rtl-no-text-align': needsRightToLeft }">
                 {{ result.metadata.author ?? $t('results.unknown-author-original') }}
               </span>
-              <EditBtn :result="result" :edit="'author'" v-model:metadata-modal="metadataModal" />
+              <EditBtn :result="result" :edit="'author'" />
               (
               <span :class="{ 'ltr-no-text-align': needsLeftToRight }">
                 {{ result.metadata.authorEnglish ?? $t('results.unknown-author-transcription') }}
               </span>
-              <EditBtn
-                :result="result"
-                :edit="'authorEnglish'"
-                v-model:metadata-modal="metadataModal"
-              />
+              <EditBtn :result="result" :edit="'authorEnglish'" />
               )
             </span>
           </div>
@@ -139,11 +131,7 @@ Description: presents OCR record metadata
               <span :class="{ 'ltr-no-text-align': needsLeftToRight }">
                 {{ result.metadata.publicationYear }}
               </span>
-              <EditBtn
-                :result="result"
-                :edit="'publicationYear'"
-                v-model:metadata-modal="metadataModal"
-              />
+              <EditBtn :result="result" :edit="'publicationYear'" />
             </span>
           </div>
           <div
@@ -169,11 +157,7 @@ Description: presents OCR record metadata
               <span class="is-vcentered" :class="{ 'ltr-no-text-align': needsLeftToRight }">{{
                 result.metadata.publisher
               }}</span>
-              <EditBtn
-                :result="result"
-                :edit="'publisher'"
-                v-model:metadata-modal="metadataModal"
-              />
+              <EditBtn :result="result" :edit="'publisher'" />
             </span>
           </div>
           <div
@@ -219,7 +203,6 @@ const { result, bookIndex, pageNumberOffset } = defineProps({
   pageNumberOffset: { type: Number, default: 0 }
 })
 
-const metadataModal = defineModel('metadataModal')
 const showing = defineModel<boolean>('showing', { default: true })
 const selectedEntry = defineModel<SearchResult>('selectedEntry')
 const selectedEntryIdx = defineModel<number>('selectedEntryIdx')

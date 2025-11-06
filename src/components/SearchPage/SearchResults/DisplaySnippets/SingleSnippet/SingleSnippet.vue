@@ -153,23 +153,31 @@ Description: displays text snippets from the OCR text
 <script setup lang="ts">
 import { fetchData } from '@/assets/fetchMethods'
 import { ref, type Ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { useSearchStore } from '@/stores/SearchStore'
+import { useModalStore } from '@/stores/ModalStore'
+import type { Snippet } from '@/assets/interfacesExternals'
 
 const preferences = usePreferencesStore()
 
-const { snippet, docRef, bookIndex, snippetIndex, query, strict } = defineProps([
-  'snippet',
-  'docRef',
-  'bookIndex',
-  'snippetIndex',
-  'query',
-  'strict',
-  'title',
-  'author'
-])
-const imageModal: Ref = defineModel('imageModal')
-const wordModal = defineModel('wordModal')
-const notification = defineModel('notification')
+interface Props {
+  snippet: Snippet
+  docRef: string
+  bookIndex?: number
+  snippetIndex: number
+  title?: string
+  author?: string
+}
+
+const { snippet, docRef, bookIndex, snippetIndex, title, author } = defineProps<Props>()
+
+const searchStore = useSearchStore()
+const { query, strict } = storeToRefs(searchStore)
+
+const modalStore = useModalStore()
+const { notification, fixWordModalData, showFixWordModal, imageModalData, showImageModal } =
+  storeToRefs(modalStore)
 const selectedEntryIdx: Ref = defineModel<number>('selectedEntryIdx', { default: 0 })
 
 const image = ref('')
@@ -194,12 +202,13 @@ const openWordModal = () => {
       const globalOffsetStr = parentSpan.getAttribute('offset') ?? '0'
       const globalOffset = parseInt(globalOffsetStr)
 
-      wordModal.value = {
-        show: true,
+      fixWordModalData.value = {
         docRef: docRef,
         selection: selection,
         globalOffset: globalOffset
       }
+
+      showFixWordModal.value = true
     }
   }
 }
@@ -220,7 +229,6 @@ const toggleImageSnippet = async () => {
   const response = await fetchData('image-snippet', 'get', params, 'image/png', 'arraybuffer')
   if (response.status !== 200) {
     notification.value = {
-      show: true,
       error: true,
       delay: 4000,
       msg: 'Something went wrong! Contact us if the error persists!'
@@ -239,20 +247,21 @@ const toggleImageSnippet = async () => {
 }
 
 const openImageModal = (title: string) => {
-  imageModal.value = {
-    show: true,
+  imageModalData.value = {
     title: title,
-    data: image.value ? image.value : null
+    data: image.value ? image.value : ''
   }
+
+  showImageModal.value = true
 }
 
 const openTranscribedText = () => {
   const textParams = new URLSearchParams()
   if (query) {
-    textParams.append('query', query)
+    textParams.append('query', query.value)
   }
   if (strict) {
-    textParams.append('strict', strict)
+    textParams.append('strict', strict.value.toString())
   }
   const url = `/text/${docRef}/page/${snippet.page}/?` + textParams.toString()
   openDeepLink(url)

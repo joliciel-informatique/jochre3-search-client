@@ -8,7 +8,6 @@ export const usePreferencesStore = defineStore('preferences', () => {
   const keycloakStore = useKeycloakStore()
   const keycloak = keycloakStore.keycloak
 
-  const show = ref(false)
   const storePreferencesInCookie = ref(true)
   const language = ref('yi')
   const interfaceStyle = ref('old')
@@ -218,7 +217,6 @@ export const usePreferencesStore = defineStore('preferences', () => {
   }
 
   return {
-    show,
     storePreferencesInCookie,
     language,
     interfaceStyle,

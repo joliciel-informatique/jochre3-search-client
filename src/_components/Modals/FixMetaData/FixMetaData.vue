@@ -1,12 +1,8 @@
 <template>
-  <ModalBox
-    v-model:data="metadataModal"
-    v-model:notification="notification"
-    v-model:author-list="authorList"
-  >
+  <ModalBox v-model:show="showFixMetadataModal" v-model:close-func="close">
     <template #header>
       <p class="modal-card-title">
-        {{ $t('fix-metadata.title', [$t(`fix-metadata.field-type.${metadataModal.field}`)]) }}
+        {{ $t('fix-metadata.title', [$t(`fix-metadata.field-type.${field}`)]) }}
       </p>
     </template>
     <template #body>
@@ -17,12 +13,12 @@
       <div class="columns field has-addons">
         <span
           class="column is-flex is-flex-direction-row is-flex-wrap-nowrap field is-horizontal"
-          :class="metadataModal.field !== 'publicationYear' ? 'has-icons-right' : ''"
+          :class="field !== 'publicationYear' ? 'has-icons-right' : ''"
         >
           <p class="control is-expanded">
             <input
-              :id="metadataModal.field"
-              :type="metadataModal.field === 'publicationYear' ? 'number' : 'text'"
+              :id="field"
+              :type="field === 'publicationYear' ? 'number' : 'text'"
               class="input has-text-dark"
               :class="{
                 'ltr-align': fieldLeftToRight && preferences.needsLeftToRight,
@@ -31,16 +27,16 @@
               }"
               :lang="preferences.corpusLanguage"
               name="fixWordSuggestionInput"
-              v-model="metadataModal.value"
+              v-model="metadataValue"
               :disabled="authorList.length > 0"
               :alt="$t('search.keyboard')"
               :title="$t('search.keyboard')"
             />
           </p>
           <simple-key
-            v-if="metadataModal.field !== 'publicationYear'"
-            v-model:attach-to="metadataModal.field"
-            v-model:reference="metadataModal.value"
+            v-if="field !== 'publicationYear'"
+            v-model:attach-to="field"
+            v-model:reference="metadataValue"
             @onEnter="null"
           />
         </span>
@@ -66,7 +62,7 @@
             <span class="column field has-addons has-addons-left is-horizontal">
               <p class="control is-expanded">
                 <input
-                  :id="`new-author-${metadataModal.field}`"
+                  :id="`new-author-${field}`"
                   type="text"
                   class="input has-text-dark"
                   lang="yi"
@@ -75,7 +71,7 @@
                 />
               </p>
               <simple-key
-                :attach-to="`new-author-${metadataModal.field}`"
+                :attach-to="`new-author-${field}`"
                 v-model:reference="authorText"
                 @onEnter="null"
               />
@@ -83,18 +79,14 @@
           </span>
         </span>
         <author-dropdown
-          :attach-to="`new-author-${metadataModal.field}`"
+          :attach-to="`new-author-${field}`"
           v-model:author-text="authorText"
           v-model:author-list="authorList"
         />
       </div>
     </template>
-    <template #footer="modalBox">
-      <button
-        class="button is-link"
-        :disabled="!authenticated"
-        @click="save(modalBox.closeFunction)"
-      >
+    <template #footer>
+      <button class="button is-link" :disabled="!authenticated" @click="save">
         {{ $t('modal.save') }}
       </button>
     </template>
@@ -105,61 +97,79 @@
 import { ref, computed, type Ref, defineAsyncComponent } from 'vue'
 import { authenticated, fetchData } from '@/assets/fetchMethods'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
+import { useModalStore } from '@/stores/ModalStore'
+import { storeToRefs } from 'pinia'
+
+const modalStore = useModalStore()
+const { notification, fixMetadataModalData, showFixMetadataModal } = storeToRefs(modalStore)
 
 const ModalBox = defineAsyncComponent(() => import('@/_components/ModalBox/ModalBox.vue'))
 
 const preferences = usePreferencesStore()
-const metadataModal: Ref = defineModel('metadataModal')
-const notification = defineModel('notification')
-const showFindAuthorDropdown = computed(() => metadataModal.value.field?.includes('author'))
+
 const authorList: Ref = ref<Array<{ label: string; count: number }>>([])
 const authorText = ref('')
-const fieldLeftToRight = computed(() =>
-  ['authorEnglish', 'titleEnglish', 'publisher'].includes(metadataModal.value.field)
+
+const field = computed<string>(() =>
+  fixMetadataModalData.value ? fixMetadataModalData.value.field : ''
+)
+const metadataValue = computed<string>(() =>
+  fixMetadataModalData.value?.value ? fixMetadataModalData.value.value : ''
 )
 
-const save = (closeFunc: Function) => {
-  const authorListValue = authorList.value[0]?.label
+const showFindAuthorDropdown = computed<boolean>(() => field.value.includes('author'))
 
-  const newValue = authorListValue ? authorListValue : metadataModal.value.value
-  const applyEverywhere = authorListValue ? true : false
-  const capitalizedField = capitalizeFirstLetter(metadataModal.value.field)
+const fieldLeftToRight = computed<boolean>(() =>
+  ['authorEnglish', 'titleEnglish', 'publisher'].includes(field.value)
+)
 
-  const data = JSON.stringify({
-    docRef: metadataModal.value.docRef,
-    field: capitalizedField,
-    value: newValue,
-    applyEverywhere: applyEverywhere
-  })
+const close = () => {
+  fixMetadataModalData.value = null
+  showFixMetadataModal.value = false
+  authorList.value = []
+}
 
-  fetchData('correct-metadata', 'post', data, 'application/json')
-    .then((res) => {
-      if (res.status === 200) {
-        notification.value = {
-          show: true,
-          error: false,
-          delay: 2000,
-          msg: 'Thanks, we will review your suggestion!'
+const save = () => {
+  if (fixMetadataModalData.value) {
+    const authorListValue = authorList.value[0]?.label
+
+    const newValue = authorListValue ? authorListValue : fixMetadataModalData.value.value
+    const applyEverywhere = authorListValue ? true : false
+    const capitalizedField = capitalizeFirstLetter(fixMetadataModalData.value.field)
+
+    const data = JSON.stringify({
+      docRef: fixMetadataModalData.value.docRef,
+      field: capitalizedField,
+      value: newValue,
+      applyEverywhere: applyEverywhere
+    })
+
+    fetchData('correct-metadata', 'post', data, 'application/json')
+      .then((res) => {
+        if (res.status === 200) {
+          notification.value = {
+            error: false,
+            delay: 2000,
+            msg: 'Thanks, we will review your suggestion!'
+          }
+        } else {
+          notification.value = {
+            error: true,
+            delay: 4000,
+            msg: `Something went wrong: ${res.status}: ${res.statusText}. Try again and if the error persists, contact us!`
+          }
         }
-      } else {
+        close()
+      })
+      .catch((error) => {
         notification.value = {
-          show: true,
           error: true,
           delay: 4000,
-          msg: `Something went wrong: ${res.status}: ${res.statusText}. Try again and if the error persists, contact us!`
+          msg: `Something went wrong: ${error}. Try again and if the error persists, contact us!`
         }
-      }
-      closeFunc()
-    })
-    .catch((error) => {
-      notification.value = {
-        show: true,
-        error: true,
-        delay: 4000,
-        msg: `Something went wrong: ${error}. Try again and if the error persists, contact us!`
-      }
-      closeFunc()
-    })
+        close()
+      })
+  }
 }
 
 const capitalizeFirstLetter = (string: String) => string.charAt(0).toUpperCase() + string.slice(1)

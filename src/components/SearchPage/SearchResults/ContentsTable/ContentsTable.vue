@@ -29,10 +29,6 @@
             :class="searchResults[selectedEntryIdx]?.docRef === result.docRef ? 'is-active' : ''"
           >
             <SingleResult
-              v-model:image-modal="imageModal"
-              v-model:word-modal="wordModal"
-              v-model:metadata-modal="metadataModal"
-              v-model:notification="notification"
               v-model:selectedEntryIdx="selectedEntryIdx"
               :result="result"
               :book-index="bookIndex"
@@ -81,7 +77,7 @@
         </span>
       </span>
     </a>
-    <PageNumbering @newPage="emit('newPage')" v-model:totalHits="totalHits" />
+    <PageNumbering @newPage="emit('newPage')" />
   </div>
   <aside
     v-if="searchResults?.length"
@@ -89,10 +85,6 @@
     v-show="openMobileMetadataPanel"
   >
     <SingleResult
-      v-model:image-modal="imageModal"
-      v-model:word-modal="wordModal"
-      v-model:metadata-modal="metadataModal"
-      v-model:notification="notification"
       v-model:selected-entry-idx="selectedEntryIdx"
       :result="searchResults[selectedEntryIdx]"
       :book-index="-1"
@@ -104,12 +96,6 @@
     class="toc-drawer menu box p-2"
     v-show="openMobileSearchResultsToc"
   >
-    <!-- <p
-      class="menu-label is-size-5 label p-2 is-flex is-flex-direction-row is-justify-content-space-between"
-    >
-      {{ $t('toc.contents-table-header') }}
-      <font-awesome-icon icon="gear" @click="preferences.show = true" />
-    </p> -->
     <p class="menu-label label pt-4 has-text-centered">
       {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
     </p>
@@ -142,8 +128,6 @@
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { computed, nextTick, ref, watch, type Ref } from 'vue'
 import { useTemplateRefsList } from '@vueuse/core'
-
-import type { SearchResult } from '@/assets/interfacesExternals'
 import { useSearchStore } from '@/stores/SearchStore'
 import { storeToRefs } from 'pinia'
 
@@ -152,17 +136,11 @@ import PageNumbering from '@/components/SearchPage/SearchBar/Navigation/PageNumb
 import FacetBar from '@/components/SearchPage/SearchResults/FacetBar/FacetBar.vue'
 
 const searchStore = useSearchStore()
-const { page, totalHits, firstResult, lastResult } = storeToRefs(searchStore)
+const { page, searchResults, totalHits, firstResult, lastResult, selectedEntryIdx } =
+  storeToRefs(searchStore)
 
 const preferences = usePreferencesStore()
 
-const searchResults = defineModel<Array<SearchResult>>('searchResults')
-const imageModal: Ref = defineModel('imageModal')
-const wordModal: Ref = defineModel('wordModal')
-const metadataModal: Ref = defineModel('metadataModal')
-const notification: Ref = defineModel('notification')
-// const selectedEntry = defineModel<SearchResult>('selectedEntry')
-const selectedEntryIdx = defineModel<number>('selectedEntryIdx', { default: 0 })
 const facets: Ref = defineModel('facets')
 
 const openMobileSearchResultsToc = defineModel('openMobileSearchResultsToc')

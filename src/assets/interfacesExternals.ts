@@ -93,3 +93,26 @@ export interface SearchError {
   code: string
   message: string
 }
+
+export interface NotificationData {
+  error: boolean
+  delay: number
+  msg: string
+}
+
+export interface FixWordModalData {
+  docRef: string
+  selection: Selection
+  globalOffset: number
+}
+
+export interface FixMetadataModalData {
+  docRef: string
+  field: string
+  value?: string
+}
+
+export interface ImageModalData {
+  title: string
+  data: string // base64 image data string
+}

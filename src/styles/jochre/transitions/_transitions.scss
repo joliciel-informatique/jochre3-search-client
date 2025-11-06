@@ -32,6 +32,13 @@ according to style policies.
   transition-duration: 0.3s;
 }
 
+.corner-notification {
+  position: absolute !important;
+  z-index: 100 !important;
+  bottom: 0;
+  right: 0;
+}
+
 .notification .card {
   transition: 150ms ease-in-out;
 }

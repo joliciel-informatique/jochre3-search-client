@@ -21,7 +21,7 @@
       >
         <a
           class="navbar-item p-3"
-          @click.prevent="preferences.show = true"
+          @click.prevent="showPreferencesModal = true"
           :title="$t('header.preferences')"
         >
           <font-awesome-icon icon="gear" size="lg" />
@@ -68,7 +68,7 @@
         </a>
         <a
           class="panel-block"
-          @click.prevent="preferences.show = true"
+          @click.prevent="showPreferencesModal = true"
           :title="$t('header.preferences')"
           target="_blank"
         >
@@ -97,14 +97,18 @@
 import { useKeycloakStore } from '@/stores/KeycloakStore'
 import { ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
-import { type SearchResult } from '@/assets/interfacesExternals'
+import { useSearchStore } from '@/stores/SearchStore'
+import { storeToRefs } from 'pinia'
+import { useModalStore } from '@/stores/ModalStore'
+const modalStore = useModalStore()
+const { showPreferencesModal } = storeToRefs(modalStore)
+
 const keycloak = useKeycloakStore().keycloak
 const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
 const preferences = usePreferencesStore()
 const hasAdvancedSearchCriteria = ref(false)
-const showAdvancedSearchPanel = defineModel('showAdvancedSearchPanel')
 const openNavBarMobileMenu = defineModel('openNavBarMobileMenu')
-const searchResults = defineModel<Array<SearchResult>>('searchResults')
+const { searchResults, showAdvancedSearchPanel } = storeToRefs(useSearchStore())
 
 const signout = () => keycloak?.logout()
 

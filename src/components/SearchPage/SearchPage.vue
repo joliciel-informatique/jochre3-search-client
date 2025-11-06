@@ -15,19 +15,9 @@
           >
             <img :src="$t('header.logo')" :alt="$t('header.title')" :title="$t('header.title')" />
           </a>
-          <SearchBar
-            @newSearch="newSearch"
-            @resetSearchResults="resetSearchResults"
-            v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-            v-model:has-advanced-search-criteria="hasAdvancedSearchCriteria"
-            v-model:query="query"
-            v-model:strict="strict"
-            v-model:is-loading="isLoading"
-          />
+          <SearchBar @newSearch="newSearch" @resetSearchResults="resetSearchResults" />
           <UserOptions
             v-if="authenticated"
-            v-model:search-results="searchResults"
-            v-model:show-advanced-search-panel="showAdvancedSearchPanel"
             v-model:open-nav-bar-mobile-menu="openNavBarMobileMenu"
           />
           <div
@@ -47,7 +37,7 @@
           </div>
         </div>
         <div class="is-hidden-touch">
-          <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
+          <PageNumbering @newPage="newPage()" />
         </div>
         <div
           class="navbar-item is-flex is-flex-direction-column"
@@ -57,15 +47,7 @@
           <AdvancedSearch
             @newSearch="newSearch"
             @resetSearchResults="resetSearchResults"
-            v-model:show-advanced-search-panel="showAdvancedSearchPanel"
-            v-model:author-list="authorList"
-            v-model:title="title"
-            v-model:to-year="toYear"
-            v-model:from-year="fromYear"
-            v-model:doc-refs="docRefs"
-            v-model:sort-by="sortBy"
             v-model:facets="facets"
-            v-model:include-authors="includeAuthors"
           />
         </div>
         <!-- </div> -->
@@ -73,12 +55,6 @@
       <div class="is-hidden-desktop">
         <ContentsTable
           v-if="hasSearch"
-          v-model:search-results="searchResults"
-          v-model:image-modal="imageModal"
-          v-model:metadata-modal="metadataModal"
-          v-model:notification="notification"
-          v-model:word-modal="wordModal"
-          v-model:selected-entry-idx="selectedEntryIdx"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
@@ -111,12 +87,6 @@
     >
       <div class="is-hidden-touch">
         <ContentsTable
-          v-model:search-results="searchResults"
-          v-model:image-modal="imageModal"
-          v-model:metadata-modal="metadataModal"
-          v-model:notification="notification"
-          v-model:word-modal="wordModal"
-          v-model:selected-entry-idx="selectedEntryIdx"
           v-model:open-mobile-search-results-toc="openMobileSearchResultsToc"
           v-model:open-mobile-metadata-panel="openMobileMetadataPanel"
           v-model:open-mobile-facets="openMobileFacets"
@@ -126,17 +96,7 @@
         />
       </div>
       <!-- Not loading, has query and results -->
-      <DisplaySnippets
-        v-model:image-modal="imageModal"
-        v-model:notification="notification"
-        v-model:word-modal="wordModal"
-        v-model:metadata-modal="metadataModal"
-        v-model:selected-entry-idx="selectedEntryIdx"
-        v-model:search-results="searchResults"
-        v-model:is-loading="isLoading"
-        v-model:query="query"
-        v-model:strict="strict"
-      />
+      <DisplaySnippets />
       <div class="is-hidden-touch">
         <FacetBar
           @active-facets-changed="activeFacetsChanged"
@@ -152,17 +112,7 @@
           <h1 class="ml-2 mr-2 mt-2">
             {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
           </h1>
-          <DisplaySnippets
-            v-model:image-modal="imageModal"
-            v-model:notification="notification"
-            v-model:word-modal="wordModal"
-            v-model:metadata-modal="metadataModal"
-            v-model:selected-entry-idx="selectedEntryIdx"
-            v-model:search-results="searchResults"
-            v-model:is-loading="isLoading"
-            v-model:query="query"
-            v-model:strict="strict"
-          />
+          <DisplaySnippets />
         </div>
         <div class="is-hidden-touch">
           <FacetBar
@@ -173,7 +123,7 @@
         </div>
       </div>
 
-      <PageNumbering @newPage="newPage()" v-model:totalHits="totalHits" />
+      <PageNumbering @newPage="newPage()" />
     </div>
 
     <!-- Not loading, with query, but error -->
@@ -206,7 +156,7 @@
     </div>
 
     <!-- Not loading, no search, no results -->
-    <IndexSize v-else v-model:is-loading="isLoading" v-model:notification="notification" />
+    <IndexSize v-else />
   </main>
   <footer
     id="footer"
@@ -248,59 +198,54 @@ const UserOptions = defineAsyncComponent(
 )
 
 // Import interfaces
-import {
-  type SearchResult,
-  type AggregationBin,
-  type SearchError
-} from '@/assets/interfacesExternals'
+import { type AggregationBin, type SearchError } from '@/assets/interfacesExternals'
 
 // This is better kept in Pinia or something similar
 import { hasSearch } from '@/assets/appState'
 
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useSearchStore } from '@/stores/SearchStore'
+import { useModalStore } from '@/stores/ModalStore'
+import { storeToRefs } from 'pinia'
 
 const searchStore = useSearchStore()
-const { page, totalHits, firstResult, lastResult } = storeToRefs(searchStore)
+const {
+  query,
+  strict,
+  title,
+  fromYear,
+  toYear,
+  docRefs,
+  sortBy,
+  includeAuthors,
+  authorList,
+  isLoading,
+  page,
+  searchResults,
+  totalHits,
+  firstResult,
+  lastResult,
+  selectedEntryIdx,
+  hasAdvancedSearchCriteria,
+  showAdvancedSearchPanel
+} = storeToRefs(searchStore)
 const preferences = usePreferencesStore()
 
 const { initializeMedia } = preferences
 
-const { show, interfaceStyle } = storeToRefs(preferences)
+const { interfaceStyle, authorFacetCount } = storeToRefs(preferences)
 
-import { storeToRefs } from 'pinia'
-
-const { authorFacetCount } = storeToRefs(preferences)
-
-const query = ref('')
-// const selectedEntry = ref<SearchResult>()
-const selectedEntryIdx = ref(0)
-const searchResults = ref<Array<SearchResult>>([])
 const searchError = ref<SearchError | null>()
-const imageModal: Ref = defineModel('imageModal')
-const wordModal: Ref = defineModel('wordModal')
-const metadataModal: Ref = defineModel('metadataModal')
-const notification: Ref = defineModel('notification')
 
-const includeAuthors = ref(true)
-const authorList = ref<Array<AggregationBin>>([])
+const modalStore = useModalStore()
+const { notification, showPreferencesModal } = storeToRefs(modalStore)
 
-const strict = ref(false)
-const isLoading = ref(false)
-
-const title = ref('')
-const fromYear = ref()
-const toYear = ref()
-const docRefs = ref('')
-const sortBy = ref('Score')
 const resultsPerPage = ref(10)
 
 // Startup variables: may move to App.vue or HomeView.vue
 const router = useRouter()
 const route = useRoute()
 
-const hasAdvancedSearchCriteria = ref(false)
-const showAdvancedSearchPanel = ref(false)
 const openMobileSearchResultsToc = ref(false)
 const openMobileMetadataPanel = ref(false)
 const openMobileFacets = ref(false)
@@ -392,6 +337,7 @@ onMounted(() => {
 
 const newPage = () => runSearch()
 const newSearch = () => {
+  //notification.value = { error: false, delay: 4000, msg: 'Running search...' }
   clearSearchResults()
   runSearch()
 }
@@ -459,7 +405,7 @@ watch(showAdvancedSearchPanel, (newV) => {
     openMobileMetadataPanel.value = false
     openMobileFacets.value = false
     openNavBarMobileMenu.value = false
-    preferences.show = false
+    showPreferencesModal.value = false
   }
 })
 
@@ -469,7 +415,7 @@ watch(openMobileSearchResultsToc, (newV) => {
     openMobileMetadataPanel.value = false
     openMobileFacets.value = false
     openNavBarMobileMenu.value = false
-    preferences.show = false
+    showPreferencesModal.value = false
   }
 })
 watch(openMobileMetadataPanel, (newV) => {
@@ -478,7 +424,7 @@ watch(openMobileMetadataPanel, (newV) => {
     openMobileSearchResultsToc.value = false
     openMobileFacets.value = false
     openNavBarMobileMenu.value = false
-    preferences.show = false
+    showPreferencesModal.value = false
   }
 })
 watch(openNavBarMobileMenu, (newV) => {
@@ -487,11 +433,11 @@ watch(openNavBarMobileMenu, (newV) => {
     openMobileSearchResultsToc.value = false
     openMobileMetadataPanel.value = false
     openMobileFacets.value = false
-    preferences.show = false
+    showPreferencesModal.value = false
   }
 })
 
-watch(show, (newV) => {
+watch(showPreferencesModal, (newV) => {
   if (newV) {
     showAdvancedSearchPanel.value = false
     openMobileSearchResultsToc.value = false
@@ -507,7 +453,7 @@ watch(openMobileFacets, (newV) => {
     openMobileSearchResultsToc.value = false
     openMobileMetadataPanel.value = false
     openNavBarMobileMenu.value = false
-    preferences.show = false
+    showPreferencesModal.value = false
   }
 })
 
@@ -638,7 +584,6 @@ const runSearch = async (addHistory: boolean = true) => {
                 .catch((error) => {
                   console.error(`Error fetching facets: ${error}`)
                   notification.value = {
-                    show: true,
                     error: true,
                     delay: 4000,
                     msg: `Error: ${error}`
@@ -667,7 +612,6 @@ const runSearch = async (addHistory: boolean = true) => {
           console.error(`Response status ${response.status}: ${error}`)
           clearSearchResults()
           notification.value = {
-            show: true,
             error: true,
             delay: 4000,
             msg: `Error: ${error}`
@@ -683,7 +627,6 @@ const runSearch = async (addHistory: boolean = true) => {
       console.error(`Error running search: ${error}`)
       clearSearchResults()
       notification.value = {
-        show: true,
         error: true,
         delay: 4000,
         msg: `Error: ${error}`
