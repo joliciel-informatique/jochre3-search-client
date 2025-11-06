@@ -12,19 +12,26 @@
 <script setup lang="ts">
 import type { SearchResult } from '@/assets/interfacesExternals'
 import type { PropType } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useModalStore } from '@/stores/ModalStore'
 
-const metadataModal = defineModel('metadataModal')
+const modalStore = useModalStore()
+const { fixMetadataModalData, showFixMetadataModal } = storeToRefs(modalStore)
+
 const { result, edit } = defineProps({
   result: { type: Object as PropType<SearchResult> },
   edit: { type: String, default: 'title' }
 })
 
 const openMetadataModal = (field: string) => {
-  metadataModal.value = {
-    show: true,
-    docRef: result?.docRef,
+  const fieldValue = result?.metadata[field]
+  const stringValue = Array.isArray(fieldValue) ? fieldValue[0] : fieldValue
+
+  fixMetadataModalData.value = {
+    docRef: result?.docRef ?? '',
     field: field,
-    value: result?.metadata[field]
+    value: stringValue
   }
+  showFixMetadataModal.value = true
 }
 </script>

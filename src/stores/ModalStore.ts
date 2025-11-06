@@ -2,7 +2,11 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 // Import interfaces
-import { type NotificationData, type FixWordModalData } from '@/assets/interfacesExternals'
+import {
+  type NotificationData,
+  type FixWordModalData,
+  type FixMetadataModalData
+} from '@/assets/interfacesExternals'
 
 export const useModalStore = defineStore('modalStore', () => {
   const notification = ref<NotificationData>({
@@ -15,5 +19,15 @@ export const useModalStore = defineStore('modalStore', () => {
 
   const showFixWordModal = ref<boolean>(false)
 
-  return { notification, fixWordModalData, showFixWordModal }
+  const fixMetadataModalData = ref<FixMetadataModalData | null>()
+
+  const showFixMetadataModal = ref<boolean>(false)
+
+  return {
+    notification,
+    fixWordModalData,
+    showFixWordModal,
+    fixMetadataModalData,
+    showFixMetadataModal
+  }
 })

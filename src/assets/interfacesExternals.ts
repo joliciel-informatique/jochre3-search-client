@@ -105,3 +105,9 @@ export interface FixWordModalData {
   selection: Selection
   globalOffset: number
 }
+
+export interface FixMetadataModalData {
+  docRef: string
+  field: string
+  value?: string
+}

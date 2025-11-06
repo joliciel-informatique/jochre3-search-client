@@ -30,7 +30,6 @@
           >
             <SingleResult
               v-model:image-modal="imageModal"
-              v-model:metadata-modal="metadataModal"
               v-model:selectedEntryIdx="selectedEntryIdx"
               :result="result"
               :book-index="bookIndex"
@@ -88,7 +87,6 @@
   >
     <SingleResult
       v-model:image-modal="imageModal"
-      v-model:metadata-modal="metadataModal"
       v-model:selected-entry-idx="selectedEntryIdx"
       :result="searchResults[selectedEntryIdx]"
       :book-index="-1"
@@ -153,7 +151,6 @@ const { page, searchResults, totalHits, firstResult, lastResult, selectedEntryId
 const preferences = usePreferencesStore()
 
 const imageModal: Ref = defineModel('imageModal')
-const metadataModal: Ref = defineModel('metadataModal')
 const facets: Ref = defineModel('facets')
 
 const openMobileSearchResultsToc = defineModel('openMobileSearchResultsToc')

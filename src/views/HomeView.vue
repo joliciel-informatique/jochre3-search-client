@@ -7,11 +7,11 @@
     :style="preferences.interfaceStyle == 'old' ? 'overflow: auto; max-height: 100vh' : ''"
   >
     <PreferencesSetup />
-    <SearchPage v-model:image-modal="imageModal" v-model:metadata-modal="metadataModal" />
+    <SearchPage v-model:image-modal="imageModal" />
     <Preferences />
     <LargeImage v-model:image-modal="imageModal" />
     <FixWord />
-    <FixMetaData v-model:metadata-modal="metadataModal" />
+    <FixMetaData />
     <Notification />
   </div>
 </template>
@@ -42,5 +42,4 @@ const preferences = usePreferencesStore()
 
 // Props for modal boxes
 const imageModal = ref({})
-const metadataModal = ref({ field: 'author' })
 </script>
