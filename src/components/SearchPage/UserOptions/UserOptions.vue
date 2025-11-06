@@ -21,7 +21,7 @@
       >
         <a
           class="navbar-item p-3"
-          @click.prevent="preferences.show = true"
+          @click.prevent="showPreferencesModal = true"
           :title="$t('header.preferences')"
         >
           <font-awesome-icon icon="gear" size="lg" />
@@ -68,7 +68,7 @@
         </a>
         <a
           class="panel-block"
-          @click.prevent="preferences.show = true"
+          @click.prevent="showPreferencesModal = true"
           :title="$t('header.preferences')"
           target="_blank"
         >
@@ -99,6 +99,10 @@ import { ref } from 'vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
 import { useSearchStore } from '@/stores/SearchStore'
 import { storeToRefs } from 'pinia'
+import { useModalStore } from '@/stores/ModalStore'
+const modalStore = useModalStore()
+const { showPreferencesModal } = storeToRefs(modalStore)
+
 const keycloak = useKeycloakStore().keycloak
 const authenticated = ref<boolean>(keycloak?.authenticated ?? false)
 const preferences = usePreferencesStore()

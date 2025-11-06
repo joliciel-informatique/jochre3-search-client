@@ -241,7 +241,7 @@ const { authorFacetCount } = storeToRefs(preferences)
 const searchError = ref<SearchError | null>()
 
 const modalStore = useModalStore()
-const { notification } = storeToRefs(modalStore)
+const { notification, showPreferencesModal } = storeToRefs(modalStore)
 
 const resultsPerPage = ref(10)
 
@@ -408,7 +408,7 @@ watch(showAdvancedSearchPanel, (newV) => {
     openMobileMetadataPanel.value = false
     openMobileFacets.value = false
     openNavBarMobileMenu.value = false
-    preferences.show = false
+    showPreferencesModal.value = false
   }
 })
 
@@ -418,7 +418,7 @@ watch(openMobileSearchResultsToc, (newV) => {
     openMobileMetadataPanel.value = false
     openMobileFacets.value = false
     openNavBarMobileMenu.value = false
-    preferences.show = false
+    showPreferencesModal.value = false
   }
 })
 watch(openMobileMetadataPanel, (newV) => {
@@ -427,7 +427,7 @@ watch(openMobileMetadataPanel, (newV) => {
     openMobileSearchResultsToc.value = false
     openMobileFacets.value = false
     openNavBarMobileMenu.value = false
-    preferences.show = false
+    showPreferencesModal.value = false
   }
 })
 watch(openNavBarMobileMenu, (newV) => {
@@ -436,7 +436,7 @@ watch(openNavBarMobileMenu, (newV) => {
     openMobileSearchResultsToc.value = false
     openMobileMetadataPanel.value = false
     openMobileFacets.value = false
-    preferences.show = false
+    showPreferencesModal.value = false
   }
 })
 
@@ -456,7 +456,7 @@ watch(openMobileFacets, (newV) => {
     openMobileSearchResultsToc.value = false
     openMobileMetadataPanel.value = false
     openNavBarMobileMenu.value = false
-    preferences.show = false
+    showPreferencesModal.value = false
   }
 })
 

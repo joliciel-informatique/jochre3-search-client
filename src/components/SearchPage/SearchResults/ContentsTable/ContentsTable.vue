@@ -96,12 +96,6 @@
     class="toc-drawer menu box p-2"
     v-show="openMobileSearchResultsToc"
   >
-    <!-- <p
-      class="menu-label is-size-5 label p-2 is-flex is-flex-direction-row is-justify-content-space-between"
-    >
-      {{ $t('toc.contents-table-header') }}
-      <font-awesome-icon icon="gear" @click="preferences.show = true" />
-    </p> -->
     <p class="menu-label label pt-4 has-text-centered">
       {{ $t('toc.contents-table-subheader', [totalHits, firstResult, lastResult]) }}
     </p>

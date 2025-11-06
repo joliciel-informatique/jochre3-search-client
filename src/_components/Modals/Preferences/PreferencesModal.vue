@@ -1,5 +1,5 @@
 <template>
-  <ModalBox v-model:show="preferences.show" v-model:close-func="close">
+  <ModalBox v-model:show="showPreferencesModal" v-model:close-func="close">
     <template #header>
       <p class="modal-card-title">{{ $t('preferences.title') }}</p>
     </template>
@@ -77,6 +77,10 @@ import { usePreferencesStore } from '@/stores/PreferencesStore'
 import ModalBox from '@/_components/ModalBox/ModalBox.vue'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useModalStore } from '@/stores/ModalStore'
+
+const modalStore = useModalStore()
+const { showPreferencesModal } = storeToRefs(modalStore)
 
 const i18n = useI18n()
 
@@ -86,7 +90,9 @@ const languageToSet = ref<string>(preferences.language)
 
 const { displayPerBook, language, interfaceStyle } = storeToRefs(preferences)
 
-const close = () => {}
+const close = () => {
+  showPreferencesModal.value = false
+}
 
 const save = () => {
   language.value = languageToSet.value
@@ -94,7 +100,6 @@ const save = () => {
   i18n.locale.value = language.value
 
   preferences.save()
-  preferences.show = false
   close()
 }
 </script>

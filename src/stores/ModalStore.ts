@@ -31,6 +31,8 @@ export const useModalStore = defineStore('modalStore', () => {
 
   const showImageModal = ref<boolean>(false)
 
+  const showPreferencesModal = ref<boolean>(false)
+
   return {
     notification,
     fixWordModalData,
@@ -38,6 +40,7 @@ export const useModalStore = defineStore('modalStore', () => {
     fixMetadataModalData,
     showFixMetadataModal,
     imageModalData,
-    showImageModal
+    showImageModal,
+    showPreferencesModal
   }
 })
