@@ -1,7 +1,7 @@
 import { type HighlightedDocument } from '@/assets/interfacesExternals'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { fetchData } from '@/assets/fetchMethods'
+import { authenticated, fetchData } from '@/assets/fetchMethods'
 import { mostFrequentUsingMap } from '@/assets/functions'
 
 export const useBookStore = defineStore('bookStore', () => {
@@ -26,8 +26,8 @@ export const useBookStore = defineStore('bookStore', () => {
     const params = new URLSearchParams(defineSearchParams())
     params.append('doc-ref', docRef.value)
     params.append('text-as-html', 'true')
-
-    const res = await fetchData('highlighted-text', 'get', params).catch((err) => console.log(err))
+    const url = authenticated ? 'highlighted-text' : 'highlighted-text-no-auth'
+    const res = await fetchData(url, 'get', params).catch((err) => console.log(err))
 
     if (res && res.ok) {
       book.value = await res.json()
