@@ -36,7 +36,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted, ref, watch, type Ref } from 'vue'
-import { fetchData } from '@/assets/fetchMethods'
+import { authenticated, fetchData } from '@/assets/fetchMethods'
 import { sha1 } from 'object-hash'
 import FilterTag from '../FilterTag/FilterTag.vue'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
@@ -65,7 +65,8 @@ const findAuthor = () => {
       includeAuthor: includeAuthor.value,
       includeAuthorInTranscription: includeAuthorInTranscription.value
     })
-    fetchData('authors', 'get', params).then((response) =>
+    const url = authenticated ? 'authors' : 'authors-no-auth'
+    fetchData(url, 'get', params).then((response) =>
       response.json().then((result) => {
         authorDropdownItems.value = result.bins.filter(
           (author: { label: string; count: number }) =>

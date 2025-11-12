@@ -151,7 +151,7 @@ Description: displays text snippets from the OCR text
 </template>
 
 <script setup lang="ts">
-import { fetchData } from '@/assets/fetchMethods'
+import { authenticated, fetchData } from '@/assets/fetchMethods'
 import { ref, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { usePreferencesStore } from '@/stores/PreferencesStore'
@@ -226,7 +226,8 @@ const toggleImageSnippet = async () => {
     params.append('highlight', `[${highlight[0]},${highlight[1]}]`)
   })
 
-  const response = await fetchData('image-snippet', 'get', params, 'image/png', 'arraybuffer')
+  const url = authenticated ? 'image-snippet' : 'image-snippet-no-auth'
+  const response = await fetchData(url, 'get', params, 'image/png', 'arraybuffer')
   if (response.status !== 200) {
     notification.value = {
       error: true,

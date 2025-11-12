@@ -462,7 +462,9 @@ const searchFacets = async () => {
   facetParams.append('field', 'Author')
   if (preferences.authorFacetCount > 0)
     facetParams.append('maxBins', preferences.authorFacetCount.toString())
-  return fetchData('aggregate', 'get', facetParams).then((response) =>
+
+  const url = authenticated ? 'aggregate' : 'aggregate-no-auth'
+  return fetchData(url, 'get', facetParams).then((response) =>
     response.json().then((result) => {
       console.log(`Found ${result.bins.length} author facets`)
       const activeFacets = facets.value
@@ -555,7 +557,7 @@ const runSearch = async (addHistory: boolean = true) => {
 
   params.value = searchParams
 
-  const searchUrl = authenticated ? 'search-with-auth' : 'search'
+  const searchUrl = authenticated ? 'search' : 'search-no-auth'
   return fetchData(searchUrl, 'get', searchParams)
     .then((response) => {
       if (response.status === 200) {
