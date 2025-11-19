@@ -1,6 +1,6 @@
 {
   "name": "jochre3-search-client",
-  "version": "0.0.0",
+  "version": "1.1.7",
   "private": true,
   "type": "module",
   "scripts": {
