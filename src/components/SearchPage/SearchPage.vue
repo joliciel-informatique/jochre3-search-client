@@ -608,6 +608,18 @@ const runSearch = async (addHistory: boolean = true) => {
           isLoading.value = false
           return false
         })
+      } else if (response.status === 503) {
+        // Forbidden, typically caused by Cloudfare requiring a new challenge
+        console.error(`503 Forbidden response`)
+        searchError.value = {
+          code: 'Forbidden',
+          message: 'Your login has expired, please refresh the page'
+        }
+        clearSearchResults()
+        q?.parentElement?.classList.remove('is-loading')
+        q?.removeAttribute('disabled')
+        isLoading.value = false
+        return false
       } else {
         return response.json().then((json) => {
           const error = 'message' in json ? json['message'] : 'An unexpected error occurred'
