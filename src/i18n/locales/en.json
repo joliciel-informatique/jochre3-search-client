@@ -42,6 +42,10 @@
     "QueryTooComplex": {
       "title": "Query too complex",
       "message": "If your query contains a wildcard, try adding more letters before or after the wildcard."
+    },
+    "Forbidden": {
+      "title": "Session expired",
+      "message": "Please refresh the page to renew your session."
     }
   },
   "toc": {
