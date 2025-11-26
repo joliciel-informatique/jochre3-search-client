@@ -608,9 +608,9 @@ const runSearch = async (addHistory: boolean = true) => {
           isLoading.value = false
           return false
         })
-      } else if (response.status === 503) {
+      } else if (response.status === 403) {
         // Forbidden, typically caused by Cloudfare requiring a new challenge
-        console.error(`503 Forbidden response`)
+        console.error(`403 Forbidden response`)
         searchError.value = {
           code: 'Forbidden',
           message: 'Your login has expired, please refresh the page'
