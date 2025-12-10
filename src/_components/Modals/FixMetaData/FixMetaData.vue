@@ -27,7 +27,7 @@
               }"
               :lang="preferences.corpusLanguage"
               name="fixWordSuggestionInput"
-              v-model="metadataValue"
+              v-model="fixMetadataModalData.value"
               :disabled="authorList.length > 0"
               :alt="$t('search.keyboard')"
               :title="$t('search.keyboard')"
@@ -36,7 +36,7 @@
           <simple-key
             v-if="field !== 'publicationYear'"
             v-model:attach-to="field"
-            v-model:reference="metadataValue"
+            v-model:reference="fixMetadataModalData.value"
             @onEnter="null"
           />
         </span>
@@ -110,12 +110,7 @@ const preferences = usePreferencesStore()
 const authorList: Ref = ref<Array<{ label: string; count: number }>>([])
 const authorText = ref('')
 
-const field = computed<string>(() =>
-  fixMetadataModalData.value ? fixMetadataModalData.value.field : ''
-)
-const metadataValue = computed<string>(() =>
-  fixMetadataModalData.value?.value ? fixMetadataModalData.value.value : ''
-)
+const field = computed<string>(() => fixMetadataModalData.value.field)
 
 const showFindAuthorDropdown = computed<boolean>(() => field.value.includes('author'))
 
@@ -124,52 +119,50 @@ const fieldLeftToRight = computed<boolean>(() =>
 )
 
 const close = () => {
-  fixMetadataModalData.value = null
+  fixMetadataModalData.value = { docRef: '', field: '', value: '' }
   showFixMetadataModal.value = false
   authorList.value = []
 }
 
 const save = () => {
-  if (fixMetadataModalData.value) {
-    const authorListValue = authorList.value[0]?.label
+  const authorListValue = authorList.value[0]?.label
 
-    const newValue = authorListValue ? authorListValue : fixMetadataModalData.value.value
-    const applyEverywhere = authorListValue ? true : false
-    const capitalizedField = capitalizeFirstLetter(fixMetadataModalData.value.field)
+  const newValue = authorListValue ? authorListValue : fixMetadataModalData.value.value
+  const applyEverywhere = authorListValue ? true : false
+  const capitalizedField = capitalizeFirstLetter(fixMetadataModalData.value.field)
 
-    const data = JSON.stringify({
-      docRef: fixMetadataModalData.value.docRef,
-      field: capitalizedField,
-      value: newValue,
-      applyEverywhere: applyEverywhere
-    })
+  const data = JSON.stringify({
+    docRef: fixMetadataModalData.value.docRef,
+    field: capitalizedField,
+    value: newValue,
+    applyEverywhere: applyEverywhere
+  })
 
-    fetchData('correct-metadata', 'post', data, 'application/json')
-      .then((res) => {
-        if (res.status === 200) {
-          notification.value = {
-            error: false,
-            delay: 2000,
-            msg: 'Thanks, we will review your suggestion!'
-          }
-        } else {
-          notification.value = {
-            error: true,
-            delay: 4000,
-            msg: `Something went wrong: ${res.status}: ${res.statusText}. Try again and if the error persists, contact us!`
-          }
+  fetchData('correct-metadata', 'post', data, 'application/json')
+    .then((res) => {
+      if (res.status === 200) {
+        notification.value = {
+          error: false,
+          delay: 2000,
+          msg: 'Thanks, we will review your suggestion!'
         }
-        close()
-      })
-      .catch((error) => {
+      } else {
         notification.value = {
           error: true,
           delay: 4000,
-          msg: `Something went wrong: ${error}. Try again and if the error persists, contact us!`
+          msg: `Something went wrong: ${res.status}: ${res.statusText}. Try again and if the error persists, contact us!`
         }
-        close()
-      })
-  }
+      }
+      close()
+    })
+    .catch((error) => {
+      notification.value = {
+        error: true,
+        delay: 4000,
+        msg: `Something went wrong: ${error}. Try again and if the error persists, contact us!`
+      }
+      close()
+    })
 }
 
 const capitalizeFirstLetter = (string: String) => string.charAt(0).toUpperCase() + string.slice(1)

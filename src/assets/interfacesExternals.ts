@@ -109,7 +109,7 @@ export interface FixWordModalData {
 export interface FixMetadataModalData {
   docRef: string
   field: string
-  value?: string
+  value: string
 }
 
 export interface ImageModalData {
