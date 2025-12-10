@@ -25,7 +25,7 @@ const { result, edit } = defineProps({
 
 const openMetadataModal = (field: string) => {
   const fieldValue = result?.metadata[field]
-  const stringValue = Array.isArray(fieldValue) ? fieldValue[0] : fieldValue
+  const stringValue = (Array.isArray(fieldValue) ? fieldValue[0] : fieldValue) ?? ''
 
   fixMetadataModalData.value = {
     docRef: result?.docRef ?? '',

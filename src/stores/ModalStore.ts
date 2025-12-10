@@ -20,7 +20,11 @@ export const useModalStore = defineStore('modalStore', () => {
 
   const showFixWordModal = ref<boolean>(false)
 
-  const fixMetadataModalData = ref<FixMetadataModalData | null>()
+  const fixMetadataModalData = ref<FixMetadataModalData>({
+    docRef: '',
+    field: '',
+    value: ''
+  })
 
   const showFixMetadataModal = ref<boolean>(false)
 
